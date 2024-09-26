@@ -2,7 +2,7 @@
 
 ## Technologies
 
-Vite + React + SWA
+Vite + React + Vitest + Redux Toolkit + SWA CLI
 
 ## Development
 
@@ -17,6 +17,12 @@ Vite + React + SWA
 - `npm run build` - builds the project for production.
 - `npm run preview` - serves the **last built** production project from `dist/`
 - `npm run swa` - starts Azure Static Web Apps emulator & dev server
+
+### Testing
+
+Realistically, you of course want to use your IDEs built in test runner, but npm scripts are also available:
+
+- `npm test` - runs all tests
 
 ### Linting
 

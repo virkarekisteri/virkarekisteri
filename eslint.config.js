@@ -14,7 +14,7 @@ export default tseslint.config(
       js.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
-      eslintConfigPrettier
+      eslintConfigPrettier,
     ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
@@ -23,14 +23,14 @@ export default tseslint.config(
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname,
-        warnOnUnsupportedTypeScriptVersion: false
-      }
+        warnOnUnsupportedTypeScriptVersion: false,
+      },
     },
     plugins: {
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      'no-relative-import-paths': noRelativeImportPaths
+      'no-relative-import-paths': noRelativeImportPaths,
     },
     rules: {
       ...react.configs.recommended.rules,
@@ -38,8 +38,21 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-relative-import-paths/no-relative-import-paths': ['error', { allowSameFolder: true, rootDir: 'src' }],
-      'eol-last': ['error', 'always']
+      'eol-last': ['error', 'always'],
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-redux',
+              importNames: ['useSelector', 'useStore', 'useDispatch'],
+              message: 'Please use pre-typed versions from `src/redux/hooks.ts` instead.',
+            },
+          ],
+        },
+      ],
     },
-    settings: { react: { version: '18.3' } }
-  }
+    settings: { react: { version: '18.3' } },
+  },
 );
