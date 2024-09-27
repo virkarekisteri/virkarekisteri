@@ -2,7 +2,7 @@
 
 ## Technologies
 
-Vite + React + Vitest + Redux Toolkit + SWA CLI
+Vite + React + Vitest + Redux Toolkit + daisyUI + SWA CLI
 
 ## Development
 

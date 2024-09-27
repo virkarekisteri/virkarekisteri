@@ -3,9 +3,10 @@ import viteLogo from '/vite.svg';
 import vitestLogo from '/vitest.svg';
 import reduxLogo from '/redux.svg';
 import swaCliLogo from '/swa-cli.svg';
-import './App.css';
+import daisyuiLogo from '/daisyui.svg';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { decrement, increment, incrementAsync, selectCount, selectStatus, setValue } from './redux/slices/counterSlice';
+import Logo from './components/Logo';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -14,36 +15,35 @@ const App = () => {
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-        <a href="https://vitest.dev/" target="_blank" rel="noreferrer">
-          <img src={vitestLogo} className="logo vitest" alt="Vitest logo" />
-        </a>
-        <a href="https://redux.js.org" target="_blank" rel="noreferrer">
-          <img src={reduxLogo} className="logo redux" alt="Redux logo" />
-        </a>
-        <a href="https://azure.github.io/static-web-apps-cli/" target="_blank" rel="noreferrer">
-          <img src={swaCliLogo} className="logo swa-cli" alt="SWA CLI logo" />
-        </a>
+      <div className="flex justify-center space-x-4 p-6">
+        <Logo src={viteLogo} alt="Vite logo" href="https://vitejs.dev" label="Vite" />
+        <Logo src={reactLogo} alt="React logo" href="https://react.dev" label="React" spin={true} />
+        <Logo src={vitestLogo} alt="Vitest logo" href="https://vitest.dev/" label="Vitest" />
+        <Logo src={reduxLogo} alt="Redux logo" href="https://redux.js.org" label="Redux Toolkit" />
+        <Logo src={daisyuiLogo} alt="daisyUI logo" href="https://daisyui.com/" label="daisyUI" />
+        <Logo src={swaCliLogo} alt="SWA CLI logo" href="https://azure.github.io/static-web-apps-cli/" label="SWA CLI" />
       </div>
-      <h1>Vite + React + Vitest + Redux Toolkit + SWA CLI</h1>
-      <div className="card">
-        <p>Status: {status}</p>
-        <button onClick={() => dispatch(decrement())}>-</button>
-        <button onClick={() => dispatch(setValue(0))}>count is {count}</button>
-        <button onClick={() => dispatch(increment())}>+</button>
-        <br />
-        <button onClick={() => dispatch(incrementAsync())}>Increment Async</button>
-        <p>
+      <div className="card bg-base-200 mt-6 items-center rounded-lg p-8 shadow-lg">
+        <p className="text-lg">Status: {status}</p>
+        <div className="mt-4 flex space-x-4">
+          <button className="btn btn-error" onClick={() => dispatch(decrement())}>
+            -
+          </button>
+          <button className="btn btn-primary" onClick={() => dispatch(setValue(0))}>
+            count is {count}
+          </button>
+          <button className="btn btn-success" onClick={() => dispatch(increment())}>
+            +
+          </button>
+        </div>
+        <button className="btn btn-outline mt-4" onClick={() => dispatch(incrementAsync())}>
+          Increment Async
+        </button>
+        <p className="mt-4">
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <p className="mt-8 text-center text-sm text-gray-500">Click on the logos to learn more</p>
     </>
   );
 };
