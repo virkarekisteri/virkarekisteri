@@ -1,4 +1,4 @@
-# Virkarekisteri
+# Virkarekisteri-frontend
 
 ## Technologies
 
