@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "SqlConnectionString": "Server=(local);Initial Catalog=virkaluettelo-database;Persist Security Info=False;User ID=sa;Password=MyLocalSqlP@ssw0rd;Encrypt=True;TrustServerCertificate=True;"
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*"
+  }
+}
