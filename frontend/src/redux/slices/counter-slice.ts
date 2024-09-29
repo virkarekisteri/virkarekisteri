@@ -1,4 +1,4 @@
-import { createAppSlice } from 'redux/createAppSlice';
+import { createAppSlice } from 'redux/create-app-slice';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface CounterState {

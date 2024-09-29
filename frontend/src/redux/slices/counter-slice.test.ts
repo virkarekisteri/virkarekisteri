@@ -1,7 +1,7 @@
 import type { AppStore } from 'redux/store';
 import { makeStore } from 'redux/store';
-import type { CounterState } from './counterSlice';
-import { counterSlice, decrement, increment, incrementByAmount, selectCount } from './counterSlice';
+import type { CounterState } from './counter-slice';
+import { counterSlice, decrement, increment, incrementByAmount, selectCount } from './counter-slice';
 
 interface LocalTestContext {
   store: AppStore;
