@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "backend": "func start -p 7071 --script-root ../backend",
     "swa:frontend": "swa start",
-    "swa": "concurrently --kill-others \"npm run swa:backend\" \"swa start --api-devserver-url http://localhost:7071\"",
+    "swa": "concurrently --kill-others \"npm run backend\" \"swa start --api-devserver-url http://localhost:7071\"",
     "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
