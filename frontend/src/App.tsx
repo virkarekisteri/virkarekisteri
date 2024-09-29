@@ -5,13 +5,22 @@ import reduxLogo from '/redux.svg';
 import swaCliLogo from '/swa-cli.svg';
 import daisyuiLogo from '/daisyui.svg';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { decrement, increment, incrementAsync, selectCount, selectStatus, setValue } from './redux/slices/counterSlice';
+import {
+  decrement,
+  increment,
+  incrementAsync,
+  selectCount,
+  selectStatus,
+  setValue,
+} from './redux/slices/counter-slice';
 import Logo from './components/Logo';
+import { getTestTable } from './redux/slices/test-table-slice';
 
 const App = () => {
   const dispatch = useAppDispatch();
   const count = useAppSelector(selectCount);
   const status = useAppSelector(selectStatus);
+  const { entries: messages } = useAppSelector((state) => state.messages);
 
   return (
     <>
@@ -23,7 +32,7 @@ const App = () => {
         <Logo src={daisyuiLogo} alt="daisyUI logo" href="https://daisyui.com/" label="daisyUI" />
         <Logo src={swaCliLogo} alt="SWA CLI logo" href="https://azure.github.io/static-web-apps-cli/" label="SWA CLI" />
       </div>
-      <div className="card bg-base-200 mt-6 items-center rounded-lg p-8 shadow-lg">
+      <div className="card mt-6 items-center rounded-lg bg-base-200 p-8 shadow-lg">
         <p className="text-lg">Status: {status}</p>
         <div className="mt-4 flex space-x-4">
           <button className="btn btn-error" onClick={() => dispatch(decrement())}>
@@ -39,6 +48,16 @@ const App = () => {
         <button className="btn btn-outline mt-4" onClick={() => dispatch(incrementAsync())}>
           Increment Async
         </button>
+        <button className="btn btn-outline mt-4" onClick={() => dispatch(getTestTable())}>
+          Fetch TestTable1
+        </button>
+        {messages
+          .filter((msg) => msg.displayMessage)
+          .map((msg) => (
+            <p key={msg.coolNumber} className="mt-4">
+              {msg.coolMessage + ' ' + msg.coolNumber}
+            </p>
+          ))}
         <p className="mt-4">
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>

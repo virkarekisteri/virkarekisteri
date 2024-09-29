@@ -16,7 +16,9 @@ Vite + React + Vitest + Redux Toolkit + daisyUI + SWA CLI
 - `npm run dev` - runs the dev server which supports hot module reloading.
 - `npm run build` - builds the project for production.
 - `npm run preview` - serves the **last built** production project from `dist/`
-- `npm run swa` - starts Azure Static Web Apps emulator & dev server
+- `npm run backend` - starts the Azure Functions backend locally (has pre-reqs, see [backend README](../backend/README.md))
+- `npm run swa:frontend` - starts Azure Static Web Apps emulator & dev server (only frontend)
+- `npm run swa` - starts the local backend & frontend SWA with a backend connection
 
 ### Testing
 
