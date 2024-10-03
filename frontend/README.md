@@ -8,7 +8,7 @@ Vite + React + Vitest + Redux Toolkit + daisyUI + SWA CLI
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22+
 - `npm install`
 
 ### Running
