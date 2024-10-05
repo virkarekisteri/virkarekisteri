@@ -1,0 +1,8 @@
+﻿{
+    "plugins": ["prettier-plugin-sql"],
+    "language": "transactsql",
+    "tabWidth": 4,
+    "keywordCase": "upper",
+    "functionCase": "upper",
+    "dataTypeCase": "upper"
+}

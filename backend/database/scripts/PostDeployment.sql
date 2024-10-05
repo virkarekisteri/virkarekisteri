@@ -1,10 +1,39 @@
 -- This file contains SQL statements that will be executed after the build script.
-
-INSERT INTO TestTable1
-VALUES ('Hello World', 1, 73)
-
-INSERT INTO TestTable1
-VALUES ('Secret Message', 0, 123)
-
-INSERT INTO TestTable1
-VALUES ('1 + 1 = ', 1, 2)
+INSERT INTO
+    Positions (
+        LuontiPvm,
+        PaattymisPvm,
+        VakanssiKoko,
+        VakanssinTaytto,
+        LuontiPaatosNumero,
+        LopetusPaatosNumero,
+        Laji
+    )
+VALUES
+    (
+        '2023-01-15',
+        '2024-01-15',
+        0.95,
+        0.85,
+        'Paatos-001',
+        'Lopetus-001',
+        1
+    ),
+    (
+        '2022-05-12',
+        NULL,
+        0.75,
+        0.50,
+        'Paatos-002',
+        NULL,
+        2
+    ),
+    (
+        '2021-09-10',
+        '2023-09-10',
+        0.60,
+        0.60,
+        'Paatos-003',
+        'Lopetus-003',
+        1
+    );
