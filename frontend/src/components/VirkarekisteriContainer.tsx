@@ -2,7 +2,7 @@
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import seinajokiLogo from 'assets/seinajoki-logo.jpg'; 
+import seinajokiLogo from '/seinajoki-logo.jpg'; 
 import UserMenu from './UserMenu';
 
 const VirkarekisterContainer = () => {
