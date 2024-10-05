@@ -13,7 +13,8 @@ public static class DeserializeHelper
     /// <param name="req"> The input HTTP request that should contain a json body deserializable to type T</param>
     /// <typeparam name="T">Type to deserialize to</typeparam>
     /// <returns>
-    /// Deserialized object of type T
+    /// Tuple where first item is a BadRequestObjectResult if deserialization failed, otherwise null,
+    /// and the second item is the deserialized object of type T
     /// </returns>
     public static async Task<(BadRequestObjectResult? Error, T Result)> TryDeserializeRequestBody<T>(HttpRequest req)
         where T : class

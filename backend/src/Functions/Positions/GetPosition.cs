@@ -23,7 +23,7 @@ public class GetPosition(ILogger<GetPosition> logger, PositionRepository positio
         logger.LogInformation("Getting position by id: {Id}", req.RouteValues["id"]);
 
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionId))
-            return new BadRequestObjectResult("Position id is required");
+            return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
         var position = await positionRepository.GetPosition(positionId);
         return new OkObjectResult(position);

@@ -6,31 +6,31 @@ namespace Virkarekisteri.Models;
 [Table("Positions")]
 public class Position
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     [Required]
     [Column("LuontiPvm")]
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; init; }
 
     [Column("PaattymisPvm")]
-    public DateTime? EndedAt { get; set; }
+    public DateTime? EndedAt { get; init; }
 
-    [Column("VakanssiKoko")]
-    public decimal? VacancySize { get; set; }
+    [Column("VakanssiKoko", TypeName = "decimal(3, 2)")]
+    public decimal? VacancySize { get; init; }
 
-    [Column("VakanssinTaytto")]
-    public decimal? VacancyFill { get; set; }
+    [Column("VakanssinTaytto", TypeName = "decimal(3, 2)")]
+    public decimal? VacancyFill { get; init; }
 
     [Required]
     [MaxLength(100)]
     [Column("LuontiPaatosNumero")]
-    public required string CreationDecisionNumber { get; set; }
+    public required string CreationDecisionNumber { get; init; }
 
     [MaxLength(100)]
     [Column("LopetusPaatosNumero")]
-    public string? EndingDecisionNumber { get; set; }
+    public string? EndingDecisionNumber { get; init; }
 
     [Required]
     [Column("Laji")]
-    public int Type { get; set; }
+    public int Type { get; init; }
 }
