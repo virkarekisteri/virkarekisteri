@@ -1,0 +1,7 @@
+{
+  "//": "Forced to create a npm structure because prettier doesnt support globally installed plugins...",
+  "devDependencies": {
+    "prettier-plugin-sql": "^0.18.1",
+    "prettier": "^3.3.3"
+  }
+}

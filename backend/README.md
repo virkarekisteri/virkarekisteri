@@ -59,6 +59,7 @@ To see the actual database while it's running, enter the "Connections" view from
 
 ### Formatting
 
+#### C# Code
 Code format is enforced by CSharpier.  
 Install CSharpier:
 
@@ -72,4 +73,18 @@ CLI usage is also available, of course:
 
 ```sh
 dotnet csharpier .
+```
+
+#### SQL Database code
+
+The SQL code is formatted by Prettier.
+
+You can `npm i` in the `database/` directory to set up 
+the node environment for using Prettier.
+
+And again, you of course want to make your IDE run prettier for you,
+but you can also manually run it via CLI in the `database/` directory:
+   
+```sh
+npx prettier --write .
 ```
