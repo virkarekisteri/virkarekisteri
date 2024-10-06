@@ -54,6 +54,34 @@ const DataTable: React.FC = () => {
         sijoituspaikka: 'Tampere',
         virannimi: 'Developer',
       },
+      {
+        virkanumero: '12348',
+        viranHoitaja: 'Jack Daniels',
+        kustannuspaikka: 'Marketing',
+        sijoituspaikka: 'Oulu',
+        virannimi: 'Marketing Manager',
+      },
+      {
+        virkanumero: '12345',
+        viranHoitaja: 'John Doe',
+        kustannuspaikka: 'Finance',
+        sijoituspaikka: 'Helsinki',
+        virannimi: 'Manager',
+      },
+      {
+        virkanumero: '12346',
+        viranHoitaja: 'Jane Doe',
+        kustannuspaikka: 'HR',
+        sijoituspaikka: 'Espoo',
+        virannimi: 'Assistant Manager',
+      },
+      {
+        virkanumero: '12347',
+        viranHoitaja: 'Jim Beam',
+        kustannuspaikka: 'IT',
+        sijoituspaikka: 'Tampere',
+        virannimi: 'Developer',
+      },
     ],
     [],
   );
@@ -90,7 +118,7 @@ const DataTable: React.FC = () => {
   );
 
   return (
-    <TableContainer component={Box} sx={{ margin: 2, borderRadius: '8px' }}>
+    <TableContainer component={Box} sx={{ margin: 2, border: '1px solid #ccc' }}>
       <Table {...getTableProps()} sx={{ minWidth: 650 }}>
         <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
           {headerGroups.map((headerGroup) => (
@@ -107,7 +135,7 @@ const DataTable: React.FC = () => {
                   }}
                 >
                   {column.render('Header')}
-                  <span style={{ marginLeft: '8px', minWidth: '16px', textAlign: 'center' }}>
+                  <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
                     {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
                   </span>
                 </TableCell>
