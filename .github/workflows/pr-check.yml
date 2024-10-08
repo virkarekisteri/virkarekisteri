@@ -68,8 +68,10 @@ jobs:
         run: |
           if [[ "$(git log -1 --pretty=format:'%an')" == "github-actions" ]]; then
             echo "FRONTEND_AUTOFIXES_RAN=true" >> $GITHUB_ENV
-            echo "GIT_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           fi
+
+      - name: Get Git HEAD SHA
+        run: echo "GIT_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Comment on Auto-Fixes
         if: env.FRONTEND_AUTOFIXES_RAN == 'true'
