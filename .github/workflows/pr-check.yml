@@ -1,0 +1,294 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+permissions:
+  checks: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      database: ${{ steps.filter.outputs.database }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+            database:
+              - 'database/**'
+
+
+  frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - run: npm ci
+
+      - name: Run ESLint + Prettier
+        uses: 0x464e/lint-action@master
+        with:
+          eslint: true
+          prettier: true
+          auto_fix: true
+          eslint_dir: frontend
+          prettier_dir: frontend
+          check_name: 'Frontend-${linter}'
+          git_name: 'github-actions'
+          git_email: '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - name: Check if Auto-Fixes were Made
+        run: |
+          if [[ "$(git log -1 --pretty=format:'%an')" == "github-actions" ]]; then
+            echo "FRONTEND_AUTOFIXES_RAN=true" >> $GITHUB_ENV
+            echo "GIT_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          fi
+
+      - name: Comment on Auto-Fixes
+        if: env.FRONTEND_AUTOFIXES_RAN == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "ESLint and/or Prettier issues were found and auto-fixed.\n\nIf there are remaining ESLint issues, they're unable to be auto-fixed, please `git pull` locally and address these manually.\n\nTo avoid this in the future, please set up ESLint and Prettier in your IDE for instant feedback and automatic runs on save."
+            });
+
+      - name: Ignore backend checks if needed
+        if: ${{ needs.changes.outputs.backend == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Backend-CSharpier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+            });
+
+      - name: Ignore database checks if needed
+        if: ${{ needs.changes.outputs.database == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Database-Prettier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+            });
+  
+
+  backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8
+
+      - run: dotnet tool restore
+
+      - name: Run CSharpier
+        run: |
+          dotnet csharpier .
+          if ! git diff --quiet; then
+            echo "BACKEND_AUTOFIXES_RAN=true" >> $GITHUB_ENV
+          fi
+
+      - name: Commit Auto-Fix Changes
+        if: env.BACKEND_AUTOFIXES_RAN == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: Fix code style issues with CSharpier
+
+      - name: Get Git HEAD SHA
+        run: echo "GIT_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Comment on Auto-Fixes
+        if: env.BACKEND_AUTOFIXES_RAN == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "CSharpier issues were found and auto-fixed.\n\nTo avoid this in the future, please set up CSharpier in your IDE for automatic runs on save."
+            });
+
+      - name: Write CSharpier Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Backend-CSharpier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'success'
+            });
+ 
+
+      - name: Ignore frontend checks if needed
+        if: ${{ needs.changes.outputs.frontend == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            for (const checkName of ['ESLint', 'Prettier'])
+              await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: `Frontend-${checkName}`,
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+              });
+
+      - name: Ignore database checks if needed
+        if: ${{ needs.changes.outputs.database == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Database-Prettier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+            });
+
+
+  database:
+    needs: changes
+    if: ${{ needs.changes.outputs.database == 'true' }}
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: database
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: database/package-lock.json
+
+      - run: npm ci
+
+      - name: Run Prettier
+        run: |
+          npx prettier --write .
+          if ! git diff --quiet; then
+            echo "DATABASE_AUTOFIXES_RAN=true" >> $GITHUB_ENV
+          fi
+
+      - name: Commit Auto-Fix Changes
+        if: env.DATABASE_AUTOFIXES_RAN == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: Fix code style issues with Prettier
+
+      - name: Get Git HEAD SHA
+        run: echo "GIT_HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Comment on Auto-Fixes
+        if: env.DATABASE_AUTOFIXES_RAN == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Prettier issues were found and auto-fixed.\n\nTo avoid this in the future, please set up Prettier in your IDE for automatic runs on save."
+            });
+
+      - name: Write Prettier Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Database-Prettier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'success'
+            });
+
+      - name: Ignore frontend checks if needed
+        if: ${{ needs.changes.outputs.frontend == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            for (const checkName of ['ESLint', 'Prettier'])
+              await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: `Frontend-${checkName}`,
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+              });
+
+      - name: Ignore backend checks if needed
+        if: ${{ needs.changes.outputs.backend == 'false' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Backend-CSharpier',
+                head_sha: '${{ env.GIT_HEAD_SHA }}',
+                conclusion: 'skipped'
+            });
+
