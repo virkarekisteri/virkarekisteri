@@ -37,3 +37,90 @@ VALUES
         'Lopetus-003',
         1
     );
+
+
+INSERT INTO 
+    OrganizationTree (
+        Number, 
+        Name, 
+        ParentId, 
+        Alue
+    )
+VALUES 
+    -- PALVELUKESKUS TASO
+    (
+        '10', 
+        'KONSERNIPALVELUT', 
+        NULL, 
+        'PALVELUKESKUS'
+    ),
+    (
+        '80', 
+        'RAHOITUS', 
+        NULL, 
+        'PALVELUKESKUS'
+    ),
+    (
+        '40', 
+        'SIVISTYKSEN JA HYVINVOINNIN TOIMIALA', 
+        NULL, 
+        'PALVELUKESKUS'
+    ),
+    (
+        '60', 
+        'KAUPUNKIYMPÄRISTÖN TOIMIALA', 
+        NULL, 
+        'PALVELUKESKUS'
+    ),
+    (
+        '80', 
+        'RAHOITUS', 
+        NULL, 
+        'PALVELUKESKUS'
+    ),
+    
+    
+    -- TULOSALUE TASO
+    (
+        '100', 
+        'VAALIT', 
+        ParentId, -- ??? TODO: Tarkista
+        'TULOSALUE'
+    ),
+    (
+        '120', 
+        'TARKASTUSTOIMI', 
+        '8D5E957F-5E76-489A-8E78-2B5148A08BFC', -- Tän hetken ID
+        'TULOSALUE'
+    ),
+    (
+        '130', 
+        'YLEISHALLINTO', 
+        '', 
+        'TULOSALUE'
+    ),
+    (
+        '140', 
+        'HALLINTOPALVELUT', 
+        '', 
+        'TULOSALUE'
+    ),
+    (
+        '150', 
+        'HENKILÖSTÖPALVELUT', 
+        '', 
+        'TULOSALUE'
+    ),
+    (
+        '160', 
+        'TALOUSPALVELUT', 
+        '', 
+        'TULOSALUE'
+    ),
+    (
+        '890',
+        'RAHOITUS',
+        '',
+        'TULOSALUE'
+    )
+    ;
