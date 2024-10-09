@@ -25,7 +25,7 @@ const UserMenu = () => {
         onClick={handleMenu}
         color="inherit"
       >
-        <AccountCircle sx={{ fontSize: 50 }}/>
+        <AccountCircle sx={{ fontSize: 50 }} />
       </IconButton>
       <Menu
         id="menu-appbar"
