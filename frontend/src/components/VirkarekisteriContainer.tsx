@@ -7,6 +7,8 @@ import UserMenu from './UserMenu';
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
+import VirkarekisteriTable from './Table/VirkarekisteriTable';
+import { Box } from '@mui/material';
 
 const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -37,6 +39,14 @@ const VirkarekisterContainer = () => {
       </Button>
       <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
       {/* Other components and content will go here */}
+      <Box
+        sx={{
+          margin: 'auto',
+          maxWidth: '90%',
+        }}
+      >
+        <VirkarekisteriTable />
+      </Box>
     </div>
   );
 };
