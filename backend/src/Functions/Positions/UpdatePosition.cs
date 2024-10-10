@@ -30,7 +30,8 @@ public class UpdatePosition
     [Function("UpdatePosition")]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
-        string id)
+        string id
+    )
     {
         _logger.LogInformation("Updating position with ID: {Id}", id);
 
