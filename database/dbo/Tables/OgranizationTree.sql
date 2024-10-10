@@ -1,9 +1,12 @@
 CREATE TABLE [dbo].[OrganizationTree] (
-    [Number] NVARCHAR(50) PRIMARY KEY, -- Unique identifier
+    [Number] NVARCHAR(50), -- Not unique on its own, need Alue as well
     [Name] NVARCHAR(255) NOT NULL,
     [ParentNumber] NVARCHAR(50), -- NULL for highest-level
     [Alue] NVARCHAR(255) NOT NULL, -- (Palvelukeskus, Tulosalue, Vastuualue, Tulosyksikkö, Kustannuspaikka)
-    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber]) REFERENCES [dbo].[OrganizationTree]([Number]) ON DELETE CASCADE
-);
+    CONSTRAINT [PK_OrganizationTree] PRIMARY KEY ([Number], [Alue]), -- Composite primary key
+    CONSTRAINT [FK_OrganizationTree_Parent] 
+        FOREIGN KEY ([ParentNumber], [Alue]) 
+        REFERENCES [dbo].[OrganizationTree]([Number], [Alue])
+        ON DELETE CASCADE);
 
 GO
