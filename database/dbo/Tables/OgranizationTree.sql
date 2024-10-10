@@ -1,10 +1,9 @@
 CREATE TABLE [dbo].[OrganizationTree] (
-    [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
-    [Number] NVARCHAR(50) NOT NULL,
+    [Number] NVARCHAR(50) PRIMARY KEY, -- Unique identifier
     [Name] NVARCHAR(255) NOT NULL,
-    [ParentId] UNIQUEIDENTIFIER, -- NULL for highest-level
+    [ParentNumber] NVARCHAR(50), -- NULL for highest-level
     [Alue] NVARCHAR(255) NOT NULL, -- (Palvelukeskus, Tulosalue, Vastuualue, Tulosyksikkö, Kustannuspaikka)
-    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[OrganizationTree]([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber]) REFERENCES [dbo].[OrganizationTree]([Number]) ON DELETE CASCADE
 );
 
 GO
