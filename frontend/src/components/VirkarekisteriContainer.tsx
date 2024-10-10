@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import seinajokiLogo from '/seinajoki-logo.jpg';
 import UserMenu from './UserMenu';
 import { useState } from 'react';
-import { Button } from '@mui/material';
+import { Button, Grid2 } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import { Box } from '@mui/material';
@@ -33,19 +33,25 @@ const VirkarekisterContainer = () => {
           </div>
         </Toolbar>
       </AppBar>
-
-      <Button variant="contained" onClick={handleOpen}>
-        Open Modals
-      </Button>
       <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
       {/* Other components and content will go here */}
       <Box
         sx={{
           margin: 'auto',
           maxWidth: '90%',
+          mt: 4,
         }}
       >
-        <VirkarekisteriTable />
+        <Grid2 container spacing={2}>
+          <Grid2 size={12} display="flex" justifyContent="flex-end">
+            <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
+              + Uusi virka
+            </Button>
+          </Grid2>
+          <Grid2 size={12}>
+            <VirkarekisteriTable />
+          </Grid2>
+        </Grid2>
       </Box>
     </div>
   );

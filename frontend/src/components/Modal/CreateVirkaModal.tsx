@@ -1,10 +1,9 @@
-import { Box, TextField, Button, Grid2, IconButton, Typography } from '@mui/material';
+import { Box, TextField, Button, Grid2, IconButton, Typography, InputAdornment } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import React from 'react';
 import axios from 'axios';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
-
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
@@ -43,6 +42,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             justifyContent: 'space-between',
             alignItems: 'center',
             p: 2,
+            height: 50,
             borderBottom: '1px solid #ccc',
             bgcolor: '#223B7C',
             color: 'white',
@@ -50,7 +50,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">Luo uusi virka</Typography>
+          <Typography variant="h6">Lisää uusi virka</Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -60,8 +60,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             onSubmit={onSubmit}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
-                <Grid2 container spacing={2}>
-                  <Grid2>
+                <Grid2 container spacing={2} size={12}>
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      Perustamisajankohta
+                    </Typography>
                     <Field name="createdAt">
                       {({ input }) => (
                         <TextField
@@ -70,13 +73,17 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           required
                           fullWidth
                           id="createdAt"
-                          label="Created At"
-                          type="datetime-local"
+                          label="Perustamisajankohta"
+                          type="date"
+                          slotProps={{ inputLabel: { shrink: true } }}
                         />
                       )}
                     </Field>
                   </Grid2>
-                  <Grid2>
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      Päätösnumero
+                    </Typography>
                     <Field name="creationDecisionNumber">
                       {({ input }) => (
                         <TextField
@@ -86,6 +93,28 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           fullWidth
                           id="creationDecisionNumber"
                           label="Päätösnumero"
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      Koko-%
+                    </Typography>
+                    <Field name="vacancySize">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          fullWidth
+                          id="vacancySize"
+                          label="Koko-%"
+                          type="number"
+                          slotProps={{
+                            input: {
+                              endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                            },
+                          }}
                         />
                       )}
                     </Field>
