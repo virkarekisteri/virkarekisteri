@@ -1,19 +1,29 @@
 import { Box, TextField, Button, Grid2, IconButton, Typography, InputAdornment } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import React from 'react';
-import axios from 'axios';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { createPosition } from 'services/functions/positions-service';
+import type { Position } from 'types/Position';
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
 }
 
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: Partial<Position>) => {
     try {
-      await axios.post('https://your-api-url/posts', values);
+      const positionData: Position = {
+        createdAt: new Date(values.createdAt || ''),
+        endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
+        vacancySize: values.vacancySize,
+        vacancyFill: values.vacancyFill,
+        creationDecisionNumber: values.creationDecisionNumber || '',
+        endingDecisionNumber: values.endingDecisionNumber,
+        type: values.type || 0, // Assuming a default type value
+      };
+
+      await createPosition(positionData);
       handleClose();
     } catch (error) {
       console.error(error);
@@ -55,7 +65,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             <CloseIcon />
           </IconButton>
         </Box>
-        <Box component="form" sx={{ p: 4 }}>
+        <Box sx={{ p: 4 }}>
           <Form
             onSubmit={onSubmit}
             render={({ handleSubmit, submitting, pristine }) => (
