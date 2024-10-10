@@ -14,7 +14,7 @@ VALUES
         'PALVELUKESKUS'
     ),
     (
-        '80', 
+        '89', 
         'RAHOITUS', 
         NULL, 
         'PALVELUKESKUS'
@@ -32,8 +32,8 @@ VALUES
         'PALVELUKESKUS'
     ),
     (
-        '80', 
-        'RAHOITUS', 
+        '70', 
+        'ELINVOIMAn JA TYÖLLISYYDEN TOIMIALA', 
         NULL, 
         'PALVELUKESKUS'
     );
