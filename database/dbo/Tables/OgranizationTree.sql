@@ -1,5 +1,5 @@
 CREATE TABLE [dbo].[OrganizationTree] (
-    [Number] NVARCHAR(50), -- Not unique on its own, need Alue as well
+    [Number] NVARCHAR(50) NOT NULL, -- Not unique on its own, need Alue as well
     [Name] NVARCHAR(255) NOT NULL,
     [ParentNumber] NVARCHAR(50), -- NULL for highest-level
     [Alue] NVARCHAR(255) NOT NULL, -- (Palvelukeskus, Tulosalue, Vastuualue, Tulosyksikkö, Kustannuspaikka)
