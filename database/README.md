@@ -6,10 +6,10 @@ Azure SQL Database
 
 ### Prerequisites
 
-- Azure Functions Core Tools
-- Docker (for local database emulation)
-- Azure Data Studio (for local database emulation/database overall)  
-  <sup><sub>(VSCode works also, but not as well)</sub></sup>
+-   Azure Functions Core Tools
+-   Docker (for local database emulation)
+-   Azure Data Studio (for local database emulation/database overall)  
+    <sup><sub>(VSCode works also, but not as well)</sub></sup>
 
 ### Running
 

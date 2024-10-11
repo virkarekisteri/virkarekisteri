@@ -1,18 +1,8 @@
 -- KUSTANNUSPAIKKA TASO
-INSERT INTO 
-    OrganizationTree (
-        Number, 
-        Name, 
-        ParentNumber, 
-        Alue
-    )
+INSERT INTO
+    OrganizationTree (Number, Name, ParentNumber, Alue)
 VALUES
-    (
-        '1010',
-        'VAALIT',
-        '1000',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('1010', 'VAALIT', '1000', 'KUSTANNUSPAIKKA'),
     (
         '1201',
         'TARKASTUSTOIMI',
@@ -31,12 +21,7 @@ VALUES
         '1300',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '1303',
-        'TOIMIKUNNAT',
-        '1300',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('1303', 'TOIMIKUNNAT', '1300', 'KUSTANNUSPAIKKA'),
     (
         '1304',
         'MUU YLEISHALLINTO',
@@ -127,30 +112,15 @@ VALUES
         '1680',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '1000',
-        'TASETILIT',
-        '8900',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '8901',
-        'RAHOITUS',
-        '8900',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('1000', 'TASETILIT', '8900', 'KUSTANNUSPAIKKA'),
+    ('8901', 'RAHOITUS', '8900', 'KUSTANNUSPAIKKA'),
     (
         '4801',
         'SEINÄJOEN LUKIO',
         '4800',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4802',
-        'NURMON LUKIO',
-        '4800',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4802', 'NURMON LUKIO', '4800', 'KUSTANNUSPAIKKA'),
     (
         '4803',
         'YLISTARON LUKIO',
@@ -175,36 +145,16 @@ VALUES
         '5300',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5302',
-        'TAIDEHALLI',
-        '5300',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5302', 'TAIDEHALLI', '5300', 'KUSTANNUSPAIKKA'),
     (
         '5304',
         'TÖRNÄVÄNSAARI',
         '5300',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5305',
-        'LOUHIMO',
-        '5300',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '5306',
-        'AVUSTUKSET',
-        '5300',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '5307',
-        'YHTEISÖ',
-        '5300',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5305', 'LOUHIMO', '5300', 'KUSTANNUSPAIKKA'),
+    ('5306', 'AVUSTUKSET', '5300', 'KUSTANNUSPAIKKA'),
+    ('5307', 'YHTEISÖ', '5300', 'KUSTANNUSPAIKKA'),
     (
         '5501',
         'HALLINTO JA TUKIPALVELU',
@@ -217,18 +167,8 @@ VALUES
         '5500',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5503',
-        'YLEISÖTYÖ',
-        '5500',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '5504',
-        'KOKOELMAT',
-        '5500',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5503', 'YLEISÖTYÖ', '5500', 'KUSTANNUSPAIKKA'),
+    ('5504', 'KOKOELMAT', '5500', 'KUSTANNUSPAIKKA'),
     (
         '5505',
         'MAAKUNNALLINEN TOIMINTA',
@@ -265,24 +205,14 @@ VALUES
         '4770',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5101',
-        'PÄÄKIRJASTO',
-        '5100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5101', 'PÄÄKIRJASTO', '5100', 'KUSTANNUSPAIKKA'),
     (
         '5102',
         'KIRJASTOAUTOPALVELUT',
         '5100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5103',
-        'LÄHIPALVELUT',
-        '5100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5103', 'LÄHIPALVELUT', '5100', 'KUSTANNUSPAIKKA'),
     (
         '5104',
         'YHTEISET PALVELUT',
@@ -295,12 +225,7 @@ VALUES
         '5100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '5110',
-        'EEPOS',
-        '5100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('5110', 'EEPOS', '5100', 'KUSTANNUSPAIKKA'),
     (
         '5111',
         'VALTAKUNNALLINEN ERITYISTEHTÄVÄ',
@@ -313,12 +238,7 @@ VALUES
         '4100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4102',
-        'JOUPIN KOULU',
-        '4100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4102', 'JOUPIN KOULU', '4100', 'KUSTANNUSPAIKKA'),
     (
         '4103',
         'KIVISTÖN KOULU',
@@ -337,12 +257,7 @@ VALUES
         '4100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4106',
-        'POHJAN KOULU',
-        '4100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4106', 'POHJAN KOULU', '4100', 'KUSTANNUSPAIKKA'),
     (
         '4107',
         'TOUKOLANPUISTON KOULU',
@@ -361,12 +276,7 @@ VALUES
         '4100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4110',
-        'KÄRJEN KOULU',
-        '4100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4110', 'KÄRJEN KOULU', '4100', 'KUSTANNUSPAIKKA'),
     (
         '4111',
         'PAJULUOMAN KOULU',
@@ -397,24 +307,14 @@ VALUES
         '4100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4119',
-        'KOURAN KOULU',
-        '4100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4119', 'KOURAN KOULU', '4100', 'KUSTANNUSPAIKKA'),
     (
         '4120',
         'TANELINRANNAN KOULU',
         '4100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4121',
-        'ASEMAN KOULU',
-        '4100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4121', 'ASEMAN KOULU', '4100', 'KUSTANNUSPAIKKA'),
     (
         '4122',
         'HALKOSAAREN KOULU',
@@ -529,12 +429,7 @@ VALUES
         '4200',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4208',
-        'S-LUOKAT',
-        '4200',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4208', 'S-LUOKAT', '4200', 'KUSTANNUSPAIKKA'),
     (
         '4210',
         'KOULUVALMENTAJAT',
@@ -631,24 +526,14 @@ VALUES
         '4420',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4426',
-        'TENAVAKOTI',
-        '4420',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4426', 'TENAVAKOTI', '4420', 'KUSTANNUSPAIKKA'),
     (
         '4427',
         'KAPERNAUMIN PÄIVÄKOTI',
         '4420',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '4428',
-        'SIJAISPOOLI',
-        '4420',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('4428', 'SIJAISPOOLI', '4420', 'KUSTANNUSPAIKKA'),
     (
         '4462',
         'MARTTILAN PÄIVÄKOTI',
@@ -805,12 +690,7 @@ VALUES
         '6010',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6012',
-        'ASUNTOTOIMI',
-        '6010',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6012', 'ASUNTOTOIMI', '6010', 'KUSTANNUSPAIKKA'),
     (
         '6013',
         'PYSÄKÖINNINVALVONTA',
@@ -835,24 +715,14 @@ VALUES
         '6600',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6101',
-        'SUUNNITTELU',
-        '6100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6101', 'SUUNNITTELU', '6100', 'KUSTANNUSPAIKKA'),
     (
         '6102',
         'RAKENNUTTAMINEN',
         '6100',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6103',
-        'ISÄNNÖINTI',
-        '6100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6103', 'ISÄNNÖINTI', '6100', 'KUSTANNUSPAIKKA'),
     (
         '6111',
         'YLLÄPITOPALVELUT',
@@ -871,12 +741,7 @@ VALUES
         '6110',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6114',
-        'KUNNOSSAPITO',
-        '6110',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6114', 'KUNNOSSAPITO', '6110', 'KUSTANNUSPAIKKA'),
     (
         '6121',
         'SIIVOUSPALVELUT',
@@ -937,18 +802,8 @@ VALUES
         '6700',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6311',
-        'SUUNNITTELU',
-        '6310',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '6321',
-        'RAKENTAMINEN',
-        '6320',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6311', 'SUUNNITTELU', '6310', 'KUSTANNUSPAIKKA'),
+    ('6321', 'RAKENTAMINEN', '6320', 'KUSTANNUSPAIKKA'),
     (
         '6341',
         'LASKUTETTAVAT TYÖT, KUNNALISTEKNIIKKA',
@@ -961,12 +816,7 @@ VALUES
         '6340',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6361',
-        'JÄTEHUOLTO',
-        '6360',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6361', 'JÄTEHUOLTO', '6360', 'KUSTANNUSPAIKKA'),
     (
         '6362',
         'MAA-AINESTEN LÄJITYS',
@@ -979,12 +829,7 @@ VALUES
         '6360',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6381',
-        'KADUT',
-        '6380',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6381', 'KADUT', '6380', 'KUSTANNUSPAIKKA'),
     (
         '6382',
         'YKSITYISTEN TEIDEN HOITO',
@@ -1021,54 +866,24 @@ VALUES
         '6390',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6393',
-        'PUHTAANAPITO',
-        '6390',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '6394',
-        'KUNNOSTUS',
-        '6390',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6393', 'PUHTAANAPITO', '6390', 'KUSTANNUSPAIKKA'),
+    ('6394', 'KUNNOSTUS', '6390', 'KUSTANNUSPAIKKA'),
     (
         '6395',
         'ULKOVALAISTUS',
         '6390',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6396',
-        'MUU TOIMINTA',
-        '6390',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6396', 'MUU TOIMINTA', '6390', 'KUSTANNUSPAIKKA'),
     (
         '6397',
         'LASKUTETTAVAT TYÖT, KUNNOSSAPITO',
         '6390',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '6421',
-        'KONEKESKUS',
-        '6420',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '6422',
-        'PIENKALUSTO',
-        '6420',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '6423',
-        'KORJAUSPAJA',
-        '6420',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('6421', 'KONEKESKUS', '6420', 'KUSTANNUSPAIKKA'),
+    ('6422', 'PIENKALUSTO', '6420', 'KUSTANNUSPAIKKA'),
+    ('6423', 'KORJAUSPAJA', '6420', 'KUSTANNUSPAIKKA'),
     (
         '6424',
         'HUOLTOKORJAAMO',
@@ -1129,36 +944,16 @@ VALUES
         '6500',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '7101',
-        'STRATEGIATYÖ',
-        '7100',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('7101', 'STRATEGIATYÖ', '7100', 'KUSTANNUSPAIKKA'),
     (
         '7151',
         'ALUEKEHITYS JA KORKEAKOULUYHTEISTYÖ',
         '7150',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '7161',
-        'HANKEKEHITYS',
-        '7160',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '7201',
-        'MARKKINOINTI',
-        '7200',
-        'KUSTANNUSPAIKKA'
-    ),
-    (
-        '7251',
-        'VIESTINTÄ',
-        '7250',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('7161', 'HANKEKEHITYS', '7160', 'KUSTANNUSPAIKKA'),
+    ('7201', 'MARKKINOINTI', '7200', 'KUSTANNUSPAIKKA'),
+    ('7251', 'VIESTINTÄ', '7250', 'KUSTANNUSPAIKKA'),
     (
         '7301',
         'KANSAINVÄLISET ASIAT',
@@ -1177,36 +972,21 @@ VALUES
         '7300',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '7304',
-        'PAKOLAISTYÖ',
-        '7350',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('7304', 'PAKOLAISTYÖ', '7350', 'KUSTANNUSPAIKKA'),
     (
         '7401',
         'HYVINVOINNIN JA TERVEYDEN EDISTÄMINEN',
         '7400',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '7402',
-        'OSALLISUUS',
-        '7400',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('7402', 'OSALLISUUS', '7400', 'KUSTANNUSPAIKKA'),
     (
         '7403',
         'TOIMINTOJEN TALO',
         '7450',
         'KUSTANNUSPAIKKA'
     ),
-    (
-        '7601',
-        'TAPAHTUMAT',
-        '7600',
-        'KUSTANNUSPAIKKA'
-    ),
+    ('7601', 'TAPAHTUMAT', '7600', 'KUSTANNUSPAIKKA'),
     (
         '7701',
         'TYÖLLISYYSPALVELUT',
