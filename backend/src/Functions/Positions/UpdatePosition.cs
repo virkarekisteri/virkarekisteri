@@ -46,8 +46,8 @@ public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository p
             return new NotFoundResult(); // 404 if position not found
         }
 
-        existingPosition.EndedAt = updateDto.PaattymisPvm;
-        existingPosition.EndingDecisionNumber = updateDto.LopetusPaatosNumero;
+        existingPosition.EndedAt = updateDto.EndedAt;
+        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber;
 
         // Update the position in the database
         await positionRepository.UpdatePosition(existingPosition);

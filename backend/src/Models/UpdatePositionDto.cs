@@ -2,7 +2,7 @@ namespace Virkarekisteri.Models
 {
     public class UpdatePositionDto
     {
-        public DateTime? PaattymisPvm { get; set; }
-        public string? LopetusPaatosNumero { get; set; }
+        public DateTime? EndedAt { get; set; }
+        public string? EndingDecisionNumber { get; set; }
     }
 }
