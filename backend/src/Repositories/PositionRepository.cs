@@ -37,7 +37,7 @@ public class PositionRepository(VirkarekisteriDb db)
     /// <param name="position">The Position object containing updated values to save.</param>
     /// <returns></returns>
     public async Task UpdatePosition(Position existingPosition)
-    { 
+    {
         db.Positions.Update(existingPosition);
         await db.SaveChangesAsync();
     }

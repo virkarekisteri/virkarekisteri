@@ -22,7 +22,8 @@ public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository p
     [Function("UpdatePosition")]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
-        string id)
+        string id
+    )
     {
         logger.LogInformation("Updating position with ID: {Id}", id);
 
