@@ -1214,7 +1214,7 @@ VALUES
         'KUSTANNUSPAIKKA'
     ),
     (
-        '7701',
+        '7702',
         'TYÖPAJATOIMINTA',
         '7110',
         'KUSTANNUSPAIKKA'

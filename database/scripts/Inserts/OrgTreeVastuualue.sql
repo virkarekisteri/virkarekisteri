@@ -98,12 +98,6 @@ VALUES
         'VASTUUALUE'
     ),
     (
-        '5900',
-        'NUORISOPALVELUT',
-        '590',
-        'VASTUUALUE'
-    ),
-    (
         '5700',
         'LIIKUNTAPALVELUT',
         '570',
