@@ -123,13 +123,14 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                              inputProps: { min: 0, max: 100 },
                             },
                           }}
                         />
                       )}
                     </Field>
                   </Grid2>
-                  <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                  <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
                     <Button type="submit" variant="contained" disabled={submitting || pristine}>
                       Save
                     </Button>

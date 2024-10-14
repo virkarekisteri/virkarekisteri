@@ -42,8 +42,8 @@ const VirkarekisterContainer = () => {
           mt: 4,
         }}
       >
-        <Grid2 container spacing={2}>
-          <Grid2 size={12} display="flex" justifyContent="flex-end">
+        <Grid2 container>
+          <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
             <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
               + Uusi virka
             </Button>
