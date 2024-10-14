@@ -34,7 +34,7 @@ public class PositionRepository(VirkarekisteriDb db)
     /// Updates an existing Position in the database with the specified changes.
     /// This method marks the Position as modified and saves the changes to the database.
     /// </summary>
-    /// <param name="position">The Position object containing updated values to save.</param>
+    /// <param name="existingPosition">The Position object containing updated values to save.</param>
     /// <returns></returns>
     public async Task UpdatePosition(Position existingPosition)
     {
