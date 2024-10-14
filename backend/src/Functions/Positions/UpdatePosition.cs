@@ -8,16 +8,8 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class UpdatePosition
+public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository)
 {
-    private readonly ILogger<UpdatePosition> _logger;
-    private readonly PositionRepository _positionRepository;
-
-    public UpdatePosition(ILogger<UpdatePosition> logger, PositionRepository positionRepository)
-    {
-        _logger = logger;
-        _positionRepository = positionRepository;
-    }
 
     /// <summary>
     /// /positions/{id} PUT endpoint to update an existing position in the database
@@ -32,7 +24,7 @@ public class UpdatePosition
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
         string id)
     {
-        _logger.LogInformation("Updating position with ID: {Id}", id);
+        logger.LogInformation("Updating position with ID: {Id}", id);
 
         // Validate ID
         if (!Guid.TryParse(id, out var positionId))
@@ -48,7 +40,7 @@ public class UpdatePosition
         }
 
         // Fetch the existing position
-        var existingPosition = await _positionRepository.GetPosition(positionId);
+        var existingPosition = await positionRepository.GetPosition(positionId);
         if (existingPosition == null)
         {
             return new NotFoundResult(); // 404 if position not found
@@ -58,9 +50,9 @@ public class UpdatePosition
         existingPosition.EndingDecisionNumber = updateDto.LopetusPaatosNumero;
 
         // Update the position in the database
-        await _positionRepository.UpdatePosition(existingPosition);
+        await positionRepository.UpdatePosition(existingPosition);
 
-        _logger.LogInformation("Successfully updated position with ID: {Id}", id);
+        logger.LogInformation("Successfully updated position with ID: {Id}", id);
         return new NoContentResult(); // 204 No Content on success
     }
 }
