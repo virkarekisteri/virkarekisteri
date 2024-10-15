@@ -16,7 +16,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
         endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
-        vacancySize: values.vacancySize,
+        vacancySize: Number(values.vacancySize),
         vacancyFill: values.vacancyFill,
         creationDecisionNumber: values.creationDecisionNumber || '',
         endingDecisionNumber: values.endingDecisionNumber,
@@ -119,7 +119,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           fullWidth
                           id="vacancySize"
                           label="Koko-%"
-                          type="number"
+                          type="decimal"
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
