@@ -10,7 +10,6 @@ i18next
   .use(HttpBackend)
   .use(LanguageDetector)
   .init({
-    lng: localStorage.getItem('i18nextLng') ?? 'fi',
     fallbackLng: 'fi',
     detection: {
       // only detect from localStorage, because many Finnish people have their browser in english,
