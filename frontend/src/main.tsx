@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import './react-i18n.config';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);
