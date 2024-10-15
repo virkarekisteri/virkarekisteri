@@ -37,3 +37,13 @@ Optionally, you can use the following commands:
 - `npm run lint` - runs ESLint and fixes all auto-fixable problems
 - `npm run format` - runs Prettier and formats all files
 - `npm run lint+format` - runs both ESLint auto-fixes and Prettier formatting
+
+### Translation
+
+This project uses i18n for translations.  
+You can edit translations in `public/locales/{lang}/translation.json` files.
+
+Type definitions are also generated for fully type-safe translations.
+
+> **After adding a translation** to the Finnish language:  
+> Generate types by running `npm run i18n-generate-types`

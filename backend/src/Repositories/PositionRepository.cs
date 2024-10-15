@@ -29,4 +29,16 @@ public class PositionRepository(VirkarekisteriDb db)
         await db.SaveChangesAsync();
         return position;
     }
+
+    /// <summary>
+    /// Updates an existing Position in the database with the specified changes.
+    /// This method marks the Position as modified and saves the changes to the database.
+    /// </summary>
+    /// <param name="existingPosition">The Position object containing updated values to save.</param>
+    /// <returns></returns>
+    public async Task UpdatePosition(Position existingPosition)
+    {
+        db.Positions.Update(existingPosition);
+        await db.SaveChangesAsync();
+    }
 }
