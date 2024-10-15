@@ -1,3 +1,6 @@
 {
-  "app-name": "jag talar inte svenska"
+  "app_name": "jag talar inte svenska",
+  "user_menu": {
+    "logout": ""
+  }
 }
