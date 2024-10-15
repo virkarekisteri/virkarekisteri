@@ -1,5 +1,4 @@
 -- This file references to SQL statements that will be executed after the build script.
-
 -- POPULATE POSITION TABLE
 INSERT INTO
     Positions (
@@ -140,60 +139,15 @@ VALUES
         '400',
         'VASTUUALUE'
     ),
-    (
-        '4100',
-        'PERUSOPETUS',
-        '410',
-        'VASTUUALUE'
-    ),
-    (
-        '4200',
-        'ERITYISPALVELUT',
-        '420',
-        'VASTUUALUE'
-    ),
-    (
-        '4800',
-        'LUKIOKOULUTUS',
-        '480',
-        'VASTUUALUE'
-    ),
-    (
-        '4900',
-        'KANSALAISOPISTO',
-        '490',
-        'VASTUUALUE'
-    ),
-    (
-        '5100',
-        'KIRJASTOPALVELUT',
-        '510',
-        'VASTUUALUE'
-    ),
-    (
-        '5300',
-        'KULTTUURIPALVELUT',
-        '530',
-        'VASTUUALUE'
-    ),
-    (
-        '5500',
-        'MUSEOPALVELUT',
-        '550',
-        'VASTUUALUE'
-    ),
-    (
-        '5700',
-        'LIIKUNTAPALVELUT',
-        '570',
-        'VASTUUALUE'
-    ),
-    (
-        '5900',
-        'NUORISOPALVELUT',
-        '590',
-        'VASTUUALUE'
-    ),
+    ('4100', 'PERUSOPETUS', '410', 'VASTUUALUE'),
+    ('4200', 'ERITYISPALVELUT', '420', 'VASTUUALUE'),
+    ('4800', 'LUKIOKOULUTUS', '480', 'VASTUUALUE'),
+    ('4900', 'KANSALAISOPISTO', '490', 'VASTUUALUE'),
+    ('5100', 'KIRJASTOPALVELUT', '510', 'VASTUUALUE'),
+    ('5300', 'KULTTUURIPALVELUT', '530', 'VASTUUALUE'),
+    ('5500', 'MUSEOPALVELUT', '550', 'VASTUUALUE'),
+    ('5700', 'LIIKUNTAPALVELUT', '570', 'VASTUUALUE'),
+    ('5900', 'NUORISOPALVELUT', '590', 'VASTUUALUE'),
     (
         '4300',
         'VARHAISKASVATUKSEN HALLINTO',
