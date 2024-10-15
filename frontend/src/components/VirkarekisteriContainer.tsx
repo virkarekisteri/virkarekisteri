@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Button, Grid2 } from '@mui/material';
+import { Button, Grid2, Box } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
-import { Box } from '@mui/material';
 import TopAppBar from './TopAppBar/TopAppBar';
+import { useTranslation } from 'react-i18next';
 
 const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const { t } = useTranslation();
 
   const handleOpen = () => setOpenCreateModal(true);
   const handleClose = () => setOpenCreateModal(false);
@@ -15,7 +16,6 @@ const VirkarekisterContainer = () => {
     <div>
       <TopAppBar />
       <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
-      {/* Other components and content will go here */}
       <Box
         sx={{
           margin: 'auto',
@@ -26,7 +26,7 @@ const VirkarekisterContainer = () => {
         <Grid2 container>
           <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
             <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
-              + Uusi virka
+              {t('new_position')}
             </Button>
           </Grid2>
           <Grid2 size={12}>

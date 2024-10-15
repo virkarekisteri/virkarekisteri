@@ -4,13 +4,16 @@ import React from 'react';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { createPosition } from 'services/functions/positions-service';
-import type { Position } from 'types/Position';
+import type { Position } from 'models/Position';
+import { useTranslation } from 'react-i18next';
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
 }
 
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
+  const { t } = useTranslation();
+
   const onSubmit = async (values: Partial<Position>) => {
     try {
       const positionData: Position = {
@@ -18,9 +21,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
         vacancySize: Number(values.vacancySize),
         vacancyFill: values.vacancyFill,
-        creationDecisionNumber: values.creationDecisionNumber || '',
+        creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
-        type: values.type || 0, // Assuming a default type value
+        type: values.type ?? 0, // Assuming a default type value
       };
 
       await createPosition(positionData);
@@ -60,7 +63,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">Lisää uusi virka</Typography>
+          <Typography variant="h6">{t('create_position.add_new_position')}</Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -73,7 +76,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                 <Grid2 container spacing={2} size={12}>
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      Perustamisajankohta
+                      {t('create_position.created_at')}
                     </Typography>
                     <Field name="createdAt">
                       {({ input }) => (
@@ -83,7 +86,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           required
                           fullWidth
                           id="createdAt"
-                          label="Perustamisajankohta"
+                          label={t('create_position.created_at')}
                           type="date"
                           slotProps={{ inputLabel: { shrink: true } }}
                         />
@@ -92,7 +95,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      Päätösnumero
+                      {t('create_position.creation_decision_number')}
                     </Typography>
                     <Field name="creationDecisionNumber">
                       {({ input }) => (
@@ -102,14 +105,14 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           required
                           fullWidth
                           id="creationDecisionNumber"
-                          label="Päätösnumero"
+                          label={t('create_position.creation_decision_number')}
                         />
                       )}
                     </Field>
                   </Grid2>
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      Koko-%
+                      {t('create_position.vacancy_size')}
                     </Typography>
                     <Field name="vacancySize">
                       {({ input }) => (
@@ -118,8 +121,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           margin="normal"
                           fullWidth
                           id="vacancySize"
-                          label="Koko-%"
-                          type="decimal"
+                          label={t('create_position.vacancy_size')}
+                          type="number"
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
@@ -132,7 +135,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
                   <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
                     <Button type="submit" variant="contained" disabled={submitting || pristine}>
-                      Save
+                      {t('create_position.save')}
                     </Button>
                   </Grid2>
                 </Grid2>

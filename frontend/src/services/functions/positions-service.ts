@@ -1,5 +1,5 @@
 import { apiClient } from 'services/api-client';
-import type { Position } from 'types/Position';
+import type { Position } from 'models/Position';
 
 export const createPosition = async (data: Position) => {
   const response = await apiClient.post('/positions', data);

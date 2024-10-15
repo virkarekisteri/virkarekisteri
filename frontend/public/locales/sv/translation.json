@@ -1,5 +1,13 @@
 {
   "app_name": "jag talar inte svenska",
+  "create_position": {
+    "add_new_position": "",
+    "created_at": "",
+    "creation_decision_number": "",
+    "save": "",
+    "vacancy_size": ""
+  },
+  "new_position": "",
   "user_menu": {
     "logout": ""
   }
