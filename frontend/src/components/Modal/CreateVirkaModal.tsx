@@ -19,7 +19,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
         endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
-        vacancySize: Number(values.vacancySize),
+        vacancySize: Number(values.vacancySize) / 100,
         vacancyFill: values.vacancyFill,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
