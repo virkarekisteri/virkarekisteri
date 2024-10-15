@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[OrganizationTree] (
     [ParentNumber] NVARCHAR(50), -- NULL for highest-level
     [Alue] NVARCHAR(255) NOT NULL, -- (Palvelukeskus, Tulosalue, Vastuualue, Tulosyksikkö, Kustannuspaikka)
     CONSTRAINT [PK_OrganizationTree] PRIMARY KEY ([Number], [Alue]), -- Composite primary key
-    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber], [Alue]) REFERENCES [dbo].[OrganizationTree] ([Number], [Alue]) ON DELETE CASCADE
+    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber], [Alue]) REFERENCES [dbo].[OrganizationTree] ([Number], [Alue])
 );
 
 GO
