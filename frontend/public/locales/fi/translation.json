@@ -1,5 +1,13 @@
 {
   "app_name": "Virkarekisteri",
+  "create_position": {
+    "add_new_position": "Lisää uusi virka",
+    "created_at": "Perustamisajankohta",
+    "creation_decision_number": "Päätösnumero",
+    "save": "Tallenna",
+    "vacancy_size": "Koko-%"
+  },
+  "new_position": "+ Uusi virka",
   "user_menu": {
     "logout": "Kirjaudu Ulos"
   }
