@@ -3,4 +3,5 @@ bin/
 .idea/
 .vscode/
 *.json
-scripts/Inserts
+scripts/Inserts/
+scripts/PostDeployment.sql
