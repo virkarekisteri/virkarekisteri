@@ -10,110 +10,50 @@ import {
   TableFooter,
   alpha,
 } from '@mui/material';
-import React from 'react';
+import type { Position } from 'models/Position';
+import React, { useEffect } from 'react';
 import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
-
-// Define the data type
-interface Data {
-  virkanumero: string;
-  viranHoitaja: string;
-  kustannuspaikka: string;
-  sijoituspaikka: string;
-  virannimi?: string; // Optional field
-}
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { getPositions } from 'redux/slices/position-slice';
+import type { RootState } from 'redux/store';
 
 const DataTable: React.FC = () => {
-  const data: Data[] = React.useMemo(
+  const dispatch = useAppDispatch();
+  const dataFromBackend = useAppSelector((state: RootState) => state.positions.entries);
+
+  useEffect(() => {
+    dispatch(getPositions());
+  }, [dispatch]);
+
+  const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
-        virkanumero: '12348',
-        viranHoitaja: 'Jack Daniels',
-        kustannuspaikka: 'Marketing',
-        sijoituspaikka: 'Oulu',
-        virannimi: 'Marketing Manager',
+        Header: 'Luomispäivämäärä',
+        accessor: 'createdAt',
       },
       {
-        virkanumero: '12345',
-        viranHoitaja: 'John Doe',
-        kustannuspaikka: 'Finance',
-        sijoituspaikka: 'Helsinki',
-        virannimi: 'Manager',
+        Header: 'Luomispäätöksen numero',
+        accessor: 'creationDecisionNumber',
       },
       {
-        virkanumero: '12346',
-        viranHoitaja: 'Jane Doe',
-        kustannuspaikka: 'HR',
-        sijoituspaikka: 'Espoo',
-        virannimi: 'Assistant Manager',
+        Header: 'Lopetuspäätöksen numero',
+        accessor: 'endedAt',
       },
       {
-        virkanumero: '12347',
-        viranHoitaja: 'Jim Beam',
-        kustannuspaikka: 'IT',
-        sijoituspaikka: 'Tampere',
-        virannimi: 'Developer',
+        Header: 'Koko %',
+        accessor: 'vacancySize',
       },
       {
-        virkanumero: '12348',
-        viranHoitaja: 'Jack Daniels',
-        kustannuspaikka: 'Marketing',
-        sijoituspaikka: 'Oulu',
-        virannimi: 'Marketing Manager',
-      },
-      {
-        virkanumero: '12345',
-        viranHoitaja: 'John Doe',
-        kustannuspaikka: 'Finance',
-        sijoituspaikka: 'Helsinki',
-        virannimi: 'Manager',
-      },
-      {
-        virkanumero: '12346',
-        viranHoitaja: 'Jane Doe',
-        kustannuspaikka: 'HR',
-        sijoituspaikka: 'Espoo',
-        virannimi: 'Assistant Manager',
-      },
-      {
-        virkanumero: '12347',
-        viranHoitaja: 'Jim Beam',
-        kustannuspaikka: 'IT',
-        sijoituspaikka: 'Tampere',
-        virannimi: 'Developer',
+        Header: 'Laji',
+        accessor: 'type',
       },
     ],
     [],
   );
 
-  const columns: Column<Data>[] = React.useMemo<Column<Data>[]>(
-    () => [
-      {
-        Header: 'Virkanumero',
-        accessor: 'virkanumero',
-      },
-      {
-        Header: 'Viran hoitaja',
-        accessor: 'viranHoitaja',
-      },
-      {
-        Header: 'Kustannuspaikka',
-        accessor: 'kustannuspaikka',
-      },
-      {
-        Header: 'Sijoituspaikka',
-        accessor: 'sijoituspaikka',
-      },
-      {
-        Header: 'Virannimi',
-        accessor: 'virannimi',
-      },
-    ],
-    [],
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Data>(
-    { columns, data },
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
+    { columns, data: dataFromBackend },
     useSortBy,
   );
 
