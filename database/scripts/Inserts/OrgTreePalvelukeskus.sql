@@ -4,36 +4,43 @@ INSERT INTO
         Number, 
         Name, 
         ParentNumber, 
-        Alue
+        Alue,
+        ParentAlue
     )
 VALUES 
     (
         '10', 
         'KONSERNIPALVELUT', 
         NULL, 
-        'PALVELUKESKUS'
+        'PALVELUKESKUS',
+        NULL
     ),
     (
         '89', 
         'RAHOITUS', 
         NULL, 
-        'PALVELUKESKUS'
+        'PALVELUKESKUS',
+        NULL
     ),
     (
         '40', 
         'SIVISTYKSEN JA HYVINVOINNIN TOIMIALA', 
         NULL, 
-        'PALVELUKESKUS'
+        'PALVELUKESKUS',
+        NULL
     ),
     (
         '60', 
         'KAUPUNKIYMPÄRISTÖN TOIMIALA', 
         NULL, 
-        'PALVELUKESKUS'
+        'PALVELUKESKUS',
+        NULL
     ),
     (
         '70', 
-        'ELINVOIMAn JA TYÖLLISYYDEN TOIMIALA', 
+        'ELINVOIMAN JA TYÖLLISYYDEN TOIMIALA', 
         NULL, 
-        'PALVELUKESKUS'
+        'PALVELUKESKUS',
+        NULL
     );
+GO

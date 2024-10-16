@@ -4,174 +4,204 @@ INSERT INTO
         Number, 
         Name, 
         ParentNumber, 
-        Alue
+        Alue,
+        ParentAlue
     )
 VALUES    
     (
         '100', 
         'VAALIT', 
         '10',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '120', 
         'TARKASTUSTOIMI', 
         '10',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '130', 
         'YLEISHALLINTO', 
         '10', 
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '140', 
         'HALLINTOPALVELUT', 
         '10', 
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '150', 
         'HENKILÖSTÖPALVELUT', 
         '10', 
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '160', 
         'TALOUSPALVELUT', 
         '10', 
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '890',
         'RAHOITUS',
         '89',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '400',
         'SIVISTYKSEN JA HYVINVOINNIN TOIMIALAN HALLINTO',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '410',
         'PERUSOPETUS',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '420',
         'ERITYISPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '430',
         'VARHAISKASVATUS',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '480',
         'LUKIOKOULUTUS',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '490',
         'KANSALAISOPISTO',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '510',
         'KIRJASTOPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '530',
         'KULTTUURIPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '550',
         'MUSEOPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '570',
         'LIIKUNTAPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '590',
         'NUORISOPALVELUT',
         '40',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '600',
         'KAUPUNKIYMPÄRISTÖN TOIMIALAN HALLINTO',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '610',
         'TOIMIALAT',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '620',
         'KIINTEISTÖ- JA PAIKKATIETOPALVELUT',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '630',
         'YHDYSKUNTATEKNIIKKA',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '650',
         'KAUPUNKISUUNNITTELU JA KAAVOITUS',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '660',
         'RAKENNUSVALVONTA',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '670',
         'YMPÄRISTÖNSUOJELU',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '690',
         'YMPÄRISTÖTERVEYDENHUOLTO',
         '60',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '700',
         'ELINVOIMA',
         '70',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     ),
     (
         '710',
         'TYÖLLISYYS',
         '70',
-        'TULOSALUE'
+        'TULOSALUE',
+        'PALVELUKESKUS'
     );
+GO

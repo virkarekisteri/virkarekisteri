@@ -1,11 +1,13 @@
 -- This file references to SQL statements that will be executed after the build script.
 
 -- Insert data to Position table
-:r Inserts/Positions.sql
+PRINT 'INSERTING DATA TO Positions TABLE';
+:r \virkarekisteri\database\scripts\Inserts\Positions.sql
 
 -- Insert data to OrganizationTree table
-:r Inserts/OrgTreePalvelukeskus.sql
-:r Inserts/OrgTreeTulosalue.sql
-:r Inserts/OrgTreeVastuualue.sql
-:r Inserts/OrgTreeTulosyksikko.sql
-:r Inserts/OrgTreeKustannuspaikka.sql
+PRINT 'INSERTING DATA TO OrganizationTree TABLE';
+:r \virkarekisteri\database\scripts\Inserts\OrgTreePalvelukeskus.sql
+:r \virkarekisteri\database\scripts\Inserts\OrgTreeTulosalue.sql
+:r \virkarekisteri\database\scripts\Inserts\OrgTreeVastuualue.sql
+:r \virkarekisteri\database\scripts\Inserts\OrgTreeTulosyksikko.sql
+:r \virkarekisteri\database\scripts\Inserts\OrgTreeKustannuspaikka.sql

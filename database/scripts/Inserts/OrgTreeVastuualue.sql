@@ -4,222 +4,253 @@ INSERT INTO
         Number, 
         Name, 
         ParentNumber, 
-        Alue
+        Alue,
+        ParentAlue
     )
 VALUES
     (
         '1000',
         'VAALIT',
         '100',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '1200',
         'TARKASTUSTOIMI',
         '120',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '1300',
         'YLEISHALLINTO',
         '130',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '1400',
         'HALLINTOPALVELU',
         '140',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '1500',
         'HENKILÖSTÖPALVELUT',
         '150',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '1600',
         'TALOUSPALVELUT',
         '160',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '8900',
         'RAHOITUS',
         '890',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4000',
         'SIVISTYKSEN JA HYVINVOINNIN TOIMIALAN HALLINTO',
         '400',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4100',
         'PERUSOPETUS',
         '410',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4200',
         'ERITYISPALVELUT',
         '420',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4800',
         'LUKIOKOULUTUS',
         '480',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4900',
         'KANSALAISOPISTO',
         '490',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '5100',
         'KIRJASTOPALVELUT',
         '510',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '5300',
         'KULTTUURIPALVELUT',
         '530',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '5500',
         'MUSEOPALVELUT',
         '550',
-        'VASTUUALUE'
-    ),
-    (
-        '5900',
-        'NUORISOPALVELUT',
-        '590',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '5700',
         'LIIKUNTAPALVELUT',
         '570',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '5900',
         'NUORISOPALVELUT',
         '590',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4300',
         'VARHAISKASVATUKSEN HALLINTO',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4400',
         'PÄIVÄKODIT',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4500',
         'RYHMIKSET',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4600',
         'VAKAKESKUKSET',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4700',
         'PERHEPÄIVÄHOITO',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4710',
         'MUU PÄIVÄHOITO',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4720',
         'AVOIN LEIKKITOIMINTA',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '4770',
         'VARHAISERITYISKASVATUS',
         '430',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6000',
         'HALLINTO',
         '600',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6100',
         'TOIMITILAT',
         '610',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6200',
         'KIINTEISTÖ- JA PAIKKATIETOPALVELUT',
         '620',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6300',
         'YHDYSKUNTATEKNIIKKA',
         '630',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6500',
         'KAUPUNKISUUNNITTELU JA KAAVOITUS',
         '650',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6600',
         'RAKENNUSVALVONTA',
         '660',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6700',
         'YMPÄRISTÖNSUOJELU',
         '670',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '6900',
         'YMPÄRISTÖTERVEYDENHUOLTO',
         '690',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '700',
         'ELINVOIMA',
         '700',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     ),
     (
         '710',
         'TYÖLLISYYS',
         '710',
-        'VASTUUALUE'
+        'VASTUUALUE',
+        'TULOSALUE'
     );
+GO
