@@ -1,12 +1,6 @@
 -- KUSTANNUSPAIKKA TASO
-INSERT INTO 
-    OrganizationTree (
-        Number, 
-        Name, 
-        ParentNumber, 
-        Alue,
-        ParentAlue
-    )
+INSERT INTO
+    OrganizationTree (Number, Name, ParentNumber, Alue, ParentAlue)
 VALUES
     (
         '1010',
@@ -1422,4 +1416,5 @@ VALUES
         'KUSTANNUSPAIKKA',
         'TULOSYKSIKKÖ'
     );
+
 GO

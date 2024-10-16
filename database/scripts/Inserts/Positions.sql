@@ -36,4 +36,5 @@ VALUES
         'Lopetus-003',
         1
     );
+
 GO

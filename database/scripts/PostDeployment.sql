@@ -2,12 +2,12 @@
 
 -- Insert data to Position table
 PRINT 'INSERTING DATA TO Positions TABLE';
-:r \virkarekisteri\database\scripts\Inserts\Positions.sql
+:r .\Inserts\Positions.sql
 
 -- Insert data to OrganizationTree table
 PRINT 'INSERTING DATA TO OrganizationTree TABLE';
-:r \virkarekisteri\database\scripts\Inserts\OrgTreePalvelukeskus.sql
-:r \virkarekisteri\database\scripts\Inserts\OrgTreeTulosalue.sql
-:r \virkarekisteri\database\scripts\Inserts\OrgTreeVastuualue.sql
-:r \virkarekisteri\database\scripts\Inserts\OrgTreeTulosyksikko.sql
-:r \virkarekisteri\database\scripts\Inserts\OrgTreeKustannuspaikka.sql
+:r .\Inserts\OrgTreePalvelukeskus.sql
+:r .\Inserts\OrgTreeTulosalue.sql
+:r .\Inserts\OrgTreeVastuualue.sql
+:r .\Inserts\OrgTreeTulosyksikko.sql
+:r .\Inserts\OrgTreeKustannuspaikka.sql

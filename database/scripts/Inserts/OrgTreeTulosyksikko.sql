@@ -1,12 +1,6 @@
 -- TULOSYKSIKKÖ TASO
-INSERT INTO 
-    OrganizationTree (
-        Number, 
-        Name, 
-        ParentNumber, 
-        Alue,
-        ParentAlue
-    )
+INSERT INTO
+    OrganizationTree (Number, Name, ParentNumber, Alue, ParentAlue)
 VALUES
     (
         '1000',
@@ -470,4 +464,5 @@ VALUES
         'TULOSYKSIKKÖ',
         'VASTUUALUE'
     );
+
 GO

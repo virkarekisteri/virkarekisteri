@@ -1,52 +1,46 @@
 -- TULOSALUE TASO
-INSERT INTO 
-    OrganizationTree (
-        Number, 
-        Name, 
-        ParentNumber, 
-        Alue,
-        ParentAlue
-    )
-VALUES    
+INSERT INTO
+    OrganizationTree (Number, Name, ParentNumber, Alue, ParentAlue)
+VALUES
     (
-        '100', 
-        'VAALIT', 
+        '100',
+        'VAALIT',
         '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
     (
-        '120', 
-        'TARKASTUSTOIMI', 
+        '120',
+        'TARKASTUSTOIMI',
         '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
     (
-        '130', 
-        'YLEISHALLINTO', 
-        '10', 
+        '130',
+        'YLEISHALLINTO',
+        '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
     (
-        '140', 
-        'HALLINTOPALVELUT', 
-        '10', 
+        '140',
+        'HALLINTOPALVELUT',
+        '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
     (
-        '150', 
-        'HENKILÖSTÖPALVELUT', 
-        '10', 
+        '150',
+        'HENKILÖSTÖPALVELUT',
+        '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
     (
-        '160', 
-        'TALOUSPALVELUT', 
-        '10', 
+        '160',
+        'TALOUSPALVELUT',
+        '10',
         'TULOSALUE',
         'PALVELUKESKUS'
     ),
@@ -204,4 +198,5 @@ VALUES
         'TULOSALUE',
         'PALVELUKESKUS'
     );
+
 GO
