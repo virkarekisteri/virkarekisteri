@@ -44,7 +44,7 @@ const DataTable: React.FC = () => {
         accessor: 'type',
       },
     ],
-    [],
+    [t],
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
