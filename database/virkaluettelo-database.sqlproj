@@ -9,9 +9,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="scripts" />
+    <Folder Include="scripts\Inserts" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\PostDeployment.sql" />
+    <None Include="scripts\Inserts\Positions.sql" />
+    <None Include="scripts\Inserts\OrgTreeVastuualue.sql" />
+    <None Include="scripts\Inserts\OrgTreeTulosyksikko.sql" />
+    <None Include="scripts\Inserts\OrgTreeTulosalue.sql" />
+    <None Include="scripts\Inserts\OrgTreePalvelukeskus.sql" />
+    <None Include="scripts\Inserts\OrgTreeKustannuspaikka.sql" />
   </ItemGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />

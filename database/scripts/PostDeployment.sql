@@ -1,39 +1,13 @@
--- This file contains SQL statements that will be executed after the build script.
-INSERT INTO
-    Positions (
-        LuontiPvm,
-        PaattymisPvm,
-        VakanssiKoko,
-        VakanssinTaytto,
-        LuontiPaatosNumero,
-        LopetusPaatosNumero,
-        Laji
-    )
-VALUES
-    (
-        '2023-01-15',
-        '2024-01-15',
-        0.95,
-        0.85,
-        'Paatos-001',
-        'Lopetus-001',
-        1
-    ),
-    (
-        '2022-05-12',
-        NULL,
-        0.75,
-        0.50,
-        'Paatos-002',
-        NULL,
-        2
-    ),
-    (
-        '2021-09-10',
-        '2023-09-10',
-        0.60,
-        0.60,
-        'Paatos-003',
-        'Lopetus-003',
-        1
-    );
+-- This file references to SQL statements that will be executed after the build script.
+
+-- Insert data to Position table
+PRINT 'INSERTING DATA TO Positions TABLE';
+:r .\Inserts\Positions.sql
+
+-- Insert data to OrganizationTree table
+PRINT 'INSERTING DATA TO OrganizationTree TABLE';
+:r .\Inserts\OrgTreePalvelukeskus.sql
+:r .\Inserts\OrgTreeTulosalue.sql
+:r .\Inserts\OrgTreeVastuualue.sql
+:r .\Inserts\OrgTreeTulosyksikko.sql
+:r .\Inserts\OrgTreeKustannuspaikka.sql
