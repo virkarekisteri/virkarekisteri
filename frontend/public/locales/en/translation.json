@@ -1,5 +1,11 @@
 {
   "app_name": "Position Registry",
+  "table": {
+    "created_at": "Created at",
+    "creation_decision_number": "Creation decision number",
+    "vacancy_size": "Vacancy size",
+    "type": "Type"
+  },
   "create_position": {
     "add_new_position": "Add new position",
     "created_at": "Created at",

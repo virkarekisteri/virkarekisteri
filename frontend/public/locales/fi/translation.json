@@ -1,5 +1,11 @@
 {
   "app_name": "Virkarekisteri",
+  "table": {
+    "created_at": "Perustamisajankohta",
+    "creation_decision_number": "Päätösnumero",
+    "vacancy_size": "Vakanssikoko",
+    "type": "Laji"
+  },
   "create_position": {
     "add_new_position": "Lisää uusi virka",
     "created_at": "Perustamisajankohta",

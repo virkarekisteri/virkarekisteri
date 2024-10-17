@@ -27,20 +27,20 @@ const DataTable: React.FC = () => {
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
-        Header: t('create_position.created_at'),
+        Header: t('table.created_at'),
         accessor: 'createdAt',
         Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
       },
       {
-        Header: t('create_position.creation_decision_number'),
+        Header: t('table.creation_decision_number'),
         accessor: 'creationDecisionNumber',
       },
       {
-        Header: t('create_position.vacancy_size'),
+        Header: t('table.vacancy_size'),
         accessor: 'vacancySize',
       },
       {
-        Header: 'Laji',
+        Header: t('table.type'),
         accessor: 'type',
       },
     ],
