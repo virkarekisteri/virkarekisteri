@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Grid2, Box } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
+import { getPositions } from 'redux/slices/position-slice';
+import { useAppDispatch } from 'redux/hooks';
 
 const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -11,6 +13,11 @@ const VirkarekisterContainer = () => {
 
   const handleOpen = () => setOpenCreateModal(true);
   const handleClose = () => setOpenCreateModal(false);
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getPositions());
+  }, [dispatch]);
 
   return (
     <div>

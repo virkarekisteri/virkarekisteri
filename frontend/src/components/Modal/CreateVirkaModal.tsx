@@ -3,9 +3,10 @@ import Modal from '@mui/material/Modal';
 import React from 'react';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
-import { createPosition } from 'services/functions/positions-service';
+import { addPosition } from 'redux/slices/position-slice';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from 'redux/hooks';
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
@@ -13,6 +14,7 @@ interface CreateVirkaModalProps {
 
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (values: Partial<Position>) => {
     try {
@@ -26,7 +28,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         type: values.type ?? 0, // Assuming a default type value
       };
 
-      await createPosition(positionData);
+      await dispatch(addPosition(positionData));
       handleClose();
     } catch (error) {
       console.error(error);
