@@ -11,31 +11,32 @@ import {
   alpha,
   CircularProgress,
 } from '@mui/material';
+import { format } from 'date-fns';
 import type { Position } from 'models/Position';
-import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
 import { useAppSelector } from 'redux/hooks';
-import type { RootState } from 'redux/store';
-
+import { selectPositionData, selectPositionLoading } from 'redux/slices/position-slice';
 const DataTable: React.FC = () => {
-  const dataFromBackend = useAppSelector((state: RootState) => state.positions.entries);
-  const dataLoading = useAppSelector((state: RootState) => state.positions.loading);
+  const dataFromBackend = useAppSelector(selectPositionData);
+  const dataLoading = useAppSelector(selectPositionLoading);
+  const { t } = useTranslation();
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
-        Header: 'Luomispäivämäärä',
+        Header: t('create_position.created_at'),
         accessor: 'createdAt',
-        Cell: ({ value }) => moment(value).format('DD.MM.YYYY'),
+        Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
       },
       {
-        Header: 'Luomispäätöksen numero',
+        Header: t('create_position.creation_decision_number'),
         accessor: 'creationDecisionNumber',
       },
       {
-        Header: 'Vakanssikoko',
+        Header: t('create_position.vacancy_size'),
         accessor: 'vacancySize',
       },
       {

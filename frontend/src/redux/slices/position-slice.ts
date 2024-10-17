@@ -52,6 +52,12 @@ export const positionSlice = createAppSlice({
       },
     ),
   }),
+  selectors: {
+    selectPositionData: (data) => data.entries,
+    selectPositionLoading: (counter) => counter.loading,
+  },
 });
 
 export const { getPositions, addPosition } = positionSlice.actions;
+
+export const { selectPositionData, selectPositionLoading } = positionSlice.selectors;
