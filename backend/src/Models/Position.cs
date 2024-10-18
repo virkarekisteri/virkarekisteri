@@ -21,6 +21,10 @@ public class Position
     [Column("VakanssinTaytto", TypeName = "decimal(3, 2)")]
     public decimal? VacancyFill { get; set; }
 
+    [MaxLength(10)]
+    [Column("Hinnoittelutunnus")]
+    public string? PricingId { get; set; }
+
     [Required]
     [MaxLength(100)]
     [Column("LuontiPaatosNumero")]
