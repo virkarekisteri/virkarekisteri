@@ -10,3 +10,8 @@ export const getPositionsFunc = async (): Promise<Position[]> => {
   const response = await apiClient.get('/positions');
   return response.data;
 };
+
+export const getPositionById = async (id: string): Promise<Position> => {
+  const response = await apiClient.get(`/positions/${id}`);
+  return response.data;
+};

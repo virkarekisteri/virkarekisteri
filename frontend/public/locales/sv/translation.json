@@ -6,6 +6,9 @@
     "vacancy_size": "",
     "type": ""
   },
+  "position": {
+    "details": ""
+  },
   "create_position": {
     "add_new_position": "",
     "created_at": "",
