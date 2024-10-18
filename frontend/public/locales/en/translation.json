@@ -6,6 +6,9 @@
     "vacancy_size": "Vacancy size",
     "type": "Type"
   },
+  "position": {
+    "details": "Position details"
+  },
   "create_position": {
     "add_new_position": "Add new position",
     "created_at": "Created at",

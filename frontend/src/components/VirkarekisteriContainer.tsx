@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Button, Grid2, Box } from '@mui/material';
+import { Box, Button, CircularProgress, Grid2 } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import { getPositions } from 'redux/slices/position-slice';
-import { useAppDispatch } from 'redux/hooks';
+import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import PositionDetails from './Details/PositionDetails';
 
 const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -13,6 +14,8 @@ const VirkarekisterContainer = () => {
 
   const handleOpen = () => setOpenCreateModal(true);
   const handleClose = () => setOpenCreateModal(false);
+  const position = useAppSelector(selectIndividualPosition);
+  const dataLoading = useAppSelector(selectPositionLoading);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -23,24 +26,25 @@ const VirkarekisterContainer = () => {
     <div>
       <TopAppBar />
       <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
-      <Box
-        sx={{
-          margin: 'auto',
-          maxWidth: '90%',
-          mt: 4,
-        }}
-      >
-        <Grid2 container>
-          <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
-            <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
-              {t('new_position')}
-            </Button>
-          </Grid2>
-          <Grid2 size={12}>
-            <VirkarekisteriTable />
-          </Grid2>
+      <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
+        <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
+          <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
+            {t('new_position')}
+          </Button>
         </Grid2>
-      </Box>
+        <Grid2 size={12}>
+          <VirkarekisteriTable />
+        </Grid2>
+        <Grid2 size={12}>
+          {dataLoading ? (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+              <CircularProgress />
+            </Box>
+          ) : (
+            position && <PositionDetails position={position} />
+          )}
+        </Grid2>
+      </Grid2>
     </div>
   );
 };
