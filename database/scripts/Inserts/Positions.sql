@@ -11,7 +11,6 @@ INSERT INTO
         PositionNameId
     )
 VALUES
-    VALUES
     (
         '2023-01-15',
         '2024-01-15',

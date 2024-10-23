@@ -14,6 +14,7 @@
   <ItemGroup>
     <PostDeploy Include="scripts\PostDeployment.sql" />
     <None Include="scripts\Inserts\Positions.sql" />
+    <None Include="scripts\Inserts\PositionNames.sql" />
     <None Include="scripts\Inserts\OrgTreeVastuualue.sql" />
     <None Include="scripts\Inserts\OrgTreeTulosyksikko.sql" />
     <None Include="scripts\Inserts\OrgTreeTulosalue.sql" />
