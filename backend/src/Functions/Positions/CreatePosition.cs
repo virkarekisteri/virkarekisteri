@@ -8,7 +8,11 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository, PositionNameRepository positionNameRepository)
+public class CreatePosition(
+    ILogger<CreatePosition> logger,
+    PositionRepository positionRepository,
+    PositionNameRepository positionNameRepository
+)
 {
     /// <summary>
     /// /postitions POST endpoint to add a new position to the database
@@ -33,7 +37,9 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
         // Check if positionName is provided and exists in PositionNames table
         if (!string.IsNullOrEmpty(requestPosition.PositionName?.Name))
         {
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name);
+            var positionNameId = await positionNameRepository.GetPositionNameIdByName(
+                requestPosition.PositionName.Name
+            );
 
             if (positionNameId == null)
             {

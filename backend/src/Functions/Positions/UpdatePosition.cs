@@ -8,7 +8,11 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository, PositionNameRepository positionNameRepository)
+public class UpdatePosition(
+    ILogger<CreatePosition> logger,
+    PositionRepository positionRepository,
+    PositionNameRepository positionNameRepository
+)
 {
     /// <summary>
     /// /positions/{id} PUT endpoint to update an existing position in the database
@@ -49,13 +53,12 @@ public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository p
         existingPosition.EndedAt = updateDto.EndedAt;
         existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber;
 
-
         // Check if the request contains a new PositionName to update
         if (!string.IsNullOrEmpty(updateDto.PositionName))
         {
             // Check if the PositionName already exists in the PositionNames table
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
-            
+
             if (positionNameId == null)
             {
                 // If the PositionName doesn't exist, create a new one
