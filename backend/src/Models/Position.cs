@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Virkarekisteri.Models;
@@ -37,11 +37,4 @@ public class Position
     [Required]
     [Column("Laji")]
     public int Type { get; set; }
-
-    [Required]
-    [Column("PositionNameId")]
-    public Guid PositionNameId { get; set; }
-
-    [ForeignKey("PositionNameId")]
-    public PositionName? PositionName { get; set; }
 }

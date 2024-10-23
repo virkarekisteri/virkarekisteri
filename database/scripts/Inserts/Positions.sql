@@ -7,8 +7,7 @@ INSERT INTO
         Hinnoittelutunnus,
         LuontiPaatosNumero,
         LopetusPaatosNumero,
-        Laji,
-        PositionNameId
+        Laji
     )
 VALUES
     (
@@ -19,8 +18,7 @@ VALUES
         '4 50 01 04',
         'Paatos-001',
         'Lopetus-001',
-        1,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Perusopetuksen rehtori')
+        1
     ),
     (
         '2022-05-12',
@@ -30,8 +28,7 @@ VALUES
         '4 50 01 69',
         'Paatos-002',
         NULL,
-        2,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Lukion rehtori')
+        2
     ),
     (
         '2021-09-10',
@@ -41,8 +38,7 @@ VALUES
         NULL,
         'Paatos-003',
         'Lopetus-003',
-        1,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Erityisopetuksen rehtori')
+        1
     );
 
 GO

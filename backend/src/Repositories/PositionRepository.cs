@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿﻿using Microsoft.EntityFrameworkCore;
 using Virkarekisteri.Models;
 
 namespace Virkarekisteri.Repositories;
@@ -9,24 +9,14 @@ public class PositionRepository(VirkarekisteriDb db)
     /// Gets all Posititons from the database
     /// </summary>
     /// <returns>List of all Positions</returns>
-public async Task<List<Position>> GetPositions()
-    {
-        return await db.Positions
-                        .Include(p => p.PositionName)
-                        .ToListAsync();
-    }
+    public async Task<List<Position>> GetPositions() => await db.Positions.ToListAsync();
 
     /// <summary>
     /// Gets a Position by ID from the database
     /// </summary>
     /// <param name="id">Id to get by</param>
     /// <returns>The requests Position</returns>
-   public async Task<Position?> GetPosition(Guid id)
-    {
-        return await db.Positions
-                        .Include(p => p.PositionName)
-                        .FirstOrDefaultAsync(p => p.Id == id);
-    }
+    public async Task<Position?> GetPosition(Guid id) => await db.Positions.FindAsync(id);
 
     /// <summary>
     /// Creates (inserts to the Positions table) a Position to the database
