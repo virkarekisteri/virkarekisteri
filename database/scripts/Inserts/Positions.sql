@@ -20,7 +20,14 @@ VALUES
         'Paatos-001',
         'Lopetus-001',
         1,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Perusopetuksen rehtori')
+        (
+            SELECT
+                Id
+            FROM
+                [dbo].[PositionNames]
+            WHERE
+                [Name] = 'Perusopetuksen rehtori'
+        )
     ),
     (
         '2022-05-12',
@@ -31,7 +38,14 @@ VALUES
         'Paatos-002',
         NULL,
         2,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Lukion rehtori')
+        (
+            SELECT
+                Id
+            FROM
+                [dbo].[PositionNames]
+            WHERE
+                [Name] = 'Lukion rehtori'
+        )
     ),
     (
         '2021-09-10',
@@ -42,7 +56,14 @@ VALUES
         'Paatos-003',
         'Lopetus-003',
         1,
-        (SELECT Id FROM [dbo].[PositionNames] WHERE [Name] = 'Erityisopetuksen rehtori')
+        (
+            SELECT
+                Id
+            FROM
+                [dbo].[PositionNames]
+            WHERE
+                [Name] = 'Erityisopetuksen rehtori'
+        )
     );
 
 GO

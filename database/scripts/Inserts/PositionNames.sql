@@ -1,6 +1,6 @@
-INSERT INTO 
+INSERT INTO
     PositionNames (Name)
-VALUES 
+VALUES
     ('Perusopetuksen rehtori'),
     ('Lukion rehtori'),
     ('Perusopetuksen ja lukion yhteinen rehtori'),
@@ -13,7 +13,9 @@ VALUES
     ('Lukion ja lukion aikuislinjan yhteinen lehtori'),
     ('Lukion aikuislinjan ja lukion yhteinen lehtori'),
     ('Päätoiminen lukion tuntiopettaja'),
-    ('Päätoiminen lukion ja perusopetuksen tuntiopettaja'),
+    (
+        'Päätoiminen lukion ja perusopetuksen tuntiopettaja'
+    ),
     ('Lukion erityisopetuksen tuntiopettaja'),
     ('Peruskoulun oppilaanohjaaja'),
     ('Perusopetuksen lehtori'),
@@ -24,7 +26,9 @@ VALUES
     ('Konsultoiva erityisopettaja'),
     ('Valmistava opettaja'),
     ('Päätoiminen perusopetuksen tuntiopettaja'),
-    ('Päätoiminen perusopetuksen ja lukion tuntiopettaja'),
+    (
+        'Päätoiminen perusopetuksen ja lukion tuntiopettaja'
+    ),
     ('Erityisopetuksen tuntiopettaja');
 
 GO
