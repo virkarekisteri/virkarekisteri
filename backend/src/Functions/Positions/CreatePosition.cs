@@ -27,6 +27,12 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
 
         var (error, requestPosition) = await TryDeserializeRequestBody<Position>(req);
 
+        // Check that the fill percentage is not greater than the vacancy percentage
+        if (requestPosition.VacancyFill > requestPosition.VacancySize)
+        {
+            return new BadRequestObjectResult("The fill % cannot be greater than the total vacancy %");
+        }
+
         if (error is not null)
             return error;
 
