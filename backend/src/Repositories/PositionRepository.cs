@@ -1,9 +1,17 @@
-﻿﻿using Microsoft.EntityFrameworkCore; 
+﻿using Microsoft.EntityFrameworkCore;
 using Virkarekisteri.Models;
 
 namespace Virkarekisteri.Repositories;
 
-public class PositionRepository(VirkarekisteriDb db)
+public interface IPositionRepository
+{
+    Task<List<Position>> GetPositions();
+    Task<Position?> GetPosition(Guid id);
+    Task<Position> CreatePosition(Position position);
+    Task UpdatePosition(Position existingPosition);
+}
+
+public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
 {
     /// <summary>
     /// Gets all Posititons from the database

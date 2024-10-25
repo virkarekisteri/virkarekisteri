@@ -1,23 +1,21 @@
-using Xunit;
-using Moq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Moq;
 using Virkarekisteri.Functions.Positions;
-using Virkarekisteri.Repositories;
 using Virkarekisteri.Models;
-using System.Threading.Tasks;
+using Virkarekisteri.Repositories;
 
 public class GetPositionTests
 {
     private readonly Mock<ILogger<GetPosition>> _loggerMock;
-    private readonly Mock<PositionRepository> _positionRepositoryMock;
+    private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly GetPosition _function;
 
     public GetPositionTests()
     {
         _loggerMock = new Mock<ILogger<GetPosition>>();
-        _positionRepositoryMock = new Mock<PositionRepository>();
+        _positionRepositoryMock = new Mock<IPositionRepository>();
         _function = new GetPosition(_loggerMock.Object, _positionRepositoryMock.Object);
     }
 
@@ -47,8 +45,7 @@ public class GetPositionTests
         var request = context.Request;
 
         var mockPosition = new Position { Id = validGuid, CreationDecisionNumber = "123" };
-        _positionRepositoryMock.Setup(repo => repo.GetPosition(validGuid))
-            .ReturnsAsync(mockPosition);
+        _positionRepositoryMock.Setup(repo => repo.GetPosition(validGuid)).ReturnsAsync(mockPosition);
 
         // Act
         var result = await _function.Run(request);
@@ -67,8 +64,7 @@ public class GetPositionTests
         context.Request.RouteValues["id"] = validGuid.ToString();
         var request = context.Request;
 
-        _positionRepositoryMock.Setup(repo => repo.GetPosition(validGuid))
-            .ReturnsAsync((Position)null);
+        _positionRepositoryMock.Setup(repo => repo.GetPosition(validGuid)).ReturnsAsync((Position)null);
 
         // Act
         var result = await _function.Run(request);

@@ -6,7 +6,7 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class GetPosition(ILogger<GetPosition> logger, PositionRepository positionRepository)
+public class GetPosition(ILogger<GetPosition> logger, IPositionRepository positionRepository)
 {
     /// <summary>
     /// Gets a position by id

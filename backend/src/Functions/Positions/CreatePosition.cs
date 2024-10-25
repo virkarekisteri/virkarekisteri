@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Http; 
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -8,7 +8,7 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository)
+public class CreatePosition(ILogger<CreatePosition> logger, IPositionRepository positionRepository)
 {
     /// <summary>
     /// /postitions POST endpoint to add a new position to the database

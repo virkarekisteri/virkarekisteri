@@ -8,7 +8,7 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository)
+public class UpdatePosition(ILogger<CreatePosition> logger, IPositionRepository positionRepository)
 {
     /// <summary>
     /// /positions/{id} PUT endpoint to update an existing position in the database

@@ -6,7 +6,7 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class GetPositions(ILogger<GetPosition> logger, PositionRepository positionRepository)
+public class GetPositions(ILogger<GetPosition> logger, IPositionRepository positionRepository)
 {
     /// <summary>
     /// Gets all positions from the database
