@@ -46,6 +46,16 @@ public class UpdatePosition(ILogger<CreatePosition> logger, PositionRepository p
             return new NotFoundResult(); // 404 if position not found
         }
 
+        // Check that the fill percentage is not greater than the vacancy percentage
+        if (updateDto.VacancyFill > existingPosition.VacancySize)
+        {
+            return new BadRequestObjectResult("The fill % cannot be greater than the total vacancy %");
+        }
+        if (updateDto.VacancyFill.HasValue)
+        {
+            existingPosition.VacancyFill = updateDto.VacancyFill.Value;
+        }
+
         existingPosition.EndedAt = updateDto.EndedAt;
         existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber;
 
