@@ -1,6 +1,4 @@
 export interface Position {
-  id?: string;
-
   createdAt: Date;
 
   endedAt?: Date;
@@ -15,9 +13,5 @@ export interface Position {
 
   type: number;
 
-  educationLevel?: string;
-
-  workExperience?: string;
-
-  details?: string;
+  costCentertId: string;
 }

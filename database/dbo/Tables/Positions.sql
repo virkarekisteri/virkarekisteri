@@ -7,7 +7,10 @@ CREATE TABLE [dbo].[Positions] (
     [Hinnoittelutunnus] NVARCHAR(10),
     [LuontiPaatosNumero] NVARCHAR(50) NOT NULL,
     [LopetusPaatosNumero] NVARCHAR(50),
-    [Laji] INT NOT NULL
+    [Laji] INT NOT NULL,
+	[Koulutustaso] NVARCHAR(255),
+	[Tyokokemus] NVARCHAR(255),
+	[Lisatiedot] NVARCHAR(255)
 );
 
 GO
