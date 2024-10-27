@@ -40,7 +40,7 @@ public class Position
 
     [MaxLength(255)]
     [Column("Koulutustaso")]
-    public string?  EducationLevel { get; set; }
+    public string? EducationLevel { get; set; }
 
     [MaxLength(255)]
     [Column("Tyokokemus")]
