@@ -26,6 +26,10 @@ public class GetPosition(ILogger<GetPosition> logger, IPositionRepository positi
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
         var position = await positionRepository.GetPosition(positionId);
+
+        if (position is null)
+            return new NotFoundResult();
+
         return new OkObjectResult(position);
     }
 }
