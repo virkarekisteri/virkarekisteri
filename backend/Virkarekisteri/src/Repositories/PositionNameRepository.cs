@@ -1,7 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Virkarekisteri.Models;
 
-public class PositionNameRepository(VirkarekisteriDb db)
+namespace Virkarekisteri.Repositories;
+
+public interface IPositionNameRepository
+{
+    Task<Guid?> GetPositionNameIdByName(string name);
+    Task<Guid> CreatePositionName(string name);
+}
+
+public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameRepository
 {
     public async Task<Guid?> GetPositionNameIdByName(string name)
     {

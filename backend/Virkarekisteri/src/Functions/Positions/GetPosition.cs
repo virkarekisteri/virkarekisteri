@@ -6,7 +6,7 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class GetPosition(ILogger<GetPosition> logger, PositionRepository positionRepository)
+public class GetPosition(ILogger<GetPosition> logger, IPositionRepository positionRepository)
 {
     /// <summary>
     /// Gets a position by id
@@ -26,6 +26,10 @@ public class GetPosition(ILogger<GetPosition> logger, PositionRepository positio
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
         var position = await positionRepository.GetPosition(positionId);
+
+        if (position is null)
+            return new NotFoundResult();
+
         return new OkObjectResult(position);
     }
 }
