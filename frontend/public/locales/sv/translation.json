@@ -14,8 +14,12 @@
     "created_at": "",
     "creation_decision_number": "",
     "save": "",
-    "vacancy_size": ""
+    "vacancy_size": "",
+    "education_level": "",
+    "work_experience": ""
   },
+  "additional_details": "",
+  "eligibility": "",
   "new_position": "",
   "user_menu": {
     "logout": ""

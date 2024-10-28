@@ -14,8 +14,12 @@
     "created_at": "Perustamisajankohta",
     "creation_decision_number": "Päätösnumero",
     "save": "Tallenna",
-    "vacancy_size": "Koko-%"
+    "vacancy_size": "Koko-%",
+    "education_level": "Koulutustaso",
+    "work_experience": "Työkokemus"
   },
+  "additional_details": "Lisätiedot",
+  "eligibility": "Kelpoisuusehdot",
   "new_position": "+ Uusi virka",
   "user_menu": {
     "logout": "Kirjaudu Ulos"

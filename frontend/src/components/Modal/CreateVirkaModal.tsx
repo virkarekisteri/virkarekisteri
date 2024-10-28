@@ -1,5 +1,18 @@
-import { Box, TextField, Button, Grid2, IconButton, Typography, InputAdornment } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  Grid2,
+  IconButton,
+  Typography,
+  InputAdornment,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  alpha,
+} from '@mui/material';
 import Modal from '@mui/material/Modal';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React from 'react';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,7 +38,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         vacancyFill: values.vacancyFill,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
-        type: values.type ?? 0, // Assuming a default type value
+        type: values.type ?? 0,
+        educationLevel: values.educationLevel ?? '',
+        workExperience: values.workExperience ?? '',
+        details: values.details ?? '',
       };
 
       await dispatch(addPosition(positionData));
@@ -135,11 +151,89 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
-                  <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
-                    <Button type="submit" variant="contained" disabled={submitting || pristine}>
-                      {t('create_position.save')}
-                    </Button>
-                  </Grid2>
+                </Grid2>
+                <Accordion sx={{ mb: 1 }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}
+                  >
+                    <Typography>{t('eligibility')}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid2 size={12}>
+                      <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                        {t('create_position.education_level')}
+                      </Typography>
+                      <Field name="educationLevel">
+                        {({ input }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            fullWidth
+                            multiline
+                            id="educationLevel"
+                            label={t('create_position.education_level')}
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
+                    <Grid2 size={12}>
+                      <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                        {t('create_position.work_experience')}
+                      </Typography>
+                      <Field name="workExperience">
+                        {({ input }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            fullWidth
+                            multiline
+                            id="workExperience"
+                            label={t('create_position.work_experience')}
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion sx={{ mb: 1 }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{
+                      backgroundColor: alpha('#223B7C', 1),
+                      color: 'white',
+                    }}
+                  >
+                    <Typography>{t('additional_details')}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Grid2 size={12}>
+                      <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                        {t('additional_details')}
+                      </Typography>
+                      <Field name="additionalDetails">
+                        {({ input }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            fullWidth
+                            multiline
+                            id="additionalDetails"
+                            label={t('additional_details')}
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
+                  </AccordionDetails>
+                </Accordion>
+                <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
+                  <Button type="submit" variant="contained" disabled={submitting || pristine}>
+                    {t('create_position.save')}
+                  </Button>
                 </Grid2>
               </form>
             )}

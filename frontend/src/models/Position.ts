@@ -14,4 +14,10 @@ export interface Position {
   endingDecisionNumber?: string;
 
   type: number;
+
+  educationLevel?: string;
+
+  workExperience?: string;
+
+  details?: string;
 }

@@ -44,4 +44,16 @@ public class Position
 
     [ForeignKey("PositionNameId")]
     public PositionName? PositionName { get; set; }
+
+    [MaxLength(255)]
+    [Column("Koulutustaso")]
+    public string? EducationLevel { get; set; }
+
+    [MaxLength(255)]
+    [Column("Tyokokemus")]
+    public string? WorkExperience { get; set; }
+
+    [MaxLength(255)]
+    [Column("Lisatiedot")]
+    public string? Details { get; set; }
 }

@@ -9,6 +9,9 @@ CREATE TABLE [dbo].[Positions] (
     [LopetusPaatosNumero] NVARCHAR(50),
     [Laji] INT NOT NULL,
     [PositionNameId] UNIQUEIDENTIFIER CONSTRAINT [FK_Positions_PositionNames] FOREIGN KEY ([PositionNameId]) REFERENCES [dbo].[PositionNames] ([Id]),
+    [Koulutustaso] NVARCHAR(255),
+    [Tyokokemus] NVARCHAR(255),
+    [Lisatiedot] NVARCHAR(255)
 );
 
 GO
