@@ -8,7 +8,11 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository, PositionNameRepository positionNameRepository)
+public class CreatePosition(
+    ILogger<CreatePosition> logger,
+    PositionRepository positionRepository,
+    PositionNameRepository positionNameRepository
+)
 {
     /// <summary>
     /// /postitions POST endpoint to add a new position to the database
@@ -30,7 +34,6 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
         if (error is not null)
             return error;
 
-
         if (requestPosition.PositionNameId == Guid.Empty)
         {
             if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
@@ -38,7 +41,9 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
                 return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
             }
 
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name);
+            var positionNameId = await positionNameRepository.GetPositionNameIdByName(
+                requestPosition.PositionName.Name
+            );
             if (positionNameId == null)
             {
                 positionNameId = await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
@@ -48,7 +53,7 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
         }
 
         requestPosition.PositionName = null; // Nullify to avoid conflicts
-        
+
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
         return new OkObjectResult(createdPosition);
     }
