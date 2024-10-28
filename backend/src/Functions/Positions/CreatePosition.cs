@@ -34,20 +34,25 @@ public class CreatePosition(
         if (error is not null)
             return error;
 
-        // Check if positionName is provided and exists in PositionNames table
-        if (!string.IsNullOrEmpty(requestPosition.PositionName?.Name))
+        if (requestPosition.PositionNameId == Guid.Empty)
         {
+            if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
+            {
+                return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
+            }
+
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(
                 requestPosition.PositionName.Name
             );
-
             if (positionNameId == null)
             {
                 positionNameId = await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
             }
 
-            requestPosition.PositionNameId = (Guid)positionNameId;
+            requestPosition.PositionNameId = positionNameId.Value;
         }
+
+        requestPosition.PositionName = null; // Nullify to avoid conflicts
 
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
         return new OkObjectResult(createdPosition);
