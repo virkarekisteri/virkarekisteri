@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Virkarekisteri.csproj" />
+    <ProjectReference Include="..\Virkarekisteri\Virkarekisteri.csproj" />
   </ItemGroup>
 
 </Project>

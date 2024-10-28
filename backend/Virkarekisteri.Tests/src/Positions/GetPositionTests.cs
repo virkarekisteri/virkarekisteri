@@ -6,17 +6,18 @@ using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 
+namespace Virkarekisteri.Tests.Positions;
+
 public class GetPositionTests
 {
-    private readonly Mock<ILogger<GetPosition>> _loggerMock;
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly GetPosition _function;
 
     public GetPositionTests()
     {
-        _loggerMock = new Mock<ILogger<GetPosition>>();
+        Mock<ILogger<GetPosition>> loggerMock = new();
         _positionRepositoryMock = new Mock<IPositionRepository>();
-        _function = new GetPosition(_loggerMock.Object, _positionRepositoryMock.Object);
+        _function = new GetPosition(loggerMock.Object, _positionRepositoryMock.Object);
     }
 
     [Fact]

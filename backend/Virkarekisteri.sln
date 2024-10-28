@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virkarekisteri", "src\Virkarekisteri.csproj", "{88699E01-9D09-4E44-A9B4-DB8B135DA9C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virkarekisteri", "Virkarekisteri\Virkarekisteri.csproj", "{88699E01-9D09-4E44-A9B4-DB8B135DA9C3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C3F04AD9-9976-4F44-B2DD-580F9228DEB1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virkarekisteri.Tests", "tests\Virkarekisteri.Tests\Virkarekisteri.Tests.csproj", "{FC514268-17AC-48C9-A5BD-02CCD05C452E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Virkarekisteri.Tests", "Virkarekisteri.Tests\Virkarekisteri.Tests.csproj", "{FC514268-17AC-48C9-A5BD-02CCD05C452E}"
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
