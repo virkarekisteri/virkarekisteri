@@ -10,8 +10,8 @@ namespace Virkarekisteri.Functions.Positions;
 
 public class UpdatePosition(
     ILogger<CreatePosition> logger,
-    PositionRepository positionRepository,
-    PositionNameRepository positionNameRepository
+    IPositionRepository positionRepository,
+    IPositionNameRepository positionNameRepository
 )
 {
     /// <summary>
