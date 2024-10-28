@@ -37,4 +37,11 @@ public class Position
     [Required]
     [Column("Laji")]
     public int Type { get; set; }
+
+    [Required]
+    [Column("PositionNameId")]
+    public Guid PositionNameId { get; set; }
+
+    [ForeignKey("PositionNameId")]
+    public PositionName? PositionName { get; set; }
 }

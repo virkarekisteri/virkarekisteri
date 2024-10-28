@@ -13,6 +13,7 @@ var host = new HostBuilder()
             services.AddApplicationInsightsTelemetryWorkerService();
             services.ConfigureFunctionsApplicationInsights();
             services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<PositionNameRepository>();
             services.AddDbContext<VirkarekisteriDb>(options =>
                 options.UseSqlServer(
                     config.Configuration["SqlConnectionString"],
