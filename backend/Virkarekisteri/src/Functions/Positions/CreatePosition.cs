@@ -10,8 +10,8 @@ namespace Virkarekisteri.Functions.Positions;
 
 public class CreatePosition(
     ILogger<CreatePosition> logger,
-    PositionRepository positionRepository,
-    PositionNameRepository positionNameRepository
+    IPositionRepository positionRepository,
+    IPositionNameRepository positionNameRepository
 )
 {
     /// <summary>
@@ -41,15 +41,11 @@ public class CreatePosition(
                 return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
             }
 
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(
-                requestPosition.PositionName.Name
-            );
-            if (positionNameId == null)
-            {
-                positionNameId = await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
-            }
+            var positionNameId =
+                await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name)
+                ?? await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
 
-            requestPosition.PositionNameId = positionNameId.Value;
+            requestPosition.PositionNameId = positionNameId;
         }
 
         requestPosition.PositionName = null; // Nullify to avoid conflicts

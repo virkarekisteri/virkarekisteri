@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "lint+format": "npm run lint && npm run format",
     "preview": "vite preview",
-    "backend": "func start -p 7071 --script-root ../backend",
+    "backend": "func start -p 7071 --script-root ../backend/Virkarekisteri",
     "swa:frontend": "swa start",
     "swa": "concurrently --kill-others \"npm run backend\" \"swa start --api-devserver-url http://localhost:7071\"",
     "test": "vitest run",
