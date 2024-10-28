@@ -8,7 +8,11 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository positionRepository)
+public class CreatePosition(
+    ILogger<CreatePosition> logger,
+    IPositionRepository positionRepository,
+    IPositionNameRepository positionNameRepository
+)
 {
     /// <summary>
     /// /postitions POST endpoint to add a new position to the database
@@ -30,11 +34,21 @@ public class CreatePosition(ILogger<CreatePosition> logger, PositionRepository p
         if (error is not null)
             return error;
 
-        // Check that the fill percentage is not greater than the vacancy percentage
-        if (requestPosition.VacancyFill > requestPosition.VacancySize)
+        if (requestPosition.PositionNameId == Guid.Empty)
         {
-            return new BadRequestObjectResult("The fill % cannot be greater than the total vacancy %");
+            if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
+            {
+                return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
+            }
+
+            var positionNameId =
+                await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name)
+                ?? await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
+
+            requestPosition.PositionNameId = positionNameId;
         }
+
+        requestPosition.PositionName = null; // Nullify to avoid conflicts
 
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
         return new OkObjectResult(createdPosition);

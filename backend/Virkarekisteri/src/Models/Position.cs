@@ -38,6 +38,13 @@ public class Position
     [Column("Laji")]
     public int Type { get; set; }
 
+    [Required]
+    [Column("PositionNameId")]
+    public Guid PositionNameId { get; set; }
+
+    [ForeignKey("PositionNameId")]
+    public PositionName? PositionName { get; set; }
+
     [MaxLength(255)]
     [Column("Koulutustaso")]
     public string? EducationLevel { get; set; }
