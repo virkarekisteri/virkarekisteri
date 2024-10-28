@@ -48,7 +48,4 @@ Global
 		{FC514268-17AC-48C9-A5BD-02CCD05C452E}.Release|x86.ActiveCfg = Release|Any CPU
 		{FC514268-17AC-48C9-A5BD-02CCD05C452E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FC514268-17AC-48C9-A5BD-02CCD05C452E} = {C3F04AD9-9976-4F44-B2DD-580F9228DEB1}
-	EndGlobalSection
 EndGlobal
