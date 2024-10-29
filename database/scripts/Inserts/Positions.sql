@@ -8,7 +8,8 @@ INSERT INTO
         LuontiPaatosNumero,
         LopetusPaatosNumero,
         Laji,
-        PositionNameId
+        PositionNameId,
+        Sijoituspaikka
     )
 VALUES
     (
@@ -27,7 +28,8 @@ VALUES
                 [dbo].[PositionNames]
             WHERE
                 [Name] = 'Perusopetuksen rehtori'
-        )
+        ),
+        'Hervanta'
     ),
     (
         '2022-05-12',
@@ -45,7 +47,8 @@ VALUES
                 [dbo].[PositionNames]
             WHERE
                 [Name] = 'Lukion rehtori'
-        )
+        ),
+        'Seinäjoki'
     ),
     (
         '2021-09-10',
@@ -63,7 +66,8 @@ VALUES
                 [dbo].[PositionNames]
             WHERE
                 [Name] = 'Erityisopetuksen rehtori'
-        )
+        ),
+        NULL
     );
 
 GO

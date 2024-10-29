@@ -42,6 +42,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
+        placementLocation: values.placementLocation ?? ''
       };
 
       await dispatch(addPosition(positionData));
@@ -234,6 +235,27 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('create_position.save')}
                   </Button>
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.placement_location')}
+                    </Typography>
+                    <Field name="placementLocation">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          fullWidth
+                          id="placementLocation"
+                          label={t('create_position.placement_location')}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
+                  <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
+                    <Button type="submit" variant="contained" disabled={submitting || pristine}>
+                      {t('create_position.save')}
+                    </Button>
+                  </Grid2>
                 </Grid2>
               </form>
             )}

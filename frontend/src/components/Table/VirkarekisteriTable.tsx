@@ -43,6 +43,10 @@ const DataTable: React.FC = () => {
         Header: t('table.type'),
         accessor: 'type',
       },
+      {
+        Header: t('table.placement_location'),
+        accessor: 'placementLocation',
+      },
     ],
     [t],
   );

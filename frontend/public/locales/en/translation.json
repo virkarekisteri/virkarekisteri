@@ -4,7 +4,8 @@
     "created_at": "Created at",
     "creation_decision_number": "Creation decision number",
     "vacancy_size": "Vacancy size",
-    "type": "Type"
+    "type": "Type",
+    "placement_location": "Placement location"
   },
   "position": {
     "details": "Position details"
@@ -16,7 +17,8 @@
     "save": "Save",
     "vacancy_size": "Size-%",
     "education_level": "Education level",
-    "work_experience": "Work experience"
+    "work_experience": "Work experience",
+    "placement_location": "Placement Location"
   },
   "additional_details": "Additional details",
   "eligibility": "Eligibility",

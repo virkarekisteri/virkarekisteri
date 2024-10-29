@@ -56,4 +56,8 @@ public class Position
     [MaxLength(255)]
     [Column("Lisatiedot")]
     public string? Details { get; set; }
+    
+    [MaxLength(50)]
+    [Column("Sijoituspaikka")]
+    public string? PlacementLocation { get; set; }
 }

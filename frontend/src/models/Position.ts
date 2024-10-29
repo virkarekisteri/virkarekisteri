@@ -20,4 +20,6 @@ export interface Position {
   workExperience?: string;
 
   details?: string;
+  
+  placementLocation?: string;
 }

@@ -4,7 +4,8 @@
     "created_at": "",
     "creation_decision_number": "",
     "vacancy_size": "",
-    "type": ""
+    "type": "",
+    "placement_location": ""
   },
   "position": {
     "details": ""
@@ -16,7 +17,8 @@
     "save": "",
     "vacancy_size": "",
     "education_level": "",
-    "work_experience": ""
+    "work_experience": "",
+    "placement_location": ""
   },
   "additional_details": "",
   "eligibility": "",

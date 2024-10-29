@@ -4,7 +4,8 @@
     "created_at": "Perustamisajankohta",
     "creation_decision_number": "Päätösnumero",
     "vacancy_size": "Vakanssikoko",
-    "type": "Laji"
+    "type": "Laji",
+    "placement_location": "Sijoituspaikka"
   },
   "position": {
     "details": "Viran tiedot"
@@ -16,7 +17,8 @@
     "save": "Tallenna",
     "vacancy_size": "Koko-%",
     "education_level": "Koulutustaso",
-    "work_experience": "Työkokemus"
+    "work_experience": "Työkokemus",
+    "placement_location": "Sijoituspaikka"
   },
   "additional_details": "Lisätiedot",
   "eligibility": "Kelpoisuusehdot",

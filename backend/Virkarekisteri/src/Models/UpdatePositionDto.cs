@@ -6,5 +6,6 @@ namespace Virkarekisteri.Models
         public string? EndingDecisionNumber { get; set; }
         public string? PositionName { get; set; }
         public decimal? VacancyFill { get; set; }
+        public string? PlacementLocation { get; set; }
     }
 }
