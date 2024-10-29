@@ -62,6 +62,7 @@ public class UpdatePosition(
 
         existingPosition.EndedAt = updateDto.EndedAt;
         existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber;
+        existingPosition.PlacementLocation = updateDto.PlacementLocation;
 
         // Check if the request contains a new PositionName to update
         if (!string.IsNullOrEmpty(updateDto.PositionName))
