@@ -42,6 +42,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
+        placementLocation: values.placementLocation ?? '',
       };
 
       await dispatch(addPosition(positionData));
@@ -111,6 +112,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('create_position.creation_decision_number')}
@@ -128,6 +130,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('create_position.vacancy_size')}
@@ -151,8 +154,26 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.placement_location')}
+                    </Typography>
+                    <Field name="placementLocation">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          fullWidth
+                          id="placementLocation"
+                          label={t('create_position.placement_location')}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
                 </Grid2>
-                <Accordion sx={{ mb: 1 }}>
+
+                <Accordion sx={{ mt: 2, mb: 2 }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -173,6 +194,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                             margin="normal"
                             fullWidth
                             multiline
+                            maxRows={4}
                             id="educationLevel"
                             label={t('create_position.education_level')}
                           />
@@ -190,6 +212,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                             margin="normal"
                             fullWidth
                             multiline
+                            maxRows={4}
                             id="workExperience"
                             label={t('create_position.work_experience')}
                           />
@@ -198,7 +221,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion sx={{ mb: 1 }}>
+                <Accordion sx={{ mt: 2, mb: 4 }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
@@ -222,6 +245,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                             margin="normal"
                             fullWidth
                             multiline
+                            maxRows={4}
                             id="additionalDetails"
                             label={t('additional_details')}
                           />
@@ -230,7 +254,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
-                <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, width: '100%' }}>
+                <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('create_position.save')}
                   </Button>
