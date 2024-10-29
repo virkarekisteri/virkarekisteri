@@ -254,7 +254,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
-                <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+                <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('create_position.save')}
                   </Button>
