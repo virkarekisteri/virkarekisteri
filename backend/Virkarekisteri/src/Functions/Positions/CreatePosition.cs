@@ -39,7 +39,7 @@ public class CreatePosition(
             || string.IsNullOrWhiteSpace(requestPosition.OrgTreeLevel)
         )
         {
-            return new BadRequestObjectResult("KustannuspaikkaId and KustannuspaikkaAlue must be provided.");
+            return new BadRequestObjectResult("OrgTreeNumber and OrgTreeLevel must be provided.");
         }
 
         if (requestPosition.PositionNameId == Guid.Empty)
