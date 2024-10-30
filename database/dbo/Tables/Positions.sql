@@ -14,10 +14,8 @@ CREATE TABLE [dbo].[Positions] (
     [Tyokokemus] NVARCHAR(255),
     [Lisatiedot] NVARCHAR(255),
     [OrgTreeNumero] NVARCHAR(50) NOT NULL,
-    [OrgTreeAlue] NVARCHAR(255) NOT NULL,  
-    CONSTRAINT [FK_Positions_OrganizationTree]
-    FOREIGN KEY ([OrgTreeNumero], [OrgTreeAlue]) 
-    REFERENCES [dbo].[OrganizationTree] ([Number], [Alue]) -- Composite foreign key
+    [OrgTreeAlue] NVARCHAR(255) NOT NULL,
+    CONSTRAINT [FK_Positions_OrganizationTree] FOREIGN KEY ([OrgTreeNumero], [OrgTreeAlue]) REFERENCES [dbo].[OrganizationTree] ([Number], [Alue]) -- Composite foreign key
 );
 
 GO
