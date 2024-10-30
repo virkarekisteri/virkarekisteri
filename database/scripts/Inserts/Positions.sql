@@ -10,6 +10,8 @@ INSERT INTO
         Laji,
         Sijoituspaikka,
         PositionNameId,
+        OrgTreeNumero,
+        OrgTreeAlue
     )
 VALUES
     (
@@ -30,6 +32,8 @@ VALUES
             WHERE
                 [Name] = 'Perusopetuksen rehtori'
         ),
+        '1000',
+        'KUSTANNUSPAIKKA'
     ),
     (
         '2022-05-12',
@@ -48,7 +52,9 @@ VALUES
                 [dbo].[PositionNames]
             WHERE
                 [Name] = 'Lukion rehtori'
-        )
+        ),
+        '1412',
+        'KUSTANNUSPAIKKA'
     ),
     (
         '2021-09-10',
@@ -67,7 +73,9 @@ VALUES
                 [dbo].[PositionNames]
             WHERE
                 [Name] = 'Erityisopetuksen rehtori'
-        )
+        ),
+        '4124',
+        'KUSTANNUSPAIKKA'
     );
 
 GO
