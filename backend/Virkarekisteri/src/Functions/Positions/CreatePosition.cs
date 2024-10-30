@@ -34,7 +34,10 @@ public class CreatePosition(
         if (error is not null)
             return error;
 
-        if (string.IsNullOrWhiteSpace(requestPosition.OrgTreeNumber) || string.IsNullOrWhiteSpace(requestPosition.OrgTreeLevel))
+        if (
+            string.IsNullOrWhiteSpace(requestPosition.OrgTreeNumber)
+            || string.IsNullOrWhiteSpace(requestPosition.OrgTreeLevel)
+        )
         {
             return new BadRequestObjectResult("KustannuspaikkaId and KustannuspaikkaAlue must be provided.");
         }
