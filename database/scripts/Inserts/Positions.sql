@@ -10,8 +10,7 @@ INSERT INTO
         Laji,
         Sijoituspaikka,
         PositionNameId,
-        OrgTreeNumero,
-        OrgTreeAlue
+        OrgTreeId
     )
 VALUES
     (
@@ -32,8 +31,11 @@ VALUES
             WHERE
                 [Name] = 'Perusopetuksen rehtori'
         ),
-        '1000',
-        'KUSTANNUSPAIKKA'
+        (
+            SELECT Id
+            FROM [dbo].[OrganizationTree]
+            WHERE [Number] = '1000' AND [Alue] = 'KUSTANNUSPAIKKA'
+        )
     ),
     (
         '2022-05-12',
@@ -53,8 +55,11 @@ VALUES
             WHERE
                 [Name] = 'Lukion rehtori'
         ),
-        '1412',
-        'KUSTANNUSPAIKKA'
+        (
+            SELECT Id
+            FROM [dbo].[OrganizationTree]
+            WHERE [Number] = '1412' AND [Alue] = 'KUSTANNUSPAIKKA'
+        )
     ),
     (
         '2021-09-10',
@@ -74,8 +79,11 @@ VALUES
             WHERE
                 [Name] = 'Erityisopetuksen rehtori'
         ),
-        '4124',
-        'KUSTANNUSPAIKKA'
+        (
+            SELECT Id
+            FROM [dbo].[OrganizationTree]
+            WHERE [Number] = '4124' AND [Alue] = 'KUSTANNUSPAIKKA'
+        )
     );
 
 GO
