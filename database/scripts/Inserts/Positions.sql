@@ -32,9 +32,13 @@ VALUES
                 [Name] = 'Perusopetuksen rehtori'
         ),
         (
-            SELECT Id
-            FROM [dbo].[OrganizationTree]
-            WHERE [Number] = '1000' AND [Alue] = 'KUSTANNUSPAIKKA'
+            SELECT
+                Id
+            FROM
+                [dbo].[OrganizationTree]
+            WHERE
+                [Number] = '1000'
+                AND [Alue] = 'KUSTANNUSPAIKKA'
         )
     ),
     (
@@ -56,9 +60,13 @@ VALUES
                 [Name] = 'Lukion rehtori'
         ),
         (
-            SELECT Id
-            FROM [dbo].[OrganizationTree]
-            WHERE [Number] = '1412' AND [Alue] = 'KUSTANNUSPAIKKA'
+            SELECT
+                Id
+            FROM
+                [dbo].[OrganizationTree]
+            WHERE
+                [Number] = '1412'
+                AND [Alue] = 'KUSTANNUSPAIKKA'
         )
     ),
     (
@@ -80,9 +88,13 @@ VALUES
                 [Name] = 'Erityisopetuksen rehtori'
         ),
         (
-            SELECT Id
-            FROM [dbo].[OrganizationTree]
-            WHERE [Number] = '4124' AND [Alue] = 'KUSTANNUSPAIKKA'
+            SELECT
+                Id
+            FROM
+                [dbo].[OrganizationTree]
+            WHERE
+                [Number] = '4124'
+                AND [Alue] = 'KUSTANNUSPAIKKA'
         )
     );
 

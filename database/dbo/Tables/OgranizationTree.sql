@@ -6,8 +6,7 @@ CREATE TABLE [dbo].[OrganizationTree] (
     [Alue] NVARCHAR(255) NOT NULL, -- (Palvelukeskus, Tulosalue, Vastuualue, Tulosyksikkö, Kustannuspaikka)
     [ParentAlue] NVARCHAR(255) NULL, -- Nullable for the foreign key reference
     CONSTRAINT [UQ_OrganizationTree] UNIQUE ([Number], [Alue]), -- Unique constraint on Number and Alue
-    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber], [ParentAlue]) 
-    REFERENCES [dbo].[OrganizationTree] ([Number], [Alue]) ON DELETE NO ACTION -- No cascading action
+    CONSTRAINT [FK_OrganizationTree_Parent] FOREIGN KEY ([ParentNumber], [ParentAlue]) REFERENCES [dbo].[OrganizationTree] ([Number], [Alue]) ON DELETE NO ACTION -- No cascading action
 );
 
 GO
