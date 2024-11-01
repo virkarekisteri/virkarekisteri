@@ -7,6 +7,7 @@ public interface IPositionNameRepository
 {
     Task<Guid?> GetPositionNameIdByName(string name);
     Task<Guid> CreatePositionName(string name);
+    Task<List<PositionName>> GetAllPositionNames();
 }
 
 public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameRepository
@@ -23,5 +24,10 @@ public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameReposito
         await db.PositionNames.AddAsync(newPositionName);
         await db.SaveChangesAsync();
         return newPositionName.Id;
+    }
+
+    public async Task<List<PositionName>> GetAllPositionNames()
+    {
+        return await db.PositionNames.ToListAsync();
     }
 }

@@ -18,7 +18,8 @@
     "vacancy_size": "Koko-%",
     "education_level": "Koulutustaso",
     "work_experience": "Työkokemus",
-    "placement_location": "Sijoituspaikka"
+    "placement_location": "Sijoituspaikka",
+    "position_name": "Virkanimike"
   },
   "additional_details": "Lisätiedot",
   "eligibility": "Kelpoisuusehdot",

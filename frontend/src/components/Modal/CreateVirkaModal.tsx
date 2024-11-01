@@ -10,6 +10,8 @@ import {
   AccordionDetails,
   AccordionSummary,
   alpha,
+  Autocomplete,
+  CircularProgress,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -19,7 +21,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { addPosition } from 'redux/slices/position-slice';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'redux/hooks';
+import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { selectPositionNames, selectPositionNamesLoading } from 'redux/slices/position-name-slice';
+import type { PositionName } from 'models/PositionName';
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
@@ -28,8 +32,15 @@ interface CreateVirkaModalProps {
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const positionNames = useAppSelector(selectPositionNames);
+  const positionNamesLoading = useAppSelector(selectPositionNamesLoading);
+  const positionNameOptions = positionNames.map((option) => option.name);
 
   const onSubmit = async (values: Partial<Position>) => {
+    console.log(values);
+    const positionNameObj: PositionName = {
+      name: values.positionName?.toString() || '',
+    };
     try {
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
@@ -39,6 +50,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
         type: values.type ?? 0,
+        positionName: positionNameObj,
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
@@ -93,6 +105,43 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.position_name')}
+                    </Typography>
+                    <Field name="positionName">
+                      {({ input }) => (
+                        <Autocomplete
+                          {...input}
+                          freeSolo
+                          options={positionNameOptions}
+                          loading={positionNamesLoading}
+                          getOptionLabel={(option) => option}
+                          onInputChange={(value) => {
+                            input.onChange(value);
+                          }}
+                          onChange={(value) => {
+                            input.onChange(value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              margin="normal"
+                              fullWidth
+                              id="positionName"
+                              label={t('create_position.position_name')}
+                              slotProps={{
+                                input: {
+                                  ...params.InputProps,
+                                  type: 'search',
+                                },
+                              }}
+                            />
+                          )}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
                   <Grid2 size={4}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('create_position.created_at')}

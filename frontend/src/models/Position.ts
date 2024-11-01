@@ -1,3 +1,5 @@
+import type { PositionName } from './PositionName';
+
 export interface Position {
   id?: string;
 
@@ -18,6 +20,8 @@ export interface Position {
   educationLevel?: string;
 
   workExperience?: string;
+
+  positionName: PositionName;
 
   details?: string;
 
