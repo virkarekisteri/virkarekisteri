@@ -36,8 +36,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const positionNameOptions = positionNames.map((option) => option.name);
 
   useEffect(() => {
-    dispatch(fetchPositionNames());
-  }, [dispatch, positionNames]);
+    if (open) {
+      dispatch(fetchPositionNames());
+    }
+  }, [dispatch, open]);
 
   const onSubmit = async (values: Partial<Position>) => {
     console.log(values);
