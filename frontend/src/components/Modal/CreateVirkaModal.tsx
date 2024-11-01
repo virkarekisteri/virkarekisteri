@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPositionNames, selectPositionNames, selectPositionNamesLoading } from 'redux/slices/position-name-slice';
 import type { PositionName } from 'models/PositionName';
+import { getOrganizationTrees, selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
@@ -35,16 +36,21 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const positionNamesLoading = useAppSelector(selectPositionNamesLoading);
   const positionNameOptions = positionNames.map((option) => option.name);
 
+  const organizationTrees = useAppSelector(selectOrganizationTreeData);
+
   useEffect(() => {
     if (open) {
       dispatch(fetchPositionNames());
+      dispatch(getOrganizationTrees());
     }
   }, [dispatch, open]);
 
-  const onSubmit = async (values: Partial<Position>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = async (values: any) => {
     const positionNameObj: PositionName = {
       name: values.positionName?.toString() || '',
     };
+
     try {
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
@@ -60,6 +66,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
         placementLocation: values.placementLocation ?? '',
+        orgTreeId: values.orgTreeId.id ?? '',
       };
 
       await dispatch(addPosition(positionData));
@@ -222,6 +229,40 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           fullWidth
                           id="pricingId"
                           label={t('create_position.pricing_id')}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
+
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.organization_tree')}
+                    </Typography>
+                    <Field name="orgTreeId">
+                      {({ input }) => (
+                        <Autocomplete
+                          {...input}
+                          options={organizationTrees}
+                          getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
+                          onChange={(event, value) => {
+                            input.onChange(value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              margin="normal"
+                              required
+                              fullWidth
+                              id="orgTreeId"
+                              label={t('create_position.organization_tree')}
+                              slotProps={{
+                                input: {
+                                  ...params.InputProps,
+                                  type: 'search',
+                                },
+                              }}
+                            />
+                          )}
                         />
                       )}
                     </Field>

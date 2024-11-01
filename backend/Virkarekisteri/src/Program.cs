@@ -14,6 +14,7 @@ var host = new HostBuilder()
             services.ConfigureFunctionsApplicationInsights();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IPositionNameRepository, PositionNameRepository>();
+            services.AddScoped<IOrganizationTreeRepository, OrganizationTreeRepository>();
             services.AddDbContext<VirkarekisteriDb>(options =>
                 options.UseSqlServer(
                     config.Configuration["SqlConnectionString"],

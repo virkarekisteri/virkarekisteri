@@ -5,8 +5,15 @@ import { counterSlice } from './slices/counter-slice';
 import { testTableSlice } from './slices/test-table-slice';
 import { positionSlice } from './slices/position-slice';
 import positionNameSlice from './slices/position-name-slice';
+import organizationTreeSlice from './slices/organization-tree-slice';
 
-const rootReducer = combineSlices(counterSlice, testTableSlice, positionSlice, positionNameSlice);
+const rootReducer = combineSlices(
+  counterSlice,
+  testTableSlice,
+  positionSlice,
+  positionNameSlice,
+  organizationTreeSlice,
+);
 
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;

@@ -20,7 +20,8 @@
     "education_level": "Koulutustaso",
     "work_experience": "Työkokemus",
     "placement_location": "Sijoituspaikka",
-    "position_name": "Virkanimike"
+    "position_name": "Virkanimike",
+    "organization_tree": "Kustannuspaikka"
   },
   "additional_details": "Lisätiedot",
   "eligibility": "Kelpoisuusehdot",

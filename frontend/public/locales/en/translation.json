@@ -20,7 +20,8 @@
     "education_level": "Education level",
     "work_experience": "Work experience",
     "placement_location": "Placement location",
-    "position_name": "Position name"
+    "position_name": "Position name",
+    "organization_tree": "Organization tree"
   },
   "additional_details": "Additional details",
   "eligibility": "Eligibility",
