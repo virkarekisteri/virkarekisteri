@@ -9,6 +9,8 @@ export interface Position {
 
   vacancyFill?: number;
 
+  pricingId?: string;
+
   creationDecisionNumber: string;
 
   endingDecisionNumber?: string;
