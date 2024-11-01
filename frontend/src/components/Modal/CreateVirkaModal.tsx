@@ -50,6 +50,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
         type: values.type ?? 0,
+        pricingId: values.pricingId ?? '',
         positionName: positionNameObj,
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
@@ -199,6 +200,23 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               inputProps: { min: 0, max: 100 },
                             },
                           }}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
+
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.pricing_id')}
+                    </Typography>
+                    <Field name="pricingId">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          fullWidth
+                          id="pricingId"
+                          label={t('create_position.pricing_id')}
                         />
                       )}
                     </Field>
