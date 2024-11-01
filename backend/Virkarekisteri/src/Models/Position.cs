@@ -60,4 +60,8 @@ public class Position
     [MaxLength(50)]
     [Column("Sijoituspaikka")]
     public string? PlacementLocation { get; set; }
+
+    [Required]
+    [Column("OrgTreeId")]
+    public Guid OrgTreeId { get; set; }
 }
