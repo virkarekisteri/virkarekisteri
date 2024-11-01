@@ -11,7 +11,10 @@ namespace Virkarekisteri.Functions.OrganizationTree
         private readonly ILogger<GetOrganizationTrees> _logger;
         private readonly IOrganizationTreeRepository _organizationTreeRepository;
 
-        public GetOrganizationTrees(ILogger<GetOrganizationTrees> logger, IOrganizationTreeRepository organizationTreeRepository)
+        public GetOrganizationTrees(
+            ILogger<GetOrganizationTrees> logger,
+            IOrganizationTreeRepository organizationTreeRepository
+        )
         {
             _logger = logger;
             _organizationTreeRepository = organizationTreeRepository;
