@@ -4,10 +4,6 @@
 PRINT 'INSERTING DATA TO PositionNames TABLE';
 :r .\Inserts\PositionNames.sql
 
--- Insert data to Position table
-PRINT 'INSERTING DATA TO Positions TABLE';
-:r .\Inserts\Positions.sql
-
 -- Insert data to OrganizationTree table
 PRINT 'INSERTING DATA TO OrganizationTree TABLE';
 :r .\Inserts\OrgTreePalvelukeskus.sql
@@ -15,3 +11,7 @@ PRINT 'INSERTING DATA TO OrganizationTree TABLE';
 :r .\Inserts\OrgTreeVastuualue.sql
 :r .\Inserts\OrgTreeTulosyksikko.sql
 :r .\Inserts\OrgTreeKustannuspaikka.sql
+
+-- Insert data to Position table
+PRINT 'INSERTING DATA TO Positions TABLE';
+:r .\Inserts\Positions.sql
