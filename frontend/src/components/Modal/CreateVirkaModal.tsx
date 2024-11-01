@@ -117,16 +117,17 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           options={positionNameOptions}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option}
-                          onInputChange={(value) => {
+                          onInputChange={(event, value) => {
                             input.onChange(value);
                           }}
-                          onChange={(value) => {
+                          onChange={(event, value) => {
                             input.onChange(value);
                           }}
                           renderInput={(params) => (
                             <TextField
                               {...params}
                               margin="normal"
+                              required
                               fullWidth
                               id="positionName"
                               label={t('create_position.position_name')}
