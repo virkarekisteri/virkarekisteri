@@ -7,13 +7,8 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.PositionName
 {
-    public class GetPositionNames(
-    ILogger<GetPositionNames> logger,
-    IPositionNameRepository positionNameRepository
-
-        )
+    public class GetPositionNames(ILogger<GetPositionNames> logger, IPositionNameRepository positionNameRepository)
     {
-
         /// <summary>
         /// Gets all position names from the database
         /// </summary>
