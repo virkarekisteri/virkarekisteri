@@ -14,14 +14,14 @@ import {
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { addPosition } from 'redux/slices/position-slice';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { selectPositionNames, selectPositionNamesLoading } from 'redux/slices/position-name-slice';
+import { fetchPositionNames, selectPositionNames, selectPositionNamesLoading } from 'redux/slices/position-name-slice';
 import type { PositionName } from 'models/PositionName';
 interface CreateVirkaModalProps {
   open: boolean;
@@ -34,6 +34,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const positionNames = useAppSelector(selectPositionNames);
   const positionNamesLoading = useAppSelector(selectPositionNamesLoading);
   const positionNameOptions = positionNames.map((option) => option.name);
+
+  useEffect(() => {
+    dispatch(fetchPositionNames());
+  }, [dispatch, positionNames]);
 
   const onSubmit = async (values: Partial<Position>) => {
     console.log(values);
@@ -336,3 +340,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 };
 
 export default CreateVirkaModal;
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}

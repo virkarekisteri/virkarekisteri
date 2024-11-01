@@ -2,20 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.PositionName
 {
-    public class GetPositionNames
-    {
-        private readonly ILogger<GetPositionNames> _logger;
-        private readonly IPositionNameRepository _positionNameRepository;
+    public class GetPositionNames(
+    ILogger<GetPositionNames> logger,
+    IPositionNameRepository positionNameRepository
 
-        public GetPositionNames(ILogger<GetPositionNames> logger, IPositionNameRepository positionNameRepository)
-        {
-            _logger = logger;
-            _positionNameRepository = positionNameRepository;
-        }
+        )
+    {
 
         /// <summary>
         /// Gets all position names from the database
@@ -29,9 +26,9 @@ namespace Virkarekisteri.Functions.PositionName
             [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positionnames")] HttpRequest req
         )
         {
-            _logger.LogInformation("Getting all position names");
+            logger.LogInformation("Getting all position names");
 
-            var positionNames = await _positionNameRepository.GetAllPositionNames();
+            var positionNames = await positionNameRepository.GetAllPositionNames();
             return new OkObjectResult(positionNames);
         }
     }
