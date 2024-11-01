@@ -342,6 +342,3 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 };
 
 export default CreateVirkaModal;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
