@@ -11,7 +11,6 @@ import {
   AccordionSummary,
   alpha,
   Autocomplete,
-  CircularProgress,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
