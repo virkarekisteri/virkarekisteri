@@ -19,7 +19,8 @@
     "pricing_id": "Pricing ID",
     "education_level": "Education level",
     "work_experience": "Work experience",
-    "placement_location": "Placement location"
+    "placement_location": "Placement location",
+    "position_name": "Position name"
   },
   "additional_details": "Additional details",
   "eligibility": "Eligibility",

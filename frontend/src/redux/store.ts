@@ -4,8 +4,9 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { counterSlice } from './slices/counter-slice';
 import { testTableSlice } from './slices/test-table-slice';
 import { positionSlice } from './slices/position-slice';
+import positionNameSlice from './slices/position-name-slice';
 
-const rootReducer = combineSlices(counterSlice, testTableSlice, positionSlice);
+const rootReducer = combineSlices(counterSlice, testTableSlice, positionSlice, positionNameSlice);
 
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
