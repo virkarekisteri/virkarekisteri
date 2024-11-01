@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
-import { fetchPositionNames } from 'redux/slices/position-name-slice';
 
 const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -20,7 +19,6 @@ const VirkarekisterContainer = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchPositionNames());
     dispatch(getPositions());
   }, [dispatch]);
 
