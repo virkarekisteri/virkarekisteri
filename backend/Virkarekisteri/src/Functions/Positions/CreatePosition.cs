@@ -34,12 +34,9 @@ public class CreatePosition(
         if (error is not null)
             return error;
 
-        if (
-            string.IsNullOrWhiteSpace(requestPosition.OrgTreeNumber)
-            || string.IsNullOrWhiteSpace(requestPosition.OrgTreeLevel)
-        )
+        if (requestPosition.OrgTreeId == Guid.Empty)
         {
-            return new BadRequestObjectResult("OrgTreeNumber and OrgTreeLevel must be provided.");
+            return new BadRequestObjectResult("OrgTreeId must be provided.");
         }
 
         if (requestPosition.PositionNameId == Guid.Empty)

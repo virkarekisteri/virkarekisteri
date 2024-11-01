@@ -62,12 +62,6 @@ public class Position
     public string? PlacementLocation { get; set; }
 
     [Required]
-    [MaxLength(50)]
-    [Column("OrgTreeNumero")]
-    public string? OrgTreeNumber { get; set; }
-
-    [Required]
-    [MaxLength(255)]
-    [Column("OrgTreeAlue")]
-    public string? OrgTreeLevel { get; set; }
+    [Column("OrgTreeId")]
+    public Guid OrgTreeId { get; set; }
 }
