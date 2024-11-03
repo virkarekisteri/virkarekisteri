@@ -66,7 +66,7 @@ const DataTable: React.FC = () => {
               statusText = t('vacancy_statuses.abolished');
               color = 'red';
               break;
-          }          
+          }
           return (
             <Box display="flex" alignItems="center">
               <Box
@@ -83,7 +83,7 @@ const DataTable: React.FC = () => {
             </Box>
           );
         },
-      }, 
+      },
     ],
     [t],
   );
