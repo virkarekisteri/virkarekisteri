@@ -11,15 +11,15 @@ namespace Virkarekisteri.Models
 
         [Required]
         [MaxLength(255)]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public string? Number { get; set; }
+        public string Number { get; set; }
 
         public string? ParentNumber { get; set; }
 
         [Required]
-        public string? Alue { get; set; }
+        public string Alue { get; set; }
 
         public string? ParentAlue { get; set; }
     }

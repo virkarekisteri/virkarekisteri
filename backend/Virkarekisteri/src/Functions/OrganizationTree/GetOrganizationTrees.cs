@@ -4,35 +4,26 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Functions.OrganizationTree
+namespace Virkarekisteri.Functions.OrganizationTree;
+
+public class GetOrganizationTrees(ILogger<GetOrganizationTrees> logger, IOrganizationTreeRepository organizationTreeRepository)
 {
-    public class GetOrganizationTrees
+
+    /// <summary>
+    /// Gets all organization trees from the database
+    /// </summary>
+    /// <param name="req">Input GET request</param>
+    /// <returns>
+    /// All organization trees in the database
+    /// </returns>
+    [Function("GetOrganizationTrees")]
+    public async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "organizationtrees")] HttpRequest req
+    )
     {
-        private readonly ILogger<GetOrganizationTrees> _logger;
-        private readonly IOrganizationTreeRepository _organizationTreeRepository;
+        logger.LogInformation("Getting all organization trees");
 
-        public GetOrganizationTrees(ILogger<GetOrganizationTrees> logger, IOrganizationTreeRepository organizationTreeRepository)
-        {
-            _logger = logger;
-            _organizationTreeRepository = organizationTreeRepository;
-        }
-
-        /// <summary>
-        /// Gets all organization trees from the database
-        /// </summary>
-        /// <param name="req">Input GET request</param>
-        /// <returns>
-        /// All organization trees in the database
-        /// </returns>
-        [Function("GetOrganizationTrees")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "organizationtrees")] HttpRequest req
-        )
-        {
-            _logger.LogInformation("Getting all organization trees");
-
-            var organizationTrees = await _organizationTreeRepository.GetAllOrganizationTrees();
-            return new OkObjectResult(organizationTrees);
-        }
+        var organizationTrees = await organizationTreeRepository.GetAllOrganizationTrees();
+        return new OkObjectResult(organizationTrees);
     }
 }

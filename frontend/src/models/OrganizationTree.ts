@@ -1,8 +1,8 @@
 export interface OrganizationTree {
   id: string;
-  name?: string;
-  number?: string;
+  name: string;
+  number: string;
   parentNumber?: string;
-  alue?: string;
+  alue: string;
   parentAlue?: string;
 }
