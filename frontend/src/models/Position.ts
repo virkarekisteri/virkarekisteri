@@ -28,4 +28,6 @@ export interface Position {
   details?: string;
 
   placementLocation?: string;
+
+  orgTreeId: string;
 }
