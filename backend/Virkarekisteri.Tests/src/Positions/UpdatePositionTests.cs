@@ -73,8 +73,8 @@ public class UpdatePositionTests
         {
             Id = positionId,
             CreationDecisionNumber = "123",
-            VacancySize = 50,
-            VacancyFill = 40,
+            VacancySize = 50M,
+            VacancyFill = 40M,
         };
         var updateDto = new UpdatePositionDto { VacancyFill = 60 };
 
@@ -103,8 +103,8 @@ public class UpdatePositionTests
         {
             Id = positionId,
             CreationDecisionNumber = "123",
-            VacancySize = 50,
-            VacancyFill = 40,
+            VacancySize = 50M,
+            VacancyFill = 40M,
         };
         var updateDto = new UpdatePositionDto { VacancyFill = 30 };
 
@@ -135,8 +135,8 @@ public class UpdatePositionTests
             Id = positionId,
             CreationDecisionNumber = "123",
             PositionNameId = mockPositionNameId,
-            VacancySize = 50,
-            VacancyFill = 40,
+            VacancySize = 50M,
+            VacancyFill = 40M,
         };
         var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
 
@@ -173,8 +173,8 @@ public class UpdatePositionTests
             Id = positionId,
             CreationDecisionNumber = "123",
             PositionNameId = mockPositionNameId,
-            VacancySize = 50,
-            VacancyFill = 40,
+            VacancySize = 50M,
+            VacancyFill = 40M,
         };
         var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
 
@@ -184,7 +184,7 @@ public class UpdatePositionTests
         _positionRepositoryMock.Setup(repo => repo.GetPosition(positionId)).ReturnsAsync(existingPosition);
         _positionNameRepositoryMock
             .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName))
-            .ReturnsAsync(mockPositionNameId);
+            .ReturnsAsync((Guid?)null);
         _positionNameRepositoryMock
             .Setup(repo => repo.CreatePositionName(updateDto.PositionName))
             .ReturnsAsync(Guid.NewGuid());
@@ -194,7 +194,8 @@ public class UpdatePositionTests
 
         var result = await _updatePosition.Run(request, positionId.ToString());
 
+        _positionNameRepositoryMock.Verify(repo => repo.CreatePositionName(updateDto.PositionName), Times.Once);
+
         result.Should().BeOfType<NoContentResult>();
-        existingPosition.PositionNameId.Should().NotBe(Guid.Empty);
     }
 }
