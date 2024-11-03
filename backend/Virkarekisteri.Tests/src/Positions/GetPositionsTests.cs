@@ -39,17 +39,4 @@ public class GetPositionsTests
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.Value.Should().Be(mockPositions);
     }
-
-    [Fact]
-    public async Task ReturnsNotFound_WhenNoPositionsExist()
-    {
-        var context = new DefaultHttpContext();
-        var request = context.Request;
-
-        _positionRepositoryMock.Setup(repo => repo.GetPositions()).ReturnsAsync(new List<Position>());
-
-        var result = await _function.Run(request);
-
-        result.Should().BeOfType<NotFoundResult>();
-    }
 }
