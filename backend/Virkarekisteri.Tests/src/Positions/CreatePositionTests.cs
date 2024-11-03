@@ -56,7 +56,6 @@ public class CreatePositionTests
         var context = new DefaultHttpContext();
         var request = context.Request;
 
-        // Lisää ne kaikki required kentät
         var mockPosition = new Position
         {
             Id = Guid.NewGuid(),
