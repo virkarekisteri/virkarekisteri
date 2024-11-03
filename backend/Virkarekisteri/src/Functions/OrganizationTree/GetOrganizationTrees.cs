@@ -6,9 +6,11 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.OrganizationTree;
 
-public class GetOrganizationTrees(ILogger<GetOrganizationTrees> logger, IOrganizationTreeRepository organizationTreeRepository)
+public class GetOrganizationTrees(
+    ILogger<GetOrganizationTrees> logger,
+    IOrganizationTreeRepository organizationTreeRepository
+)
 {
-
     /// <summary>
     /// Gets all organization trees from the database
     /// </summary>
