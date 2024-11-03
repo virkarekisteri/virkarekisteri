@@ -73,8 +73,8 @@ public class UpdatePositionTests
         {
             Id = positionId,
             CreationDecisionNumber = "123",
-            VacancySize = 50M,
-            VacancyFill = 40M,
+            VacancySize = .50M,
+            VacancyFill = .40M,
         };
         var updateDto = new UpdatePositionDto { VacancyFill = 60 };
 
@@ -103,8 +103,8 @@ public class UpdatePositionTests
         {
             Id = positionId,
             CreationDecisionNumber = "123",
-            VacancySize = 50M,
-            VacancyFill = 40M,
+            VacancySize = .50M,
+            VacancyFill = .40M,
         };
         var updateDto = new UpdatePositionDto { VacancyFill = 30 };
 
@@ -135,8 +135,8 @@ public class UpdatePositionTests
             Id = positionId,
             CreationDecisionNumber = "123",
             PositionNameId = mockPositionNameId,
-            VacancySize = 50M,
-            VacancyFill = 40M,
+            VacancySize = .50M,
+            VacancyFill = .40M,
         };
         var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
 
@@ -173,8 +173,8 @@ public class UpdatePositionTests
             Id = positionId,
             CreationDecisionNumber = "123",
             PositionNameId = mockPositionNameId,
-            VacancySize = 50M,
-            VacancyFill = 40M,
+            VacancySize = .50M,
+            VacancyFill = .40M,
         };
         var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
 
