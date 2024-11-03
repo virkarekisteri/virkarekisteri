@@ -5,7 +5,13 @@
     "creation_decision_number": "Päätösnumero",
     "vacancy_size": "Vakanssikoko",
     "type": "Laji",
-    "placement_location": "Sijoituspaikka"
+    "placement_location": "Sijoituspaikka",
+    "vacancy_status": "Vakanssin tila"
+  },
+  "vacancy_statuses": {
+    "established": "Perustettu",
+    "active": "Aktiivinen",
+    "abolished": "Lakkautettu"
   },
   "position": {
     "details": "Viran tiedot"
