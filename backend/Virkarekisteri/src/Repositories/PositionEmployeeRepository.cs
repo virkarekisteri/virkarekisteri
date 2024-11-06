@@ -12,17 +12,18 @@ public interface IPositionEmployeeRepository
 
 public class PositionEmployeeRepository(VirkarekisteriDb db) : IPositionEmployeeRepository
 {
-
     public async Task<bool> IsPositionFilled(Guid positionId, DateTime startDate)
     {
-        return await db.PositionEmployees
-            .AnyAsync(pe => pe.PositionId == positionId && (pe.EndingDate > startDate || pe.EndingDate == null));
+        return await db.PositionEmployees.AnyAsync(pe =>
+            pe.PositionId == positionId && (pe.EndingDate > startDate || pe.EndingDate == null)
+        );
     }
 
     public async Task<bool> IsPositionValid(Guid positionId, DateTime startDate)
     {
-        var position = await db.Positions
-            .FirstOrDefaultAsync(p => p.Id == positionId && (p.EndedAt == null || p.EndedAt >= startDate));
+        var position = await db.Positions.FirstOrDefaultAsync(p =>
+            p.Id == positionId && (p.EndedAt == null || p.EndedAt >= startDate)
+        );
         return position != null;
     }
 

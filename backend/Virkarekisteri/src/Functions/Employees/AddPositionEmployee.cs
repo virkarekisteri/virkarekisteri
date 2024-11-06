@@ -8,15 +8,12 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Employees;
 
-public class AddPositionEmployee(
-    ILogger<AddPositionEmployee> logger,
-    IPositionEmployeeRepository repository
-)
+public class AddPositionEmployee(ILogger<AddPositionEmployee> logger, IPositionEmployeeRepository repository)
 {
-
     [Function("AddPositionEmployee")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positionemployees")] HttpRequest req)
+        [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positionemployees")] HttpRequest req
+    )
     {
         logger.LogInformation("Adding new employee to position from JSON POST request body");
 
@@ -24,12 +21,12 @@ public class AddPositionEmployee(
 
         if (error is not null)
             return error;
-        
+
         if (requestPosition.StartDate > requestPosition.EndingDate)
         {
             return new BadRequestObjectResult("Ending date must be after the starting date.");
         }
-        
+
         if (await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate))
         {
             return new BadRequestObjectResult("Position is already filled.");
