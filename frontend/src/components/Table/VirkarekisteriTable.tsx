@@ -27,9 +27,8 @@ const DataTable: React.FC = () => {
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
-        Header: t('table.created_at'),
-        accessor: 'createdAt',
-        Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
+        Header: t('table.vacancy_number'),
+        accessor: 'vacancyNumber',
       },
       {
         Header: t('table.creation_decision_number'),

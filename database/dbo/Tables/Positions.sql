@@ -1,5 +1,6 @@
 CREATE TABLE [dbo].[Positions] (
     [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    [Vakanssinumero] NVARCHAR(8) NULL,
     [LuontiPvm] DATETIME NOT NULL,
     [PaattymisPvm] DATETIME,
     [VakanssiKoko] DECIMAL(3, 2),

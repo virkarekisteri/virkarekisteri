@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Virkarekisteri.Models;
+using Virkarekisteri.Utils;
 
 namespace Virkarekisteri.Repositories;
 
@@ -11,15 +12,28 @@ public interface IPositionRepository
     Task UpdatePosition(Position existingPosition);
 }
 
-public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
+public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vacancyNumberGenerator) : IPositionRepository
 {
     /// <summary>
-    /// Gets all Posititons from the database
+    /// Gets all Positions from the database. If any Position is missing a VacancyNumber, generates one.
     /// </summary>
     /// <returns>List of all Positions</returns>
     public async Task<List<Position>> GetPositions()
     {
-        return await db.Positions.Include(p => p.PositionName).ToListAsync();
+        var positions = await db.Positions.Include(p => p.PositionName).ToListAsync();
+
+        // Generate missing VacancyNumber values
+        foreach (var position in positions)
+        {
+            if (string.IsNullOrWhiteSpace(position.VacancyNumber))
+            {
+                position.VacancyNumber = await vacancyNumberGenerator.GenerateVacancyNumber(position.OrgTreeId);
+                db.Positions.Update(position);
+            }
+        }
+
+        await db.SaveChangesAsync();
+        return positions;
     }
 
     /// <summary>
@@ -33,12 +47,18 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     }
 
     /// <summary>
-    /// Creates (inserts to the Positions table) a Position to the database
+    /// Creates a new Position in the database. Generates a VacancyNumber if missing.
     /// </summary>
     /// <param name="position">Position to create</param>
-    /// <returns>The created position</returns>
+    /// <returns>The created Position</returns>
     public async Task<Position> CreatePosition(Position position)
     {
+        // Generate VacancyNumber if it's missing
+        if (string.IsNullOrWhiteSpace(position.VacancyNumber))
+        {
+            position.VacancyNumber = await vacancyNumberGenerator.GenerateVacancyNumber(position.OrgTreeId);
+        }
+
         await db.Positions.AddAsync(position);
         await db.SaveChangesAsync();
         return position;
