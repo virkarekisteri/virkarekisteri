@@ -9,6 +9,7 @@ public interface IPositionRepository
     Task<Position?> GetPosition(Guid id);
     Task<Position> CreatePosition(Position position);
     Task UpdatePosition(Position existingPosition);
+    Task<Guid> GetOrgTreeIdByNumber(string number);
 }
 
 public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
@@ -54,5 +55,13 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     {
         db.Positions.Update(existingPosition);
         await db.SaveChangesAsync();
+    }
+
+    public async Task<Guid> GetOrgTreeIdByNumber(string number)
+    {
+        var orgTree = await db.OrganizationTrees
+            .FirstOrDefaultAsync(o => o.Number == number);
+
+        return orgTree?.Id ?? Guid.Empty;
     }
 }
