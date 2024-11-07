@@ -30,4 +30,6 @@ export interface Position {
   placementLocation?: string;
 
   orgTreeId: string;
+
+  vacancyStatus: number;
 }
