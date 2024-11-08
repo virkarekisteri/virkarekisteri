@@ -12,7 +12,8 @@ public interface IPositionRepository
     Task UpdatePosition(Position existingPosition);
 }
 
-public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vacancyNumberGenerator) : IPositionRepository
+public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vacancyNumberGenerator)
+    : IPositionRepository
 {
     /// <summary>
     /// Gets all Positions from the database. If any Position is missing a VacancyNumber, generates one.

@@ -20,24 +20,23 @@ public class VacancyNumberGenerator
     public async Task<string> GenerateVacancyNumber(Guid orgTreeId)
     {
         // Get the organization number (cost center number / kustannuspaikka) associated with the OrgTreeId
-        var orgNumber = await db.OrganizationTrees
-            .Where(o => o.Id == orgTreeId)
+        var orgNumber = await db
+            .OrganizationTrees.Where(o => o.Id == orgTreeId)
             .Select(o => o.Number)
             .FirstOrDefaultAsync();
 
         string vacancyPrefix = orgNumber ?? "";
 
         // Get the most recent vacancy number with the same prefix if there is
-        var latestVacancyNumber = await db.Positions
-            .Where(p => p.VacancyNumber.StartsWith(vacancyPrefix))
+        var latestVacancyNumber = await db
+            .Positions.Where(p => p.VacancyNumber.StartsWith(vacancyPrefix))
             .OrderByDescending(p => p.VacancyNumber)
             .Select(p => p.VacancyNumber)
             .FirstOrDefaultAsync();
 
         // Determine the next sequential number
-        var nextSequenceNumber = latestVacancyNumber != null
-            ? int.Parse(latestVacancyNumber.Substring(vacancyPrefix.Length)) + 1
-            : 0;
+        var nextSequenceNumber =
+            latestVacancyNumber != null ? int.Parse(latestVacancyNumber.Substring(vacancyPrefix.Length)) + 1 : 0;
 
         // Combine prefix with the next sequential number (sequential number is padded to 4 digits, i.e 0001)
         return vacancyPrefix + nextSequenceNumber.ToString("D4");
