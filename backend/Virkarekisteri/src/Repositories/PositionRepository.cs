@@ -47,7 +47,7 @@ public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vaca
     }
 
     /// <summary>
-    /// Creates a new Position in the database. Generates a VacancyNumber if missing.
+    /// Creates (inserts to the Positions table) a Position to the database. Generates a VacancyNumber if missing.
     /// </summary>
     /// <param name="position">Position to create</param>
     /// <returns>The created Position</returns>
