@@ -10,7 +10,6 @@ import {
   TableFooter,
   alpha,
 } from '@mui/material';
-import { format } from 'date-fns';
 import type { Position } from 'models/Position';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
