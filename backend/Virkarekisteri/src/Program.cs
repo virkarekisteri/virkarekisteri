@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
+using Virkarekisteri.Utils;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -16,6 +17,7 @@ var host = new HostBuilder()
             services.AddScoped<IPositionNameRepository, PositionNameRepository>();
             services.AddScoped<IOrganizationTreeRepository, OrganizationTreeRepository>();
             services.AddScoped<IPositionEmployeeRepository, PositionEmployeeRepository>();
+            services.AddScoped<VacancyNumberGenerator>();
             services.AddDbContext<VirkarekisteriDb>(options =>
                 options.UseSqlServer(
                     config.Configuration["SqlConnectionString"],
