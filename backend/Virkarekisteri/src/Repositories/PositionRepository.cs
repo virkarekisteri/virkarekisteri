@@ -77,16 +77,20 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     }
 
     /// <summary>
-    /// Gets the organization number for the given OrgTreeId.
+    /// Gets the organization number (prefix) for the given OrgTreeId.
     /// </summary>
+    /// <param name="orgTreeId">The organization tree node ID.</param>
+    /// <returns>The organization number, or null if not found.</returns>
     public async Task<string?> GetOrgNumberById(Guid orgTreeId)
     {
         return await db.OrganizationTrees.Where(o => o.Id == orgTreeId).Select(o => o.Number).FirstOrDefaultAsync();
     }
 
     /// <summary>
-    /// Gets the latest vacancy number with the given prefix.
+    /// Gets the vacancy number with the specified prefix.
     /// </summary>
+    /// <param name="prefix">The prefix for filtering vacancy numbers.</param>
+    /// <returns>The latest vacancy number, or null if not found.</returns>
     public async Task<string?> GetLatestVacancyNumberByPrefix(string prefix)
     {
         return await db
@@ -96,6 +100,11 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
             .FirstOrDefaultAsync();
     }
 
+    /// <summary>
+    /// Generates a unique vacancy number based on the OrgTreeId and the next sequence number.
+    /// </summary>
+    /// <param name="orgTreeId">The organization tree node ID.</param>
+    /// <returns>A new vacancy number in the format "PREFIXXXXX".</returns>
     public async Task<string> GenerateVacancyNumber(Guid orgTreeId)
     {
         var orgNumber = await GetOrgNumberById(orgTreeId);
