@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Virkarekisteri.Models;
-using Virkarekisteri.Utils;
 
 namespace Virkarekisteri.Repositories;
 
@@ -10,9 +9,12 @@ public interface IPositionRepository
     Task<Position?> GetPosition(Guid id);
     Task<Position> CreatePosition(Position position);
     Task UpdatePosition(Position existingPosition);
+    Task<string?> GetOrgNumberById(Guid orgTreeId);
+    Task<string?> GetLatestVacancyNumberByPrefix(string prefix);
+    Task<string> GenerateVacancyNumber(Guid orgTreeId);
 }
 
-public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vacancyNumberGenerator)
+public class PositionRepository(VirkarekisteriDb db)
     : IPositionRepository
 {
     /// <summary>
@@ -23,12 +25,11 @@ public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vaca
     {
         var positions = await db.Positions.Include(p => p.PositionName).ToListAsync();
 
-        // Generate missing VacancyNumber values
         foreach (var position in positions)
         {
             if (string.IsNullOrWhiteSpace(position.VacancyNumber))
             {
-                position.VacancyNumber = await vacancyNumberGenerator.GenerateVacancyNumber(position.OrgTreeId);
+                position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
                 db.Positions.Update(position);
             }
         }
@@ -54,10 +55,9 @@ public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vaca
     /// <returns>The created Position</returns>
     public async Task<Position> CreatePosition(Position position)
     {
-        // Generate VacancyNumber if it's missing
         if (string.IsNullOrWhiteSpace(position.VacancyNumber))
         {
-            position.VacancyNumber = await vacancyNumberGenerator.GenerateVacancyNumber(position.OrgTreeId);
+            position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
         }
 
         await db.Positions.AddAsync(position);
@@ -75,5 +75,42 @@ public class PositionRepository(VirkarekisteriDb db, VacancyNumberGenerator vaca
     {
         db.Positions.Update(existingPosition);
         await db.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Gets the organization number for the given OrgTreeId.
+    /// </summary>
+    public async Task<string?> GetOrgNumberById(Guid orgTreeId)
+    {
+        return await db.OrganizationTrees
+            .Where(o => o.Id == orgTreeId)
+            .Select(o => o.Number)
+            .FirstOrDefaultAsync();
+    }
+
+    /// <summary>
+    /// Gets the latest vacancy number with the given prefix.
+    /// </summary>
+    public async Task<string?> GetLatestVacancyNumberByPrefix(string prefix)
+    {
+        return await db.Positions
+            .Where(p => p.VacancyNumber != null && p.VacancyNumber.StartsWith(prefix))
+            .OrderByDescending(p => p.VacancyNumber)
+            .Select(p => p.VacancyNumber)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<string> GenerateVacancyNumber(Guid orgTreeId)
+    {
+        var orgNumber = await GetOrgNumberById(orgTreeId);
+        string vacancyPrefix = orgNumber ?? "";
+
+        var latestVacancyNumber = await GetLatestVacancyNumberByPrefix(vacancyPrefix);
+
+        int nextSequenceNumber = latestVacancyNumber != null
+            ? int.Parse(latestVacancyNumber.Substring(vacancyPrefix.Length)) + 1
+            : 0;
+
+        return vacancyPrefix + nextSequenceNumber.ToString("D4");
     }
 }
