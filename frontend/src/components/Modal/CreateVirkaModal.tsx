@@ -67,6 +67,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         details: values.details ?? '',
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
+        vacancyStatus: values.vacancyStaus ?? '',
       };
 
       await dispatch(addPosition(positionData));
