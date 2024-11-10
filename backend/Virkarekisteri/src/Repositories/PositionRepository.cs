@@ -14,8 +14,7 @@ public interface IPositionRepository
     Task<string> GenerateVacancyNumber(Guid orgTreeId);
 }
 
-public class PositionRepository(VirkarekisteriDb db)
-    : IPositionRepository
+public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
 {
     /// <summary>
     /// Gets all Positions from the database. If any Position is missing a VacancyNumber, generates one.
@@ -82,10 +81,7 @@ public class PositionRepository(VirkarekisteriDb db)
     /// </summary>
     public async Task<string?> GetOrgNumberById(Guid orgTreeId)
     {
-        return await db.OrganizationTrees
-            .Where(o => o.Id == orgTreeId)
-            .Select(o => o.Number)
-            .FirstOrDefaultAsync();
+        return await db.OrganizationTrees.Where(o => o.Id == orgTreeId).Select(o => o.Number).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -93,8 +89,8 @@ public class PositionRepository(VirkarekisteriDb db)
     /// </summary>
     public async Task<string?> GetLatestVacancyNumberByPrefix(string prefix)
     {
-        return await db.Positions
-            .Where(p => p.VacancyNumber != null && p.VacancyNumber.StartsWith(prefix))
+        return await db
+            .Positions.Where(p => p.VacancyNumber != null && p.VacancyNumber.StartsWith(prefix))
             .OrderByDescending(p => p.VacancyNumber)
             .Select(p => p.VacancyNumber)
             .FirstOrDefaultAsync();
@@ -107,9 +103,8 @@ public class PositionRepository(VirkarekisteriDb db)
 
         var latestVacancyNumber = await GetLatestVacancyNumberByPrefix(vacancyPrefix);
 
-        int nextSequenceNumber = latestVacancyNumber != null
-            ? int.Parse(latestVacancyNumber.Substring(vacancyPrefix.Length)) + 1
-            : 0;
+        int nextSequenceNumber =
+            latestVacancyNumber != null ? int.Parse(latestVacancyNumber.Substring(vacancyPrefix.Length)) + 1 : 0;
 
         return vacancyPrefix + nextSequenceNumber.ToString("D4");
     }
