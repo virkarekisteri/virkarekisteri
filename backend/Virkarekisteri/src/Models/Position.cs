@@ -8,6 +8,10 @@ public class Position
 {
     public Guid Id { get; set; }
 
+    [MaxLength(8)]
+    [Column("Vakanssinumero")]
+    public string? VacancyNumber { get; set; }
+
     [Required]
     [Column("LuontiPvm")]
     public DateTime CreatedAt { get; set; }

@@ -4,7 +4,7 @@ CREATE TABLE [dbo].[PositionEmployee] (
     [PaattymisPvm] DATE NULL,
     [VirkaId] UNIQUEIDENTIFIER NOT NULL,
     [Nimi] NVARCHAR(255) NOT NULL,
-    CONSTRAINT FK_PositionEmployee_Position FOREIGN KEY (VirkaId) REFERENCES Positions(Id)
+    CONSTRAINT FK_PositionEmployee_Position FOREIGN KEY (VirkaId) REFERENCES Positions (Id)
 );
 
 GO
