@@ -3,6 +3,8 @@ import type { PositionName } from './PositionName';
 export interface Position {
   id?: string;
 
+  vacancyNumber?: string;
+
   createdAt: Date;
 
   endedAt?: Date;
@@ -30,4 +32,6 @@ export interface Position {
   placementLocation?: string;
 
   orgTreeId: string;
+
+  vacancyStatus: number;
 }

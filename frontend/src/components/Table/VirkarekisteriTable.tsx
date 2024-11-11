@@ -10,7 +10,6 @@ import {
   TableFooter,
   alpha,
 } from '@mui/material';
-import { format } from 'date-fns';
 import type { Position } from 'models/Position';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,9 +26,8 @@ const DataTable: React.FC = () => {
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
-        Header: t('table.created_at'),
-        accessor: 'createdAt',
-        Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
+        Header: t('table.vacancy_number'),
+        accessor: 'vacancyNumber',
       },
       {
         Header: t('table.creation_decision_number'),
@@ -46,6 +44,43 @@ const DataTable: React.FC = () => {
       {
         Header: t('table.placement_location'),
         accessor: 'placementLocation',
+      },
+      {
+        Header: t('table.vacancy_status'),
+        accessor: 'vacancyStatus',
+        Cell: ({ value }: { value: number }) => {
+          let statusText = '';
+          let color = '';
+          switch (value) {
+            case 2:
+              statusText = t('vacancy_statuses.active');
+              color = 'green';
+              break;
+            case 1:
+              statusText = t('vacancy_statuses.established');
+              color = 'yellow';
+              break;
+            case 0:
+              statusText = t('vacancy_statuses.abolished');
+              color = 'red';
+              break;
+          }
+          return (
+            <Box display="flex" alignItems="center">
+              <Box
+                component="span"
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: '50%',
+                  backgroundColor: color,
+                  marginRight: 1,
+                }}
+              />
+              {statusText}
+            </Box>
+          );
+        },
       },
     ],
     [t],

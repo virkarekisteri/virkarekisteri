@@ -8,6 +8,10 @@ public class Position
 {
     public Guid Id { get; set; }
 
+    [MaxLength(8)]
+    [Column("Vakanssinumero")]
+    public string? VacancyNumber { get; set; }
+
     [Required]
     [Column("LuontiPvm")]
     public DateTime CreatedAt { get; set; }
@@ -64,4 +68,18 @@ public class Position
     [Required]
     [Column("OrgTreeId")]
     public Guid OrgTreeId { get; set; }
+
+    [Column("VakanssinTila")]
+    public int VacancyStatus
+    {
+        get
+        {
+            if (VacancyFill.HasValue && VacancyFill > 0 && !EndedAt.HasValue)
+                return 2; // 2 == Active (for now with vacancy fill due to no link with person)
+            else if (EndedAt.HasValue)
+                return 0; // 0 == Abolished
+            else
+                return 1; // 1 == Established
+        }
+    }
 }

@@ -1,5 +1,6 @@
 CREATE TABLE [dbo].[Positions] (
     [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    [Vakanssinumero] NVARCHAR(8) NULL,
     [LuontiPvm] DATETIME NOT NULL,
     [PaattymisPvm] DATETIME,
     [VakanssiKoko] DECIMAL(3, 2),
@@ -13,7 +14,8 @@ CREATE TABLE [dbo].[Positions] (
     [Koulutustaso] NVARCHAR(255),
     [Tyokokemus] NVARCHAR(255),
     [Lisatiedot] NVARCHAR(255),
-    [OrgTreeId] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [FK_Positions_OrganizationTree] FOREIGN KEY ([OrgTreeId]) REFERENCES [dbo].[OrganizationTree] ([Id])
+    [OrgTreeId] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [FK_Positions_OrganizationTree] FOREIGN KEY ([OrgTreeId]) REFERENCES [dbo].[OrganizationTree] ([Id]),
+    [VakanssinTila] INT NOT NULL DEFAULT 0
 );
 
 GO

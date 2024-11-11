@@ -1,11 +1,17 @@
 {
   "app_name": "jag talar inte svenska",
   "table": {
-    "created_at": "",
+    "vacancy_number": "",
     "creation_decision_number": "",
     "vacancy_size": "",
     "type": "",
-    "placement_location": ""
+    "placement_location": "",
+    "vacancy_status": ""
+  },
+  "vacancy_statuses": {
+    "established": "",
+    "active": "",
+    "abolished": ""
   },
   "position": {
     "details": ""

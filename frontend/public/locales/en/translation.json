@@ -1,11 +1,17 @@
 {
   "app_name": "Position Registry",
   "table": {
-    "created_at": "Created at",
+    "vacancy_number": "Vacancy number",
     "creation_decision_number": "Creation decision number",
     "vacancy_size": "Vacancy size",
     "type": "Type",
-    "placement_location": "Placement location"
+    "placement_location": "Placement location",
+    "vacancy_status": "Vacancy status"
+  },
+  "vacancy_statuses": {
+    "established": "Established",
+    "active": "Active",
+    "abolished": "Abolished"
   },
   "position": {
     "details": "Position details"
