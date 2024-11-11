@@ -1,37 +1,34 @@
 {
+  "additional_details": "",
   "app_name": "jag talar inte svenska",
-  "table": {
-    "vacancy_number": "",
-    "creation_decision_number": "",
-    "vacancy_size": "",
-    "type": "",
-    "placement_location": "",
-    "vacancy_status": ""
-  },
-  "vacancy_statuses": {
-    "established": "",
-    "active": "",
-    "abolished": ""
-  },
-  "position": {
-    "details": ""
-  },
   "create_position": {
     "add_new_position": "",
     "created_at": "",
     "creation_decision_number": "",
-    "save": "",
-    "pricing_id": "",
-    "vacancy_size": "",
     "education_level": "",
-    "work_experience": "",
+    "organization_tree": "",
     "placement_location": "",
     "position_name": "",
-    "organization_tree": ""
+    "pricing_id": "",
+    "save": "",
+    "vacancy_size": "",
+    "work_experience": ""
   },
-  "additional_details": "",
   "eligibility": "",
+  "landing_page": {
+    "login": ""
+  },
   "new_position": "",
+  "position": {
+    "details": ""
+  },
+  "table": {
+    "created_at": "",
+    "creation_decision_number": "",
+    "placement_location": "",
+    "type": "",
+    "vacancy_size": ""
+  },
   "user_menu": {
     "logout": ""
   }

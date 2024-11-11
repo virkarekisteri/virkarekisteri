@@ -1,37 +1,34 @@
 {
+  "additional_details": "Additional details",
   "app_name": "Position Registry",
-  "table": {
-    "vacancy_number": "Vacancy number",
-    "creation_decision_number": "Creation decision number",
-    "vacancy_size": "Vacancy size",
-    "type": "Type",
-    "placement_location": "Placement location",
-    "vacancy_status": "Vacancy status"
-  },
-  "vacancy_statuses": {
-    "established": "Established",
-    "active": "Active",
-    "abolished": "Abolished"
-  },
-  "position": {
-    "details": "Position details"
-  },
   "create_position": {
     "add_new_position": "Add new position",
     "created_at": "Created at",
     "creation_decision_number": "Creation decision number",
-    "save": "Save",
-    "vacancy_size": "Size-%",
-    "pricing_id": "Pricing ID",
     "education_level": "Education level",
-    "work_experience": "Work experience",
+    "organization_tree": "Organization tree",
     "placement_location": "Placement location",
     "position_name": "Position name",
-    "organization_tree": "Organization tree"
+    "pricing_id": "Pricing ID",
+    "save": "Save",
+    "vacancy_size": "Size-%",
+    "work_experience": "Work experience"
   },
-  "additional_details": "Additional details",
   "eligibility": "Eligibility",
+  "landing_page": {
+    "login": "Login"
+  },
   "new_position": "+ New position",
+  "position": {
+    "details": "Position details"
+  },
+  "table": {
+    "created_at": "Created at",
+    "creation_decision_number": "Creation decision number",
+    "placement_location": "Placement location",
+    "type": "Type",
+    "vacancy_size": "Vacancy size"
+  },
   "user_menu": {
     "logout": "Log Out"
   }
