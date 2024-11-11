@@ -1,7 +1,7 @@
 {
   "app_name": "Virkarekisteri",
   "table": {
-    "created_at": "Perustamisajankohta",
+    "vacancy_number": "Vakanssinumero",
     "creation_decision_number": "Päätösnumero",
     "vacancy_size": "Vakanssikoko",
     "type": "Laji",

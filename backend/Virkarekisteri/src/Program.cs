@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
+using Virkarekisteri.Utils;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
