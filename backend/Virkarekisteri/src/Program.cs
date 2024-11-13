@@ -2,12 +2,12 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Virkarekisteri.Middleware;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
-using Virkarekisteri.Utils;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
+    .ConfigureFunctionsWebApplication(builder => builder.UseMiddleware<RoleAuthorizationMiddleware>())
     .ConfigureServices(
         (config, services) =>
         {
