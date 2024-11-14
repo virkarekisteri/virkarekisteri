@@ -130,10 +130,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           options={positionNameOptions}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option}
-                          onInputChange={(event, value) => {
+                          onInputChange={(_event, value) => {
                             input.onChange(value);
                           }}
-                          onChange={(event, value) => {
+                          onChange={(_event, value) => {
                             input.onChange(value);
                           }}
                           renderInput={(params) => (
@@ -245,7 +245,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           {...input}
                           options={organizationTrees}
                           getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
-                          onChange={(event, value) => {
+                          onChange={(_event, value) => {
                             input.onChange(value);
                           }}
                           renderInput={(params) => (
