@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "npm run i18n-generate-types",
     "dev": "vite",
+    "dev-test-env": "vite --mode test",
     "build": "tsc -b && vite build",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
