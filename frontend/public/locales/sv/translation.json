@@ -16,7 +16,8 @@
   },
   "eligibility": "",
   "landing_page": {
-    "login": ""
+    "login": "",
+    "welcome": ""
   },
   "new_position": "",
   "position": {
@@ -27,9 +28,16 @@
     "creation_decision_number": "",
     "placement_location": "",
     "type": "",
-    "vacancy_size": ""
+    "vacancy_number": "",
+    "vacancy_size": "",
+    "vacancy_status": ""
   },
   "user_menu": {
     "logout": ""
+  },
+  "vacancy_statuses": {
+    "abolished": "",
+    "active": "",
+    "established": ""
   }
 }

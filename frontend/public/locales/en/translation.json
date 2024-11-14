@@ -16,7 +16,8 @@
   },
   "eligibility": "Eligibility",
   "landing_page": {
-    "login": "Login"
+    "login": "Login",
+    "welcome": "Welcome!"
   },
   "new_position": "+ New position",
   "position": {
@@ -27,9 +28,16 @@
     "creation_decision_number": "Creation decision number",
     "placement_location": "Placement location",
     "type": "Type",
-    "vacancy_size": "Vacancy size"
+    "vacancy_number": "Vacancy number",
+    "vacancy_size": "Vacancy size",
+    "vacancy_status": "Vacancy status"
   },
   "user_menu": {
     "logout": "Log Out"
+  },
+  "vacancy_statuses": {
+    "abolished": "Abolished",
+    "active": "Active",
+    "established": "Established"
   }
 }

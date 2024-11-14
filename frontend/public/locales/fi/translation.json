@@ -16,7 +16,8 @@
   },
   "eligibility": "Kelpoisuusehdot",
   "landing_page": {
-    "login": "Kirjaudu Sisään"
+    "login": "Kirjaudu sisään",
+    "welcome": "Tervetuloa!"
   },
   "new_position": "+ Uusi virka",
   "position": {
@@ -27,9 +28,16 @@
     "creation_decision_number": "Päätösnumero",
     "placement_location": "Sijoituspaikka",
     "type": "Laji",
-    "vacancy_size": "Vakanssikoko"
+    "vacancy_number": "Vakanssinumero",
+    "vacancy_size": "Vakanssikoko",
+    "vacancy_status": "Vakanssin tila"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos"
+  },
+  "vacancy_statuses": {
+    "abolished": "Lakkautettu",
+    "active": "Aktiivinen",
+    "established": "Perustettu"
   }
 }

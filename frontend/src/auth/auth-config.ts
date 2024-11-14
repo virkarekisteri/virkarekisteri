@@ -3,6 +3,7 @@
  * For a full list of MSAL.js configuration parameters, visit:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
  */
+import type { RedirectRequest } from '@azure/msal-browser';
 
 export const msalConfig = {
   auth: {
@@ -10,7 +11,6 @@ export const msalConfig = {
     authority: import.meta.env.VITE_MSAL_AUTHORITY,
     redirectUri: import.meta.env.VITE_MSAL_REDIRECT_URI,
     postLogoutRedirectUri: '/',
-    // navigateToLoginRequestUrl: false,
   },
   cache: {
     cacheLocation: 'localStorage',
@@ -24,6 +24,7 @@ export const msalConfig = {
  * For more information about OIDC scopes, visit:
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
-export const loginRequest = {
-  scopes: [import.meta.env.VITE_MSAL_LOGIN_SCOPE, 'GroupMember.Read.All', 'User.Read'],
+export const loginRequest: RedirectRequest = {
+  scopes: [import.meta.env.VITE_MSAL_LOGIN_SCOPE, 'User.Read'],
+  prompt: 'select_account',
 };
