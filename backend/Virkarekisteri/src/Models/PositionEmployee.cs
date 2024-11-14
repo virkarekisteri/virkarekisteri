@@ -11,7 +11,7 @@ public class PositionEmployee
     [Required]
     [Column("AlkamisPvm")]
     public DateTime StartDate { get; set; }
-
+ 
     [Column("PaattymisPvm")]
     public DateTime? EndingDate { get; set; }
 
