@@ -131,7 +131,7 @@ public class CreatePositionsFromCsv(
         // Return response with success message and errors
         var response = new
         {
-            Message = "Positions imported with some errors.",
+            Message = errors.Any() ? "Positions imported with some errors." : "Positions imported successfully.",
             Errors = errors
         };
 
