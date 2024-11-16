@@ -17,6 +17,7 @@ import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
+
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
   const dataFromBackend = useAppSelector(selectPositionData);
