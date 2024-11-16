@@ -1,4 +1,4 @@
-import { apiClient } from 'services/api-client';
+import apiClient from 'services/api-client';
 import type { Position } from 'models/Position';
 
 export const createPosition = async (data: Position) => {

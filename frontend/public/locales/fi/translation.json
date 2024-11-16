@@ -1,38 +1,43 @@
 {
+  "additional_details": "Lisätiedot",
   "app_name": "Virkarekisteri",
-  "table": {
-    "vacancy_number": "Vakanssinumero",
-    "creation_decision_number": "Päätösnumero",
-    "vacancy_size": "Vakanssikoko",
-    "type": "Laji",
-    "placement_location": "Sijoituspaikka",
-    "vacancy_status": "Vakanssin tila"
-  },
-  "vacancy_statuses": {
-    "established": "Perustettu",
-    "active": "Aktiivinen",
-    "abolished": "Lakkautettu"
-  },
-  "position": {
-    "details": "Viran tiedot"
-  },
   "create_position": {
     "add_new_position": "Lisää uusi virka",
     "created_at": "Perustamisajankohta",
     "creation_decision_number": "Päätösnumero",
-    "save": "Tallenna",
-    "vacancy_size": "Koko-%",
-    "pricing_id": "Hinnoittelutunnus",
     "education_level": "Koulutustaso",
-    "work_experience": "Työkokemus",
+    "organization_tree": "Kustannuspaikka",
     "placement_location": "Sijoituspaikka",
     "position_name": "Virkanimike",
-    "organization_tree": "Kustannuspaikka"
+    "pricing_id": "Hinnoittelutunnus",
+    "save": "Tallenna",
+    "vacancy_size": "Koko-%",
+    "work_experience": "Työkokemus"
   },
-  "additional_details": "Lisätiedot",
   "eligibility": "Kelpoisuusehdot",
+  "landing_page": {
+    "login": "Kirjaudu sisään",
+    "welcome": "Tervetuloa!"
+  },
   "new_position": "+ Uusi virka",
+  "position": {
+    "details": "Viran tiedot"
+  },
+  "table": {
+    "created_at": "Perustamisajankohta",
+    "creation_decision_number": "Päätösnumero",
+    "placement_location": "Sijoituspaikka",
+    "type": "Laji",
+    "vacancy_number": "Vakanssinumero",
+    "vacancy_size": "Vakanssikoko",
+    "vacancy_status": "Vakanssin tila"
+  },
   "user_menu": {
     "logout": "Kirjaudu Ulos"
+  },
+  "vacancy_statuses": {
+    "abolished": "Lakkautettu",
+    "active": "Aktiivinen",
+    "established": "Perustettu"
   }
 }

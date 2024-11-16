@@ -1,19 +1,13 @@
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { counterSlice } from './slices/counter-slice';
-import { testTableSlice } from './slices/test-table-slice';
 import { positionSlice } from './slices/position-slice';
 import positionNameSlice from './slices/position-name-slice';
 import organizationTreeSlice from './slices/organization-tree-slice';
+import { authSlice } from './slices/auth-slice';
+import { setupMsalEventListeners } from 'auth/msal-instance';
 
-const rootReducer = combineSlices(
-  counterSlice,
-  testTableSlice,
-  positionSlice,
-  positionNameSlice,
-  organizationTreeSlice,
-);
+const rootReducer = combineSlices(positionSlice, positionNameSlice, organizationTreeSlice, authSlice);
 
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
@@ -23,6 +17,12 @@ export type RootState = ReturnType<typeof rootReducer>;
 export const makeStore = (preloadedState?: Partial<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActionPaths: ['payload.extExpiresOn', 'payload.expiresOn', 'payload.account.tenantProfiles'],
+        },
+      }),
     preloadedState,
   });
   setupListeners(store.dispatch);
@@ -30,6 +30,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
 };
 
 export const store = makeStore();
+setupMsalEventListeners(store);
 
 // Infer the type of `store`
 export type AppStore = typeof store;
