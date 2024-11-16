@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Virkarekisteri.Functions.Positions;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.PositionName
@@ -17,6 +17,7 @@ namespace Virkarekisteri.Functions.PositionName
         /// All position names in the database
         /// </returns>
         [Function("GetPositionNames")]
+        [RequiresReadRole]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positionnames")] HttpRequest req
         )

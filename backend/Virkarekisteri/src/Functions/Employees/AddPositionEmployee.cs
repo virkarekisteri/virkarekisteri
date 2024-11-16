@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 using static Virkarekisteri.Utils.DeserializeHelper;
@@ -11,6 +12,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class AddPositionEmployee(ILogger<AddPositionEmployee> logger, IPositionEmployeeRepository repository)
 {
     [Function("AddPositionEmployee")]
+    [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positionemployees")] HttpRequest req
     )

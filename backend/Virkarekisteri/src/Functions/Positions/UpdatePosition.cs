@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 using static Virkarekisteri.Utils.DeserializeHelper;
@@ -23,6 +24,7 @@ public class UpdatePosition(
     /// No content on success or an error
     /// </returns>
     [Function("UpdatePosition")]
+    [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
         string id

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.OrganizationTree;
@@ -19,6 +20,7 @@ public class GetOrganizationTrees(
     /// All organization trees in the database
     /// </returns>
     [Function("GetOrganizationTrees")]
+    [RequiresReadRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "organizationtrees")] HttpRequest req
     )
