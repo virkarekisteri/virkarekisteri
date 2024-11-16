@@ -27,18 +27,25 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
         var method = Assembly.GetExecutingAssembly().GetType(typeName)?.GetMethod(methodName);
 
         if (method is null)
-            return next(context);
+            throw new InvalidOperationException($"Unable to find method '{typeName}.{methodName}'");
 
         var roleRequiredAttribute = method.GetCustomAttribute<RequiredRoleAttribute>();
 
         if (roleRequiredAttribute is null)
-            return next(context);
+            throw new InvalidOperationException(
+                $"The method '{typeName}.{method.Name}' is missing a required role attribute"
+            );
 
+        // NOTE!
+        // We are not validating the JWT at all, because Azure is configured to do that the before code exectution
+        // ever even reaches this point. If you don't have Azure validating the token, you must do it here!
         var token = httpContext.Request.Headers.Authorization.ToString().Split(" ")[^1];
         var jwtToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
-        var userRoles = jwtToken?.Claims.Where(c => c.Type == "roles").Select(c => c.Value);
+        var userRoles = jwtToken
+            ?.Claims.Where(c => c.Type == "roles")
+            .SelectMany(c => Enum.TryParse<RoleHierarchy>(c.Value, out var role) ? new[] { role } : []);
 
-        if (userRoles != null && userRoles.Contains(roleRequiredAttribute.Role))
+        if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
             return next(context);
 
         httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
