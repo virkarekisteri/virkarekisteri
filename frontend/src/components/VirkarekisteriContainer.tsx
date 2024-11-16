@@ -7,8 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
+import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
+import LandingPage from './LandingPage';
 
 const VirkarekisterContainer = () => {
+  const dispatch = useAppDispatch();
+
+  const isAuthenticated = useIsAuthenticated();
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const { t } = useTranslation();
 
@@ -17,35 +23,39 @@ const VirkarekisterContainer = () => {
   const position = useAppSelector(selectIndividualPosition);
   const dataLoading = useAppSelector(selectPositionLoading);
 
-  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getPositions());
-  }, [dispatch]);
+    if (isAuthenticated) dispatch(getPositions());
+  }, [dispatch, isAuthenticated]);
 
   return (
-    <div>
+    <>
       <TopAppBar />
-      <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
-      <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
-        <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
-          <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
-            {t('new_position')}
-          </Button>
+      <AuthenticatedTemplate>
+        <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
+        <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
+          <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
+            <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
+              {t('new_position')}
+            </Button>
+          </Grid2>
+          <Grid2 size={12}>
+            <VirkarekisteriTable />
+          </Grid2>
+          <Grid2 size={12}>
+            {dataLoading ? (
+              <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                <CircularProgress />
+              </Box>
+            ) : (
+              position && <PositionDetails position={position} />
+            )}
+          </Grid2>
         </Grid2>
-        <Grid2 size={12}>
-          <VirkarekisteriTable />
-        </Grid2>
-        <Grid2 size={12}>
-          {dataLoading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-              <CircularProgress />
-            </Box>
-          ) : (
-            position && <PositionDetails position={position} />
-          )}
-        </Grid2>
-      </Grid2>
-    </div>
+      </AuthenticatedTemplate>
+      <UnauthenticatedTemplate>
+        <LandingPage />
+      </UnauthenticatedTemplate>
+    </>
   );
 };
 

@@ -4,10 +4,17 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useTranslation } from 'react-i18next';
+import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { useAppSelector } from 'redux/hooks';
+import { selectName } from 'redux/slices/auth-slice';
 
 const UserMenu = () => {
+  const { instance } = useMsal();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
+
+  const name = useAppSelector(selectName);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -15,6 +22,10 @@ const UserMenu = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    await instance.logoutRedirect({ account: instance.getActiveAccount() });
   };
 
   return (
@@ -29,23 +40,27 @@ const UserMenu = () => {
       >
         <AccountCircle sx={{ fontSize: 50 }} />
       </IconButton>
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>{t('user_menu.logout')}</MenuItem>
-      </Menu>
+
+      <AuthenticatedTemplate>
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem>{name}</MenuItem>
+          <MenuItem onClick={handleLogout}>{t('user_menu.logout')}</MenuItem>
+        </Menu>
+      </AuthenticatedTemplate>
     </div>
   );
 };
