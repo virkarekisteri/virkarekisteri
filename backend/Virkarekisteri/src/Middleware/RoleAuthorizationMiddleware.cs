@@ -14,6 +14,8 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
     public Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
     {
         var httpContext = context.GetHttpContext();
+
+        // if we are not in a HTTP context, this middleware is not needed
         if (httpContext is null)
             return next(context);
 
@@ -45,6 +47,7 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
             ?.Claims.Where(c => c.Type == "roles")
             .SelectMany(c => Enum.TryParse<RoleHierarchy>(c.Value, out var role) ? new[] { role } : []);
 
+        // if any of the user's roles are higher up in the hierarchy than the required role, we're good
         if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
             return next(context);
 
