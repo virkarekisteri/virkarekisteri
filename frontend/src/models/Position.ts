@@ -31,6 +31,8 @@ export interface Position {
 
   placementLocation?: string;
 
+  positionEmployeeId?: string;
+
   orgTreeId: string;
 
   vacancyStatus: number;

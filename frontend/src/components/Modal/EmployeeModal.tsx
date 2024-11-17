@@ -1,33 +1,48 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, IconButton, Typography, Modal, Grid2 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { useAppDispatch } from 'redux/hooks';
+import { addPositionEmployee, fetchPositionEmployee } from 'redux/slices/position-employee-slice';
+import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
 
 interface AddEmployeeModalProps {
   open: boolean;
   onClose: () => void;
-  employee?: PositionEmployee;
-  isEdit?: boolean;
+  isEmployeeSet?: boolean;
+  position: Position;
 }
 
-const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, employee, isEdit }) => {
+const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEmployeeSet, position }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const [fetchedEmployee, setFetchedEmployee] = useState<PositionEmployee | undefined>();
 
   useEffect(() => {
-    if (open && employee) {
-      // Fetch any necessary data if needed
-    }
-  }, [open, employee]);
+    const fetchEmployee = async () => {
+      if (position.positionEmployeeId) {
+        const result = await dispatch(fetchPositionEmployee(position.positionEmployeeId));
+        if (result.payload) {
+          setFetchedEmployee(result.payload as PositionEmployee);
+        }
+      }
+    };
+
+    fetchEmployee();
+  }, [dispatch, position.positionEmployeeId]);
 
   const handleSubmit = async (values: any) => {
     try {
-      if (isEdit) {
-        await axios.put(`/api/positionemployees/${employee?.id}`, values);
+      const data = { ...values, positionId: position.id };
+      if (isEmployeeSet) {
+        // For the future
+        // dispatch(updatePositionEmployee({ ...fetchedEmployee, ...values }));
+        console.log('Update employee');
       } else {
-        await axios.post('/api/positionemployees', values);
+        dispatch(addPositionEmployee(data));
       }
       onClose();
     } catch (error) {
@@ -65,7 +80,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, empl
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{isEdit ? t('edit_employee') : t('add_employee')}</Typography>
+          <Typography variant="h6">{isEmployeeSet ? t('edit_employee') : t('add_employee')}</Typography>
           <IconButton onClick={onClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -73,13 +88,19 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, empl
         <Box sx={{ p: 4 }}>
           <Form
             onSubmit={handleSubmit}
-            initialValues={employee}
+            initialValues={{
+              ...fetchedEmployee,
+              startDate: fetchedEmployee?.startDate
+                ? new Date(fetchedEmployee.startDate).toISOString().split('T')[0]
+                : '',
+              endingDate: fetchedEmployee?.endingDate,
+            }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
                   <Grid2 size={6}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('employee_name')}
+                      {t('employee.employee_name')}
                     </Typography>
                     <Field name="employeeName">
                       {({ input }) => <TextField {...input} margin="normal" required fullWidth />}
@@ -87,7 +108,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, empl
                   </Grid2>
                   <Grid2 size={6}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('start_date')}
+                      {t('employee.start_date')}
                     </Typography>
                     <Field name="startDate">
                       {({ input }) => (
@@ -105,7 +126,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, empl
                   <Grid2 size={6}></Grid2>
                   <Grid2 size={6}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('ending_date')}
+                      {t('employee.ending_date')}
                     </Typography>
                     <Field name="endingDate">
                       {({ input }) => (
@@ -122,7 +143,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, empl
                 </Grid2>
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
-                    {t('save')}
+                    {t('employee.save')}
                   </Button>
                 </Grid2>
               </form>

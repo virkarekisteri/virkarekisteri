@@ -23,6 +23,14 @@
   "position": {
     "details": "Viran tiedot"
   },
+  "edit_employee": "Muokkaa viranhaltijan tietoja",
+  "add_employee": "Lisää viranhaltija",
+  "employee": {
+    "employee_name": "Viranhaltijan nimi",
+    "start_date": "Virkaan asettamispäivämäärä",
+    "ending_date": "Virkasopimuksen päättämispäivämäärä",
+    "save": "Tallenna"
+  },
   "table": {
     "created_at": "Perustamisajankohta",
     "creation_decision_number": "Päätösnumero",
