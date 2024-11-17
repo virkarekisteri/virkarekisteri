@@ -85,8 +85,7 @@ export const positionEmployeeSlice = createAppSlice({
   },
 });
 
-export const { getPositionEmployees, addPositionEmployee, updatePositionEmployee, fetchPositionEmployee } =
-  positionEmployeeSlice.actions;
+export const { addPositionEmployee, updatePositionEmployee, fetchPositionEmployee } = positionEmployeeSlice.actions;
 
 export const { selectPositionEmployeeData, selectPositionEmployeeLoading, selectIndividualPositionEmployee } =
   positionEmployeeSlice.selectors;
