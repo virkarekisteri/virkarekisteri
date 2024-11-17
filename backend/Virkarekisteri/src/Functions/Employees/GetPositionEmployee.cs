@@ -6,7 +6,10 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.Employees;
 
-public class GetPositionEmployee(ILogger<GetPositionEmployee> logger, IPositionEmployeeRepository positionEmployeeRepository)
+public class GetPositionEmployee(
+    ILogger<GetPositionEmployee> logger,
+    IPositionEmployeeRepository positionEmployeeRepository
+)
 {
     /// <summary>
     /// Gets a position employee by id

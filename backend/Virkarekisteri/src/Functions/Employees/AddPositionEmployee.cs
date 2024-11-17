@@ -9,7 +9,11 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Employees;
 
-public class AddPositionEmployee(ILogger<AddPositionEmployee> logger, IPositionEmployeeRepository repository, IPositionRepository positionRepository)
+public class AddPositionEmployee(
+    ILogger<AddPositionEmployee> logger,
+    IPositionEmployeeRepository repository,
+    IPositionRepository positionRepository
+)
 {
     [Function("AddPositionEmployee")]
     public async Task<IActionResult> Run(
