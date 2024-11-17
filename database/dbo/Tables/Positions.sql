@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[Positions] (
     [Koulutustaso] NVARCHAR(255),
     [Tyokokemus] NVARCHAR(255),
     [Lisatiedot] NVARCHAR(255),
-    [PositionEmployeeId] UNIQUEIDENTIFIER CONSTRAINT [FK_Positions_PositionEmployee] FOREIGN KEY ([PositionEmployeeId])REFERENCES [dbo].[PositionEmployee] ([Id]), 
+    [PositionEmployeeId] UNIQUEIDENTIFIER CONSTRAINT [FK_Positions_PositionEmployee] FOREIGN KEY ([PositionEmployeeId]) REFERENCES [dbo].[PositionEmployee] ([Id]),
     [OrgTreeId] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [FK_Positions_OrganizationTree] FOREIGN KEY ([OrgTreeId]) REFERENCES [dbo].[OrganizationTree] ([Id]),
     [VakanssinTila] INT NOT NULL DEFAULT 0
 );
