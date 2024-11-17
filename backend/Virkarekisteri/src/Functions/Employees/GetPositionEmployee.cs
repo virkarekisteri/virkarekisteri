@@ -23,7 +23,8 @@ public class GetPositionEmployee(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positionemployees/{id}")] HttpRequest req
     )
     {
-        logger.LogInformation("Getting position employee by id: {Id}", req.RouteValues["id"]);
+        var sanitizedId = (req.RouteValues["id"] as string)?.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        logger.LogInformation("Getting position employee by id: {Id}", sanitizedId);
 
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionEmployeeId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
