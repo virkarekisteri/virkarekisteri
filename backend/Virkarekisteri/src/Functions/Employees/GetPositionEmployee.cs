@@ -19,6 +19,7 @@ public class GetPositionEmployee(
     /// The position employee with the given ID
     /// </returns>
     [Function("GetPositionEmployee")]
+    [RequiresReadRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positionemployees/{id}")] HttpRequest req
     )
