@@ -20,7 +20,13 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredActionPaths: ['payload.extExpiresOn', 'payload.expiresOn', 'payload.account.tenantProfiles'],
+          ignoredActions: [
+            'positions/uploadPositionsFromCsv/pending',
+            'positions/uploadPositionsFromCsv/fulfilled',
+            'positions/uploadPositionsFromCsv/rejected',
+          ],
+          ignoredActionPaths: ['meta.arg', 'meta.arg.file'],
+          ignoredPaths: ['positions.meta.arg', 'positions.meta.arg.file'],
         },
       }),
     preloadedState,

@@ -14,6 +14,10 @@
     "vacancy_size": "Size-%",
     "work_experience": "Work experience"
   },
+  "create_csv_position": {
+    "upload_csv": "+ Import CSV",
+    "loading": "Loading..."
+  },
   "eligibility": "Eligibility",
   "landing_page": {
     "login": "Login",
