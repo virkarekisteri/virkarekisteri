@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.Positions;
@@ -16,6 +17,7 @@ public class GetPosition(ILogger<GetPosition> logger, IPositionRepository positi
     /// The position with the given ID
     /// </returns>
     [Function("GetPosition")]
+    [RequiresReadRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positions/{id}")] HttpRequest req
     )
