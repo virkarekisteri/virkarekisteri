@@ -1,14 +1,14 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
-using System.Globalization;
 
 namespace Virkarekisteri.Functions.Positions;
 
-public class CreatePositionsFromCsv(    
+public class CreatePositionsFromCsv(
     ILogger<CreatePositionsFromCsv> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository
@@ -35,13 +35,13 @@ public class CreatePositionsFromCsv(
 
         var positions = new List<Position>();
         var errors = new List<string>();
-        
+
         using (var reader = new StreamReader(file.OpenReadStream()))
         {
             // Skip the header line
             var headerLine = await reader.ReadLineAsync();
             int lineNumber = 2;
-            
+
             while (!reader.EndOfStream)
             {
                 var line = await reader.ReadLineAsync();
@@ -53,17 +53,22 @@ public class CreatePositionsFromCsv(
 
                 try
                 {
-                    var position = new Position
-                    {
-                        CreationDecisionNumber = values[8]
-                    };
-                    
+                    var position = new Position { CreationDecisionNumber = values[8] };
+
                     if (string.IsNullOrWhiteSpace(position.CreationDecisionNumber))
                     {
                         throw new Exception("CreationDecisionNumber is required and cannot be null or empty.");
                     }
 
-                    if (string.IsNullOrWhiteSpace(values[3]) || !DateTime.TryParse(values[3], CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt))
+                    if (
+                        string.IsNullOrWhiteSpace(values[3])
+                        || !DateTime.TryParse(
+                            values[3],
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var createdAt
+                        )
+                    )
                     {
                         throw new Exception("CreatedAt is required and must be a valid date.");
                     }
@@ -83,16 +88,24 @@ public class CreatePositionsFromCsv(
                     }
 
                     var positionName = values[1];
-                    position.PositionNameId = (await positionNameRepository.GetPositionNameIdByName(positionName)).GetValueOrDefault();
+                    position.PositionNameId = (
+                        await positionNameRepository.GetPositionNameIdByName(positionName)
+                    ).GetValueOrDefault();
                     if (position.PositionNameId == Guid.Empty)
                     {
                         throw new Exception($"Invalid Position name '{positionName}'");
                     }
 
                     position.VacancyNumber = string.IsNullOrWhiteSpace(values[2]) ? null : values[2];
-                    position.EndedAt = string.IsNullOrWhiteSpace(values[4]) ? (DateTime?)null : DateTime.Parse(values[4], CultureInfo.InvariantCulture);
-                    position.VacancySize = string.IsNullOrWhiteSpace(values[5]) ? (decimal?)null : decimal.Parse(values[5], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                    position.VacancyFill = string.IsNullOrWhiteSpace(values[6]) ? (decimal?)null : decimal.Parse(values[6], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                    position.EndedAt = string.IsNullOrWhiteSpace(values[4])
+                        ? (DateTime?)null
+                        : DateTime.Parse(values[4], CultureInfo.InvariantCulture);
+                    position.VacancySize = string.IsNullOrWhiteSpace(values[5])
+                        ? (decimal?)null
+                        : decimal.Parse(values[5], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                    position.VacancyFill = string.IsNullOrWhiteSpace(values[6])
+                        ? (decimal?)null
+                        : decimal.Parse(values[6], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
                     position.PricingId = string.IsNullOrWhiteSpace(values[7]) ? null : values[7];
                     position.EndingDecisionNumber = string.IsNullOrWhiteSpace(values[9]) ? null : values[9];
                     position.EducationLevel = string.IsNullOrWhiteSpace(values[11]) ? null : values[11];
@@ -100,7 +113,7 @@ public class CreatePositionsFromCsv(
                     position.Details = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
                     position.PlacementLocation = string.IsNullOrWhiteSpace(values[14]) ? null : values[14];
 
-                    positions.Add(position);  // Add to the list if all validations pass
+                    positions.Add(position); // Add to the list if all validations pass
                 }
                 catch (Exception ex)
                 {
@@ -133,7 +146,7 @@ public class CreatePositionsFromCsv(
         var response = new
         {
             Message = errors.Any() ? "Positions imported with some errors." : "Positions imported successfully.",
-            Errors = errors
+            Errors = errors,
         };
 
         return new OkObjectResult(response);

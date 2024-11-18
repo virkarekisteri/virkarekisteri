@@ -79,13 +79,11 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
 
     public async Task<Guid> GetOrgTreeIdByNumber(string number)
     {
-        var orgTree = await db.OrganizationTrees
-            .FirstOrDefaultAsync(o => o.Number == number);
+        var orgTree = await db.OrganizationTrees.FirstOrDefaultAsync(o => o.Number == number);
 
         return orgTree?.Id ?? Guid.Empty;
-
     }
-    
+
     /// <summary>
     /// Gets the organization number (prefix) for the given OrgTreeId.
     /// </summary>
