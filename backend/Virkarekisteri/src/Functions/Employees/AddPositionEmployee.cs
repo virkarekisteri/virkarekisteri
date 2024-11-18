@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
@@ -16,6 +17,7 @@ public class AddPositionEmployee(
 )
 {
     [Function("AddPositionEmployee")]
+    [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positionemployees")] HttpRequest req
     )
