@@ -55,7 +55,7 @@ public class CreatePositionsFromCsv(
                 {
                     var position = new Position
                     {
-                        CreationDecisionNumber = values[7]
+                        CreationDecisionNumber = values[8]
                     };
                     
                     if (string.IsNullOrWhiteSpace(position.CreationDecisionNumber))
@@ -63,13 +63,13 @@ public class CreatePositionsFromCsv(
                         throw new Exception("CreationDecisionNumber is required and cannot be null or empty.");
                     }
 
-                    if (string.IsNullOrWhiteSpace(values[2]) || !DateTime.TryParse(values[2], CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt))
+                    if (string.IsNullOrWhiteSpace(values[3]) || !DateTime.TryParse(values[3], CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt))
                     {
                         throw new Exception("CreatedAt is required and must be a valid date.");
                     }
                     position.CreatedAt = createdAt;
 
-                    if (string.IsNullOrWhiteSpace(values[9]) || !int.TryParse(values[9], out var type))
+                    if (string.IsNullOrWhiteSpace(values[10]) || !int.TryParse(values[10], out var type))
                     {
                         throw new Exception("Type is required and must be a valid integer.");
                     }
@@ -89,15 +89,16 @@ public class CreatePositionsFromCsv(
                         throw new Exception($"Invalid Position name '{positionName}'");
                     }
 
-                    position.EndedAt = string.IsNullOrWhiteSpace(values[3]) ? (DateTime?)null : DateTime.Parse(values[3], CultureInfo.InvariantCulture);
-                    position.VacancySize = string.IsNullOrWhiteSpace(values[4]) ? (decimal?)null : decimal.Parse(values[4], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                    position.VacancyFill = string.IsNullOrWhiteSpace(values[5]) ? (decimal?)null : decimal.Parse(values[5], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                    position.PricingId = string.IsNullOrWhiteSpace(values[6]) ? null : values[6];
-                    position.EndingDecisionNumber = string.IsNullOrWhiteSpace(values[8]) ? null : values[8];
-                    position.EducationLevel = string.IsNullOrWhiteSpace(values[10]) ? null : values[10];
-                    position.WorkExperience = string.IsNullOrWhiteSpace(values[11]) ? null : values[11];
-                    position.Details = string.IsNullOrWhiteSpace(values[12]) ? null : values[12];
-                    position.PlacementLocation = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
+                    position.VacancyNumber = string.IsNullOrWhiteSpace(values[2]) ? null : values[2];
+                    position.EndedAt = string.IsNullOrWhiteSpace(values[4]) ? (DateTime?)null : DateTime.Parse(values[4], CultureInfo.InvariantCulture);
+                    position.VacancySize = string.IsNullOrWhiteSpace(values[5]) ? (decimal?)null : decimal.Parse(values[5], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                    position.VacancyFill = string.IsNullOrWhiteSpace(values[6]) ? (decimal?)null : decimal.Parse(values[6], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                    position.PricingId = string.IsNullOrWhiteSpace(values[7]) ? null : values[7];
+                    position.EndingDecisionNumber = string.IsNullOrWhiteSpace(values[9]) ? null : values[9];
+                    position.EducationLevel = string.IsNullOrWhiteSpace(values[11]) ? null : values[11];
+                    position.WorkExperience = string.IsNullOrWhiteSpace(values[12]) ? null : values[12];
+                    position.Details = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
+                    position.PlacementLocation = string.IsNullOrWhiteSpace(values[14]) ? null : values[14];
 
                     positions.Add(position);  // Add to the list if all validations pass
                 }

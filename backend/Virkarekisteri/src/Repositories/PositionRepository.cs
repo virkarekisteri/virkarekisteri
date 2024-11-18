@@ -83,6 +83,9 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
             .FirstOrDefaultAsync(o => o.Number == number);
 
         return orgTree?.Id ?? Guid.Empty;
+
+    }
+    
     /// <summary>
     /// Gets the organization number (prefix) for the given OrgTreeId.
     /// </summary>
