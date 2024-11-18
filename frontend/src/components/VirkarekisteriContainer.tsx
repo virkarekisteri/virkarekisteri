@@ -4,7 +4,12 @@ import CreateVirkaModal from './Modal/CreateVirkaModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import { getPositions, selectIndividualPosition, selectPositionLoading, uploadPositionsFromCsv } from 'redux/slices/position-slice';
+import {
+  getPositions,
+  selectIndividualPosition,
+  selectPositionLoading,
+  uploadPositionsFromCsv,
+} from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
@@ -71,12 +76,7 @@ const VirkarekisterContainer = () => {
               >
                 {uploading ? t('create_csv_position.loading') : t('create_csv_position.upload_csv')}
               </Button>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileChange}
-                style={{ margin: 0 }}
-              />
+              <input type="file" accept=".csv" onChange={handleFileChange} style={{ margin: 0 }} />
             </Box>
             <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
               {t('new_position')}
