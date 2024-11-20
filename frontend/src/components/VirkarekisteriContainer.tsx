@@ -57,7 +57,7 @@ const VirkarekisterContainer = () => {
                 </Box>
               }
             >
-              {t('new_position')} {/* Translated text */}
+              {t('new_position')}
             </Button>
           </Grid2>
           <Grid2 size={12}>
