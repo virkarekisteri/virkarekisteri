@@ -114,10 +114,10 @@ const DataTable: React.FC = () => {
   );
   const handleRowClick = async (row: Position) => {
     if (row.id === selectedRowId) {
-      setSelectedRowId(null); // Deselect row
+      setSelectedRowId(null); // Deselect row if already selected
     } else {
-      setSelectedRowId(row.id ?? null); // Use null if row.id is undefined
-      await dispatch(fetchPosition(row.id!)); // Assert row.id is defined for the dispatch
+      setSelectedRowId(row.id ?? null);
+      await dispatch(fetchPosition(row.id!));
     }
   };
 
