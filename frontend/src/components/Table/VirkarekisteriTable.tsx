@@ -11,13 +11,13 @@ import {
   alpha,
 } from '@mui/material';
 import type { Position } from 'models/Position';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
-import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +25,12 @@ const DataTable: React.FC = () => {
   const { t } = useTranslation();
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const organizationTrees = useAppSelector(selectOrganizationTreeData);
+
+  useEffect(() => {
+    if (!organizationTrees.length) {
+      dispatch(getOrganizationTrees());
+    }
+  }, [dispatch, organizationTrees]);
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
@@ -41,8 +47,8 @@ const DataTable: React.FC = () => {
         Header: t('table.organization_tree'),
         accessor: 'orgTreeId',
         Cell: ({ value }: { value: string }) => {
-          const orgTree = organizationTrees.find(tree => tree.id === value);
-          return orgTree ? `${orgTree.number} ${orgTree.name}` : value || '';
+          const orgTree = organizationTrees.find((tree) => tree.id === value);
+          return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
         },
       },
       {
@@ -87,12 +93,14 @@ const DataTable: React.FC = () => {
         },
       },
     ],
-    [t],
+    [t, organizationTrees],
   );
   const handleRowClick = async (row: Position) => {
-    if (row.id) {
-      setSelectedRowId(row.id);
-      await dispatch(fetchPosition(row.id));
+    if (row.id === selectedRowId) {
+      setSelectedRowId(null); // Deselect row
+    } else {
+      setSelectedRowId(row.id ?? null); // Use null if row.id is undefined
+      await dispatch(fetchPosition(row.id!)); // Assert row.id is defined for the dispatch
     }
   };
 
@@ -102,7 +110,7 @@ const DataTable: React.FC = () => {
   );
 
   return (
-    <TableContainer component={Box} sx={{ margin: 2, border: '1px solid #ccc' }}>
+    <TableContainer component={Box} sx={{ border: '0px solid #ccc' }}>
       <Table {...getTableProps()} sx={{ minWidth: 650 }}>
         <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
           {headerGroups.map((headerGroup) => (
@@ -113,9 +121,9 @@ const DataTable: React.FC = () => {
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   sx={{
                     color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '0.875rem',
+                    fontSize: '1.2rem',
                     cursor: 'pointer',
+                    padding: '8px 16px',
                   }}
                 >
                   {column.render('Header')}
@@ -138,14 +146,17 @@ const DataTable: React.FC = () => {
                     row.original.id === selectedRowId
                       ? alpha('#223B7C', 0.5)
                       : index % 2 === 0
-                        ? '#FFFFFF'
-                        : alpha('#223B7C', 0.2),
+                        ? '#F9F9F9'
+                        : alpha('#223B7C', 0.1),
                   cursor: 'pointer',
+                  '&:hover': {
+                    backgroundColor: alpha('#223B7C', 0.3),
+                  },
                 }}
                 onClick={() => handleRowClick(row.original)}
               >
                 {row.cells.map((cell) => (
-                  <TableCell {...cell.getCellProps()} sx={{ color: 'black' }}>
+                  <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
                     {cell.render('Cell')}
                   </TableCell>
                 ))}
@@ -155,7 +166,12 @@ const DataTable: React.FC = () => {
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
+            <TableCell
+              colSpan={columns.length}
+              sx={{ backgroundColor: '#223B7C', color: 'white', fontSize: '1rem', padding: '10px 16px' }}
+            >
+              {t('table.total_rows')}: {rows.length}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>

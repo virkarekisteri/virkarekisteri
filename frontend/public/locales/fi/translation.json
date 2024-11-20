@@ -19,7 +19,7 @@
     "login": "Kirjaudu sisään",
     "welcome": "Tervetuloa!"
   },
-  "new_position": "+ Uusi virka",
+  "new_position": "Uusi virka",
   "position": {
     "details": "Viran tiedot"
   },
@@ -36,7 +36,8 @@
     "position_name": "Virkanimike",
     "organization_tree": "Kustannuspaikka",
     "placement_location": "Sijoituspaikka",
-    "vacancy_status": "Vakanssin tila"
+    "vacancy_status": "Vakanssin tila",
+    "total_rows": "Rivien kokonaismäärä"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos"

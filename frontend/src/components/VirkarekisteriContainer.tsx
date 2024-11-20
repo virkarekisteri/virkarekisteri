@@ -32,10 +32,32 @@ const VirkarekisterContainer = () => {
       <TopAppBar />
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
-        <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
+        <Grid2 container spacing={5} margin="auto" width="90%" marginTop={5}>
           <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
-            <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
-              {t('new_position')}
+            <Button
+              variant="contained"
+              onClick={handleOpen}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  +
+                </Box>
+              }
+            >
+              {t('new_position')} {/* Translated text */}
             </Button>
           </Grid2>
           <Grid2 size={12}>

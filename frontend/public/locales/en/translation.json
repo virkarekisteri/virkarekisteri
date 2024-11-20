@@ -19,7 +19,7 @@
     "login": "Login",
     "welcome": "Welcome!"
   },
-  "new_position": "+ New position",
+  "new_position": "New position",
   "position": {
     "details": "Position details"
   },
@@ -32,11 +32,12 @@
     "save": "Save"
   },
   "table": {
-    "vacancy_number": "Vakanssinumero",
-    "position_name": "Virkanimike",
-    "organization_tree": "Kustannuspaikka",
-    "placement_location": "Sijoituspaikka",
-    "vacancy_status": "Vakanssin tila"
+    "vacancy_number": "Vacancy number",
+    "position_name": "Position name",
+    "organization_tree": "Organization tree",
+    "placement_location": "Placement location",
+    "vacancy_status": "Vacancy status",
+    "total_rows": "Total Rows"
   },
   "user_menu": {
     "logout": "Log Out"
