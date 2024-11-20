@@ -32,13 +32,11 @@
     "save": ""
   },
   "table": {
-    "created_at": "",
-    "creation_decision_number": "",
-    "placement_location": "",
-    "type": "",
-    "vacancy_number": "",
-    "vacancy_size": "",
-    "vacancy_status": ""
+    "vacancy_number": "Vakanssinumero",
+    "position_name": "Virkanimike",
+    "organization_tree": "Kustannuspaikka",
+    "placement_location": "Sijoituspaikka",
+    "vacancy_status": "Vakanssin tila"
   },
   "user_menu": {
     "logout": ""

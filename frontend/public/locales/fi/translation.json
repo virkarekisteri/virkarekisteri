@@ -32,12 +32,10 @@
     "save": "Tallenna"
   },
   "table": {
-    "created_at": "Perustamisajankohta",
-    "creation_decision_number": "Päätösnumero",
-    "placement_location": "Sijoituspaikka",
-    "type": "Laji",
     "vacancy_number": "Vakanssinumero",
-    "vacancy_size": "Vakanssikoko",
+    "position_name": "Virkanimike",
+    "organization_tree": "Kustannuspaikka",
+    "placement_location": "Sijoituspaikka",
     "vacancy_status": "Vakanssin tila"
   },
   "user_menu": {
