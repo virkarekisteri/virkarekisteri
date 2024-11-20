@@ -46,6 +46,7 @@ export const positionSlice = createAppSlice({
         },
         fulfilled: (state, action: PayloadAction<Position>) => {
           state.entries.push(action.payload);
+          state.selectedPosition = action.payload;
           state.loading = false;
         },
         rejected: (state) => {

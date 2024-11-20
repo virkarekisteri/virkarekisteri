@@ -1,38 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, TextField, Button, IconButton, Typography, Modal, Grid2 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/hooks';
-import { addPositionEmployee, fetchPositionEmployee } from 'redux/slices/position-employee-slice';
+import { addPositionEmployee } from 'redux/slices/position-employee-slice';
 import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
+import { fetchPosition } from 'redux/slices/position-slice';
 
 interface AddEmployeeModalProps {
   open: boolean;
   onClose: () => void;
   isEmployeeSet?: boolean;
   position: Position;
+  employee?: PositionEmployee;
 }
 
-const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEmployeeSet, position }) => {
+const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEmployeeSet, position, employee }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [fetchedEmployee, setFetchedEmployee] = useState<PositionEmployee | undefined>();
-
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      if (position.positionEmployeeId) {
-        const result = await dispatch(fetchPositionEmployee(position.positionEmployeeId));
-        if (result.payload) {
-          setFetchedEmployee(result.payload as PositionEmployee);
-        }
-      }
-    };
-
-    fetchEmployee();
-  }, [dispatch, position.positionEmployeeId]);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -43,6 +31,9 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
         console.log('Update employee');
       } else {
         dispatch(addPositionEmployee(data));
+      }
+      if (position.id) {
+        dispatch(fetchPosition(position.id));
       }
       onClose();
     } catch (error) {
@@ -89,11 +80,9 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
           <Form
             onSubmit={handleSubmit}
             initialValues={{
-              ...fetchedEmployee,
-              startDate: fetchedEmployee?.startDate
-                ? new Date(fetchedEmployee.startDate).toISOString().split('T')[0]
-                : '',
-              endingDate: fetchedEmployee?.endingDate,
+              ...employee,
+              startDate: employee?.startDate ? new Date(employee.startDate).toISOString().split('T')[0] : '',
+              endingDate: employee?.endingDate,
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>

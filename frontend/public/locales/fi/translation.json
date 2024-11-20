@@ -27,8 +27,10 @@
   "add_employee": "Lisää viranhaltija",
   "employee": {
     "employee_name": "Viranhaltijan nimi",
+    "details": "Viranhaltijan tiedot",
     "start_date": "Virkaan asettamispäivämäärä",
     "ending_date": "Virkasopimuksen päättämispäivämäärä",
+    "no_end_date": "Ei määräaikaa",
     "save": "Tallenna"
   },
   "table": {
