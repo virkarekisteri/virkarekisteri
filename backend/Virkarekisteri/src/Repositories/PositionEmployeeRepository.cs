@@ -40,6 +40,7 @@ public class PositionEmployeeRepository(VirkarekisteriDb db) : IPositionEmployee
     {
         return await db.PositionEmployees.FirstOrDefaultAsync(pe => pe.Id == id);
     }
+
     public async Task UpdatePositionEmployee(PositionEmployee positionEmployee)
     {
         db.PositionEmployees.Update(positionEmployee);
