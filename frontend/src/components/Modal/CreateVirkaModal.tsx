@@ -37,6 +37,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const positionNameOptions = positionNames.map((option) => option.name);
 
   const organizationTrees = useAppSelector(selectOrganizationTreeData);
+  const filteredOrgTrees = organizationTrees.filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
+    .sort((a, b) => a.number.localeCompare(b.number));
 
   useEffect(() => {
     if (open) {
@@ -144,6 +146,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               fullWidth
                               id="positionName"
                               label={t('create_position.position_name')}
+                              sx={{
+                                '& input[type="search"]::-webkit-search-cancel-button': {
+                                  WebkitAppearance: 'none',
+                                },
+                              }}
                               slotProps={{
                                 input: {
                                   ...params.InputProps,
@@ -243,7 +250,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={organizationTrees}
+                          options={filteredOrgTrees}
                           getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
                           onChange={(_event, value) => {
                             input.onChange(value);
@@ -256,6 +263,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               fullWidth
                               id="orgTreeId"
                               label={t('create_position.organization_tree')}
+                              sx={{
+                                '& input[type="search"]::-webkit-search-cancel-button': {
+                                  WebkitAppearance: 'none',
+                                },
+                              }}
                               slotProps={{
                                 input: {
                                   ...params.InputProps,
