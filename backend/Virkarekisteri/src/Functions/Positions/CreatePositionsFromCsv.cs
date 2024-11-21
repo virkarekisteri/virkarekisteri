@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
-using Virkarekisteri.Middleware.Attributes;
 
 namespace Virkarekisteri.Functions.Positions;
 
