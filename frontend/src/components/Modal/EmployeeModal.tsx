@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/hooks';
-import { addPositionEmployee } from 'redux/slices/position-employee-slice';
+import { addPositionEmployee, updatePositionEmployee } from 'redux/slices/position-employee-slice';
 import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
 import { fetchPosition } from 'redux/slices/position-slice';
@@ -26,9 +26,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
     try {
       const data = { ...values, positionId: position.id };
       if (isEmployeeSet) {
-        // For the future
-        // dispatch(updatePositionEmployee({ ...fetchedEmployee, ...values }));
-        console.log('Update employee');
+        dispatch(updatePositionEmployee({ ...employee, ...values }));
       } else {
         dispatch(addPositionEmployee(data));
       }

@@ -9,6 +9,7 @@ public interface IPositionEmployeeRepository
     Task<bool> IsPositionValid(Guid virkaId, DateTime startDate);
     Task<PositionEmployee> CreatePositionEmployee(PositionEmployee positionEmployee);
     Task<PositionEmployee?> GetPositionEmployee(Guid id);
+    Task UpdatePositionEmployee(PositionEmployee positionEmployee);
 }
 
 public class PositionEmployeeRepository(VirkarekisteriDb db) : IPositionEmployeeRepository
@@ -38,5 +39,10 @@ public class PositionEmployeeRepository(VirkarekisteriDb db) : IPositionEmployee
     public async Task<PositionEmployee?> GetPositionEmployee(Guid id)
     {
         return await db.PositionEmployees.FirstOrDefaultAsync(pe => pe.Id == id);
+    }
+    public async Task UpdatePositionEmployee(PositionEmployee positionEmployee)
+    {
+        db.PositionEmployees.Update(positionEmployee);
+        await db.SaveChangesAsync();
     }
 }

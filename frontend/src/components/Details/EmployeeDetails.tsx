@@ -70,7 +70,11 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.ending_date')}
-                      value={formatDate(positionEmployee.endingDate?.toString() ?? t('employee.no_end_date'))}
+                      value={
+                        positionEmployee.endingDate
+                          ? formatDate(positionEmployee.endingDate?.toString())
+                          : t('employee.no_end_date')
+                      }
                     />
                   </Grid2>
                 </Grid2>

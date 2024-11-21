@@ -6,7 +6,6 @@ export const createPositionEmployee = async (data: PositionEmployee) => {
   return response.data;
 };
 
-// Made ready for the future
 export const updatePositionEmployeeById = async (id: string, data: PositionEmployee) => {
   const response = await apiClient.put(`/positionemployees/${id}`, data);
   return response.data;
