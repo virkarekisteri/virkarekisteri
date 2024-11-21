@@ -45,8 +45,6 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
     return utcDate.toISOString().split('T')[0];
   };
 
-  console.log(employee?.startDate);
-
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -87,8 +85,8 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
             onSubmit={handleSubmit}
             initialValues={{
               ...employee,
-              startDate: employee?.startDate ? formatDateForInput(employee.startDate.toString()) : '',
-              endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : '',
+              startDate: employee?.startDate ? formatDateForInput(employee.startDate.toString()) : 'No start date',
+              endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : null
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
