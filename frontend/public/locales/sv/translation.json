@@ -27,6 +27,14 @@
   "position": {
     "details": ""
   },
+  "edit_employee": "",
+  "add_employee": "",
+  "employee": {
+    "employee_name": "",
+    "start_date": "",
+    "ending_date": "",
+    "save": ""
+  },
   "table": {
     "created_at": "",
     "creation_decision_number": "",

@@ -27,6 +27,14 @@
   "position": {
     "details": "Position details"
   },
+  "edit_employee": "Edit employee",
+  "add_employee": "Add employee",
+  "employee": {
+    "employee_name": "Employee name",
+    "start_date": "Start date",
+    "ending_date": "Ending date",
+    "save": "Save"
+  },
   "table": {
     "created_at": "Created at",
     "creation_decision_number": "Creation decision number",

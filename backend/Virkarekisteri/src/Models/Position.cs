@@ -69,6 +69,9 @@ public class Position
     [Column("OrgTreeId")]
     public Guid OrgTreeId { get; set; }
 
+    [Column("PositionEmployeeId")]
+    public Guid? PositionEmployeeId { get; set; }
+
     [Column("VakanssinTila")]
     public int VacancyStatus
     {
