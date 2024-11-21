@@ -15,6 +15,11 @@
     "work_experience": ""
   },
   "create_csv_position": {
+    "success": "",
+    "error1": "",
+    "error2": "",
+    "upload": "",
+    "title": "",
     "upload_csv": "",
     "loading": ""
   },

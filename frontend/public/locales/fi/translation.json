@@ -15,6 +15,11 @@
     "work_experience": "Työkokemus"
   },
   "create_csv_position": {
+    "success": " virkaa luotu onnistuneesti.",
+    "error1": "CSV-tiedostossa oli ",
+    "error2": " virheellistä riviä.",
+    "upload": "Lataa",
+    "title": "Luo virkoja CSV-tiedostosta",
     "upload_csv": "+ Tuo CSV",
     "loading": "Ladataan..."
   },

@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid2 } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
+import UploadCsvModal from './Modal/UploadCsvModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import {
-  getPositions,
-  selectIndividualPosition,
-  selectPositionLoading,
-  uploadPositionsFromCsv,
-} from 'redux/slices/position-slice';
+import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
@@ -21,40 +17,17 @@ const VirkarekisterContainer = () => {
   const isAuthenticated = useIsAuthenticated();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [openUploadModal, setOpenUploadModal] = useState(false);
   const { t } = useTranslation();
 
-  const handleOpen = () => setOpenCreateModal(true);
-  const handleClose = () => setOpenCreateModal(false);
+  const handleOpenCreateModal = () => setOpenCreateModal(true);
+  const handleCloseCreateModal = () => setOpenCreateModal(false);
+
+  const handleOpenUploadModal = () => setOpenUploadModal(true);
+  const handleCloseUploadModal = () => setOpenUploadModal(false);
+
   const position = useAppSelector(selectIndividualPosition);
   const dataLoading = useAppSelector(selectPositionLoading);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setSelectedFile(file);
-  };
-
-  const handleFileUpload = async () => {
-    if (!selectedFile) {
-      return;
-    }
-
-    setUploading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-
-      await dispatch(uploadPositionsFromCsv(formData));
-      setSelectedFile(null);
-      dispatch(getPositions());
-    } catch (error) {
-      console.error('File upload failed:', error);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   useEffect(() => {
     if (isAuthenticated) dispatch(getPositions());
@@ -64,21 +37,18 @@ const VirkarekisterContainer = () => {
     <>
       <TopAppBar />
       <AuthenticatedTemplate>
-        <CreateVirkaModal open={openCreateModal} handleClose={handleClose} />
+        <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
+        <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
         <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
-          <Grid2 size={12} display="flex" justifyContent="space-between" alignItems={'flex-end'}>
-            <Box>
-              <Button
-                variant="contained"
-                onClick={handleFileUpload}
-                disabled={uploading || !selectedFile}
-                sx={{ backgroundColor: '#223B7C', margin: '0 10px 0 30px' }}
-              >
-                {uploading ? t('create_csv_position.loading') : t('create_csv_position.upload_csv')}
-              </Button>
-              <input type="file" accept=".csv" onChange={handleFileChange} style={{ margin: 0 }} />
-            </Box>
-            <Button variant="contained" onClick={handleOpen} sx={{ backgroundColor: '#223B7C' }}>
+          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'}>
+            <Button
+              variant="contained"
+              onClick={handleOpenUploadModal}
+              sx={{ backgroundColor: '#223B7C', margin: '0 10px 0 30px' }}
+            >
+              {t('create_csv_position.upload_csv')}
+            </Button>
+            <Button variant="contained" onClick={handleOpenCreateModal} sx={{ backgroundColor: '#223B7C' }}>
               {t('new_position')}
             </Button>
           </Grid2>
