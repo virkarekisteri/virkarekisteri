@@ -86,7 +86,7 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
             initialValues={{
               ...employee,
               startDate: employee?.startDate ? formatDateForInput(employee.startDate.toString()) : 'No start date',
-              endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : null
+              endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : null,
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
