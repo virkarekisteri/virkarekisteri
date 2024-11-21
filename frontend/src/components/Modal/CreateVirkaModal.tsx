@@ -37,7 +37,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const positionNameOptions = positionNames.map((option) => option.name);
 
   const organizationTrees = useAppSelector(selectOrganizationTreeData);
-  const filteredOrgTrees = organizationTrees.filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
+  const filteredOrgTrees = organizationTrees
+    .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
 
   useEffect(() => {
