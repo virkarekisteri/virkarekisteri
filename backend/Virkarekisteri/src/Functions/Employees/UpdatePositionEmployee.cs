@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Virkarekisteri.Repositories;
-using Virkarekisteri.Models;
-using System.Text.Json;
 using Virkarekisteri.Middleware.Attributes;
+using Virkarekisteri.Models;
+using Virkarekisteri.Repositories;
 using static Virkarekisteri.Utils.DeserializeHelper;
 
 namespace Virkarekisteri.Functions.Employees;
 
-public class UpdatePositionEmployee(ILogger<UpdatePositionEmployee> logger, IPositionEmployeeRepository positionEmployeeRepository)
+public class UpdatePositionEmployee(
+    ILogger<UpdatePositionEmployee> logger,
+    IPositionEmployeeRepository positionEmployeeRepository
+)
 {
     /// <summary>
     /// Updates a position employee by id
