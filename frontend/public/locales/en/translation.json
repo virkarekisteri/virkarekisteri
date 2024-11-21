@@ -27,8 +27,10 @@
   "add_employee": "Add employee",
   "employee": {
     "employee_name": "Employee name",
+    "details": "Employee details",
     "start_date": "Start date",
     "ending_date": "Ending date",
+    "no_end_date": "No end date",
     "save": "Save"
   },
   "table": {
