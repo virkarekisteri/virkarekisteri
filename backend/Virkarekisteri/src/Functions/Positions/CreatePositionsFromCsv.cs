@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 using System.Globalization;
+using Virkarekisteri.Middleware.Attributes;
 
 namespace Virkarekisteri.Functions.Positions;
 
@@ -15,6 +16,7 @@ public class CreatePositionsFromCsv(
 )
 {
     [Function("CreatePositionsFromCsv")]
+    [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positions/import")] HttpRequest req
     )
@@ -99,6 +101,7 @@ public class CreatePositionsFromCsv(
                     position.WorkExperience = string.IsNullOrWhiteSpace(values[12]) ? null : values[12];
                     position.Details = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
                     position.PlacementLocation = string.IsNullOrWhiteSpace(values[14]) ? null : values[14];
+                    position.PositionEmployeeId = null;
 
                     positions.Add(position);  // Add to the list if all validations pass
                 }
