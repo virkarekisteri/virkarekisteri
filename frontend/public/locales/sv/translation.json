@@ -56,5 +56,10 @@
     "abolished": "",
     "active": "",
     "established": ""
+  },
+  "search_filter": {
+    "search": "",
+    "reset": "",
+    "search_filters": ""
   }
 }

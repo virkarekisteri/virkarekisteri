@@ -56,5 +56,10 @@
     "abolished": "Lakkautettu",
     "active": "Aktiivinen",
     "established": "Perustettu"
+  },
+  "search_filter": {
+    "search": "Hae",
+    "reset": "Tyhjennä",
+    "search_filters": "Hakusuodattimet"
   }
 }

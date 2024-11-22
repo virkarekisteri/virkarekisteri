@@ -56,5 +56,10 @@
     "abolished": "Abolished",
     "active": "Active",
     "established": "Established"
+  },
+  "search_filter": {
+    "search": "Search",
+    "reset": "Reset search terms",
+    "search_filters": "Search filters"
   }
 }
