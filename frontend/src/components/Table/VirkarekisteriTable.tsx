@@ -15,6 +15,7 @@ import {
   Button,
   TextField,
   Typography,
+  TablePagination,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -33,6 +34,8 @@ const DataTable: React.FC = () => {
   const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [filteredData, setFilteredData] = useState(dataFromBackend);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     setFilteredData(dataFromBackend);
@@ -128,11 +131,20 @@ const DataTable: React.FC = () => {
     setFilteredData(dataFromBackend);
   };
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page on rows per page change
+  };
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
     { columns, data: filteredData },
     useSortBy,
   );
-
+  const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
       <Accordion>
@@ -188,7 +200,7 @@ const DataTable: React.FC = () => {
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()}>
-            {rows.map((row, index) => {
+            {paginatedRows.map((row, index) => {
               prepareRow(row);
               return (
                 <TableRow
@@ -220,6 +232,17 @@ const DataTable: React.FC = () => {
           </TableFooter>
         </Table>
       </TableContainer>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <TablePagination
+          component="div"
+          count={rows.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage={t('table.rows_per_page')}
+        />
+      </Box>
     </>
   );
 };

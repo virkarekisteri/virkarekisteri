@@ -47,7 +47,8 @@
     "type": "Laji",
     "vacancy_number": "Vakanssinumero",
     "vacancy_size": "Vakanssikoko",
-    "vacancy_status": "Vakanssin tila"
+    "vacancy_status": "Vakanssin tila",
+    "rows_per_page": "Rivejä sivulla:"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos"

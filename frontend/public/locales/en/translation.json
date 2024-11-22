@@ -47,7 +47,8 @@
     "type": "Type",
     "vacancy_number": "Vacancy number",
     "vacancy_size": "Vacancy size",
-    "vacancy_status": "Vacancy status"
+    "vacancy_status": "Vacancy status",
+    "rows_per_page": "Rows per page"
   },
   "user_menu": {
     "logout": "Log Out"
