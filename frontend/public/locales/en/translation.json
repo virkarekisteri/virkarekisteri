@@ -14,6 +14,15 @@
     "vacancy_size": "Size-%",
     "work_experience": "Work experience"
   },
+  "create_csv_position": {
+    "success": " positions imported successfully.",
+    "error1": "There were ",
+    "error2": " errors in the CSV file.",
+    "upload": "Upload",
+    "title": "Create positions from CSV",
+    "upload_csv": "+ Import CSV",
+    "loading": "Loading..."
+  },
   "eligibility": "Eligibility",
   "landing_page": {
     "login": "Login",
