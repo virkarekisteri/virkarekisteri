@@ -66,5 +66,8 @@
     "search": "Hae",
     "reset": "Tyhjennä",
     "search_filters": "Hakusuodattimet"
+  },
+  "basic_details": {
+    "vacancy_fill": "Täyttö-%"
   }
 }

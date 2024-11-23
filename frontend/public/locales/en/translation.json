@@ -66,5 +66,8 @@
     "search": "Search",
     "reset": "Reset search terms",
     "search_filters": "Search filters"
+  },
+  "basic_details": {
+    "vacancy_fill": "Fill-%"
   }
 }
