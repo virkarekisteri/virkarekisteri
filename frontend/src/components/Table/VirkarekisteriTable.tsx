@@ -17,6 +17,14 @@ import {
   Typography,
   TablePagination,
   Grid2,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  ListItemText,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -34,6 +42,8 @@ const DataTable: React.FC = () => {
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
   const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
+  const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
+  const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [filteredData, setFilteredData] = useState(dataFromBackend);
   const [page, setPage] = useState(0);
@@ -126,7 +136,17 @@ const DataTable: React.FC = () => {
         const matchesPositionName = positionNameSearch
           ? (position?.positionName?.name.toLocaleLowerCase().includes(positionNameSearch.toLocaleLowerCase()) ?? false)
           : true;
-        return matchesVakanssinumero && matchesSijoituspaikka && matchesPositionName;
+        const matchesPositionType =
+          positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
+        const matchesVacancyStatus =
+          vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
+        return (
+          matchesVakanssinumero &&
+          matchesSijoituspaikka &&
+          matchesPositionName &&
+          matchesPositionType &&
+          matchesVacancyStatus
+        );
       }
     });
     setFilteredData(filtered);
@@ -135,7 +155,11 @@ const DataTable: React.FC = () => {
   const handleReset = () => {
     setVacancyNumberSearch('');
     setPlacementLocationSearch('');
+    setPositionNameSearch('');
+    setPositionTypeSearch([]);
+    setVacancyStatusSearch([]);
     setFilteredData(dataFromBackend);
+    setPage(0);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -145,6 +169,20 @@ const DataTable: React.FC = () => {
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset to first page on rows per page change
+  };
+
+  const handleVacancyStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setVacancyStatusSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
+  };
+
+  const handlePositionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPositionTypeSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
@@ -193,7 +231,74 @@ const DataTable: React.FC = () => {
                 fullWidth
               />
             </Grid2>
-            <Grid2 size={6}></Grid2>
+            <Grid2 size={3}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.type')}
+              </Typography>
+              <FormControl component="fieldset" fullWidth>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={positionTypeSearch.includes('0')}
+                        onChange={handlePositionTypeChange}
+                        value="0"
+                      />
+                    }
+                    label={t('search_filter.virka')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={positionTypeSearch.includes('1')}
+                        onChange={handlePositionTypeChange}
+                        value="1"
+                      />
+                    }
+                    label={t('search_filter.toimi')}
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={3}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.vacancy_status')}
+              </Typography>
+              <FormControl component="fieldset" fullWidth>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('0')}
+                        onChange={handleVacancyStatusChange}
+                        value="0"
+                      />
+                    }
+                    label={t('vacancy_statuses.abolished')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('1')}
+                        onChange={handleVacancyStatusChange}
+                        value="1"
+                      />
+                    }
+                    label={t('vacancy_statuses.established')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('2')}
+                        onChange={handleVacancyStatusChange}
+                        value="2"
+                      />
+                    }
+                    label={t('vacancy_statuses.active')}
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid2>
             <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
               <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
                 {t('search_filter.search')}

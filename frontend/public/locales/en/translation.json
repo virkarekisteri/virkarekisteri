@@ -64,6 +64,8 @@
   "search_filter": {
     "search": "Search",
     "reset": "Reset search terms",
-    "search_filters": "Search filters"
+    "search_filters": "Search filters",
+    "virka": "Position",
+    "toimi": "Post"
   }
 }

@@ -64,6 +64,8 @@
   "search_filter": {
     "search": "Hae",
     "reset": "Tyhjennä",
-    "search_filters": "Hakusuodattimet"
+    "search_filters": "Hakusuodattimet",
+    "virka": "Virka",
+    "toimi": "Toimi"
   }
 }

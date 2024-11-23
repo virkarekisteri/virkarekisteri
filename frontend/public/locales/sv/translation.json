@@ -64,6 +64,8 @@
   "search_filter": {
     "search": "",
     "reset": "",
-    "search_filters": ""
+    "search_filters": "",
+    "virka": "",
+    "toimi": ""
   }
 }
