@@ -47,7 +47,8 @@
     "type": "",
     "vacancy_number": "",
     "vacancy_size": "",
-    "vacancy_status": ""
+    "vacancy_status": "",
+    "rows_per_page": ""
   },
   "user_menu": {
     "logout": ""
@@ -56,5 +57,10 @@
     "abolished": "",
     "active": "",
     "established": ""
+  },
+  "search_filter": {
+    "search": "",
+    "reset": "",
+    "search_filters": ""
   }
 }
