@@ -1,7 +1,7 @@
 import { createAppSlice } from 'redux/create-app-slice';
-import { createPosition, getPositionById, getPositionsFunc } from 'services/functions/positions-service';
+import { createPosition, getPositionById, getPositionsFunc, uploadCsv } from 'services/functions/positions-service';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Position } from 'models/Position'; // Adjust the import path accordingly
+import type { Position } from 'models/Position';
 
 export interface PositionState {
   entries: Position[];
@@ -71,6 +71,22 @@ export const positionSlice = createAppSlice({
         },
       },
     ),
+    uploadPositionsFromCsv: create.asyncThunk(
+      async (formData: FormData) => {
+        return await uploadCsv(formData); // API call to handle file upload
+      },
+      {
+        pending: (state) => {
+          state.loading = true;
+        },
+        fulfilled: (state) => {
+          state.loading = false;
+        },
+        rejected: (state) => {
+          state.loading = false;
+        },
+      },
+    ),
   }),
   selectors: {
     selectPositionData: (data) => data.entries,
@@ -79,6 +95,6 @@ export const positionSlice = createAppSlice({
   },
 });
 
-export const { getPositions, addPosition, fetchPosition } = positionSlice.actions;
+export const { getPositions, addPosition, fetchPosition, uploadPositionsFromCsv } = positionSlice.actions;
 
 export const { selectPositionData, selectPositionLoading, selectIndividualPosition } = positionSlice.selectors;

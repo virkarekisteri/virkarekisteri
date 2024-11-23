@@ -14,6 +14,15 @@
     "vacancy_size": "",
     "work_experience": ""
   },
+  "create_csv_position": {
+    "success": "",
+    "error1": "",
+    "error2": "",
+    "upload": "",
+    "title": "",
+    "upload_csv": "",
+    "loading": ""
+  },
   "eligibility": "",
   "landing_page": {
     "login": "",
@@ -40,7 +49,8 @@
     "type": "",
     "vacancy_number": "",
     "vacancy_size": "",
-    "vacancy_status": ""
+    "vacancy_status": "",
+    "rows_per_page": ""
   },
   "user_menu": {
     "logout": ""
@@ -49,5 +59,10 @@
     "abolished": "",
     "active": "",
     "established": ""
+  },
+  "search_filter": {
+    "search": "",
+    "reset": "",
+    "search_filters": ""
   }
 }
