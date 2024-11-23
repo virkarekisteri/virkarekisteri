@@ -174,7 +174,7 @@ const DataTable: React.FC = () => {
           </Box>
         </AccordionDetails>
       </Accordion>
-      <TableContainer component={Box} sx={{ margin: 2, border: '1px solid #ccc' }}>
+      <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
         <Table {...getTableProps()} sx={{ minWidth: 650 }}>
           <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
             {headerGroups.map((headerGroup) => (
