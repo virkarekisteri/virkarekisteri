@@ -116,13 +116,15 @@ const DataTable: React.FC = () => {
     const filtered = dataFromBackend.filter((position) => {
       if (position) {
         const matchesVakanssinumero = vacancyNumberSearch
-          ? (position.vacancyNumber?.includes(vacancyNumberSearch) ?? false)
+          ? (position.vacancyNumber?.toLocaleLowerCase().includes(vacancyNumberSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesSijoituspaikka = placementLocationStateSearch
-          ? (position?.placementLocation?.includes(placementLocationStateSearch) ?? false)
+          ? (position?.placementLocation
+              ?.toLocaleLowerCase()
+              .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesPositionName = positionNameSearch
-          ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
+          ? (position?.positionName?.name.toLocaleLowerCase().includes(positionNameSearch.toLocaleLowerCase()) ?? false)
           : true;
         return matchesVakanssinumero && matchesSijoituspaikka && matchesPositionName;
       }
