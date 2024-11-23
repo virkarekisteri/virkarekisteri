@@ -44,11 +44,51 @@ const VirkarekisterContainer = () => {
             <Button
               variant="contained"
               onClick={handleOpenUploadModal}
-              sx={{ backgroundColor: '#223B7C', margin: '0 10px 0 30px' }}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  +
+                </Box>
+              }
             >
               {t('create_csv_position.upload_csv')}
             </Button>
-            <Button variant="contained" onClick={handleOpenCreateModal} sx={{ backgroundColor: '#223B7C' }}>
+            <Button
+              variant="contained"
+              onClick={handleOpenCreateModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  +
+                </Box>
+              }
+            >
               {t('new_position')}
             </Button>
           </Grid2>

@@ -20,7 +20,7 @@
     "error2": " errors in the CSV file.",
     "upload": "Upload",
     "title": "Create positions from CSV",
-    "upload_csv": "+ Import CSV",
+    "upload_csv": "Import CSV",
     "loading": "Loading..."
   },
   "eligibility": "Eligibility",
