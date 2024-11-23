@@ -50,7 +50,8 @@
     "vacancy_number": "",
     "vacancy_size": "",
     "vacancy_status": "",
-    "rows_per_page": ""
+    "rows_per_page": "",
+    "position_name": ""
   },
   "user_menu": {
     "logout": ""

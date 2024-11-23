@@ -16,6 +16,7 @@ import {
   TextField,
   Typography,
   TablePagination,
+  Grid2,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +33,7 @@ const DataTable: React.FC = () => {
   const { t } = useTranslation();
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
   const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
+  const [positionNameSearch, setPositionNameSearch] = useState('');
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [filteredData, setFilteredData] = useState(dataFromBackend);
   const [page, setPage] = useState(0);
@@ -119,7 +121,10 @@ const DataTable: React.FC = () => {
         const matchesSijoituspaikka = placementLocationStateSearch
           ? (position?.placementLocation?.includes(placementLocationStateSearch) ?? false)
           : true;
-        return matchesVakanssinumero && matchesSijoituspaikka;
+        const matchesPositionName = positionNameSearch
+          ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
+          : true;
+        return matchesVakanssinumero && matchesSijoituspaikka && matchesPositionName;
       }
     });
     setFilteredData(filtered);
@@ -152,26 +157,50 @@ const DataTable: React.FC = () => {
           <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <TextField
-              label={t('table.vacancy_number')}
-              value={vacancyNumberSearch}
-              onChange={(e) => setVacancyNumberSearch(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label={t('table.placement_location')}
-              value={placementLocationStateSearch}
-              onChange={(e) => setPlacementLocationSearch(e.target.value)}
-              fullWidth
-            />
-            <Button variant="contained" onClick={handleSearch}>
-              {t('search_filter.search')}
-            </Button>
-            <Button variant="outlined" onClick={handleReset}>
-              {t('search_filter.reset')}
-            </Button>
-          </Box>
+          <Grid2 container spacing={2}>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.vacancy_number')}
+              </Typography>
+              <TextField
+                label={t('table.vacancy_number')}
+                value={vacancyNumberSearch}
+                onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.placement_location')}
+              </Typography>
+              <TextField
+                label={t('table.placement_location')}
+                value={placementLocationStateSearch}
+                onChange={(e) => setPlacementLocationSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.position_name')}
+              </Typography>
+              <TextField
+                label={t('table.position_name')}
+                value={positionNameSearch}
+                onChange={(e) => setPositionNameSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={6}></Grid2>
+            <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
+              <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
+                {t('search_filter.search')}
+              </Button>
+              <Button variant="outlined" onClick={handleReset}>
+                {t('search_filter.reset')}
+              </Button>
+            </Grid2>
+          </Grid2>
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
