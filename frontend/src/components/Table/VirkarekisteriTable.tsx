@@ -18,13 +18,9 @@ import {
   TablePagination,
   Grid2,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Checkbox,
   FormControlLabel,
   FormGroup,
-  ListItemText,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
