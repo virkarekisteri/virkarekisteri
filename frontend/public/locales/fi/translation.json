@@ -43,14 +43,13 @@
     "save": "Tallenna"
   },
   "table": {
-    "created_at": "Perustamisajankohta",
-    "creation_decision_number": "Päätösnumero",
-    "placement_location": "Sijoituspaikka",
-    "type": "Laji",
     "vacancy_number": "Vakanssinumero",
     "vacancy_size": "Vakanssikoko",
     "vacancy_status": "Vakanssin tila",
-    "rows_per_page": "Rivejä sivulla:"
+    "rows_per_page": "Rivejä sivulla:",
+    "position_name": "Virkanimike",
+    "organization_tree": "Kustannuspaikka",
+    "placement_location": "Sijoituspaikka"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos"

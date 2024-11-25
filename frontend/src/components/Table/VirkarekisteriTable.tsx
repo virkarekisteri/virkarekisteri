@@ -25,6 +25,7 @@ import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const DataTable: React.FC = () => {
   useEffect(() => {
     setFilteredData(dataFromBackend);
   }, [dataFromBackend]);
+  const organizationTrees = useAppSelector(selectOrganizationTreeData);
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
@@ -48,16 +50,17 @@ const DataTable: React.FC = () => {
         accessor: 'vacancyNumber',
       },
       {
-        Header: t('table.creation_decision_number'),
-        accessor: 'creationDecisionNumber',
+        Header: t('table.position_name'),
+        accessor: 'positionName',
+        Cell: ({ value }: { value: { name: string } }) => value?.name || '',
       },
       {
-        Header: t('table.vacancy_size'),
-        accessor: 'vacancySize',
-      },
-      {
-        Header: t('table.type'),
-        accessor: 'type',
+        Header: t('table.organization_tree'),
+        accessor: 'orgTreeId',
+        Cell: ({ value }: { value: string }) => {
+          const orgTree = organizationTrees.find(tree => tree.id === value);
+          return orgTree ? `${orgTree.number} ${orgTree.name}` : value || '';
+        },
       },
       {
         Header: t('table.placement_location'),

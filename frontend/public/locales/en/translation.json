@@ -50,7 +50,9 @@
     "vacancy_number": "Vacancy number",
     "vacancy_size": "Vacancy size",
     "vacancy_status": "Vacancy status",
-    "rows_per_page": "Rows per page"
+    "rows_per_page": "Rows per page",
+    "position_name": "Position name",
+    "organization_tree": "Organization tree"
   },
   "user_menu": {
     "logout": "Log Out"
