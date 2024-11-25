@@ -39,8 +39,8 @@ const VirkarekisterContainer = () => {
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
-        <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
-          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'}>
+        <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
+          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'} sx={{ gap: 5 }}>
             <Button
               variant="contained"
               onClick={handleOpenUploadModal}

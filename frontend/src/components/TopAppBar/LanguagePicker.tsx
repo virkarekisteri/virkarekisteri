@@ -1,52 +1,77 @@
+import React, { useState } from 'react';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import React from 'react';
 import { LANGUAGES } from 'react-i18n.config';
 
 const LanguagePicker = () => {
   const { i18n } = useTranslation();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleChangeLanguage = async (lng: string) => {
-    await i18n.changeLanguage(lng);
+  const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
+  const handleChangeLanguage = async (lng: string) => {
+    await i18n.changeLanguage(lng);
+    handleMenuClose();
+  };
+
+  const currentLanguage = i18n.resolvedLanguage || 'fi';
+
   return (
-    <>
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
+    <div>
+      <IconButton
+        aria-label="select language"
+        aria-controls="language-menu"
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
         onClick={handleMenuOpen}
-      >
-        <p className="text-white">{i18n.resolvedLanguage}</p>
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={() => setAnchorEl(null)}
-        keepMounted={true}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
+        sx={{
+          backgroundColor: '#FFFFFF',
+          color: '#223B7C',
+          fontSize: '1.2rem',
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          '&:hover': {
+            backgroundColor: '#d3d8e5',
+          },
         }}
       >
+        {currentLanguage.toUpperCase()}
+      </IconButton>
+
+      <Menu
+        id="language-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        keepMounted
+      >
         {(Object.keys(LANGUAGES) as (keyof typeof LANGUAGES)[]).map((lng) => (
-          <MenuItem key={lng} onClick={() => handleChangeLanguage(lng)} disabled={i18n.resolvedLanguage === lng}>
+          <MenuItem key={lng} onClick={() => handleChangeLanguage(lng)} disabled={currentLanguage === lng}>
             {LANGUAGES[lng]}
           </MenuItem>
         ))}
       </Menu>
-    </>
+    </div>
   );
 };
 

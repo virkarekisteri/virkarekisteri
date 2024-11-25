@@ -158,91 +158,154 @@ const DataTable: React.FC = () => {
   const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}>
-          <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <TextField
-              label={t('table.vacancy_number')}
-              value={vacancyNumberSearch}
-              onChange={(e) => setVacancyNumberSearch(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label={t('table.placement_location')}
-              value={placementLocationStateSearch}
-              onChange={(e) => setPlacementLocationSearch(e.target.value)}
-              fullWidth
-            />
-            <Button variant="contained" onClick={handleSearch}>
-              {t('search_filter.search')}
-            </Button>
-            <Button variant="outlined" onClick={handleReset}>
-              {t('search_filter.reset')}
-            </Button>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-      <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
-        <Table {...getTableProps()} sx={{ minWidth: 650 }}>
-          <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
-            {headerGroups.map((headerGroup) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()}>
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-                {headerGroup.headers.map((column: any) => (
-                  <TableCell
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    sx={{
-                      color: 'white',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      padding: '8px 16px',
-                    }}
-                  >
-                    {column.render('Header')}
-                    <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
-                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
-                    </span>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody {...getTableBodyProps()}>
-            {paginatedRows.map((row, index) => {
-              prepareRow(row);
-              return (
-                <TableRow
-                  {...row.getRowProps()}
+      <Box
+        sx={{
+          width: '950px',
+          marginLeft: 0,
+          marginRight: 'auto',
+        }}
+      >
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
+              backgroundColor: alpha('#223B7C', 1),
+              color: 'white',
+              minHeight: '45px',
+              height: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+                height: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: '1.2rem' }}>{t('search_filter.search_filters')}</Typography>
+          </AccordionSummary>
+
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#f5f5f5', 1),
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Box sx={{ display: 'flex', gap: 2, flex: 1 }}>
+                <TextField
+                  label={t('table.vacancy_number')}
+                  value={vacancyNumberSearch}
+                  onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                  size="small"
                   sx={{
-                    backgroundColor:
-                      row.original.id === selectedRowId
-                        ? alpha('#223B7C', 0.5)
-                        : index % 2 === 0
-                          ? '#F9F9F9'
-                          : alpha('#223B7C', 0.2),
-                    cursor: 'pointer',
+                    flexShrink: 0,
                   }}
-                  onClick={() => handleRowClick(row.original)}
+                  inputProps={{ maxLength: 8 }}
+                />
+                <TextField
+                  label={t('table.placement_location')}
+                  value={placementLocationStateSearch}
+                  onChange={(e) => setPlacementLocationSearch(e.target.value)}
+                  size="small"
+                  sx={{
+                    flexShrink: 0,
+                  }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleSearch}
+                  sx={{
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
+                  }}
                 >
-                  {row.cells.map((cell) => (
-                    <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
-                      {cell.render('Cell')}
+                  {t('search_filter.search')}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleReset}
+                  sx={{
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
+                  }}
+                >
+                  {t('search_filter.reset')}
+                </Button>
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <TableContainer component={Box} sx={{ border: '0px solid #ccc' }}>
+          <Table {...getTableProps()} sx={{ minWidth: 650 }}>
+            <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
+              {headerGroups.map((headerGroup) => (
+                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
+                  {headerGroup.headers.map((column: any) => (
+                    <TableCell
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      sx={{
+                        color: 'white',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        padding: '8px 16px',
+                      }}
+                    >
+                      {column.render('Header')}
+                      <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
+                        {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
+                      </span>
                     </TableCell>
                   ))}
                 </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+              ))}
+            </TableHead>
+            <TableBody {...getTableBodyProps()}>
+              {paginatedRows.map((row, index) => {
+                prepareRow(row);
+                return (
+                  <TableRow
+                    {...row.getRowProps()}
+                    sx={{
+                      backgroundColor:
+                        row.original.id === selectedRowId
+                          ? alpha('#223B7C', 0.5)
+                          : index % 2 === 0
+                            ? '#F9F9F9'
+                            : alpha('#223B7C', 0.2),
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleRowClick(row.original)}
+                  >
+                    {row.cells.map((cell) => (
+                      <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
+                        {cell.render('Cell')}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Box>
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"

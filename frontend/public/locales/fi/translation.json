@@ -20,7 +20,7 @@
     "error2": " virheellistä riviä.",
     "upload": "Lataa",
     "title": "Luo virkoja CSV-tiedostosta",
-    "upload_csv": "+ Tuo CSV",
+    "upload_csv": "Tuo CSV",
     "loading": "Ladataan..."
   },
   "eligibility": "Kelpoisuusehdot",
@@ -43,6 +43,9 @@
     "save": "Tallenna"
   },
   "table": {
+    "created_at": "Perustamisajankohta",
+    "creation_decision_number": "Päätösnumero",
+    "type": "Laji",
     "vacancy_number": "Vakanssinumero",
     "vacancy_size": "Vakanssikoko",
     "vacancy_status": "Vakanssin tila",
