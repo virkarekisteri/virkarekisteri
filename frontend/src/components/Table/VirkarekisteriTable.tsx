@@ -24,8 +24,12 @@ import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
+<<<<<<< HEAD
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+=======
+import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
+>>>>>>> fb7fbb3 (VIR-102: Update table)
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +47,12 @@ const DataTable: React.FC = () => {
   }, [dataFromBackend]);
   const organizationTrees = useAppSelector(selectOrganizationTreeData);
 
+  useEffect(() => {
+    if (!organizationTrees.length) {
+      dispatch(getOrganizationTrees());
+    }
+  }, [dispatch, organizationTrees]);
+
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
       {
@@ -58,8 +68,8 @@ const DataTable: React.FC = () => {
         Header: t('table.organization_tree'),
         accessor: 'orgTreeId',
         Cell: ({ value }: { value: string }) => {
-          const orgTree = organizationTrees.find(tree => tree.id === value);
-          return orgTree ? `${orgTree.number} ${orgTree.name}` : value || '';
+          const orgTree = organizationTrees.find((tree) => tree.id === value);
+          return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
         },
       },
       {
@@ -104,12 +114,14 @@ const DataTable: React.FC = () => {
         },
       },
     ],
-    [t],
+    [t, organizationTrees],
   );
   const handleRowClick = async (row: Position) => {
-    if (row.id) {
-      setSelectedRowId(row.id);
-      await dispatch(fetchPosition(row.id));
+    if (row.id === selectedRowId) {
+      setSelectedRowId(null); // Deselect row
+    } else {
+      setSelectedRowId(row.id ?? null); // Use null if row.id is undefined
+      await dispatch(fetchPosition(row.id!)); // Assert row.id is defined for the dispatch
     }
   };
 

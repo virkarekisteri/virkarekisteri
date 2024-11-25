@@ -28,7 +28,7 @@
     "login": "Login",
     "welcome": "Welcome!"
   },
-  "new_position": "+ New position",
+  "new_position": "New position",
   "position": {
     "details": "Position details"
   },

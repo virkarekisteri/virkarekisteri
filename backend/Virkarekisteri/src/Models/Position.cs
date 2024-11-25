@@ -77,7 +77,7 @@ public class Position
     {
         get
         {
-            if (VacancyFill.HasValue && VacancyFill > 0 && !EndedAt.HasValue)
+            if (PositionEmployeeId.HasValue && !EndedAt.HasValue)
                 return 2; // 2 == Active (for now with vacancy fill due to no link with person)
             else if (EndedAt.HasValue)
                 return 0; // 0 == Abolished
