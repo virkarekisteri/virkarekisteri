@@ -24,12 +24,8 @@ import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
-<<<<<<< HEAD
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
-=======
 import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
->>>>>>> fb7fbb3 (VIR-102: Update table)
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
