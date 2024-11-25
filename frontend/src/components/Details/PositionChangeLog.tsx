@@ -37,25 +37,31 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                 <Grid2 container spacing={2} sx={{ padding: 2, border: '1px solid #ccc', background: '#F5F5F5' }}>
                     {changeLogs.map((log, index) => (
                         <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
-                            <Grid2 size={{ xs: 3 }}>
+                            <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField label="Muutoksen tekijä" value={log.editor} />
                             </Grid2>
-                            <Grid2 size={{ xs: 3 }}>
+                            <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
                                     label="Muokattu kenttä"
                                     value={log.editedField}
                                 />
                             </Grid2>
-                            <Grid2 size={{ xs: 3 }}>
+                            <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
                                     label="Vanha arvo"
                                     value={log.oldValue}
                                 />
                             </Grid2>
-                            <Grid2 size={{ xs: 3 }}>
+                            <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
                                     label="Uusi arvo"
                                     value={log.newValue}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 2 }}>
+                                <RenderReadonlyTextField
+                                    label="Aikaleima"
+                                    value={log.timestamp}
                                 />
                             </Grid2>
                         </Grid2>

@@ -5,4 +5,5 @@ export interface ChangeLogEntry {
     oldValue: string;
     newValue: string;
     editor: string;
+    timestamp: string;
 }

@@ -31,4 +31,8 @@ public class ChangeLog
     [MaxLength(255)]
     [Column("Muokkaaja")]
     public required string Editor { get; set; }
+
+    [Required]
+    [Column("Timestamp")]
+    public DateTime Timestamp { get; set; }
 }
