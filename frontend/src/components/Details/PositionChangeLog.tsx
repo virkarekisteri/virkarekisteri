@@ -36,7 +36,7 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
     return (
         <Accordion defaultExpanded>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">Viran muutoshistoria</Typography>
+                <Typography variant="h6">{t("change_logs.title")}</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <Grid2 container spacing={2} sx={{ padding: 2, border: '1px solid #ccc', background: '#F5F5F5' }}>
@@ -44,28 +44,28 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                         <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
                             <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
-                                    label="Aikaleima"
+                                    label={t("change_logs.timestamp")}
                                     value={formatTimestamp(log.timestamp)}
                                 />
                             </Grid2>
                             <Grid2 size={{ xs: 2 }}>
-                                <RenderReadonlyTextField label="Muutoksen tekijä" value={log.editor} />
+                                <RenderReadonlyTextField label={t("change_logs.editor")} value={log.editor} />
                             </Grid2>
                             <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
-                                    label="Muokattu kenttä"
+                                    label={t("change_logs.edited_field")}
                                     value={log.editedField}
                                 />
                             </Grid2>
                             <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
-                                    label="Vanha arvo"
+                                    label={t("change_logs.old_value")}
                                     value={log.oldValue}
                                 />
                             </Grid2>
                             <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField
-                                    label="Uusi arvo"
+                                    label={t("change_logs.new_value")}
                                     value={log.newValue}
                                 />
                             </Grid2>

@@ -64,5 +64,13 @@
     "search": "Hae",
     "reset": "Tyhjennä",
     "search_filters": "Hakusuodattimet"
+  },
+  "change_logs": {
+    "title": "Viran muutoshistoria",
+    "timestamp": "Aikaleima",
+    "editor": "Muokkaaja",
+    "edited_field": "Muokattu kenttä",
+    "old_value": "Vanha arvo",
+    "new_value": "Uusi arvo"
   }
 }

@@ -64,5 +64,13 @@
     "search": "",
     "reset": "",
     "search_filters": ""
+  },
+  "change_logs": {
+    "title": "",
+    "timestamp": "",
+    "editor": "",
+    "edited_field": "",
+    "old_value": "",
+    "new_value": ""
   }
 }

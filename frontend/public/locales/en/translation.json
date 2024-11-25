@@ -64,5 +64,13 @@
     "search": "Search",
     "reset": "Reset search terms",
     "search_filters": "Search filters"
+  },
+  "change_logs": {
+    "title": "History of changes",
+    "timestamp": "Timestamp",
+    "editor": "Editor",
+    "edited_field": "Edited field",
+    "old_value": "Old value",
+    "new_value": "New value"
   }
 }
