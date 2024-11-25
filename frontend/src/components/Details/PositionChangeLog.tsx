@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import type { ChangeLogEntry } from 'models/ChangeLogEntry';
 import { useState, useEffect } from 'react';
 import { fetchPositionChangeLogs } from 'services/functions/positions-service';
+import { format } from 'date-fns';
 
 interface PositionChangeLogProps {
     position: Position;
@@ -16,6 +17,10 @@ interface PositionChangeLogProps {
 const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
     const { t } = useTranslation();
     const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
+
+    const formatTimestamp = (timestamp: string) => {
+        return format(new Date(timestamp), 'dd.MM.yyyy HH:mm:ss');
+    };
 
     useEffect(() => {
         const loadChangeLogs = async () => {
@@ -38,6 +43,12 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                     {changeLogs.map((log, index) => (
                         <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
                             <Grid2 size={{ xs: 2 }}>
+                                <RenderReadonlyTextField
+                                    label="Aikaleima"
+                                    value={formatTimestamp(log.timestamp)}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 2 }}>
                                 <RenderReadonlyTextField label="Muutoksen tekijä" value={log.editor} />
                             </Grid2>
                             <Grid2 size={{ xs: 2 }}>
@@ -56,12 +67,6 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                                 <RenderReadonlyTextField
                                     label="Uusi arvo"
                                     value={log.newValue}
-                                />
-                            </Grid2>
-                            <Grid2 size={{ xs: 2 }}>
-                                <RenderReadonlyTextField
-                                    label="Aikaleima"
-                                    value={log.timestamp}
                                 />
                             </Grid2>
                         </Grid2>
