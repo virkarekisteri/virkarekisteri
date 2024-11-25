@@ -12,7 +12,8 @@ namespace Virkarekisteri.Functions.Employees;
 
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
-    IPositionEmployeeRepository positionEmployeeRepository
+    IPositionEmployeeRepository positionEmployeeRepository,
+    IChangeLogRepository changeLogRepository
 )
 {
     /// <summary>
@@ -49,6 +50,29 @@ public class UpdatePositionEmployee(
 
         if (existingPositionEmployee == null)
             return new NotFoundResult();
+        
+        var changeLogs = new List<ChangeLog>();
+        var editor = req.HttpContext.Items["Editor"] as string; // Get the editor from middleware
+
+        void LogChange(string field, string? oldValue, string? newValue)
+        {
+            if (oldValue != newValue)
+            {
+                changeLogs.Add(new ChangeLog
+                {
+                    PositionId = existingPositionEmployee.PositionId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor ?? "Unknown"
+                });
+            }
+        }
+
+        LogChange("StartDate", existingPositionEmployee.StartDate.ToString("yyyy-MM-dd"), requestPosition.StartDate.ToString("yyyy-MM-dd"));
+        LogChange("EndingDate", existingPositionEmployee.EndingDate?.ToString("yyyy-MM-dd"), requestPosition.EndingDate?.ToString("yyyy-MM-dd"));
+        LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), requestPosition.PositionId.ToString());
+        LogChange("EmployeeName", existingPositionEmployee.EmployeeName, requestPosition.EmployeeName);
 
         // Update the existing position employee with the new values
         existingPositionEmployee.StartDate = requestPosition.StartDate;
@@ -57,6 +81,11 @@ public class UpdatePositionEmployee(
         existingPositionEmployee.EmployeeName = requestPosition.EmployeeName;
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
+
+        foreach (var changeLog in changeLogs)
+        {
+            await changeLogRepository.AddChangeLogEntry(changeLog);
+        }
 
         return new OkObjectResult(existingPositionEmployee);
     }
