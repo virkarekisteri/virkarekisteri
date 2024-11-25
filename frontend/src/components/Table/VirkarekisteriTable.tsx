@@ -142,7 +142,7 @@ const DataTable: React.FC = () => {
     setFilteredData(dataFromBackend);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -196,9 +196,9 @@ const DataTable: React.FC = () => {
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     sx={{
                       color: 'white',
-                      fontWeight: 'bold',
-                      fontSize: '0.875rem',
+                      fontSize: '1.2rem',
                       cursor: 'pointer',
+                      padding: '8px 16px',
                     }}
                   >
                     {column.render('Header')}
@@ -221,14 +221,14 @@ const DataTable: React.FC = () => {
                       row.original.id === selectedRowId
                         ? alpha('#223B7C', 0.5)
                         : index % 2 === 0
-                          ? '#FFFFFF'
+                          ? '#F9F9F9'
                           : alpha('#223B7C', 0.2),
                     cursor: 'pointer',
                   }}
                   onClick={() => handleRowClick(row.original)}
                 >
                   {row.cells.map((cell) => (
-                    <TableCell {...cell.getCellProps()} sx={{ color: 'black' }}>
+                    <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
                       {cell.render('Cell')}
                     </TableCell>
                   ))}
