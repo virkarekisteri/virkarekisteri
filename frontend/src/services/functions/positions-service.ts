@@ -24,3 +24,8 @@ export const uploadCsv = async (formData: FormData): Promise<void> => {
   });
   return response.data;
 };
+
+export const fetchPositionChangeLogs = async (positionId: string) => {
+  const response = await apiClient.get(`/positions/${positionId}/changelog`);
+  return response.data;
+};
