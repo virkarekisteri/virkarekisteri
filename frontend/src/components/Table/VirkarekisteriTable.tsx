@@ -208,7 +208,7 @@ const DataTable: React.FC = () => {
                   sx={{
                     flexShrink: 0,
                   }}
-                  inputProps={{ maxLength: 8 }}
+                  slotProps={{ htmlInput: { maxLength: 8 } }}
                 />
                 <TextField
                   label={t('table.placement_location')}
