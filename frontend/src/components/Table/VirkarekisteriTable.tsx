@@ -204,26 +204,117 @@ const DataTable: React.FC = () => {
           <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Box display="flex" flexDirection="column" gap={2}>
-            <TextField
-              label={t('table.vacancy_number')}
-              value={vacancyNumberSearch}
-              onChange={(e) => setVacancyNumberSearch(e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label={t('table.placement_location')}
-              value={placementLocationStateSearch}
-              onChange={(e) => setPlacementLocationSearch(e.target.value)}
-              fullWidth
-            />
-            <Button variant="contained" onClick={handleSearch}>
-              {t('search_filter.search')}
-            </Button>
-            <Button variant="outlined" onClick={handleReset}>
-              {t('search_filter.reset')}
-            </Button>
-          </Box>
+          <Grid2 container spacing={2}>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.vacancy_number')}
+              </Typography>
+              <TextField
+                label={t('table.vacancy_number')}
+                value={vacancyNumberSearch}
+                onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.placement_location')}
+              </Typography>
+              <TextField
+                label={t('table.placement_location')}
+                value={placementLocationStateSearch}
+                onChange={(e) => setPlacementLocationSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={6}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.position_name')}
+              </Typography>
+              <TextField
+                label={t('table.position_name')}
+                value={positionNameSearch}
+                onChange={(e) => setPositionNameSearch(e.target.value)}
+                fullWidth
+              />
+            </Grid2>
+            <Grid2 size={3}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.type')}
+              </Typography>
+              <FormControl component="fieldset" fullWidth>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={positionTypeSearch.includes('0')}
+                        onChange={handlePositionTypeChange}
+                        value="0"
+                      />
+                    }
+                    label={t('search_filter.virka')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={positionTypeSearch.includes('1')}
+                        onChange={handlePositionTypeChange}
+                        value="1"
+                      />
+                    }
+                    label={t('search_filter.toimi')}
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={3}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('table.vacancy_status')}
+              </Typography>
+              <FormControl component="fieldset" fullWidth>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('0')}
+                        onChange={handleVacancyStatusChange}
+                        value="0"
+                      />
+                    }
+                    label={t('vacancy_statuses.abolished')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('1')}
+                        onChange={handleVacancyStatusChange}
+                        value="1"
+                      />
+                    }
+                    label={t('vacancy_statuses.established')}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={vacancyStatusSearch.includes('2')}
+                        onChange={handleVacancyStatusChange}
+                        value="2"
+                      />
+                    }
+                    label={t('vacancy_statuses.active')}
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
+              <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
+                {t('search_filter.search')}
+              </Button>
+              <Button variant="outlined" onClick={handleReset}>
+                {t('search_filter.reset')}
+              </Button>
+            </Grid2>
+          </Grid2>
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
