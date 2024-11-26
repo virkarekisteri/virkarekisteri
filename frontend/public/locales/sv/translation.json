@@ -45,12 +45,13 @@
   "table": {
     "created_at": "",
     "creation_decision_number": "",
-    "placement_location": "",
     "type": "",
-    "vacancy_number": "",
     "vacancy_size": "",
-    "vacancy_status": "",
     "rows_per_page": "",
+    "vacancy_number": "",
+    "organization_tree": "",
+    "placement_location": "",
+    "vacancy_status": "",
     "position_name": ""
   },
   "user_menu": {

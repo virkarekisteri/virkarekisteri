@@ -30,6 +30,7 @@ import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,6 +49,13 @@ const DataTable: React.FC = () => {
   useEffect(() => {
     setFilteredData(dataFromBackend);
   }, [dataFromBackend]);
+  const organizationTrees = useAppSelector(selectOrganizationTreeData);
+
+  useEffect(() => {
+    if (!organizationTrees.length) {
+      dispatch(getOrganizationTrees());
+    }
+  }, [dispatch, organizationTrees]);
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
@@ -56,16 +64,17 @@ const DataTable: React.FC = () => {
         accessor: 'vacancyNumber',
       },
       {
-        Header: t('table.creation_decision_number'),
-        accessor: 'creationDecisionNumber',
+        Header: t('table.position_name'),
+        accessor: 'positionName',
+        Cell: ({ value }: { value: { name: string } }) => value?.name || '',
       },
       {
-        Header: t('table.vacancy_size'),
-        accessor: 'vacancySize',
-      },
-      {
-        Header: t('table.type'),
-        accessor: 'type',
+        Header: t('table.organization_tree'),
+        accessor: 'orgTreeId',
+        Cell: ({ value }: { value: string }) => {
+          const orgTree = organizationTrees.find((tree) => tree.id === value);
+          return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
+        },
       },
       {
         Header: t('table.placement_location'),
@@ -109,12 +118,14 @@ const DataTable: React.FC = () => {
         },
       },
     ],
-    [t],
+    [t, organizationTrees],
   );
   const handleRowClick = async (row: Position) => {
-    if (row.id) {
-      setSelectedRowId(row.id);
-      await dispatch(fetchPosition(row.id));
+    if (row.id === selectedRowId) {
+      setSelectedRowId(null); // Deselect row if already selected
+    } else {
+      setSelectedRowId(row.id ?? null);
+      await dispatch(fetchPosition(row.id!));
     }
   };
 
@@ -158,7 +169,7 @@ const DataTable: React.FC = () => {
     setPage(0);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -193,117 +204,26 @@ const DataTable: React.FC = () => {
           <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid2 container spacing={2}>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.vacancy_number')}
-              </Typography>
-              <TextField
-                label={t('table.vacancy_number')}
-                value={vacancyNumberSearch}
-                onChange={(e) => setVacancyNumberSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.placement_location')}
-              </Typography>
-              <TextField
-                label={t('table.placement_location')}
-                value={placementLocationStateSearch}
-                onChange={(e) => setPlacementLocationSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.position_name')}
-              </Typography>
-              <TextField
-                label={t('table.position_name')}
-                value={positionNameSearch}
-                onChange={(e) => setPositionNameSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={3}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.type')}
-              </Typography>
-              <FormControl component="fieldset" fullWidth>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={positionTypeSearch.includes('0')}
-                        onChange={handlePositionTypeChange}
-                        value="0"
-                      />
-                    }
-                    label={t('search_filter.virka')}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={positionTypeSearch.includes('1')}
-                        onChange={handlePositionTypeChange}
-                        value="1"
-                      />
-                    }
-                    label={t('search_filter.toimi')}
-                  />
-                </FormGroup>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={3}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.vacancy_status')}
-              </Typography>
-              <FormControl component="fieldset" fullWidth>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('0')}
-                        onChange={handleVacancyStatusChange}
-                        value="0"
-                      />
-                    }
-                    label={t('vacancy_statuses.abolished')}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('1')}
-                        onChange={handleVacancyStatusChange}
-                        value="1"
-                      />
-                    }
-                    label={t('vacancy_statuses.established')}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('2')}
-                        onChange={handleVacancyStatusChange}
-                        value="2"
-                      />
-                    }
-                    label={t('vacancy_statuses.active')}
-                  />
-                </FormGroup>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
-              <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
-                {t('search_filter.search')}
-              </Button>
-              <Button variant="outlined" onClick={handleReset}>
-                {t('search_filter.reset')}
-              </Button>
-            </Grid2>
-          </Grid2>
+          <Box display="flex" flexDirection="column" gap={2}>
+            <TextField
+              label={t('table.vacancy_number')}
+              value={vacancyNumberSearch}
+              onChange={(e) => setVacancyNumberSearch(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label={t('table.placement_location')}
+              value={placementLocationStateSearch}
+              onChange={(e) => setPlacementLocationSearch(e.target.value)}
+              fullWidth
+            />
+            <Button variant="contained" onClick={handleSearch}>
+              {t('search_filter.search')}
+            </Button>
+            <Button variant="outlined" onClick={handleReset}>
+              {t('search_filter.reset')}
+            </Button>
+          </Box>
         </AccordionDetails>
       </Accordion>
       <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
