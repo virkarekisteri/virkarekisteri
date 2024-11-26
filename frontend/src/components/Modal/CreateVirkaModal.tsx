@@ -88,7 +88,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 1000,
+          width: '100%',
+          maxWidth: '1500px',
+          maxHeight: '90vh',
+          overflow: 'auto',
           bgcolor: 'background.paper',
           border: '2px solid #000',
           boxShadow: 24,
@@ -302,14 +305,29 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 
                 <Accordion sx={{ mt: 2, mb: 2 }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}
+                    sx={{
+                      backgroundColor: alpha('#223B7C', 1),
+                      color: 'white',
+                      minHeight: '45px',
+                      '&.Mui-expanded': {
+                        minHeight: '45px',
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        margin: 0,
+                      },
+                    }}
                   >
                     <Typography>{t('eligibility')}</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails
+                    sx={{
+                      padding: '16px',
+                      backgroundColor: alpha('#f5f5f5', 1),
+                    }}
+                  >
                     <Grid2 size={12}>
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('create_position.education_level')}
@@ -350,17 +368,29 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                 </Accordion>
                 <Accordion sx={{ mt: 2, mb: 4 }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     sx={{
                       backgroundColor: alpha('#223B7C', 1),
                       color: 'white',
+                      minHeight: '45px',
+                      '&.Mui-expanded': {
+                        minHeight: '45px',
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        margin: 0,
+                      },
                     }}
                   >
                     <Typography>{t('additional_details')}</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails
+                    sx={{
+                      padding: '16px',
+                      backgroundColor: alpha('#f5f5f5', 1),
+                    }}
+                  >
                     <Grid2 size={12}>
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('additional_details')}
@@ -381,6 +411,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
+
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('create_position.save')}
