@@ -27,26 +27,24 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
   const handleSubmit = async (values: any) => {
     try {
       const data = { ...values, positionId: position.id };
-      if (isEmployeeSet) {
-        dispatch(updatePositionEmployee({ ...employee, ...values, inLeave: isReplacement }));
-      } else {
-        dispatch(addPositionEmployee({ ...data, replacement: isReplacement }));
-      }
       if (isReplacement) {
-        const replacementData = {
-          ...values,
-          positionId: position.id,
-          replacement: true,
-          inLeave: false,
-        };
-        dispatch(addPositionEmployee(replacementData));
+        dispatch(addPositionEmployee({ ...data, replacement: isReplacement }));
+        if (employee?.id) {
+          dispatch(updatePositionEmployee({ ...employee, inLeave: true }));
+        }
+        return;
       }
-      if (position.id) {
-        dispatch(fetchPosition(position.id));
+      if (isEmployeeSet) {
+        dispatch(updatePositionEmployee({ ...employee, ...values }));
+      } else {
+        dispatch(addPositionEmployee({ ...data }));
       }
+
       onClose();
     } catch (error) {
       console.error(error);
+    } finally {
+      onClose();
     }
   };
 

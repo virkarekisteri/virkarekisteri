@@ -34,7 +34,7 @@ public class AddPositionEmployee(
             return new BadRequestObjectResult("Ending date must be after the starting date.");
         }
 
-        if (await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate))
+        if (await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate) && !requestPosition.Replacement)
         {
             return new BadRequestObjectResult("Position is already filled.");
         }
@@ -44,9 +44,14 @@ public class AddPositionEmployee(
             return new BadRequestObjectResult("Position is not currently valid.");
         }
 
+        if(requestPosition.Replacement)
+        {
+            requestPosition.Id = Guid.NewGuid();
+        }
+
         var createdPositionEmployee = await repository.CreatePositionEmployee(requestPosition);
 
-        var position = await positionRepository.GetPosition(requestPosition.PositionId);
+        var position = await positionRepository.GetPosition(requestPosition.PositionId);  
 
         if (position != null)
         {
@@ -54,7 +59,6 @@ public class AddPositionEmployee(
 
             await positionRepository.UpdatePosition(position);
         }
-        var position2 = await positionRepository.GetPosition(requestPosition.PositionId);
 
         return new OkObjectResult(createdPositionEmployee);
     }

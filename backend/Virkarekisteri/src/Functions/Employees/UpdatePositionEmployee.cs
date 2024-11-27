@@ -55,6 +55,8 @@ public class UpdatePositionEmployee(
         existingPositionEmployee.EndingDate = requestPosition.EndingDate;
         existingPositionEmployee.PositionId = requestPosition.PositionId;
         existingPositionEmployee.EmployeeName = requestPosition.EmployeeName;
+        existingPositionEmployee.Replacement = requestPosition.Replacement;
+        existingPositionEmployee.InLeave = requestPosition.InLeave;
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 
