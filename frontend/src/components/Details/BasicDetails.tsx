@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, alpha, Box, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
+import { fetchOrganization } from 'redux/slices/organization-tree-slice';
+import { useAppDispatch } from 'redux/hooks';
+import { OrganizationTree } from 'models/OrganizationTree';
 
 interface BasicDetailsProps {
   position: Position;
@@ -12,6 +15,34 @@ interface BasicDetailsProps {
 
 const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
+
+  const [positionOrganization, setPositionOrganization] = useState<OrganizationTree | undefined>();
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchOrganizationById = async () => {
+      if (position.orgTreeId) {
+        const result = await dispatch(fetchOrganization(position.orgTreeId));
+        if (result.payload) {
+          setPositionOrganization(result.payload as OrganizationTree);
+        }
+      }
+    };
+
+    fetchOrganizationById();
+  }, [dispatch, position.orgTreeId]);
+
+  const statusTextMap: Record<number, string> = {
+    2: t('vacancy_statuses.active'),
+    1: t('vacancy_statuses.established'),
+    0: t('vacancy_statuses.abolished'),
+  };
+
+  const positionTypeTextMap: Record<number, string> = {
+    2: t('position_type.type_post'),
+    1: t('position_type.type_position'),
+  }
 
   return (
     <Box>
@@ -43,19 +74,19 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.position_name')}
             </Typography>
-            <RenderReadonlyTextField value={position.positionName.toString()} />
+            <RenderReadonlyTextField value={position.positionName.name} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('table.type')}
             </Typography>
-            <RenderReadonlyTextField value={position.type.toString()} />
+            <RenderReadonlyTextField value={positionTypeTextMap[position.type]} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('table.vacancy_status')}
             </Typography>
-            <RenderReadonlyTextField value={position.vacancyStatus.toString()} />
+            <RenderReadonlyTextField value={statusTextMap[position.vacancyStatus]} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -79,7 +110,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.organization_tree')}
             </Typography>
-            <RenderReadonlyTextField value={position.orgTreeId} />
+            <RenderReadonlyTextField value={`${positionOrganization?.number} ${positionOrganization?.name}`} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -89,7 +120,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </Grid2>
         </Grid2>
 
-        <Accordion sx={{ mt: 2, mb: 4}}>
+        <Accordion sx={{ mt: 2, mb: 2}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -117,7 +148,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion sx={{ mt: 2, mb: 4}}>
+        <Accordion sx={{ mt: 2, mb: 2}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"

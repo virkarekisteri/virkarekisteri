@@ -69,5 +69,9 @@
   },
   "basic_details": {
     "vacancy_fill": ""
+  },
+  "position_type": {
+    "type_post": "",
+    "type_position": ""
   }
 }
