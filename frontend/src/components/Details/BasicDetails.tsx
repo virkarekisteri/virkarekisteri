@@ -7,7 +7,7 @@ import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import { fetchOrganization } from 'redux/slices/organization-tree-slice';
 import { useAppDispatch } from 'redux/hooks';
-import { OrganizationTree } from 'models/OrganizationTree';
+import type { OrganizationTree } from 'models/OrganizationTree';
 
 interface BasicDetailsProps {
   position: Position;
