@@ -66,7 +66,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         vacancyFill: values.vacancyFill,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
-        type: values.type ?? 0,
+        type: values.type ?? 99,
         pricingId: values.pricingId ?? '',
         positionName: positionNameObj,
         educationLevel: values.educationLevel ?? '',
@@ -308,7 +308,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('create_position.type')}
                     </Typography>
-                    <Field name="laji">
+                    <Field name="type">
                       {({ input }) => (
                         <FormControl fullWidth margin="normal">
                           <InputLabel id="type">{`${t('create_position.type')} *`}</InputLabel>
@@ -420,7 +420,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('additional_details')}
                       </Typography>
-                      <Field name="additionalDetails">
+                      <Field name="details">
                         {({ input }) => (
                           <TextField
                             {...input}
