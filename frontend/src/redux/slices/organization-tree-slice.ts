@@ -52,7 +52,7 @@ export const organizationTreeSlice = createAppSlice({
           state.loading = false;
         },
       },
-    )
+    ),
   }),
   selectors: {
     selectOrganizationTreeData: (state) => state.entries,
@@ -63,6 +63,7 @@ export const organizationTreeSlice = createAppSlice({
 
 export const { getOrganizationTrees, fetchOrganization } = organizationTreeSlice.actions;
 
-export const { selectOrganizationTreeData, selectOrganizationTreeLoading, selectOrganizationTree } = organizationTreeSlice.selectors;
+export const { selectOrganizationTreeData, selectOrganizationTreeLoading, selectOrganizationTree } =
+  organizationTreeSlice.selectors;
 
 export default organizationTreeSlice;

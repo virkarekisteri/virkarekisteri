@@ -42,23 +42,23 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const positionTypeTextMap: Record<number, string> = {
     2: t('position_type.type_post'),
     1: t('position_type.type_position'),
-  }
+  };
 
   return (
     <Box>
       <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        p: 2,
-        height: 30,
-        borderBottom: '1px solid #ccc',
-        bgcolor: '#223B7C',
-        color: 'white',
-        borderTopLeftRadius: 1,
-        borderTopRightRadius: 1,
-      }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          p: 2,
+          height: 30,
+          borderBottom: '1px solid #ccc',
+          bgcolor: '#223B7C',
+          color: 'white',
+          borderTopLeftRadius: 1,
+          borderTopRightRadius: 1,
+        }}
       >
         <Typography>{t('position.details')}</Typography>
       </Box>
@@ -120,7 +120,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </Grid2>
         </Grid2>
 
-        <Accordion sx={{ mt: 2, mb: 2}}>
+        <Accordion sx={{ mt: 2, mb: 2 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -148,7 +148,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion sx={{ mt: 2, mb: 2}}>
+        <Accordion sx={{ mt: 2, mb: 2 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
