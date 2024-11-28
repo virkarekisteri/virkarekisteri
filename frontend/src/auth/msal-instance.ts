@@ -1,6 +1,6 @@
-import type { AuthenticationResult, EventMessage } from '@azure/msal-browser';
+import type { AuthenticationResult, AuthError, EventMessage } from '@azure/msal-browser';
 import { EventType, PublicClientApplication } from '@azure/msal-browser';
-import { msalConfig } from './auth-config';
+import { loginRequest, msalConfig } from './auth-config';
 import type { AppStore } from 'redux/store';
 import { clearAuthState, updateAuthState } from 'redux/slices/auth-slice';
 
@@ -18,7 +18,7 @@ msalInstance.enableAccountStorageEvents();
 // kind of a hack, but we have to somehow interlink the Redux store with the MSAL instance
 // and this is a convenient place
 export const setupMsalEventListeners = (store: AppStore) => {
-  msalInstance.addEventCallback((event: EventMessage) => {
+  msalInstance.addEventCallback(async (event: EventMessage) => {
     if (event.eventType === EventType.LOGIN_SUCCESS) {
       const payload = event.payload as AuthenticationResult;
 
@@ -28,15 +28,57 @@ export const setupMsalEventListeners = (store: AppStore) => {
       }
     }
 
+    // interlink the Redux store with the MSAL instance
     if (event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS) {
       const payload = event.payload as AuthenticationResult;
       if (payload.account) store.dispatch(updateAuthState(payload));
+    }
+
+    if (event.eventType === EventType.ACQUIRE_TOKEN_FAILURE) {
+      const error = event.error as AuthError;
+
+      // if refresh token has expired, log out the user
+      // a manual re-login is required
+      if (error.name === 'InteractionRequiredAuthError') {
+        await msalInstance.logoutRedirect({
+          account: msalInstance.getActiveAccount(),
+          onRedirectNavigate: () => false,
+        });
+        store.dispatch(clearAuthState());
+      }
     }
 
     if (event.eventType === EventType.LOGOUT_SUCCESS) {
       store.dispatch(clearAuthState());
     }
   });
+};
+
+/**
+ * Helper function to acquire an access token silently.
+ */
+export const acquireAccessToken = async () =>
+  (
+    await msalInstance.acquireTokenSilent({
+      scopes: loginRequest.scopes,
+      account: msalInstance.getActiveAccount()!,
+    })
+  ).accessToken;
+
+/**
+ * Helper function to validate the authentication state.
+ * Checks that if there is an active account, we're able to retrieve access tokens if needed.
+ * If, e.g., the auth state has been sitting stale for a while in the browser's storage, the refresh
+ * token might have expired and therefore the whole auth state is invalid.
+ */
+export const validateAuthState = async () => {
+  try {
+    if (msalInstance.getActiveAccount()) await acquireAccessToken();
+    return true;
+  } catch (error) {
+    console.error('validateAuthState error', error);
+    return false;
+  }
 };
 
 export default msalInstance;
