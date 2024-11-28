@@ -37,6 +37,13 @@ const UserMenu = () => {
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
+        sx={{
+          width: 40,
+          height: 40,
+          '&:hover': {
+            backgroundColor: '#d3d8e5',
+          },
+        }}
       >
         <AccountCircle sx={{ fontSize: 50 }} />
       </IconButton>

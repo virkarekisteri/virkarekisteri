@@ -20,7 +20,7 @@
     "error2": " errors in the CSV file.",
     "upload": "Upload",
     "title": "Create positions from CSV",
-    "upload_csv": "+ Import CSV",
+    "upload_csv": "Import CSV",
     "loading": "Loading..."
   },
   "eligibility": "Eligibility",
@@ -28,7 +28,7 @@
     "login": "Login",
     "welcome": "Welcome!"
   },
-  "new_position": "+ New position",
+  "new_position": "New position",
   "position": {
     "details": "Position details"
   },
@@ -50,7 +50,9 @@
     "vacancy_number": "Vacancy number",
     "vacancy_size": "Vacancy size",
     "vacancy_status": "Vacancy status",
-    "rows_per_page": "Rows per page"
+    "rows_per_page": "Rows per page",
+    "position_name": "Position name",
+    "organization_tree": "Organization tree"
   },
   "user_menu": {
     "logout": "Log Out"
