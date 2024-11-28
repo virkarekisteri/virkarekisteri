@@ -71,6 +71,13 @@
     "editor": "Editor",
     "edited_field": "Edited field",
     "old_value": "Old value",
-    "new_value": "New value"
+    "new_value": "New value",
+    "no_logs_found": "No changes have been made",
+    "fields": {
+      "EmployeeName": "Employee Name",
+      "EndingDate": "Ending Date",
+      "StartDate": "Start Date",
+      "PositionId": "Position ID"
+    }
   }
 }

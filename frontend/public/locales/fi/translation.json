@@ -71,6 +71,13 @@
     "editor": "Muokkaaja",
     "edited_field": "Muokattu kenttä",
     "old_value": "Vanha arvo",
-    "new_value": "Uusi arvo"
+    "new_value": "Uusi arvo",
+    "no_logs_found": "Muutoksia ei ole tehty",
+    "fields": {
+      "EmployeeName": "Viranhaltijan nimi",
+      "EndingDate": "Päättymispäivä",
+      "StartDate": "Aloituspäivä",
+      "PositionId": "Virka ID"
+    }
   }
 }

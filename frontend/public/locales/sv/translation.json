@@ -71,6 +71,13 @@
     "editor": "",
     "edited_field": "",
     "old_value": "",
-    "new_value": ""
+    "new_value": "",
+    "no_logs_found": "",
+    "fields": {
+      "EmployeeName": "",
+      "EndingDate": "",
+      "StartDate": "",
+      "PositionId": ""
+    }
   }
 }
