@@ -71,7 +71,7 @@
     "vacancy_fill": "Täyttö-%"
   },
   "position_type": {
-    "type_post": "Toimi",
-    "type_position": "Virka"
+    "post": "Toimi",
+    "position": "Virka"
   }
 }

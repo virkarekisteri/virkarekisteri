@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, alpha, Box, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
-import { fetchOrganization } from 'redux/slices/organization-tree-slice';
-import { useAppDispatch } from 'redux/hooks';
-import type { OrganizationTree } from 'models/OrganizationTree';
+import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import { useAppSelector } from 'redux/hooks';
 
 interface BasicDetailsProps {
   position: Position;
@@ -16,22 +15,8 @@ interface BasicDetailsProps {
 const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
 
-  const [positionOrganization, setPositionOrganization] = useState<OrganizationTree | undefined>();
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const fetchOrganizationById = async () => {
-      if (position.orgTreeId) {
-        const result = await dispatch(fetchOrganization(position.orgTreeId));
-        if (result.payload) {
-          setPositionOrganization(result.payload as OrganizationTree);
-        }
-      }
-    };
-
-    fetchOrganizationById();
-  }, [dispatch, position.orgTreeId]);
+  const orgTrees = useAppSelector(selectOrganizationTreeData);
+  const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
 
   const statusTextMap: Record<number, string> = {
     2: t('vacancy_statuses.active'),
