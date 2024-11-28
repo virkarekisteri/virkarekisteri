@@ -37,15 +37,13 @@ export const setupMsalEventListeners = (store: AppStore) => {
     if (event.eventType === EventType.ACQUIRE_TOKEN_FAILURE) {
       const error = event.error as AuthError;
 
-      // if refresh token has expired, log out the user
+      // if the refresh token has expired, log out the user
       // a manual re-login is required
-      if (error.name === 'InteractionRequiredAuthError') {
+      if (error.name === 'InteractionRequiredAuthError')
         await msalInstance.logoutRedirect({
           account: msalInstance.getActiveAccount(),
           onRedirectNavigate: () => false,
         });
-        store.dispatch(clearAuthState());
-      }
     }
 
     if (event.eventType === EventType.LOGOUT_SUCCESS) {
