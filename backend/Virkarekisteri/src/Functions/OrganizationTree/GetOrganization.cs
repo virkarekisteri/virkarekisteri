@@ -25,7 +25,10 @@ public class GetOrganization(ILogger<GetOrganization> logger, IOrganizationTreeR
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "organizationtrees/{id}")] HttpRequest req
     )
     {
-        var sanitizedId = (req.RouteValues["id"] as string)?.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        var sanitizedId = (req.RouteValues["id"] as string)
+            ?.Replace(Environment.NewLine, "")
+            .Replace("\n", "")
+            .Replace("\r", "");
         logger.LogInformation("Getting organization by id: {Id}", sanitizedId);
 
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var organizationTreeId))
