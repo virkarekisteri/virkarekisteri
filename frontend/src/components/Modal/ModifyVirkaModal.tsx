@@ -455,7 +455,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                     </Grid2>
                   </Grid2>
 
-                  {/* Creation description */}
+                  {/* Creation description 
                   <Grid2 size={12}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('edit_position.creation_description')}
@@ -473,7 +473,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                         />
                       )}
                     </Field>
-                  </Grid2>
+                  </Grid2> */}
                 </Grid2>
 
                 {/* Buttons */}
