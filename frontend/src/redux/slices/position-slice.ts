@@ -57,7 +57,10 @@ export const positionSlice = createAppSlice({
     ),
     updatePosition: create.asyncThunk(
       async ({ id, data }: { id: string; data: Partial<Position> }) => {
-        return await updatePositionAPI(id, data);
+        return await updatePositionAPI(id, {
+          ...data,
+          DecisionNumber: data.DecisionNumber,
+        });
       },
       {
         pending: (state) => {
