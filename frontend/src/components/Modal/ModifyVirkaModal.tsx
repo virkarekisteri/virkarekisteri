@@ -31,7 +31,7 @@ interface ModifyVirkaModalProps {
 }
 
 interface FormValues {
-  endedAt?: string;
+  endedAt?: Date;
   endingDecisionNumber?: string;
   placementLocation?: string;
   vacancyFill?: number;
@@ -75,7 +75,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         endingDecisionNumber: values.endingDecisionNumber,
         placementLocation: values.placementLocation,
         vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
-        positionName: values.positionName?.name,
+        positionName: values.positionName ? { name: values.positionName.name } : undefined,
         orgTreeId: values.orgTree,
         pricingId: values.pricingId,
         vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
