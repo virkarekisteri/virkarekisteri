@@ -13,7 +13,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
     IPositionEmployeeRepository positionEmployeeRepository,
-        IPositionRepository positionRepository
+    IPositionRepository positionRepository
 )
 {
     /// <summary>
@@ -68,8 +68,6 @@ public class UpdatePositionEmployee(
         existingPositionEmployee.EmployeeName = requestEmployee.EmployeeName;
         existingPositionEmployee.Replacement = requestEmployee.Replacement;
         existingPositionEmployee.InLeave = requestEmployee.InLeave;
-
-
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 
