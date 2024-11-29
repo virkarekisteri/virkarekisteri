@@ -10,7 +10,7 @@ import type { PositionEmployee } from 'models/PositionEmployee'; // Adjust the i
 export interface PositionEmployeeState {
   entries: PositionEmployee[];
   loading?: boolean;
-  selectedEmployee?: PositionEmployee;
+  selectedEmployee?: PositionEmployee | null;
 }
 
 const initialState: PositionEmployeeState = {
@@ -61,15 +61,18 @@ export const positionEmployeeSlice = createAppSlice({
       },
     ),
     fetchPositionEmployee: create.asyncThunk(
-      async (id: string) => {
-        return await getPositionEmployeeById(id);
+      async (id: string | null) => {
+        if (id === null) {
+          return null; // Return null to clear selected employee
+        }
+        return await getPositionEmployeeById(id); // Fetch data for the given ID
       },
       {
         pending: (state) => {
           state.loading = true;
         },
-        fulfilled: (state, action: PayloadAction<PositionEmployee>) => {
-          state.selectedEmployee = action.payload;
+        fulfilled: (state, action: PayloadAction<PositionEmployee | null>) => {
+          state.selectedEmployee = action.payload; // Accept null or a valid employee
           state.loading = false;
         },
         rejected: (state) => {

@@ -42,9 +42,33 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
   return (
     <Box>
       <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
-        <Button variant="contained" sx={{ backgroundColor: '#223B7C' }} onClick={handleOpenModal}>
-          {isEmployeeSet ? t('edit_employee') : t('add_employee')}
-        </Button>
+        <Box sx={{ padding: 2, textAlign: 'right' }}>
+          <Button
+            variant="contained"
+            onClick={handleOpenModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1rem',
+              padding: '10px 20px',
+              height: '36px',
+              display: 'inline-flex',
+              borderRadius: '25px 8px 8px 25px',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '8px',
+                }}
+              >
+                ✎
+              </Box>
+            }
+          >
+            {isEmployeeSet ? t('edit_employee') : t('add_employee')}
+          </Button>
+        </Box>
       </Grid2>
       {positionEmployee && (
         <Accordion defaultExpanded>

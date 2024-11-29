@@ -41,6 +41,33 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
 
   return (
     <Box>
+      <Box sx={{ padding: 2, textAlign: 'right' }}>
+        <Button
+          variant="contained"
+          onClick={handleOpenEditModal}
+          sx={{
+            backgroundColor: '#223B7C',
+            color: 'white',
+            fontSize: '1rem',
+            padding: '10px 20px',
+            height: '36px',
+            display: 'inline-flex',
+            borderRadius: '25px 8px 8px 25px',
+          }}
+          startIcon={
+            <Box
+              component="span"
+              sx={{
+                marginRight: '8px',
+              }}
+            >
+              ✎
+            </Box>
+          }
+        >
+          {t('edit_position.title')}
+        </Button>
+      </Box>
       <Box
         sx={{
           display: 'flex',
@@ -56,19 +83,6 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
         }}
       >
         <Typography>{t('position.details')}</Typography>
-        <Button
-          variant="contained"
-          onClick={handleOpenEditModal}
-          sx={{
-            backgroundColor: '#223B7C',
-            color: 'white',
-            fontSize: '0.9rem',
-            padding: '6px 12px',
-            borderRadius: '20px',
-          }}
-        >
-          {t('edit_position.title')}
-        </Button>
       </Box>
       <Box padding={3}>
         <Grid2 container spacing={2} size={12}>
@@ -130,25 +144,37 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
 
         <Accordion sx={{ mt: 2, mb: 2 }}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
             aria-controls="panel1a-content"
             id="panel1a-header"
             sx={{
               backgroundColor: alpha('#223B7C', 1),
               color: 'white',
+              minHeight: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
             }}
           >
             <Typography>{t('eligibility')}</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#f5f5f5', 1),
+            }}
+          >
             <Grid2 size={12}>
-              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
                 {t('create_position.education_level')}
               </Typography>
               <RenderReadonlyTextField value={position.educationLevel} />
             </Grid2>
             <Grid2 size={12}>
-              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
                 {t('create_position.work_experience')}
               </Typography>
               <RenderReadonlyTextField value={position.workExperience} />
@@ -156,20 +182,37 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion sx={{ mt: 2, mb: 2 }}>
+        <Accordion sx={{ mt: 2, mb: 4 }}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
             aria-controls="panel1a-content"
             id="panel1a-header"
             sx={{
               backgroundColor: alpha('#223B7C', 1),
               color: 'white',
+              minHeight: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
             }}
           >
             <Typography>{t('additional_details')}</Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <RenderReadonlyTextField value={position.details} />
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#f5f5f5', 1),
+            }}
+          >
+            <Grid2 size={12}>
+              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                {t('additional_details')}
+              </Typography>
+              <RenderReadonlyTextField value={position.details} />
+            </Grid2>
           </AccordionDetails>
         </Accordion>
       </Box>

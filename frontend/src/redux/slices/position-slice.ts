@@ -7,7 +7,7 @@ import { updatePosition as updatePositionAPI } from 'services/functions/position
 export interface PositionState {
   entries: Position[];
   loading?: boolean;
-  selectedPosition?: Position;
+  selectedPosition?: Position | null;
 }
 
 const initialState: PositionState = {
@@ -77,15 +77,18 @@ export const positionSlice = createAppSlice({
       },
     ),
     fetchPosition: create.asyncThunk(
-      async (id: string) => {
-        return await getPositionById(id);
+      async (id: string | null) => {
+        if (id === null) {
+          return null; // Return null to indicate no selection
+        }
+        return await getPositionById(id); // Fetch data for the given ID
       },
       {
         pending: (state) => {
           state.loading = true;
         },
-        fulfilled: (state, action: PayloadAction<Position>) => {
-          state.selectedPosition = action.payload;
+        fulfilled: (state, action: PayloadAction<Position | null>) => {
+          state.selectedPosition = action.payload; // Set to null or the fetched position
           state.loading = false;
         },
         rejected: (state) => {
