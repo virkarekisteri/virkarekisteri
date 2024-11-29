@@ -18,6 +18,7 @@ const VirkarekisterContainer = () => {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+
   const { t } = useTranslation();
 
   const handleOpenCreateModal = () => setOpenCreateModal(true);
@@ -39,16 +40,56 @@ const VirkarekisterContainer = () => {
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
-        <Grid2 container spacing={2} margin="auto" width="90%" marginTop={5}>
-          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'}>
+        <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
+          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'} sx={{ gap: 5 }}>
             <Button
               variant="contained"
               onClick={handleOpenUploadModal}
-              sx={{ backgroundColor: '#223B7C', margin: '0 10px 0 30px' }}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  +
+                </Box>
+              }
             >
               {t('create_csv_position.upload_csv')}
             </Button>
-            <Button variant="contained" onClick={handleOpenCreateModal} sx={{ backgroundColor: '#223B7C' }}>
+            <Button
+              variant="contained"
+              onClick={handleOpenCreateModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  +
+                </Box>
+              }
+            >
               {t('new_position')}
             </Button>
           </Grid2>

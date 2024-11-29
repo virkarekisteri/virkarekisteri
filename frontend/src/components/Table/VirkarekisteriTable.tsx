@@ -17,6 +17,10 @@ import {
   Typography,
   TablePagination,
   Grid2,
+  FormControl,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -26,14 +30,17 @@ import { useTable, useSortBy } from 'react-table';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
   const dataFromBackend = useAppSelector(selectPositionData);
   const { t } = useTranslation();
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
-  const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
+  const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
+  const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
+  const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [filteredData, setFilteredData] = useState(dataFromBackend);
   const [page, setPage] = useState(0);
@@ -42,6 +49,13 @@ const DataTable: React.FC = () => {
   useEffect(() => {
     setFilteredData(dataFromBackend);
   }, [dataFromBackend]);
+  const organizationTrees = useAppSelector(selectOrganizationTreeData);
+
+  useEffect(() => {
+    if (!organizationTrees.length) {
+      dispatch(getOrganizationTrees());
+    }
+  }, [dispatch, organizationTrees]);
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
@@ -50,16 +64,17 @@ const DataTable: React.FC = () => {
         accessor: 'vacancyNumber',
       },
       {
-        Header: t('table.creation_decision_number'),
-        accessor: 'creationDecisionNumber',
+        Header: t('table.position_name'),
+        accessor: 'positionName',
+        Cell: ({ value }: { value: { name: string } }) => value?.name || '',
       },
       {
-        Header: t('table.vacancy_size'),
-        accessor: 'vacancySize',
-      },
-      {
-        Header: t('table.type'),
-        accessor: 'type',
+        Header: t('table.organization_tree'),
+        accessor: 'orgTreeId',
+        Cell: ({ value }: { value: string }) => {
+          const orgTree = organizationTrees.find((tree) => tree.id === value);
+          return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
+        },
       },
       {
         Header: t('table.placement_location'),
@@ -103,12 +118,15 @@ const DataTable: React.FC = () => {
         },
       },
     ],
-    [t],
+    [t, organizationTrees],
   );
   const handleRowClick = async (row: Position) => {
-    if (row.id) {
-      setSelectedRowId(row.id);
-      await dispatch(fetchPosition(row.id));
+    if (row.id === selectedRowId) {
+      setSelectedRowId(null); // Clear selection
+      await dispatch(fetchPosition(null)); // Dispatch with null
+    } else {
+      setSelectedRowId(row.id ?? null); // Set new selection
+      await dispatch(fetchPosition(row.id!)); // Dispatch with row ID
     }
   };
 
@@ -116,15 +134,28 @@ const DataTable: React.FC = () => {
     const filtered = dataFromBackend.filter((position) => {
       if (position) {
         const matchesVakanssinumero = vacancyNumberSearch
-          ? (position.vacancyNumber?.includes(vacancyNumberSearch) ?? false)
+          ? (position.vacancyNumber?.toLocaleLowerCase().includes(vacancyNumberSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesSijoituspaikka = placementLocationStateSearch
-          ? (position?.placementLocation?.includes(placementLocationStateSearch) ?? false)
+          ? (position?.placementLocation
+              ?.toLocaleLowerCase()
+              .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesPositionName = positionNameSearch
           ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
           : true;
-        return matchesVakanssinumero && matchesSijoituspaikka && matchesPositionName;
+        const matchesPositionType =
+          positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
+        const matchesVacancyStatus =
+          vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
+        return (
+          matchesVakanssinumero &&
+          matchesSijoituspaikka &&
+          matchesPositionName &&
+          matchesPositionName &&
+          matchesPositionType &&
+          matchesVacancyStatus
+        );
       }
     });
     setFilteredData(filtered);
@@ -132,17 +163,35 @@ const DataTable: React.FC = () => {
 
   const handleReset = () => {
     setVacancyNumberSearch('');
-    setPlacementLocationSearch('');
+    setPlacementLocationStateSearch('');
+    setPositionNameSearch('');
+    setPositionTypeSearch([]);
+    setVacancyStatusSearch([]);
     setFilteredData(dataFromBackend);
+    setPage(0);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset to first page on rows per page change
+  };
+
+  const handleVacancyStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setVacancyStatusSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
+  };
+
+  const handlePositionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPositionTypeSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
@@ -152,115 +201,236 @@ const DataTable: React.FC = () => {
   const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}>
-          <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid2 container spacing={2}>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.vacancy_number')}
-              </Typography>
-              <TextField
-                label={t('table.vacancy_number')}
-                value={vacancyNumberSearch}
-                onChange={(e) => setVacancyNumberSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.placement_location')}
-              </Typography>
-              <TextField
-                label={t('table.placement_location')}
-                value={placementLocationStateSearch}
-                onChange={(e) => setPlacementLocationSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.position_name')}
-              </Typography>
-              <TextField
-                label={t('table.position_name')}
-                value={positionNameSearch}
-                onChange={(e) => setPositionNameSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}></Grid2>
-            <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
-              <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
-                {t('search_filter.search')}
-              </Button>
-              <Button variant="outlined" onClick={handleReset}>
-                {t('search_filter.reset')}
-              </Button>
-            </Grid2>
-          </Grid2>
-        </AccordionDetails>
-      </Accordion>
-      <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
-        <Table {...getTableProps()} sx={{ minWidth: 650 }}>
-          <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
-            {headerGroups.map((headerGroup) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()}>
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-                {headerGroup.headers.map((column: any) => (
-                  <TableCell
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    sx={{
-                      color: 'white',
-                      fontWeight: 'bold',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {column.render('Header')}
-                    <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
-                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
-                    </span>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody {...getTableBodyProps()}>
-            {paginatedRows.map((row, index) => {
-              prepareRow(row);
-              return (
-                <TableRow
-                  {...row.getRowProps()}
+      <Box
+        sx={{
+          width: '950px',
+          marginLeft: 0,
+          marginRight: 'auto',
+        }}
+      >
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
+              backgroundColor: alpha('#223B7C', 1),
+              color: 'white',
+              minHeight: '45px',
+              height: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+                height: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: '1.2rem' }}>{t('search_filter.search_filters')}</Typography>
+          </AccordionSummary>
+
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#f5f5f5', 1),
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Grid2 container spacing={2}>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_number')}
+                  </Typography>
+                  <TextField
+                    label={t('table.vacancy_number')}
+                    value={vacancyNumberSearch}
+                    onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.placement_location')}
+                  </Typography>
+                  <TextField
+                    label={t('table.placement_location')}
+                    value={placementLocationStateSearch}
+                    onChange={(e) => setPlacementLocationStateSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.position_name')}
+                  </Typography>
+                  <TextField
+                    label={t('table.position_name')}
+                    value={positionNameSearch}
+                    onChange={(e) => setPositionNameSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.type')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('0')}
+                            onChange={handlePositionTypeChange}
+                            value="0"
+                          />
+                        }
+                        label={t('search_filter.virka')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('1')}
+                            onChange={handlePositionTypeChange}
+                            value="1"
+                          />
+                        }
+                        label={t('search_filter.toimi')}
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_status')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('0')}
+                            onChange={handleVacancyStatusChange}
+                            value="0"
+                          />
+                        }
+                        label={t('vacancy_statuses.abolished')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('1')}
+                            onChange={handleVacancyStatusChange}
+                            value="1"
+                          />
+                        }
+                        label={t('vacancy_statuses.established')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('2')}
+                            onChange={handleVacancyStatusChange}
+                            value="2"
+                          />
+                        }
+                        label={t('vacancy_statuses.active')}
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+              </Grid2>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleSearch}
                   sx={{
-                    backgroundColor:
-                      row.original.id === selectedRowId
-                        ? alpha('#223B7C', 0.5)
-                        : index % 2 === 0
-                          ? '#FFFFFF'
-                          : alpha('#223B7C', 0.2),
-                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
                   }}
-                  onClick={() => handleRowClick(row.original)}
                 >
-                  {row.cells.map((cell) => (
-                    <TableCell {...cell.getCellProps()} sx={{ color: 'black' }}>
-                      {cell.render('Cell')}
+                  {t('search_filter.search')}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleReset}
+                  sx={{
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
+                  }}
+                >
+                  {t('search_filter.reset')}
+                </Button>
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <TableContainer component={Box} sx={{ border: '0px solid #ccc' }}>
+          <Table {...getTableProps()} sx={{ minWidth: 650 }}>
+            <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
+              {headerGroups.map((headerGroup) => (
+                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
+                  {headerGroup.headers.map((column: any) => (
+                    <TableCell
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      sx={{
+                        color: 'white',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        padding: '8px 16px',
+                      }}
+                    >
+                      {column.render('Header')}
+                      <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
+                        {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
+                      </span>
                     </TableCell>
                   ))}
                 </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+              ))}
+            </TableHead>
+            <TableBody {...getTableBodyProps()}>
+              {paginatedRows.map((row, index) => {
+                prepareRow(row);
+                return (
+                  <TableRow
+                    {...row.getRowProps()}
+                    sx={{
+                      backgroundColor:
+                        row.original.id === selectedRowId
+                          ? alpha('#223B7C', 0.5)
+                          : index % 2 === 0
+                            ? '#F9F9F9'
+                            : alpha('#223B7C', 0.2),
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleRowClick(row.original)}
+                  >
+                    {row.cells.map((cell) => (
+                      <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
+                        {cell.render('Cell')}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Box>
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"

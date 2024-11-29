@@ -24,3 +24,21 @@ export const uploadCsv = async (formData: FormData): Promise<void> => {
   });
   return response.data;
 };
+
+export const updatePosition = async (id: string, data: Partial<Position>): Promise<Position> => {
+  try {
+    const response = await apiClient.put<Position>(`/positions/${id}`, data);
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error in updatePosition API:', error.message);
+      throw error;
+    } else if (typeof error === 'object' && error !== null && 'response' in error) {
+      console.error('Unknown error');
+      throw error;
+    } else {
+      console.error('Unknown error in updatePosition API');
+      throw new Error('Unknown error occurred');
+    }
+  }
+};

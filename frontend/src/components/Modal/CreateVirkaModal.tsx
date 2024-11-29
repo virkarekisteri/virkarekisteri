@@ -11,6 +11,10 @@ import {
   AccordionSummary,
   alpha,
   Autocomplete,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -59,15 +63,15 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         createdAt: new Date(values.createdAt || ''),
         endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
         vacancySize: Number(values.vacancySize) / 100,
-        vacancyFill: values.vacancyFill,
+        vacancyFill: Number(values.vacancyFill) / 100,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
-        type: values.type ?? 0,
+        type: values.type ?? 99,
         pricingId: values.pricingId ?? '',
         positionName: positionNameObj,
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
-        details: values.details ?? '',
+        details: values.additionalDetails ?? '',
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
         vacancyStatus: values.vacancyStaus ?? '',
@@ -88,9 +92,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 1000,
+          width: '100%',
+          maxWidth: '1500px',
+          maxHeight: '90vh',
+          overflow: 'auto',
           bgcolor: 'background.paper',
-          border: '2px solid #000',
           boxShadow: 24,
           p: 0,
           borderRadius: 1,
@@ -103,7 +109,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             alignItems: 'center',
             p: 2,
             height: 50,
-            borderBottom: '1px solid #ccc',
             bgcolor: '#223B7C',
             color: 'white',
             borderTopLeftRadius: 1,
@@ -298,18 +303,56 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.type')}
+                    </Typography>
+                    <Field name="type">
+                      {({ input }) => (
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel id="type">{`${t('create_position.type')} *`}</InputLabel>
+                          <Select
+                            required
+                            id="type"
+                            value={input.value || ''}
+                            onChange={(event) => input.onChange(event.target.value)}
+                            label={t('create_position.type')}
+                          >
+                            <MenuItem value={1}>{t('create_position.type_position')}</MenuItem>
+                            <MenuItem value={2}>{t('create_position.type_post')}</MenuItem>
+                          </Select>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Grid2>
                 </Grid2>
 
                 <Accordion sx={{ mt: 2, mb: 2 }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}
+                    sx={{
+                      backgroundColor: alpha('#223B7C', 1),
+                      color: 'white',
+                      minHeight: '45px',
+                      '&.Mui-expanded': {
+                        minHeight: '45px',
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        margin: 0,
+                      },
+                    }}
                   >
                     <Typography>{t('eligibility')}</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails
+                    sx={{
+                      padding: '16px',
+                      backgroundColor: alpha('#f5f5f5', 1),
+                    }}
+                  >
                     <Grid2 size={12}>
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('create_position.education_level')}
@@ -350,22 +393,34 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                 </Accordion>
                 <Accordion sx={{ mt: 2, mb: 4 }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     sx={{
                       backgroundColor: alpha('#223B7C', 1),
                       color: 'white',
+                      minHeight: '45px',
+                      '&.Mui-expanded': {
+                        minHeight: '45px',
+                      },
+                      '& .MuiAccordionSummary-content': {
+                        margin: 0,
+                      },
                     }}
                   >
                     <Typography>{t('additional_details')}</Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails
+                    sx={{
+                      padding: '16px',
+                      backgroundColor: alpha('#f5f5f5', 1),
+                    }}
+                  >
                     <Grid2 size={12}>
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('additional_details')}
                       </Typography>
-                      <Field name="additionalDetails">
+                      <Field name="details">
                         {({ input }) => (
                           <TextField
                             {...input}
@@ -381,6 +436,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
+
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('create_position.save')}

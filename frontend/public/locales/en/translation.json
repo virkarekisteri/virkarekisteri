@@ -12,7 +12,10 @@
     "pricing_id": "Pricing ID",
     "save": "Save",
     "vacancy_size": "Size-%",
-    "work_experience": "Work experience"
+    "work_experience": "Work experience",
+    "type": "Type",
+    "type_position": "Position",
+    "type_post": "Post"
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
@@ -20,7 +23,7 @@
     "error2": " errors in the CSV file.",
     "upload": "Upload",
     "title": "Create positions from CSV",
-    "upload_csv": "+ Import CSV",
+    "upload_csv": "Import CSV",
     "loading": "Loading..."
   },
   "eligibility": "Eligibility",
@@ -28,7 +31,7 @@
     "login": "Login",
     "welcome": "Welcome!"
   },
-  "new_position": "+ New position",
+  "new_position": "New position",
   "position": {
     "details": "Position details"
   },
@@ -51,6 +54,7 @@
     "vacancy_size": "Vacancy size",
     "vacancy_status": "Vacancy status",
     "rows_per_page": "Rows per page",
+    "organization_tree": "Organization tree",
     "position_name": "Position name"
   },
   "user_menu": {
@@ -64,6 +68,38 @@
   "search_filter": {
     "search": "Search",
     "reset": "Reset search terms",
-    "search_filters": "Search filters"
+    "search_filters": "Search filters",
+    "virka": "Position",
+    "toimi": "Post"
+  },
+  "basic_details": {
+    "vacancy_fill": "Fill-%"
+  },
+  "position_type": {
+    "type_post": "Post",
+    "type_position": "Position"
+  },
+  "edit_position": {
+    "title": "Edit position details",
+    "vacancy_number": "Vacancy number",
+    "position_name": "Position name",
+    "organization_tree": "Organization tree",
+    "placement_location": "Placement location",
+    "type": "Type",
+    "type_position": "Position",
+    "type_post": "Post",
+    "vacancy_size": "Size-%",
+    "vacancy_fill": "Fill-%",
+    "pricing_id": "Pricing ID",
+    "education_level": "Education level",
+    "work_experience": "Work experience",
+    "additional_details": "Additional details",
+    "decision": "Decision",
+    "cancel": "Cancel",
+    "save": "Save",
+    "details": "Position details",
+    "eligibility": "Eligibility",
+    "creation_decision_number": "Creation decision number",
+    "creation_description": "Decision description"
   }
 }
