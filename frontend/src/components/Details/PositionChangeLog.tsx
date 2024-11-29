@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
@@ -38,13 +38,33 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
     }, [position.id]);
 
     return (
-        <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">{t("change_logs.title")}</Typography>
+        <Accordion>
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                sx={{
+                    backgroundColor: alpha('#223B7C', 1),
+                    color: 'white',
+                    minHeight: '45px',
+                    '&.Mui-expanded': {
+                        minHeight: '45px',
+                    },
+                    '& .MuiAccordionSummary-content': {
+                        margin: 0,
+                    },
+                }}
+            >
+                <Typography>{t("change_logs.title")}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails
+                sx={{
+                    padding: '16px',
+                    backgroundColor: alpha('#f5f5f5', 1),
+                }}
+            >
                 {changeLogs.length > 0 ? (
-                    <Grid2 container spacing={2} sx={{ padding: 2, border: '1px solid #ccc', background: '#F5F5F5' }}>
+                    <Grid2 container spacing={2}>
                         {changeLogs.map((log, index) => (
                             <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
                                 <Grid2 size={{ xs: 2 }}>
@@ -78,7 +98,7 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                         ))}
                     </Grid2>
                 ) : (
-                    <Typography variant="body1" sx={{ padding: 2, textAlign: 'center' }}>
+                    <Typography variant="body1" sx={{ padding: 2, textAlign: 'left' }}>
                         {t("change_logs.no_logs_found")}
                     </Typography>
                 )}
