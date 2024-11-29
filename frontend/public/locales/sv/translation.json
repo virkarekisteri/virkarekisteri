@@ -82,7 +82,19 @@
       "EmployeeName": "",
       "EndingDate": "",
       "StartDate": "",
-      "PositionId": ""
+      "PositionId": "",
+      "EndedAt": "",
+      "EndingDecisionNumber": "",
+      "PlacementLocation": "",
+      "VacancyFill": "",
+      "VacancySize": "",
+      "PricingId": "",
+      "EducationLevel": "",
+      "WorkExperience": "",
+      "Details": "",
+      "Type": "",
+      "OrgTreeId": "",
+      "PositionNameId": ""
     }
   },
   "basic_details": {

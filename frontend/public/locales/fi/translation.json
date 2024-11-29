@@ -82,7 +82,19 @@
       "EmployeeName": "Viranhaltijan nimi",
       "EndingDate": "Päättymispäivä",
       "StartDate": "Aloituspäivä",
-      "PositionId": "Virka ID"
+      "PositionId": "Virka ID",
+      "EndedAt": "Päättymispäivä",
+      "EndingDecisionNumber": "Lopetuksen päätösnumero",
+      "PlacementLocation": "Sijoituspaikka",
+      "VacancyFill": "Täyttö",
+      "VacancySize": "Koko",
+      "PricingId": "Hinnoittelutunnus",
+      "EducationLevel": "Koulutustaso",
+      "WorkExperience": "Työkokemus",
+      "Details": "Lisätiedot",
+      "Type": "Tyyppi",
+      "OrgTreeId": "Kustannuspaikka",
+      "PositionNameId": "Virkanimike"
     }
   },
   "basic_details": {
