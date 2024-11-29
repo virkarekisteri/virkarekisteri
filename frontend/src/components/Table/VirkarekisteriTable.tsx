@@ -199,182 +199,236 @@ const DataTable: React.FC = () => {
   const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: alpha('#223B7C', 1), color: 'white' }}>
-          <Typography sx={{ color: 'white' }}>{t('search_filter.search_filters')}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid2 container spacing={2}>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.vacancy_number')}
-              </Typography>
-              <TextField
-                label={t('table.vacancy_number')}
-                value={vacancyNumberSearch}
-                onChange={(e) => setVacancyNumberSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.placement_location')}
-              </Typography>
-              <TextField
-                label={t('table.placement_location')}
-                value={placementLocationStateSearch}
-                onChange={(e) => setPlacementLocationSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={6}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.position_name')}
-              </Typography>
-              <TextField
-                label={t('table.position_name')}
-                value={positionNameSearch}
-                onChange={(e) => setPositionNameSearch(e.target.value)}
-                fullWidth
-              />
-            </Grid2>
-            <Grid2 size={3}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.type')}
-              </Typography>
-              <FormControl component="fieldset" fullWidth>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={positionTypeSearch.includes('0')}
-                        onChange={handlePositionTypeChange}
-                        value="0"
-                      />
-                    }
-                    label={t('search_filter.virka')}
+      <Box
+        sx={{
+          width: '950px',
+          marginLeft: 0,
+          marginRight: 'auto',
+        }}
+      >
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
+              backgroundColor: alpha('#223B7C', 1),
+              color: 'white',
+              minHeight: '45px',
+              height: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+                height: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: '1.2rem' }}>{t('search_filter.search_filters')}</Typography>
+          </AccordionSummary>
+
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#f5f5f5', 1),
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Grid2 container spacing={2}>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_number')}
+                  </Typography>
+                  <TextField
+                    label={t('table.vacancy_number')}
+                    value={vacancyNumberSearch}
+                    onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                    fullWidth
                   />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={positionTypeSearch.includes('1')}
-                        onChange={handlePositionTypeChange}
-                        value="1"
-                      />
-                    }
-                    label={t('search_filter.toimi')}
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.placement_location')}
+                  </Typography>
+                  <TextField
+                    label={t('table.placement_location')}
+                    value={placementLocationStateSearch}
+                    onChange={(e) => setPlacementLocationSearch(e.target.value)}
+                    fullWidth
                   />
-                </FormGroup>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={3}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                {t('table.vacancy_status')}
-              </Typography>
-              <FormControl component="fieldset" fullWidth>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('0')}
-                        onChange={handleVacancyStatusChange}
-                        value="0"
-                      />
-                    }
-                    label={t('vacancy_statuses.abolished')}
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.position_name')}
+                  </Typography>
+                  <TextField
+                    label={t('table.position_name')}
+                    value={positionNameSearch}
+                    onChange={(e) => setPositionNameSearch(e.target.value)}
+                    fullWidth
                   />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('1')}
-                        onChange={handleVacancyStatusChange}
-                        value="1"
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.type')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('0')}
+                            onChange={handlePositionTypeChange}
+                            value="0"
+                          />
+                        }
+                        label={t('search_filter.virka')}
                       />
-                    }
-                    label={t('vacancy_statuses.established')}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={vacancyStatusSearch.includes('2')}
-                        onChange={handleVacancyStatusChange}
-                        value="2"
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('1')}
+                            onChange={handlePositionTypeChange}
+                            value="1"
+                          />
+                        }
+                        label={t('search_filter.toimi')}
                       />
-                    }
-                    label={t('vacancy_statuses.active')}
-                  />
-                </FormGroup>
-              </FormControl>
-            </Grid2>
-            <Grid2 size={12} display="flex" justifyContent={'flex-end'} alignItems={'center'}>
-              <Button variant="contained" onClick={handleSearch} sx={{ marginRight: 1 }}>
-                {t('search_filter.search')}
-              </Button>
-              <Button variant="outlined" onClick={handleReset}>
-                {t('search_filter.reset')}
-              </Button>
-            </Grid2>
-          </Grid2>
-        </AccordionDetails>
-      </Accordion>
-      <TableContainer component={Box} sx={{ border: '1px solid #ccc' }}>
-        <Table {...getTableProps()} sx={{ minWidth: 650 }}>
-          <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
-            {headerGroups.map((headerGroup) => (
-              <TableRow {...headerGroup.getHeaderGroupProps()}>
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
-                {headerGroup.headers.map((column: any) => (
-                  <TableCell
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    sx={{
-                      color: 'white',
-                      fontWeight: 'bold',
-                      fontSize: '0.875rem',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {column.render('Header')}
-                    <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
-                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
-                    </span>
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody {...getTableBodyProps()}>
-            {paginatedRows.map((row, index) => {
-              prepareRow(row);
-              return (
-                <TableRow
-                  {...row.getRowProps()}
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_status')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('0')}
+                            onChange={handleVacancyStatusChange}
+                            value="0"
+                          />
+                        }
+                        label={t('vacancy_statuses.abolished')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('1')}
+                            onChange={handleVacancyStatusChange}
+                            value="1"
+                          />
+                        }
+                        label={t('vacancy_statuses.established')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('2')}
+                            onChange={handleVacancyStatusChange}
+                            value="2"
+                          />
+                        }
+                        label={t('vacancy_statuses.active')}
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+              </Grid2>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleSearch}
                   sx={{
-                    backgroundColor:
-                      row.original.id === selectedRowId
-                        ? alpha('#223B7C', 0.5)
-                        : index % 2 === 0
-                          ? '#FFFFFF'
-                          : alpha('#223B7C', 0.2),
-                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
                   }}
-                  onClick={() => handleRowClick(row.original)}
                 >
-                  {row.cells.map((cell) => (
-                    <TableCell {...cell.getCellProps()} sx={{ color: 'black' }}>
-                      {cell.render('Cell')}
+                  {t('search_filter.search')}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleReset}
+                  sx={{
+                    fontSize: '0.8rem',
+                    padding: '6px 35px',
+                  }}
+                >
+                  {t('search_filter.reset')}
+                </Button>
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <TableContainer component={Box} sx={{ border: '0px solid #ccc' }}>
+          <Table {...getTableProps()} sx={{ minWidth: 650 }}>
+            <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
+              {headerGroups.map((headerGroup) => (
+                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
+                  {headerGroup.headers.map((column: any) => (
+                    <TableCell
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      sx={{
+                        color: 'white',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        padding: '8px 16px',
+                      }}
+                    >
+                      {column.render('Header')}
+                      <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
+                        {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
+                      </span>
                     </TableCell>
                   ))}
                 </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+              ))}
+            </TableHead>
+            <TableBody {...getTableBodyProps()}>
+              {paginatedRows.map((row, index) => {
+                prepareRow(row);
+                return (
+                  <TableRow
+                    {...row.getRowProps()}
+                    sx={{
+                      backgroundColor:
+                        row.original.id === selectedRowId
+                          ? alpha('#223B7C', 0.5)
+                          : index % 2 === 0
+                            ? '#F9F9F9'
+                            : alpha('#223B7C', 0.2),
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleRowClick(row.original)}
+                  >
+                    {row.cells.map((cell) => (
+                      <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
+                        {cell.render('Cell')}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Box>
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"
