@@ -94,6 +94,12 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                                         value={log.newValue}
                                     />
                                 </Grid2>
+                                <Grid2 size={{ xs: 2 }}>
+                                    <RenderReadonlyTextField
+                                        label={'Päätösnumero'}
+                                        value={log.decisionNumber}
+                                    />
+                                </Grid2>
                             </Grid2>
                         ))}
                     </Grid2>

@@ -95,7 +95,8 @@
       "Type": "Tyyppi",
       "OrgTreeId": "Kustannuspaikka",
       "PositionName": "Virkanimike"
-    }
+    },
+    "DecisionNumber": "Päätösnumero"
   },
   "basic_details": {
     "vacancy_fill": "Täyttö-%"

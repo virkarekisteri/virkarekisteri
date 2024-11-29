@@ -95,7 +95,8 @@
       "Type": "Type",
       "OrgTreeId": "Organization tree",
       "PositionName": "Position name"
-    }
+    },
+    "DecisionNumber": "Decision number"
   },
   "basic_details": {
     "vacancy_fill": "Fill-%"
