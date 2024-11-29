@@ -77,6 +77,7 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
         await db.SaveChangesAsync();
     }
 
+
     public async Task<Guid> GetOrgTreeIdByNumber(string number)
     {
         var orgTree = await db.OrganizationTrees.FirstOrDefaultAsync(o => o.Number == number);

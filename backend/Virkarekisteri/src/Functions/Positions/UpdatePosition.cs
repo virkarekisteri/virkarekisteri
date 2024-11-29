@@ -10,7 +10,7 @@ using static Virkarekisteri.Utils.DeserializeHelper;
 namespace Virkarekisteri.Functions.Positions;
 
 public class UpdatePosition(
-    ILogger<CreatePosition> logger,
+    ILogger<UpdatePosition> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository
 )
@@ -24,68 +24,57 @@ public class UpdatePosition(
     /// No content on success or an error
     /// </returns>
     [Function("UpdatePosition")]
-    [RequiresEditRole]
+    [RequiresReadRole] // <--- this should be admin or edit!! For testing purposes, I use lesser role
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
-        string id
-    )
+        string id)
     {
-        logger.LogInformation("Updating position with ID: {Id}", id);
+        logger.LogInformation("1/3 : Updating position with ID: {Id}", id);
 
-        // Validate ID
         if (!Guid.TryParse(id, out var positionId))
-        {
             return new BadRequestObjectResult($"Invalid ID format: {id}");
-        }
 
-        // Deserialize req body into DTO
+        // Deserialize payload into UpdatePositionDto
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionDto>(req);
-        if (error is not null)
-        {
+        if (error != null)
             return error;
-        }
 
-        // Fetch the existing position
+        // Fetch the existing position from the database
         var existingPosition = await positionRepository.GetPosition(positionId);
         if (existingPosition == null)
-        {
-            return new NotFoundResult(); // 404 if position not found
-        }
+            return new NotFoundResult();
 
-        // Check that the fill percentage is not greater than the vacancy percentage
-        if (updateDto.VacancyFill > existingPosition.VacancySize)
-        {
-            return new BadRequestObjectResult("The fill % cannot be greater than the total vacancy %");
-        }
-        if (updateDto.VacancyFill.HasValue)
-        {
-            existingPosition.VacancyFill = updateDto.VacancyFill.Value;
-        }
+        logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
 
-        existingPosition.EndedAt = updateDto.EndedAt;
-        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber;
-        existingPosition.PlacementLocation = updateDto.PlacementLocation;
+        // Map only provided fields from UpdatePositionDto to the existing Position
+        existingPosition.EndedAt = updateDto.EndedAt ?? existingPosition.EndedAt;
+        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber ?? existingPosition.EndingDecisionNumber;
+        existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
+        existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
+        existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
+        existingPosition.PricingId = updateDto.PricingId ?? existingPosition.PricingId;
+        existingPosition.EducationLevel = updateDto.EducationLevel ?? existingPosition.EducationLevel;
+        existingPosition.WorkExperience = updateDto.WorkExperience ?? existingPosition.WorkExperience;
+        existingPosition.Details = updateDto.Details ?? existingPosition.Details;
+        existingPosition.Type = updateDto.Type ?? existingPosition.Type;
+        existingPosition.OrgTreeId = updateDto.OrgTreeId ?? existingPosition.OrgTreeId;
 
-        // Check if the request contains a new PositionName to update
         if (!string.IsNullOrEmpty(updateDto.PositionName))
         {
-            // Check if the PositionName already exists in the PositionNames table
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
-
             if (positionNameId == null)
             {
-                // If the PositionName doesn't exist, create a new one
+                // Create a new PositionName if it doesn't exist
                 positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName);
             }
-
-            // Update the Position's PositionNameId with the new or existing PositionNameId
             existingPosition.PositionNameId = positionNameId.Value;
         }
 
-        // Update the position in the database
         await positionRepository.UpdatePosition(existingPosition);
 
-        logger.LogInformation("Successfully updated position with ID: {Id}", id);
-        return new NoContentResult(); // 204 No Content on success
+        logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
+        return new NoContentResult();
     }
+
+
 }

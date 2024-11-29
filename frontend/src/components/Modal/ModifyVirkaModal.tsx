@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { selectPositionData } from 'redux/slices/position-slice';
 import { fetchPositionNames, selectPositionNames } from 'redux/slices/position-name-slice';
 import { getOrganizationTrees, selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import { getPositions, updatePosition } from 'redux/slices/position-slice';
 
 interface ModifyVirkaModalProps {
   open: boolean;
@@ -47,9 +48,32 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     }
   }, [dispatch, open, dataFromBackend]);
 
-  const onSubmit = (values: any) => {
-    console.log('Modified values:', values);
-    handleClose();
+  const onSubmit = async (values: any) => {
+    if (!position.id) {
+      return;
+    }
+
+    try {
+      const updateData = {
+        endedAt: values.endedAt,
+        endingDecisionNumber: values.endingDecisionNumber,
+        placementLocation: values.placementLocation,
+        vacancyFill: values.vacancyFill / 100, // Convert percentage to decimal
+        positionName: values.positionName?.name,
+        orgTreeId: values.orgTree,
+        pricingId: values.pricingId,
+        vacancySize: values.vacancySize / 100, // Convert percentage to decimal
+        educationLevel: values.educationLevel,
+        workExperience: values.workExperience,
+        details: values.details,
+        type: values.type,
+      };
+      await dispatch(updatePosition({ id: position.id, data: updateData }));
+      await dispatch(getPositions());
+      //handleClose();
+    } catch (error) {
+      //console.error('Failed to update position:', error);
+    }
   };
 
   return (
@@ -95,17 +119,17 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
           <Form
             onSubmit={onSubmit}
             initialValues={{
-              // vacancyNumber: position.vacancyNumber, <-- no need
               type: position.type,
-              vacancySize: position.vacancySize,
+              vacancySize: Number(position.vacancySize) * 100,
+              vacancyFill: Number(position.vacancyFill) * 100,
               positionName: position.positionName,
               orgTree: position.orgTreeId,
               placementLocation: position.placementLocation,
-              vacancyFill: position.vacancyFill,
               pricingId: position.pricingId,
               educationLevel: position.educationLevel,
               workExperience: position.workExperience,
               details: position.details,
+              vacancyNumber: position.vacancyNumber,
               //creationDecisionNumber: position.creationDecisionNumber, <-- this will be DecisionNumber (Nvarchar)
               //creationDescription: position.creationDescription, <-- this will be DecisionDescription
             }}

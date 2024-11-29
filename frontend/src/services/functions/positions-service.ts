@@ -24,3 +24,13 @@ export const uploadCsv = async (formData: FormData): Promise<void> => {
   });
   return response.data;
 };
+
+export const updatePosition = async (id: string, data: Partial<Position>) => {
+  try {
+    const response = await apiClient.put(`/positions/${id}`, data);
+    return response.data;
+  } catch (error: any) {
+    console.error('Error in updatePosition API:', error.response?.data || error.message); // Log API errors
+    throw error;
+  }
+};

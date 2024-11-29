@@ -63,7 +63,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         createdAt: new Date(values.createdAt || ''),
         endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
         vacancySize: Number(values.vacancySize) / 100,
-        vacancyFill: values.vacancyFill,
+        vacancyFill: Number(values.vacancyFill) / 100,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
         endingDecisionNumber: values.endingDecisionNumber,
         type: values.type ?? 99,
