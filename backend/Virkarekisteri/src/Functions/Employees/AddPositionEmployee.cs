@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
@@ -30,33 +29,27 @@ public class AddPositionEmployee(
             return error;
 
         if (requestPosition.StartDate > requestPosition.EndingDate)
-        {
             return new BadRequestObjectResult("Ending date must be after the starting date.");
-        }
 
-        if (await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate) && !requestPosition.Replacement)
-        {
+        // a position employee can only be added to a filled position if it's a replacement employee
+        if (
+            !requestPosition.Replacement
+            && await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate)
+        )
             return new BadRequestObjectResult("Position is already filled.");
-        }
 
         if (!await repository.IsPositionValid(requestPosition.PositionId, requestPosition.StartDate))
-        {
             return new BadRequestObjectResult("Position is not currently valid.");
-        }
-
-        if(requestPosition.Replacement)
-        {
-            requestPosition.Id = Guid.NewGuid();
-        }
 
         var createdPositionEmployee = await repository.CreatePositionEmployee(requestPosition);
+        var position = await positionRepository.GetPosition(requestPosition.PositionId);
 
-        var position = await positionRepository.GetPosition(requestPosition.PositionId);  
+        if (position == null)
+            return new OkObjectResult(createdPositionEmployee);
 
-        if (position != null)
+        if (requestPosition.Replacement && requestPosition.StartDate.Date <= DateTime.Now.Date)
         {
-            position.PositionEmployeeId = createdPositionEmployee.Id;
-
+            position.ReplacementEmployeeId = createdPositionEmployee.Id;
             await positionRepository.UpdatePosition(position);
         }
 
