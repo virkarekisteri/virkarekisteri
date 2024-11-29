@@ -30,6 +30,21 @@ interface ModifyVirkaModalProps {
   position: Position;
 }
 
+interface FormValues {
+  endedAt?: string;
+  endingDecisionNumber?: string;
+  placementLocation?: string;
+  vacancyFill?: number;
+  positionName?: { name: string };
+  orgTree?: string;
+  pricingId?: string;
+  vacancySize?: number;
+  educationLevel?: string;
+  workExperience?: string;
+  details?: string;
+  type?: number;
+}
+
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -48,7 +63,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     }
   }, [dispatch, open, dataFromBackend]);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: FormValues) => {
     if (!position.id) {
       return;
     }
@@ -58,11 +73,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         endedAt: values.endedAt,
         endingDecisionNumber: values.endingDecisionNumber,
         placementLocation: values.placementLocation,
-        vacancyFill: values.vacancyFill / 100, // Convert percentage to decimal
+        vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
         positionName: values.positionName?.name,
         orgTreeId: values.orgTree,
         pricingId: values.pricingId,
-        vacancySize: values.vacancySize / 100, // Convert percentage to decimal
+        vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
         educationLevel: values.educationLevel,
         workExperience: values.workExperience,
         details: values.details,
@@ -72,7 +87,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
       await dispatch(getPositions());
       handleClose();
     } catch (error) {
-      //console.error('Failed to update position:', error);
+      console.error('Failed to update position:', error);
     }
   };
 
