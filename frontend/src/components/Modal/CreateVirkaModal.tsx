@@ -11,6 +11,10 @@ import {
   AccordionSummary,
   alpha,
   Autocomplete,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -93,7 +97,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
           maxHeight: '90vh',
           overflow: 'auto',
           bgcolor: 'background.paper',
-          border: '2px solid #000',
           boxShadow: 24,
           p: 0,
           borderRadius: 1,
@@ -106,7 +109,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
             alignItems: 'center',
             p: 2,
             height: 50,
-            borderBottom: '1px solid #ccc',
             bgcolor: '#223B7C',
             color: 'white',
             borderTopLeftRadius: 1,
@@ -298,6 +300,30 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           id="placementLocation"
                           label={t('create_position.placement_location')}
                         />
+                      )}
+                    </Field>
+                  </Grid2>
+
+                  <Grid2 size={4}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('create_position.type')}
+                    </Typography>
+                    <Field name="laji">
+                      {({ input }) => (
+                        <FormControl fullWidth margin="normal">
+                          <InputLabel id="laji-select-label">{`${t('create_position.type')} *`}</InputLabel>
+                          <Select
+                            required
+                            labelId="laji-select-label"
+                            id="laji-select"
+                            value={input.value || ''}
+                            onChange={(event) => input.onChange(event.target.value)}
+                            label={t('create_position.type')}
+                          >
+                            <MenuItem value={1}>{t('create_position.type_position')}</MenuItem>
+                            <MenuItem value={2}>{t('create_position.type_post')}</MenuItem>
+                          </Select>
+                        </FormControl>
                       )}
                     </Field>
                   </Grid2>

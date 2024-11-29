@@ -12,7 +12,10 @@
     "pricing_id": "",
     "save": "",
     "vacancy_size": "",
-    "work_experience": ""
+    "work_experience": "",
+    "type": "",
+    "type_position": "",
+    "type_post": ""
   },
   "create_csv_position": {
     "success": "",
@@ -73,5 +76,28 @@
   "position_type": {
     "post": "",
     "position": ""
+  },
+  "edit_position": {
+    "title": "",
+    "vacancy_number": "",
+    "position_name": "",
+    "organization_tree": "",
+    "placement_location": "",
+    "type": "",
+    "type_position": "",
+    "type_post": "",
+    "vacancy_size": "",
+    "vacancy_fill": "",
+    "pricing_id": "",
+    "education_level": "",
+    "work_experience": "",
+    "additional_details": "",
+    "decision": "",
+    "cancel": "",
+    "save": "",
+    "details": "",
+    "eligibility": "",
+    "creation_decision_number": "",
+    "creation_description": ""
   }
 }

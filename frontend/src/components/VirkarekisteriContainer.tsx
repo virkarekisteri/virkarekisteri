@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid2 } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
+import ModifyVirkaModal from './Modal/ModifyVirkaModal'; // Ensure this matches the file and component name
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,8 @@ const VirkarekisterContainer = () => {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+
   const { t } = useTranslation();
 
   const handleOpenCreateModal = () => setOpenCreateModal(true);
@@ -25,6 +28,9 @@ const VirkarekisterContainer = () => {
 
   const handleOpenUploadModal = () => setOpenUploadModal(true);
   const handleCloseUploadModal = () => setOpenUploadModal(false);
+
+  const handleOpenEditModal = () => setOpenEditModal(true);
+  const handleCloseEditModal = () => setOpenEditModal(false);
 
   const position = useAppSelector(selectIndividualPosition);
   const dataLoading = useAppSelector(selectPositionLoading);
@@ -39,6 +45,7 @@ const VirkarekisterContainer = () => {
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
+        <ModifyVirkaModal open={openEditModal} handleClose={handleCloseEditModal} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'} sx={{ gap: 5 }}>
             <Button
@@ -90,6 +97,31 @@ const VirkarekisterContainer = () => {
               }
             >
               {t('new_position')}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleOpenEditModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.2rem',
+                padding: '20px',
+                height: '45px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '40px',
+                  }}
+                >
+                  ✎
+                </Box>
+              }
+            >
+              Edit Placeholder
             </Button>
           </Grid2>
           <Grid2 size={12}>
