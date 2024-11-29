@@ -7,6 +7,8 @@ import { store } from './redux/store';
 import { createTheme, StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import './react-i18n.config';
+import msalInstance, { setupMsalEventListeners } from './auth/msal-instance';
+import { MsalProvider } from '@azure/msal-react';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement!);
@@ -36,13 +38,18 @@ const theme = createTheme({
   },
 });
 
+await msalInstance.initialize();
+setupMsalEventListeners(store);
+
 root.render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <CssBaseline />
-          <App />
+          <MsalProvider instance={msalInstance}>
+            <App />
+          </MsalProvider>
         </Provider>
       </ThemeProvider>
     </StyledEngineProvider>

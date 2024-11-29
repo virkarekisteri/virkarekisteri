@@ -5,7 +5,6 @@ import { positionSlice } from './slices/position-slice';
 import positionNameSlice from './slices/position-name-slice';
 import organizationTreeSlice from './slices/organization-tree-slice';
 import { authSlice } from './slices/auth-slice';
-import { setupMsalEventListeners } from 'auth/msal-instance';
 
 const rootReducer = combineSlices(positionSlice, positionNameSlice, organizationTreeSlice, authSlice);
 
@@ -42,7 +41,6 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
 };
 
 export const store = makeStore();
-setupMsalEventListeners(store);
 
 // Infer the type of `store`
 export type AppStore = typeof store;
