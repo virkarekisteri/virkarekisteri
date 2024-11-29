@@ -8,7 +8,6 @@ import { useAppDispatch } from 'redux/hooks';
 import { addPositionEmployee, updatePositionEmployee } from 'redux/slices/position-employee-slice';
 import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
-import { fetchPosition } from 'redux/slices/position-slice';
 import ReplacementAccordion from './ReplacementAccordion';
 
 interface AddEmployeeModalProps {
@@ -17,23 +16,52 @@ interface AddEmployeeModalProps {
   isEmployeeSet?: boolean;
   position: Position;
   employee?: PositionEmployee;
+  replacementEmployee?: PositionEmployee;
 }
 
-const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEmployeeSet, position, employee }) => {
+const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
+  open,
+  onClose,
+  isEmployeeSet,
+  position,
+  employee,
+  replacementEmployee,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [isReplacement, setIsReplacement] = useState(false);
+  const [isReplacementToggle, setIsReplacementToggle] = useState(!!replacementEmployee?.replacement);
 
   const handleSubmit = async (values: any) => {
     try {
       const data = { ...values, positionId: position.id };
-      if (isReplacement) {
-        dispatch(addPositionEmployee({ ...data, replacement: isReplacement }));
+      console.log(data);
+      console.log(values);
+
+      if (values.isReplacement) {
+        const replacementData = {
+          employeeName: values.replacementEmployeeName,
+          startDate: values.replacementStartDate,
+          endingDate: values.replacementEndingDate,
+          positionId: position.id ?? '',
+          replacement: true,
+        };
+        delete data.replacementEmployeeName;
+        delete data.replacementStartDate;
+        delete data.replacementEndingDate;
+        dispatch(addPositionEmployee(replacementData as any));
         if (employee?.id) {
           dispatch(updatePositionEmployee({ ...employee, inLeave: true }));
         }
         return;
+      } else {
+        // "Deleting" the replacement employee
+        if (employee?.id) {
+          dispatch(updatePositionEmployee({ ...employee, inLeave: false }));
+        }
       }
+      delete data.replacementEmployeeName;
+      delete data.replacementStartDate;
+      delete data.replacementEndingDate;
       if (isEmployeeSet) {
         dispatch(updatePositionEmployee({ ...employee, ...values }));
       } else {
@@ -93,9 +121,16 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
           <Form
             onSubmit={handleSubmit}
             initialValues={{
-              ...employee,
+              employeeName: employee?.employeeName,
               startDate: employee?.startDate ? formatDateForInput(employee.startDate.toString()) : 'No start date',
               endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : null,
+              replacementEmployeeName: replacementEmployee?.employeeName,
+              replacementStartDate: replacementEmployee?.startDate
+                ? formatDateForInput(replacementEmployee.startDate.toString())
+                : 'No start date',
+              replacementEndingDate: replacementEmployee?.endingDate
+                ? formatDateForInput(replacementEmployee.endingDate.toString())
+                : null,
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -144,20 +179,28 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
                   </Grid2>
                 </Grid2>
                 {isEmployeeSet && (
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={isReplacement}
-                        onChange={() => setIsReplacement(!isReplacement)}
-                        name="isReplacement"
-                        color="primary"
+                  <Field name="isReplacement" type="checkbox">
+                    {({ input }) => (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...input}
+                            checked={input.value}
+                            onChange={(event) => {
+                              input.onChange(event);
+                              setIsReplacementToggle(event.target.checked);
+                            }}
+                            name="isReplacement"
+                            color="primary"
+                          />
+                        }
+                        label={t('employee.replacement')}
                       />
-                    }
-                    label={t('employee.replacement')}
-                  />
+                    )}
+                  </Field>
                 )}
 
-                {isReplacement && <ReplacementAccordion />}
+                {isReplacementToggle && <ReplacementAccordion />}
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('employee.save')}
@@ -172,4 +215,4 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
   );
 };
 
-export default AddEmployeeModal;
+export default EmployeeModal;

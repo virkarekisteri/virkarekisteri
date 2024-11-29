@@ -43,7 +43,13 @@
     "start_date": "Virkaan asettamispäivämäärä",
     "ending_date": "Virkasopimuksen päättämispäivämäärä",
     "no_end_date": "Ei määräaikaa",
-    "save": "Tallenna"
+    "save": "Tallenna",
+    "replacement": "Sijaisuus",
+    "replacement_active": "Sijaisuus voimassa",
+    "replacement_details": "Sijaisuuden tiedot",
+    "replacement_start_date": "Sijaisuuden alkamispäivämäärä",
+    "replacement_end_date": "Sijaisuuden päättymispäivämäärä",
+    "replacement_name": "Sijaisen nimi"
   },
   "table": {
     "created_at": "Perustamisajankohta",

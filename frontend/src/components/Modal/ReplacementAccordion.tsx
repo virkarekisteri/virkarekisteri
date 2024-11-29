@@ -3,22 +3,27 @@ import { Accordion, AccordionSummary, AccordionDetails, TextField, Typography } 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
+import type { PositionEmployee } from 'models/PositionEmployee';
 
-const ReplacementAccordion: React.FC = () => {
+interface ReplacementAccordionProps {
+  initialValues?: PositionEmployee;
+}
+
+const ReplacementAccordion: React.FC<ReplacementAccordionProps> = ({ initialValues }) => {
   const { t } = useTranslation();
 
   return (
-    <Accordion>
+    <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>{t('employee.replacement_details')}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Field name="employeeName">
+        <Field name="replacementEmployeeName" initialValue={initialValues?.employeeName}>
           {({ input }) => (
             <TextField {...input} margin="normal" required fullWidth label={t('employee.replacement_name')} />
           )}
         </Field>
-        <Field name="startDate">
+        <Field name="replacementStartDate" initialValue={initialValues?.startDate}>
           {({ input }) => (
             <TextField
               {...input}
@@ -27,11 +32,11 @@ const ReplacementAccordion: React.FC = () => {
               fullWidth
               type="date"
               label={t('employee.replacement_start_date')}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           )}
         </Field>
-        <Field name="endingDate">
+        <Field name="replacementEndingDate" initialValue={initialValues?.endingDate}>
           {({ input }) => (
             <TextField
               {...input}
@@ -40,7 +45,7 @@ const ReplacementAccordion: React.FC = () => {
               fullWidth
               type="date"
               label={t('employee.replacement_end_date')}
-              InputLabelProps={{ shrink: true }}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           )}
         </Field>

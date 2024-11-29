@@ -12,7 +12,8 @@ namespace Virkarekisteri.Functions.Employees;
 
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
-    IPositionEmployeeRepository positionEmployeeRepository
+    IPositionEmployeeRepository positionEmployeeRepository,
+        IPositionRepository positionRepository
 )
 {
     /// <summary>
@@ -37,12 +38,12 @@ public class UpdatePositionEmployee(
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionEmployeeId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
-        var (error, requestPosition) = await TryDeserializeRequestBody<PositionEmployee>(req);
+        var (error, requestEmployee) = await TryDeserializeRequestBody<PositionEmployee>(req);
 
         if (error is not null)
             return error;
 
-        if (requestPosition == null)
+        if (requestEmployee == null)
             return new BadRequestObjectResult("Invalid request body");
 
         var existingPositionEmployee = await positionEmployeeRepository.GetPositionEmployee(positionEmployeeId);
@@ -50,13 +51,25 @@ public class UpdatePositionEmployee(
         if (existingPositionEmployee == null)
             return new NotFoundResult();
 
+        if (!requestEmployee.InLeave && existingPositionEmployee.InLeave)
+        {
+            var position = await positionRepository.GetPosition(requestEmployee.PositionId);
+            if (position == null)
+                return new BadRequestObjectResult("Position not found");
+
+            position.ReplacementEmployeeId = null;
+            await positionRepository.UpdatePosition(position);
+        }
+
         // Update the existing position employee with the new values
-        existingPositionEmployee.StartDate = requestPosition.StartDate;
-        existingPositionEmployee.EndingDate = requestPosition.EndingDate;
-        existingPositionEmployee.PositionId = requestPosition.PositionId;
-        existingPositionEmployee.EmployeeName = requestPosition.EmployeeName;
-        existingPositionEmployee.Replacement = requestPosition.Replacement;
-        existingPositionEmployee.InLeave = requestPosition.InLeave;
+        existingPositionEmployee.StartDate = requestEmployee.StartDate;
+        existingPositionEmployee.EndingDate = requestEmployee.EndingDate;
+        existingPositionEmployee.PositionId = requestEmployee.PositionId;
+        existingPositionEmployee.EmployeeName = requestEmployee.EmployeeName;
+        existingPositionEmployee.Replacement = requestEmployee.Replacement;
+        existingPositionEmployee.InLeave = requestEmployee.InLeave;
+
+
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 

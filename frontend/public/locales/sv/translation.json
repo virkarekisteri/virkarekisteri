@@ -43,7 +43,13 @@
     "start_date": "",
     "ending_date": "",
     "no_end_date": "",
-    "save": ""
+    "save": "",
+    "replacement": "",
+    "replacement_active": "",
+    "replacement_details": "",
+    "replacement_start_date": "",
+    "replacement_end_date": "",
+    "replacement_name": ""
   },
   "table": {
     "created_at": "",
