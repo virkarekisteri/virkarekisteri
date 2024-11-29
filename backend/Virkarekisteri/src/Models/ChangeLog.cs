@@ -35,4 +35,9 @@ public class ChangeLog
     [Required]
     [Column("Timestamp")]
     public DateTime Timestamp { get; set; }
+
+    [Required]
+    [MaxLength(255)]
+    [Column("PaatosNumero")]
+    public required string DecisionNumber { get; set; }
 }

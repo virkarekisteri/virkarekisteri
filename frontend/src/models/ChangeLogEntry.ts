@@ -6,4 +6,5 @@ export interface ChangeLogEntry {
     newValue: string;
     editor: string;
     timestamp: string;
+    decisionNumber: string;
 }

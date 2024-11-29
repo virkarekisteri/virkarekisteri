@@ -12,4 +12,5 @@ public class UpdatePositionDto
     public int? Type { get; set; }
     public Guid? OrgTreeId { get; set; }
     public string? PositionName { get; set; }
+    public string? DecisionNumber { get; set; }
 }
