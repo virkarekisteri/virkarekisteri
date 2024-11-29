@@ -18,6 +18,7 @@ const VirkarekisterContainer = () => {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+
   const { t } = useTranslation();
 
   const handleOpenCreateModal = () => setOpenCreateModal(true);

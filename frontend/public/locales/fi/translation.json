@@ -12,7 +12,10 @@
     "pricing_id": "Hinnoittelutunnus",
     "save": "Tallenna",
     "vacancy_size": "Koko-%",
-    "work_experience": "Työkokemus"
+    "work_experience": "Työkokemus",
+    "type": "Laji",
+    "type_position": "Virka",
+    "type_post": "Toimi"
   },
   "create_csv_position": {
     "success": " virkaa luotu onnistuneesti.",
@@ -71,7 +74,30 @@
     "vacancy_fill": "Täyttö-%"
   },
   "position_type": {
-    "post": "Toimi",
-    "position": "Virka"
+    "type_post": "Toimi",
+    "type_position": "Virka"
+  },
+  "edit_position": {
+    "title": "Muokkaa viran tietoja",
+    "vacancy_number": "Vakanssinumero",
+    "position_name": "Virkanimike",
+    "organization_tree": "Kustannuspaikka",
+    "placement_location": "Sijoituspaikka",
+    "type": "Laji",
+    "type_position": "Virka",
+    "type_post": "Toimi",
+    "vacancy_size": "Koko-%",
+    "vacancy_fill": "Täyttö-%",
+    "pricing_id": "Hinnoittelutunnus",
+    "education_level": "Koulutustaso",
+    "work_experience": "Työkokemus",
+    "additional_details": "Lisätiedot",
+    "decision": "Päätös",
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "details": "Viran tiedot",
+    "eligibility": "Kelpoisuusehdot",
+    "creation_decision_number": "Päätösnumero",
+    "creation_description": "Päätöksen selite"
   }
 }
