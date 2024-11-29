@@ -47,11 +47,12 @@ public class AddPositionEmployee(
         if (position == null)
             return new OkObjectResult(createdPositionEmployee);
 
-        if (requestPosition.Replacement && requestPosition.StartDate.Date <= DateTime.Now.Date)
-        {
+        if (requestPosition.Replacement)
             position.ReplacementEmployeeId = createdPositionEmployee.Id;
-            await positionRepository.UpdatePosition(position);
-        }
+        else
+            position.PositionEmployeeId = createdPositionEmployee.Id;
+
+        await positionRepository.UpdatePosition(position);
 
         return new OkObjectResult(createdPositionEmployee);
     }
