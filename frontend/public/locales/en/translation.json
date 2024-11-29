@@ -94,7 +94,7 @@
       "Details": "Additional details",
       "Type": "Type",
       "OrgTreeId": "Organization tree",
-      "PositionNameId": "Position name"
+      "PositionName": "Position name"
     }
   },
   "basic_details": {

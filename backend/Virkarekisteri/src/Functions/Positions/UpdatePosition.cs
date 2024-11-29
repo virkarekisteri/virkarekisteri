@@ -109,7 +109,11 @@ public class UpdatePosition(
                 // Create a new PositionName if it doesn't exist
                 positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName);
             }
-            LogChange("PositionName", existingPosition.PositionNameId.ToString(), positionNameId.ToString());
+            var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
+            var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
+
+            // Log the change
+            LogChange("PositionName", oldPositionName, newPositionName);existingPosition.PositionNameId = positionNameId.Value;
             existingPosition.PositionNameId = positionNameId.Value;
         }
 

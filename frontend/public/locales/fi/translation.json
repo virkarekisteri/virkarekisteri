@@ -94,7 +94,7 @@
       "Details": "Lisätiedot",
       "Type": "Tyyppi",
       "OrgTreeId": "Kustannuspaikka",
-      "PositionNameId": "Virkanimike"
+      "PositionName": "Virkanimike"
     }
   },
   "basic_details": {
