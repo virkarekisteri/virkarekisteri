@@ -52,10 +52,10 @@
     "vacancy_size": "",
     "rows_per_page": "",
     "vacancy_number": "",
-    "position_name": "",
     "organization_tree": "",
     "placement_location": "",
-    "vacancy_status": ""
+    "vacancy_status": "",
+    "position_name": ""
   },
   "user_menu": {
     "logout": ""
@@ -68,7 +68,9 @@
   "search_filter": {
     "search": "",
     "reset": "",
-    "search_filters": ""
+    "search_filters": "",
+    "virka": "",
+    "toimi": ""
   },
   "basic_details": {
     "vacancy_fill": ""
