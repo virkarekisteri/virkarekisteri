@@ -25,14 +25,16 @@ public class GetPositionChangeLog(
         logger.LogInformation("Getting change logs for position ID: {PositionId}", sanitizedId);
 
         if (!Guid.TryParse(req.RouteValues["positionId"] as string, out var positionId))
+        {
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["positionId"]} as a Guid");
+        }
 
         var changeLogs = await changeLogRepository.GetChangeLogsByPositionId(positionId);
 
         if (changeLogs is null || !changeLogs.Any())
         {
             logger.LogInformation("No change logs found for position ID: {PositionId}", positionId);
-            return new NotFoundObjectResult($"No change logs found for position ID {positionId}");
+            return new OkObjectResult(new List<object>());
         }
 
         return new OkObjectResult(changeLogs);
