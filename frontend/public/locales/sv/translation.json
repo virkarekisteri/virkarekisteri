@@ -68,5 +68,12 @@
     "search_filters": "",
     "virka": "",
     "toimi": ""
+  },
+  "basic_details": {
+    "vacancy_fill": ""
+  },
+  "position_type": {
+    "post": "",
+    "position": ""
   }
 }

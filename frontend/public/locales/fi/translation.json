@@ -68,5 +68,12 @@
     "search_filters": "Hakusuodattimet",
     "virka": "Virka",
     "toimi": "Toimi"
+  },
+  "basic_details": {
+    "vacancy_fill": "Täyttö-%"
+  },
+  "position_type": {
+    "post": "Toimi",
+    "position": "Virka"
   }
 }
