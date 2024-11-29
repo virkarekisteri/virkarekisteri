@@ -37,7 +37,7 @@ const DataTable: React.FC = () => {
   const dataFromBackend = useAppSelector(selectPositionData);
   const { t } = useTranslation();
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
-  const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
+  const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
@@ -161,7 +161,7 @@ const DataTable: React.FC = () => {
 
   const handleReset = () => {
     setVacancyNumberSearch('');
-    setPlacementLocationSearch('');
+    setPlacementLocationStateSearch('');
     setPositionNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
@@ -259,7 +259,7 @@ const DataTable: React.FC = () => {
                   <TextField
                     label={t('table.placement_location')}
                     value={placementLocationStateSearch}
-                    onChange={(e) => setPlacementLocationSearch(e.target.value)}
+                    onChange={(e) => setPlacementLocationStateSearch(e.target.value)}
                     fullWidth
                   />
                 </Grid2>
