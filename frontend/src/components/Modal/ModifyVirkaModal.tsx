@@ -70,7 +70,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
       };
       await dispatch(updatePosition({ id: position.id, data: updateData }));
       await dispatch(getPositions());
-      //handleClose();
+      handleClose();
     } catch (error) {
       //console.error('Failed to update position:', error);
     }
