@@ -74,8 +74,8 @@
     "vacancy_fill": "Fill-%"
   },
   "position_type": {
-    "post": "Post",
-    "position": "Position"
+    "type_post": "Post",
+    "type_position": "Position"
   },
   "edit_position": {
     "title": "Edit position details",

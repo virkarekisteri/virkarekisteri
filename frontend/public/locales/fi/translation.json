@@ -74,8 +74,8 @@
     "vacancy_fill": "Täyttö-%"
   },
   "position_type": {
-    "post": "Toimi",
-    "position": "Virka"
+    "type_post": "Toimi",
+    "type_position": "Virka"
   },
   "edit_position": {
     "title": "Muokkaa viran tietoja",

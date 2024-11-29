@@ -1,12 +1,13 @@
-import React from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, alpha, Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
-import type { Position } from 'models/Position';
-import { useTranslation } from 'react-i18next';
-import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
 import { useAppSelector } from 'redux/hooks';
+import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import { useTranslation } from 'react-i18next';
+import type { Position } from 'models/Position';
 
 interface BasicDetailsProps {
   position: Position;
@@ -14,6 +15,15 @@ interface BasicDetailsProps {
 
 const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const handleOpenEditModal = () => {
+    setEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
 
   const orgTrees = useAppSelector(selectOrganizationTreeData);
   const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
@@ -46,6 +56,19 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
         }}
       >
         <Typography>{t('position.details')}</Typography>
+        <Button
+          variant="contained"
+          onClick={handleOpenEditModal}
+          sx={{
+            backgroundColor: '#223B7C',
+            color: 'white',
+            fontSize: '0.9rem',
+            padding: '6px 12px',
+            borderRadius: '20px',
+          }}
+        >
+          {t('edit_position.title')}
+        </Button>
       </Box>
       <Box padding={3}>
         <Grid2 container spacing={2} size={12}>
@@ -150,6 +173,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </AccordionDetails>
         </Accordion>
       </Box>
+      <ModifyVirkaModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} />
     </Box>
   );
 };

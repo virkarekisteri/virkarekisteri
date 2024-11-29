@@ -311,11 +311,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Field name="laji">
                       {({ input }) => (
                         <FormControl fullWidth margin="normal">
-                          <InputLabel id="laji-select-label">{`${t('create_position.type')} *`}</InputLabel>
+                          <InputLabel id="type">{`${t('create_position.type')} *`}</InputLabel>
                           <Select
                             required
-                            labelId="laji-select-label"
-                            id="laji-select"
+                            id="type"
                             value={input.value || ''}
                             onChange={(event) => input.onChange(event.target.value)}
                             label={t('create_position.type')}
