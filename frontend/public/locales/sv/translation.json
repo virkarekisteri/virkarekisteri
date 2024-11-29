@@ -66,5 +66,12 @@
     "search": "",
     "reset": "",
     "search_filters": ""
+  },
+  "basic_details": {
+    "vacancy_fill": ""
+  },
+  "position_type": {
+    "post": "",
+    "position": ""
   }
 }
