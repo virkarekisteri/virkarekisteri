@@ -27,7 +27,8 @@ public class UpdatePosition(
     [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
-        string id)
+        string id
+    )
     {
         logger.LogInformation("1/3 : Updating position with ID: {Id}", id);
 
@@ -75,6 +76,4 @@ public class UpdatePosition(
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
     }
-
-
 }
