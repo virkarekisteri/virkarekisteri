@@ -13,7 +13,8 @@ public class UpdatePosition(
     ILogger<UpdatePosition> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IChangeLogRepository changeLogRepository
+    IChangeLogRepository changeLogRepository,
+    IOrganizationTreeRepository organizationTreeRepository
 )
 {
     /// <summary>
@@ -98,9 +99,16 @@ public class UpdatePosition(
         LogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
         existingPosition.Type = updateDto.Type ?? existingPosition.Type;
 
-        LogChange("OrgTreeId", existingPosition.OrgTreeId.ToString(), updateDto.OrgTreeId?.ToString());
-        existingPosition.OrgTreeId = updateDto.OrgTreeId ?? existingPosition.OrgTreeId;
+        if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
+        {
+            var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(existingPosition.OrgTreeId);
+            var newOrganizationName = await organizationTreeRepository.GetOrganizationNameById(updateDto.OrgTreeId.Value);
 
+            LogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
+
+            existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
+        }
+        
         if (!string.IsNullOrEmpty(updateDto.PositionName))
         {
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
