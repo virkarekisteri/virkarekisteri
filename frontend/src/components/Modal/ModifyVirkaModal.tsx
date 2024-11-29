@@ -43,6 +43,7 @@ interface FormValues {
   workExperience?: string;
   details?: string;
   type?: number;
+  DecisionNumber?: string
 }
 
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
@@ -82,6 +83,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         workExperience: values.workExperience,
         details: values.details,
         type: values.type,
+        DecisionNumber: values.DecisionNumber
       };
       await dispatch(updatePosition({ id: position.id, data: updateData }));
       await dispatch(getPositions());
@@ -438,7 +440,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('edit_position.creation_decision_number')}
                       </Typography>
-                      <Field name="creationDecisionNumber">
+                      <Field name="DecisionNumber">
                         {({ input }) => (
                           <TextField
                             {...input}
