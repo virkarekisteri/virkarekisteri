@@ -43,7 +43,7 @@ interface FormValues {
   workExperience?: string;
   details?: string;
   type?: number;
-  DecisionNumber?: string
+  decisionNumber?: string
 }
 
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
@@ -83,7 +83,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         workExperience: values.workExperience,
         details: values.details,
         type: values.type,
-        DecisionNumber: values.DecisionNumber
+        decisionNumber: values.decisionNumber
       };
       await dispatch(updatePosition({ id: position.id, data: updateData }));
       await dispatch(getPositions());
@@ -147,8 +147,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
               workExperience: position.workExperience,
               details: position.details,
               vacancyNumber: position.vacancyNumber,
-              //creationDecisionNumber: position.creationDecisionNumber, <-- this will be DecisionNumber (Nvarchar)
-              //creationDescription: position.creationDescription, <-- this will be DecisionDescription
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -440,14 +438,14 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('edit_position.creation_decision_number')}
                       </Typography>
-                      <Field name="DecisionNumber">
+                      <Field name="decisionNumber">
                         {({ input }) => (
                           <TextField
                             {...input}
                             margin="normal"
                             required
                             fullWidth
-                            id="creationDecisionNumber"
+                            id="decisionNumber"
                             label={t('edit_position.creation_decision_number')}
                           />
                         )}

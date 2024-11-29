@@ -46,27 +46,28 @@ public class UpdatePosition(
         var existingPosition = await positionRepository.GetPosition(positionId);
         if (existingPosition == null)
             return new NotFoundResult();
-        
+
         var changeLogs = new List<ChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
         void LogChange(string field, string? oldValue, string? newValue)
         {
-            if (AreValuesEquivalent(oldValue, newValue)) 
+            if (AreValuesEquivalent(oldValue, newValue))
                 return;
 
-            changeLogs.Add(new ChangeLog
-            {
-                PositionId = positionId,
-                EditedField = field,
-                OldValue = oldValue ?? string.Empty,
-                NewValue = newValue ?? string.Empty,
-                Editor = editor,
-                Timestamp = DateTime.UtcNow,
-                DecisionNumber = decisionNumber
-            });
-            
+            changeLogs.Add(
+                new ChangeLog
+                {
+                    PositionId = positionId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.UtcNow,
+                    DecisionNumber = decisionNumber,
+                }
+            );
         }
 
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
@@ -104,8 +105,12 @@ public class UpdatePosition(
 
         if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
         {
-            var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(existingPosition.OrgTreeId);
-            var newOrganizationName = await organizationTreeRepository.GetOrganizationNameById(updateDto.OrgTreeId.Value);
+            var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
+                existingPosition.OrgTreeId
+            );
+            var newOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
+                updateDto.OrgTreeId.Value
+            );
 
             LogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
 
@@ -124,7 +129,8 @@ public class UpdatePosition(
             var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
 
             // Log the change
-            LogChange("PositionName", oldPositionName, newPositionName);existingPosition.PositionNameId = positionNameId.Value;
+            LogChange("PositionName", oldPositionName, newPositionName);
+            existingPosition.PositionNameId = positionNameId.Value;
             existingPosition.PositionNameId = positionNameId.Value;
         }
 

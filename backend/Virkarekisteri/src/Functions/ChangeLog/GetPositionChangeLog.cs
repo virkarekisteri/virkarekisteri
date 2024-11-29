@@ -7,10 +7,7 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.ChangeLogs;
 
-public class GetPositionChangeLog(
-    ILogger<GetPositionChangeLog> logger,
-    IChangeLogRepository changeLogRepository
-)
+public class GetPositionChangeLog(ILogger<GetPositionChangeLog> logger, IChangeLogRepository changeLogRepository)
 {
     [Function("GetPositionChangeLog")]
     [RequiresReadRole]

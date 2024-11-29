@@ -50,7 +50,8 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
         // if any of the user's roles are higher up in the hierarchy than the required role, we're good
         if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
         {
-            var editor = jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
+            var editor =
+                jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
                 ?? jwtToken?.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
 
             if (!string.IsNullOrEmpty(editor))
@@ -58,7 +59,7 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
                 // Store editor in HttpContext.Items for access in the function
                 httpContext.Items["Editor"] = editor;
             }
-            
+
             return next(context);
         }
 

@@ -22,10 +22,9 @@ public class ChangeLogRepository(VirkarekisteriDb db) : IChangeLogRepository
 
     public async Task<List<ChangeLog>> GetChangeLogsByPositionId(Guid positionId)
     {
-        return await db.ChangeLogs
-            .Where(cl => cl.PositionId == positionId)
+        return await db
+            .ChangeLogs.Where(cl => cl.PositionId == positionId)
             .OrderByDescending(cl => cl.Timestamp)
             .ToListAsync();
     }
 }
-

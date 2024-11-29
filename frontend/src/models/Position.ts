@@ -37,5 +37,5 @@ export interface Position {
 
   vacancyStatus: number;
 
-  DecisionNumber?: string;
+  decisionNumber?: string;
 }
