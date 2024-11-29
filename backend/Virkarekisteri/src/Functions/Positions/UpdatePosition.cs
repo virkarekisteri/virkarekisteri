@@ -49,21 +49,24 @@ public class UpdatePosition(
         
         var changeLogs = new List<ChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+        var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
         void LogChange(string field, string? oldValue, string? newValue)
         {
-            if (oldValue != newValue)
+            if (AreValuesEquivalent(oldValue, newValue)) 
+                return;
+
+            changeLogs.Add(new ChangeLog
             {
-                changeLogs.Add(new ChangeLog
-                {
-                    PositionId = positionId,
-                    EditedField = field,
-                    OldValue = oldValue ?? string.Empty,
-                    NewValue = newValue ?? string.Empty,
-                    Editor = editor,
-                    Timestamp = DateTime.UtcNow
-                });
-            }
+                PositionId = positionId,
+                EditedField = field,
+                OldValue = oldValue ?? string.Empty,
+                NewValue = newValue ?? string.Empty,
+                Editor = editor,
+                Timestamp = DateTime.UtcNow,
+                DecisionNumber = decisionNumber
+            });
+            
         }
 
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
@@ -108,7 +111,7 @@ public class UpdatePosition(
 
             existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
         }
-        
+
         if (!string.IsNullOrEmpty(updateDto.PositionName))
         {
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
@@ -134,5 +137,21 @@ public class UpdatePosition(
 
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
+    }
+
+    private static bool AreValuesEquivalent(string? oldValue, string? newValue)
+    {
+        // Treat null and empty as equivalent
+        if (string.IsNullOrWhiteSpace(oldValue) && string.IsNullOrWhiteSpace(newValue))
+            return true;
+
+        // Normalize numeric strings to a consistent format and compare
+        if (decimal.TryParse(oldValue, out var oldDecimal) && decimal.TryParse(newValue, out var newDecimal))
+        {
+            return oldDecimal == newDecimal;
+        }
+
+        // Fallback to trimmed string comparison for non-numeric values
+        return oldValue?.Trim() == newValue?.Trim();
     }
 }
