@@ -24,7 +24,7 @@ public class UpdatePosition(
     /// No content on success or an error
     /// </returns>
     [Function("UpdatePosition")]
-    [RequiresReadRole] // <--- this should be admin or edit!! For testing purposes, I use lesser role
+    [RequiresEditRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "positions/{id}")] HttpRequest req,
         string id)
