@@ -95,6 +95,9 @@ public class UpdatePositionEmployee(
                     return new BadRequestObjectResult("Position not found");
 
                 position.ReplacementEmployeeId = null;
+
+                // Substitute is removed
+                LogChange("Substitute", existingPositionEmployee.EmployeeName, null);
                 await positionRepository.UpdatePosition(position);
             }
             else
