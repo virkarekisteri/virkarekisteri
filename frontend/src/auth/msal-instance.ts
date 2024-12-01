@@ -39,15 +39,18 @@ export const setupMsalEventListeners = (store: AppStore) => {
 
       // if the refresh token has expired, log out the user
       // a manual re-login is required
-      if (error.name === 'InteractionRequiredAuthError')
+      if (error.name === 'InteractionRequiredAuthError') {
+        console.warn('Refresh token has expired, manual re-login is required, clearing cached user');
         await msalInstance.logoutRedirect({
           account: msalInstance.getActiveAccount(),
           onRedirectNavigate: () => false,
         });
+      }
     }
 
     if (event.eventType === EventType.LOGOUT_SUCCESS) {
       store.dispatch(clearAuthState());
+      await msalInstance.clearCache();
     }
   });
 };
@@ -70,13 +73,8 @@ export const acquireAccessToken = async () =>
  * token might have expired and therefore the whole auth state is invalid.
  */
 export const validateAuthState = async () => {
-  try {
-    if (msalInstance.getActiveAccount()) await acquireAccessToken();
-    return true;
-  } catch (error) {
-    console.error('validateAuthState error', error);
-    return false;
-  }
+  // silently catch any error, the event handler will take care of clearing the auth state
+  if (msalInstance.getActiveAccount()) await acquireAccessToken().catch();
 };
 
 export default msalInstance;

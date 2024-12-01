@@ -142,7 +142,7 @@ const DataTable: React.FC = () => {
               .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesPositionName = positionNameSearch
-          ? (position?.positionName?.name.toLocaleLowerCase().includes(positionNameSearch.toLocaleLowerCase()) ?? false)
+          ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
           : true;
         const matchesPositionType =
           positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
