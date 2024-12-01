@@ -102,7 +102,8 @@
       "Details": "Lisätiedot",
       "Type": "Tyyppi",
       "OrgTreeId": "Kustannuspaikka",
-      "PositionName": "Virkanimike"
+      "PositionName": "Virkanimike",
+      "Substitute": "Sijainen"
     },
     "DecisionNumber": "Päätösnumero"
   },

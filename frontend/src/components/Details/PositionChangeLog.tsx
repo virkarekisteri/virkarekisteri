@@ -85,13 +85,13 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
                                 <Grid2 size={{ xs: 2 }}>
                                     <RenderReadonlyTextField
                                         label={t("change_logs.old_value")}
-                                        value={log.oldValue}
+                                        value={log.oldValue && log.oldValue.trim() !== "" ? log.oldValue : "-"}
                                     />
                                 </Grid2>
                                 <Grid2 size={{ xs: 2 }}>
                                     <RenderReadonlyTextField
                                         label={t("change_logs.new_value")}
-                                        value={log.newValue}
+                                        value={log.newValue && log.newValue.trim() !== "" ? log.newValue : "-"}
                                     />
                                 </Grid2>
                                 <Grid2 size={{ xs: 2 }}>

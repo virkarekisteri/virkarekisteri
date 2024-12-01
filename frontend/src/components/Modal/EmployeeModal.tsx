@@ -41,11 +41,14 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
 
       if (isReplacementToggle) {
         const replacementData = {
-          employeeName: values.replacementEmployeeName,
-          startDate: values.replacementStartDate,
-          endingDate: values.replacementEndingDate,
-          positionId: position.id ?? '',
-          replacement: true,
+          positionEmployee: {
+            employeeName: values.replacementEmployeeName,
+            startDate: values.replacementStartDate,
+            endingDate: values.replacementEndingDate,
+            positionId: position.id ?? '',
+            replacement: true,
+          },
+          decisionNumber: values.decisionNumber,
         };
 
         dispatch(addPositionEmployee(replacementData as any));
@@ -130,6 +133,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
               replacementEndingDate: replacementEmployee?.endingDate
                 ? formatDateForInput(replacementEmployee.endingDate.toString())
                 : null,
+              decisionNumber: ''
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
