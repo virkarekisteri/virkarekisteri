@@ -41,8 +41,6 @@ public class UpdatePositionEmployee(
 
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionEmployeeDto>(req);
 
-        logger.LogInformation("Deserialized DTO: {@UpdateDto}", updateDto);
-
         if (error is not null)
             return error;
 
@@ -97,7 +95,7 @@ public class UpdatePositionEmployee(
                 position.ReplacementEmployeeId = null;
 
                 // Substitute is removed
-                LogChange("Substitute", existingPositionEmployee.EmployeeName, null);
+                LogChange("Substitute", string.Empty, existingPositionEmployee.EmployeeName);
                 await positionRepository.UpdatePosition(position);
             }
             else
