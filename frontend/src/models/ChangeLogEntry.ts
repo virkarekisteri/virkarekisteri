@@ -1,10 +1,10 @@
 export interface ChangeLogEntry {
-    id: string;
-    positionId: string;
-    editedField: string;
-    oldValue: string;
-    newValue: string;
-    editor: string;
-    timestamp: string;
-    decisionNumber: string;
+  id: string;
+  positionId: string;
+  editedField: string;
+  oldValue: string;
+  newValue: string;
+  editor: string;
+  timestamp: string;
+  decisionNumber: string;
 }

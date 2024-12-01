@@ -43,7 +43,7 @@ interface FormValues {
   workExperience?: string;
   details?: string;
   type?: number;
-  decisionNumber?: string
+  decisionNumber?: string;
 }
 
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
@@ -83,7 +83,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         workExperience: values.workExperience,
         details: values.details,
         type: values.type,
-        decisionNumber: values.decisionNumber
+        decisionNumber: values.decisionNumber,
       };
       await dispatch(updatePosition({ id: position.id, data: updateData }));
       await dispatch(getPositions());

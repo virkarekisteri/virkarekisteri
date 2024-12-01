@@ -68,7 +68,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
         dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
       } else {
         delete data.decisionNumber;
-        dispatch(addPositionEmployee({ positionEmployee: data, decisionNumber: "" }));
+        dispatch(addPositionEmployee({ positionEmployee: data, decisionNumber: '' }));
       }
 
       onClose();
@@ -134,7 +134,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
               replacementEndingDate: replacementEmployee?.endingDate
                 ? formatDateForInput(replacementEmployee.endingDate.toString())
                 : null,
-              decisionNumber: ''
+              decisionNumber: '',
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -184,8 +184,6 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                 </Grid2>
                 {isEmployeeSet && (
                   <>
-
-
                     <Field name="isReplacement" type="checkbox">
                       {({ input }) => (
                         <FormControlLabel
@@ -208,9 +206,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                   </>
                 )}
 
-                {isReplacementToggle &&
-                  <ReplacementAccordion />
-                }
+                {isReplacementToggle && <ReplacementAccordion />}
                 <Box
                   sx={{
                     height: '2px',
