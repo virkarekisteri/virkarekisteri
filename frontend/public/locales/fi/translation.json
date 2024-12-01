@@ -103,6 +103,12 @@
     "creation_description": "Päätöksen selite"
   },
   "mass_changes": {
-    "make_changes": "Tee massamuutoksia"
+    "make_changes": "Tee massamuutoksia",
+    "make_change": "Tee muutos",
+    "edit_field": "Muokattava kenttä",
+    "field_type": "Kentän tyyppi",
+    "new_value": "Uusi haluttu arvo",
+    "changes_executed": "Muutokset suoritettu onnistuneesti.",
+    "update_value_message": "Kentän arvo päivitetään jokaiselle valitulle viralle"
   }
 }

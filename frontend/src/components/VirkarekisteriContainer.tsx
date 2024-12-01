@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid2, Snackbar, SnackbarCloseReason } from '@mui/material';
+import type { SnackbarCloseReason } from '@mui/material';
+import { Box, Button, CircularProgress, Grid2, Snackbar } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
 import MassChangesModal from './Modal/MassChangesModal';
@@ -45,10 +46,7 @@ const VirkarekisterContainer = () => {
     setOpenSnackbar(true);
   };
 
-  const handleCloseSnackbar = (
-    _event: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
-  ) => {
+  const handleCloseSnackbar = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -65,7 +63,7 @@ const VirkarekisterContainer = () => {
         <MassChangesModal open={openMassModal} handleClose={handleCloseMassModal} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'} sx={{ gap: 5 }}>
-          <Button
+            <Button
               variant="contained"
               onClick={() => {
                 handleOpenMassModal();
@@ -94,11 +92,11 @@ const VirkarekisterContainer = () => {
               {t('mass_changes.make_changes')}
             </Button>
             <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={openSnackbar}
-            autoHideDuration={6000}
-            onClose={handleCloseSnackbar}
-            message="Kentän arvo päivitetään jokaiselle valitulle viralle"
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={openSnackbar}
+              autoHideDuration={6000}
+              onClose={handleCloseSnackbar}
+              message={t('mass_changes.update_value_message')}
             />
             <Button
               variant="contained"

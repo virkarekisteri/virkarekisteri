@@ -101,5 +101,14 @@
     "eligibility": "",
     "creation_decision_number": "",
     "creation_description": ""
+  },
+  "mass_changes": {
+    "make_changes": "",
+    "make_change": "",
+    "edit_field": "",
+    "field_type": "",
+    "new_value": "",
+    "changes_executed": "",
+    "update_value_message": ""
   }
 }
