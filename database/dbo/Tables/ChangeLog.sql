@@ -8,6 +8,6 @@ CREATE TABLE [dbo].[ChangeLog] (
     [Timestamp] DATETIME DEFAULT GETDATE() NOT NULL,
     [PaatosNumero] NVARCHAR(255) NOT NULL,
     CONSTRAINT FK_ChangeLog_Position FOREIGN KEY (VirkaId) REFERENCES Positions (Id)
-    );
+);
 
 GO
