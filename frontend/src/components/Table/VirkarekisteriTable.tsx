@@ -152,7 +152,6 @@ const DataTable: React.FC = () => {
           matchesVakanssinumero &&
           matchesSijoituspaikka &&
           matchesPositionName &&
-          matchesPositionName &&
           matchesPositionType &&
           matchesVacancyStatus
         );

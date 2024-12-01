@@ -40,15 +40,15 @@
   "employee": {
     "employee_name": "Viranhaltijan nimi",
     "details": "Viranhaltijan tiedot",
-    "start_date": "Virkaan asettamispäivämäärä",
-    "ending_date": "Virkasopimuksen päättämispäivämäärä",
+    "start_date": "Virkaan asettamispäivä",
+    "ending_date": "Virkasopimuksen päättämispäivä",
     "no_end_date": "Ei määräaikaa",
     "save": "Tallenna",
     "replacement": "Sijaisuus",
     "replacement_active": "Sijaisuus voimassa",
     "replacement_details": "Sijaisuuden tiedot",
-    "replacement_start_date": "Sijaisuuden alkamispäivämäärä",
-    "replacement_end_date": "Sijaisuuden päättymispäivämäärä",
+    "replacement_start_date": "Sijaisuuden alkamispäivä",
+    "replacement_end_date": "Sijaisuuden päättymispäivä",
     "replacement_name": "Sijaisen nimi"
   },
   "table": {

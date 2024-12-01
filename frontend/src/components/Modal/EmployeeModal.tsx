@@ -34,8 +34,6 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
   const handleSubmit = async (values: any) => {
     try {
       const data = { ...values, positionId: position.id };
-      console.log(data);
-      console.log(values);
 
       if (values.isReplacement) {
         const replacementData = {
@@ -45,27 +43,23 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
           positionId: position.id ?? '',
           replacement: true,
         };
-        delete data.replacementEmployeeName;
-        delete data.replacementStartDate;
-        delete data.replacementEndingDate;
+
         dispatch(addPositionEmployee(replacementData as any));
+
         if (employee?.id) {
           dispatch(updatePositionEmployee({ ...employee, inLeave: true }));
         }
         return;
-      } else {
-        // "Deleting" the replacement employee
-        if (employee?.id) {
-          dispatch(updatePositionEmployee({ ...employee, inLeave: false }));
-        }
       }
+
       delete data.replacementEmployeeName;
       delete data.replacementStartDate;
       delete data.replacementEndingDate;
+
       if (isEmployeeSet) {
-        dispatch(updatePositionEmployee({ ...employee, ...values }));
+        dispatch(updatePositionEmployee({ ...employee, ...values, inLeave: false }));
       } else {
-        dispatch(addPositionEmployee({ ...data }));
+        dispatch(addPositionEmployee(data));
       }
 
       onClose();

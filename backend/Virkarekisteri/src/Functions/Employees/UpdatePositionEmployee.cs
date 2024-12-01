@@ -43,9 +43,6 @@ public class UpdatePositionEmployee(
         if (error is not null)
             return error;
 
-        if (requestEmployee == null)
-            return new BadRequestObjectResult("Invalid request body");
-
         var existingPositionEmployee = await positionEmployeeRepository.GetPositionEmployee(positionEmployeeId);
 
         if (existingPositionEmployee == null)

@@ -105,32 +105,30 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid2 container spacing={2} sx={{ padding: 2, border: '1px solid #ccc', background: '#F5F5F5' }}>
-                <>
-                  <Grid2 size={12} container spacing={2} alignItems="center">
-                    <Grid2 size={4}>
-                      <RenderReadonlyTextField
-                        label={t('employee.employee_name')}
-                        value={positionEmployee.employeeName}
-                      />
-                    </Grid2>
-                    <Grid2 size={4}>
-                      <RenderReadonlyTextField
-                        label={t('employee.start_date')}
-                        value={formatDate(positionEmployee.startDate.toString())}
-                      />
-                    </Grid2>
-                    <Grid2 size={4}>
-                      <RenderReadonlyTextField
-                        label={t('employee.ending_date')}
-                        value={
-                          positionEmployee.endingDate
-                            ? formatDate(positionEmployee.endingDate?.toString())
-                            : t('employee.no_end_date')
-                        }
-                      />
-                    </Grid2>
+                <Grid2 size={12} container spacing={2} alignItems="center">
+                  <Grid2 size={4}>
+                    <RenderReadonlyTextField
+                      label={t('employee.employee_name')}
+                      value={positionEmployee.employeeName}
+                    />
                   </Grid2>
-                </>
+                  <Grid2 size={4}>
+                    <RenderReadonlyTextField
+                      label={t('employee.start_date')}
+                      value={formatDate(positionEmployee.startDate.toString())}
+                    />
+                  </Grid2>
+                  <Grid2 size={4}>
+                    <RenderReadonlyTextField
+                      label={t('employee.ending_date')}
+                      value={
+                        positionEmployee.endingDate
+                          ? formatDate(positionEmployee.endingDate?.toString())
+                          : t('employee.no_end_date')
+                      }
+                    />
+                  </Grid2>
+                </Grid2>
               </Grid2>
             </AccordionDetails>
           </Accordion>
