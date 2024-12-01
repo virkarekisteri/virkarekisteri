@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, IconButton, Typography, Modal, Grid2, FormControlLabel, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
@@ -29,7 +29,11 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [isReplacementToggle, setIsReplacementToggle] = useState(!!replacementEmployee?.replacement);
+  const [isReplacementToggle, setIsReplacementToggle] = useState(false);
+
+  useEffect(() => {
+    setIsReplacementToggle(replacementEmployee?.replacement ?? false);
+  }, [replacementEmployee]);
 
   const handleSubmit = async (values: any) => {
     try {
@@ -55,9 +59,10 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
       delete data.replacementEmployeeName;
       delete data.replacementStartDate;
       delete data.replacementEndingDate;
+      delete data.isReplacement;
 
       if (isEmployeeSet) {
-        dispatch(updatePositionEmployee({ ...employee, ...values, inLeave: false }));
+        dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
       } else {
         dispatch(addPositionEmployee(data));
       }
@@ -179,7 +184,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                         control={
                           <Switch
                             {...input}
-                            checked={input.value}
+                            checked={isReplacementToggle}
                             onChange={(event) => {
                               input.onChange(event);
                               setIsReplacementToggle(event.target.checked);

@@ -109,22 +109,34 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.employee_name')}
-                      value={positionEmployee.employeeName}
+                      value={
+                        isReplacementActive && replacementEmployee
+                          ? replacementEmployee.employeeName
+                          : positionEmployee.employeeName
+                      }
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.start_date')}
-                      value={formatDate(positionEmployee.startDate.toString())}
+                      value={
+                        isReplacementActive && replacementEmployee
+                          ? formatDate(replacementEmployee.startDate.toString())
+                          : formatDate(positionEmployee.startDate.toString())
+                      }
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.ending_date')}
                       value={
-                        positionEmployee.endingDate
-                          ? formatDate(positionEmployee.endingDate?.toString())
-                          : t('employee.no_end_date')
+                        isReplacementActive && replacementEmployee
+                          ? replacementEmployee.endingDate
+                            ? formatDate(replacementEmployee.endingDate.toString())
+                            : t('employee.no_end_date')
+                          : positionEmployee.endingDate
+                            ? formatDate(positionEmployee.endingDate?.toString())
+                            : t('employee.no_end_date')
                       }
                     />
                   </Grid2>
