@@ -56,6 +56,7 @@ public class UpdatePosition(
 
         void LogChange(string field, string? oldValue, string? newValue)
         {
+            // No need to log changes if there are none and the values are the same
             if (AreValuesEquivalent(oldValue, newValue))
                 return;
 
@@ -147,17 +148,25 @@ public class UpdatePosition(
 
     private static bool AreValuesEquivalent(string? oldValue, string? newValue)
     {
-        // Treat null and empty as equivalent
-        if (string.IsNullOrWhiteSpace(oldValue) && string.IsNullOrWhiteSpace(newValue))
+        // Normalize null/empty values
+        oldValue = string.IsNullOrWhiteSpace(oldValue) ? null : oldValue.Trim();
+        newValue = string.IsNullOrWhiteSpace(newValue) ? null : newValue.Trim();
+
+        // Skip if both are null/empty
+        if (oldValue == null && newValue == null)
             return true;
 
-        // Normalize numeric strings to a consistent format and compare
-        if (decimal.TryParse(oldValue, out var oldDecimal) && decimal.TryParse(newValue, out var newDecimal))
-        {
-            return oldDecimal == newDecimal;
-        }
+        // Skip if both values are identical
+        if (oldValue == newValue)
+            return true;
 
-        // Fallback to trimmed string comparison for non-numeric values
-        return oldValue?.Trim() == newValue?.Trim();
+        // Treat "0,00" or "0" as equivalent to null/empty
+        var isZeroOrEmpty = (string? value) =>
+            value == null || value == "0,00" || value == "0";
+
+        if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
+            return true;
+
+        return false;
     }
 }
