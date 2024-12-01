@@ -37,10 +37,16 @@ public class UpdatePosition(
         if (!Guid.TryParse(id, out var positionId))
             return new BadRequestObjectResult($"Invalid ID format: {id}");
 
+        var rawBody = await new StreamReader(req.Body).ReadToEndAsync();
+        logger.LogInformation("Raw JSON Body: {Body}", rawBody);
+
         // Deserialize payload into UpdatePositionDto
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionDto>(req);
+        
         if (error != null)
             return error;
+        
+        logger.LogInformation("Deserialized DTO: {@UpdateDto}", updateDto);
 
         // Fetch the existing position from the database
         var existingPosition = await positionRepository.GetPosition(positionId);
@@ -117,20 +123,17 @@ public class UpdatePosition(
             existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
         }
 
-        if (!string.IsNullOrEmpty(updateDto.PositionName))
+        if (updateDto.PositionName?.Name is not null)
         {
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
+            var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName.Name);
             if (positionNameId == null)
             {
-                // Create a new PositionName if it doesn't exist
-                positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName);
+                positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName.Name);
             }
             var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
             var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
 
-            // Log the change
             LogChange("PositionName", oldPositionName, newPositionName);
-            existingPosition.PositionNameId = positionNameId.Value;
             existingPosition.PositionNameId = positionNameId.Value;
         }
 

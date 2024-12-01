@@ -39,7 +39,13 @@ public class UpdatePositionEmployee(
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionEmployeeId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
+        var rawBody = await new StreamReader(req.Body).ReadToEndAsync();
+        logger.LogInformation("Raw JSON Body: {Body}", rawBody);
+
+
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionEmployeeDto>(req);
+
+        logger.LogInformation("Deserialized DTO: {@UpdateDto}", updateDto);
 
         if (error is not null)
             return error;
@@ -87,6 +93,7 @@ public class UpdatePositionEmployee(
         LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), updateDto.PositionId?.ToString());
         LogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
 
+        /*
         if (updateDto.InLeave.HasValue && !updateDto.InLeave.Value && existingPositionEmployee.InLeave)
         {
             if (updateDto.PositionId.HasValue)
@@ -102,7 +109,7 @@ public class UpdatePositionEmployee(
             {
                 return new BadRequestObjectResult("PositionId is required");
             }
-        }
+        }*/
         
         // Update the existing position employee with the new values
         existingPositionEmployee.StartDate = updateDto.StartDate ?? existingPositionEmployee.StartDate;
