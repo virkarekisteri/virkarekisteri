@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import { Box, TextField, Button, IconButton, Typography, Modal, Grid2 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, TextField, Button, IconButton, Typography, Modal, Grid2, FormControlLabel, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import { useAppDispatch } from 'redux/hooks';
 import { addPositionEmployee, updatePositionEmployee } from 'redux/slices/position-employee-slice';
 import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
-import { fetchPosition } from 'redux/slices/position-slice';
+import ReplacementAccordion from './ReplacementAccordion';
 
 interface AddEmployeeModalProps {
   open: boolean;
@@ -16,26 +16,62 @@ interface AddEmployeeModalProps {
   isEmployeeSet?: boolean;
   position: Position;
   employee?: PositionEmployee;
+  replacementEmployee?: PositionEmployee;
 }
 
-const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEmployeeSet, position, employee }) => {
+const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
+  open,
+  onClose,
+  isEmployeeSet,
+  position,
+  employee,
+  replacementEmployee,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const [isReplacementToggle, setIsReplacementToggle] = useState(false);
+
+  useEffect(() => {
+    setIsReplacementToggle(replacementEmployee?.replacement ?? false);
+  }, [replacementEmployee]);
 
   const handleSubmit = async (values: any) => {
     try {
       const data = { ...values, positionId: position.id };
+
+      if (values.isReplacement) {
+        const replacementData = {
+          employeeName: values.replacementEmployeeName,
+          startDate: values.replacementStartDate,
+          endingDate: values.replacementEndingDate,
+          positionId: position.id ?? '',
+          replacement: true,
+        };
+
+        dispatch(addPositionEmployee(replacementData as any));
+
+        if (employee?.id) {
+          dispatch(updatePositionEmployee({ ...employee, inLeave: true }));
+        }
+        return;
+      }
+
+      delete data.replacementEmployeeName;
+      delete data.replacementStartDate;
+      delete data.replacementEndingDate;
+      delete data.isReplacement;
+
       if (isEmployeeSet) {
-        dispatch(updatePositionEmployee({ ...employee, ...values }));
+        dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
       } else {
         dispatch(addPositionEmployee(data));
       }
-      if (position.id) {
-        dispatch(fetchPosition(position.id));
-      }
+
       onClose();
     } catch (error) {
       console.error(error);
+    } finally {
+      onClose();
     }
   };
 
@@ -84,9 +120,16 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
           <Form
             onSubmit={handleSubmit}
             initialValues={{
-              ...employee,
+              employeeName: employee?.employeeName,
               startDate: employee?.startDate ? formatDateForInput(employee.startDate.toString()) : 'No start date',
               endingDate: employee?.endingDate ? formatDateForInput(employee.endingDate.toString()) : null,
+              replacementEmployeeName: replacementEmployee?.employeeName,
+              replacementStartDate: replacementEmployee?.startDate
+                ? formatDateForInput(replacementEmployee.startDate.toString())
+                : null,
+              replacementEndingDate: replacementEmployee?.endingDate
+                ? formatDateForInput(replacementEmployee.endingDate.toString())
+                : null,
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -134,6 +177,29 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
                     </Field>
                   </Grid2>
                 </Grid2>
+                {isEmployeeSet && (
+                  <Field name="isReplacement" type="checkbox">
+                    {({ input }) => (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...input}
+                            checked={isReplacementToggle}
+                            onChange={(event) => {
+                              input.onChange(event);
+                              setIsReplacementToggle(event.target.checked);
+                            }}
+                            name="isReplacement"
+                            color="primary"
+                          />
+                        }
+                        label={t('employee.replacement')}
+                      />
+                    )}
+                  </Field>
+                )}
+
+                {isReplacementToggle && <ReplacementAccordion />}
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('employee.save')}
@@ -148,4 +214,4 @@ const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({ open, onClose, isEm
   );
 };
 
-export default AddEmployeeModal;
+export default EmployeeModal;

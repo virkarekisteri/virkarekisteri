@@ -9,18 +9,18 @@ using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Tests.src.Positions;
+namespace Virkarekisteri.Tests.Positions;
 
 public class UpdatePositionTests
 {
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly Mock<IPositionNameRepository> _positionNameRepositoryMock;
-    private readonly ILogger<CreatePosition> _logger;
+    private readonly ILogger<UpdatePosition> _logger;
     private readonly UpdatePosition _updatePosition;
 
     public UpdatePositionTests()
     {
-        _logger = Mock.Of<ILogger<CreatePosition>>();
+        _logger = Mock.Of<ILogger<UpdatePosition>>();
         _positionRepositoryMock = new Mock<IPositionRepository>();
         _positionNameRepositoryMock = new Mock<IPositionNameRepository>();
         _updatePosition = new UpdatePosition(

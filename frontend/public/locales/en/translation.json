@@ -43,7 +43,13 @@
     "start_date": "Start date",
     "ending_date": "Ending date",
     "no_end_date": "No end date",
-    "save": "Save"
+    "save": "Save",
+    "replacement": "Replacement",
+    "replacement_active": "Replacement active",
+    "replacement_details": "Replacement details",
+    "replacement_start_date": "Replacement start date",
+    "replacement_end_date": "Replacement end date",
+    "replacement_name": "Name of replacement"
   },
   "table": {
     "created_at": "Created at",
