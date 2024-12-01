@@ -55,7 +55,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
   }, [dispatch, open]);
 
   const [selectedOption, setSelectedOption] = useState<string | null>('');
-  const [isFieldEnabled, setIsFieldEnabled] = useState(false);
+  // const [isFieldEnabled, setIsFieldEnabled] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const onSubmit = async () => {
@@ -124,7 +124,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
                       includeInputInList
                       onChange={(_event, newValue) => {
                         setSelectedOption(newValue);
-                        setIsFieldEnabled(Boolean(newValue));
+                        // setIsFieldEnabled(Boolean(newValue));
                       }}
                       renderInput={(params) => (
                         <TextField
