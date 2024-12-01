@@ -101,5 +101,8 @@
     "eligibility": "Kelpoisuusehdot",
     "creation_decision_number": "Päätösnumero",
     "creation_description": "Päätöksen selite"
+  },
+  "mass_changes": {
+    "make_changes": "Tee massamuutoksia"
   }
 }
