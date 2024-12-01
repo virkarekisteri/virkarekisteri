@@ -39,7 +39,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
     try {
       const data = { ...values, positionId: position.id };
 
-      if (values.isReplacement) {
+      if (isReplacementToggle) {
         const replacementData = {
           employeeName: values.replacementEmployeeName,
           startDate: values.replacementStartDate,
@@ -186,7 +186,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                         width: '100%',
                         my: 0,
                         marginTop: 2,
-                        marginBottom: 2
+                        marginBottom: 2,
                       }}
                     />
                     <Grid2 container spacing={2} size={12} justifyContent="left">

@@ -37,15 +37,12 @@ public class UpdatePosition(
         if (!Guid.TryParse(id, out var positionId))
             return new BadRequestObjectResult($"Invalid ID format: {id}");
 
-        var rawBody = await new StreamReader(req.Body).ReadToEndAsync();
-        logger.LogInformation("Raw JSON Body: {Body}", rawBody);
-
         // Deserialize payload into UpdatePositionDto
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionDto>(req);
-        
+
         if (error != null)
             return error;
-        
+
         logger.LogInformation("Deserialized DTO: {@UpdateDto}", updateDto);
 
         // Fetch the existing position from the database
