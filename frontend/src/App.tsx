@@ -1,5 +1,5 @@
 import VirkarekisterContainer from 'components/VirkarekisteriContainer';
-import msalInstance, { validateAuthState } from './auth/msal-instance';
+import { validateAuthState } from './auth/msal-instance';
 import { useEffect, useState } from 'react';
 
 const App = () => {
@@ -7,14 +7,7 @@ const App = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (!(await validateAuthState()))
-        // if the auth state is "broken" (refresh token has expired or there is some unknown unexpected error),
-        // silently "log out" (more accurately, tell MSAL that it needs to clear its state) the user
-        await msalInstance.logoutRedirect({
-          account: msalInstance.getActiveAccount(),
-          onRedirectNavigate: () => false,
-        });
-
+      await validateAuthState();
       setAppIsReady(true);
     };
 
@@ -25,4 +18,5 @@ const App = () => {
 
   return <VirkarekisterContainer />;
 };
+
 export default App;

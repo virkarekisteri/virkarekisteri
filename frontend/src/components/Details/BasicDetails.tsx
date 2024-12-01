@@ -35,8 +35,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   };
 
   const positionTypeTextMap: Record<number, string> = {
-    2: t('position_type.type_post'),
-    1: t('position_type.type_position'),
+    2: t('position_type.post'),
+    1: t('position_type.position'),
   };
 
   return (

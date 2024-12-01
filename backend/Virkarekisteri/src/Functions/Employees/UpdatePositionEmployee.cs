@@ -13,7 +13,8 @@ namespace Virkarekisteri.Functions.Employees;
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
     IPositionEmployeeRepository positionEmployeeRepository,
-    IChangeLogRepository changeLogRepository
+    IChangeLogRepository changeLogRepository,
+    IPositionRepository positionRepository
 )
 {
     /// <summary>
@@ -86,11 +87,30 @@ public class UpdatePositionEmployee(
         LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), updateDto.PositionId?.ToString());
         LogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
 
+        if (updateDto.InLeave.HasValue && !updateDto.InLeave.Value && existingPositionEmployee.InLeave)
+        {
+            if (updateDto.PositionId.HasValue)
+            {
+                var position = await positionRepository.GetPosition(updateDto.PositionId.Value);
+                if (position == null)
+                    return new BadRequestObjectResult("Position not found");
+
+                position.ReplacementEmployeeId = null;
+                await positionRepository.UpdatePosition(position);
+            }
+            else
+            {
+                return new BadRequestObjectResult("PositionId is required");
+            }
+        }
+        
         // Update the existing position employee with the new values
         existingPositionEmployee.StartDate = updateDto.StartDate ?? existingPositionEmployee.StartDate;
         existingPositionEmployee.EndingDate = updateDto.EndingDate ?? existingPositionEmployee.EndingDate;
         existingPositionEmployee.PositionId = updateDto.PositionId ?? existingPositionEmployee.PositionId;
         existingPositionEmployee.EmployeeName = updateDto.EmployeeName ?? existingPositionEmployee.EmployeeName;
+        existingPositionEmployee.Replacement = updateDto.Replacement ?? existingPositionEmployee.Replacement;
+        existingPositionEmployee.InLeave = updateDto.InLeave ?? existingPositionEmployee.InLeave;
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 

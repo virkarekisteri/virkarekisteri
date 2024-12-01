@@ -72,6 +72,9 @@ public class Position
     [Column("PositionEmployeeId")]
     public Guid? PositionEmployeeId { get; set; }
 
+    [Column("ReplacementEmployeeId")]
+    public Guid? ReplacementEmployeeId { get; set; }
+
     [Column("VakanssinTila")]
     public int VacancyStatus
     {

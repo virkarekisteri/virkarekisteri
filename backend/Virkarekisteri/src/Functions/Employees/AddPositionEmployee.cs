@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
@@ -30,31 +29,30 @@ public class AddPositionEmployee(
             return error;
 
         if (requestPosition.StartDate > requestPosition.EndingDate)
-        {
             return new BadRequestObjectResult("Ending date must be after the starting date.");
-        }
 
-        if (await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate))
-        {
+        // a position employee can only be added to a filled position if it's a replacement employee
+        if (
+            !requestPosition.Replacement
+            && await repository.IsPositionFilled(requestPosition.PositionId, requestPosition.StartDate)
+        )
             return new BadRequestObjectResult("Position is already filled.");
-        }
 
         if (!await repository.IsPositionValid(requestPosition.PositionId, requestPosition.StartDate))
-        {
             return new BadRequestObjectResult("Position is not currently valid.");
-        }
 
         var createdPositionEmployee = await repository.CreatePositionEmployee(requestPosition);
-
         var position = await positionRepository.GetPosition(requestPosition.PositionId);
 
-        if (position != null)
-        {
+        if (position == null)
+            return new OkObjectResult(createdPositionEmployee);
+
+        if (requestPosition.Replacement)
+            position.ReplacementEmployeeId = createdPositionEmployee.Id;
+        else
             position.PositionEmployeeId = createdPositionEmployee.Id;
 
-            await positionRepository.UpdatePosition(position);
-        }
-        var position2 = await positionRepository.GetPosition(requestPosition.PositionId);
+        await positionRepository.UpdatePosition(position);
 
         return new OkObjectResult(createdPositionEmployee);
     }

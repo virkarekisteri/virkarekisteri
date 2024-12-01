@@ -16,6 +16,11 @@ import {
   TextField,
   Typography,
   TablePagination,
+  Grid2,
+  FormControl,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -32,7 +37,10 @@ const DataTable: React.FC = () => {
   const dataFromBackend = useAppSelector(selectPositionData);
   const { t } = useTranslation();
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
-  const [placementLocationStateSearch, setPlacementLocationSearch] = useState('');
+  const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
+  const [positionNameSearch, setPositionNameSearch] = useState('');
+  const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
+  const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [filteredData, setFilteredData] = useState(dataFromBackend);
   const [page, setPage] = useState(0);
@@ -126,12 +134,27 @@ const DataTable: React.FC = () => {
     const filtered = dataFromBackend.filter((position) => {
       if (position) {
         const matchesVakanssinumero = vacancyNumberSearch
-          ? (position.vacancyNumber?.includes(vacancyNumberSearch) ?? false)
+          ? (position.vacancyNumber?.toLocaleLowerCase().includes(vacancyNumberSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesSijoituspaikka = placementLocationStateSearch
-          ? (position?.placementLocation?.includes(placementLocationStateSearch) ?? false)
+          ? (position?.placementLocation
+              ?.toLocaleLowerCase()
+              .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
-        return matchesVakanssinumero && matchesSijoituspaikka;
+        const matchesPositionName = positionNameSearch
+          ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
+          : true;
+        const matchesPositionType =
+          positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
+        const matchesVacancyStatus =
+          vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
+        return (
+          matchesVakanssinumero &&
+          matchesSijoituspaikka &&
+          matchesPositionName &&
+          matchesPositionType &&
+          matchesVacancyStatus
+        );
       }
     });
     setFilteredData(filtered);
@@ -139,8 +162,12 @@ const DataTable: React.FC = () => {
 
   const handleReset = () => {
     setVacancyNumberSearch('');
-    setPlacementLocationSearch('');
+    setPlacementLocationStateSearch('');
+    setPositionNameSearch('');
+    setPositionTypeSearch([]);
+    setVacancyStatusSearch([]);
     setFilteredData(dataFromBackend);
+    setPage(0);
   };
 
   const handleChangePage = (_event: unknown, newPage: number) => {
@@ -150,6 +177,20 @@ const DataTable: React.FC = () => {
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset to first page on rows per page change
+  };
+
+  const handleVacancyStatusChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setVacancyStatusSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
+  };
+
+  const handlePositionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPositionTypeSearch((prev: string[]) =>
+      prev.includes(value) ? prev.filter((status) => status !== value) : ([...prev, value] as string[]),
+    );
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<Position>(
@@ -200,27 +241,109 @@ const DataTable: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Box sx={{ display: 'flex', gap: 2, flex: 1 }}>
-                <TextField
-                  label={t('table.vacancy_number')}
-                  value={vacancyNumberSearch}
-                  onChange={(e) => setVacancyNumberSearch(e.target.value)}
-                  size="small"
-                  sx={{
-                    flexShrink: 0,
-                  }}
-                  slotProps={{ htmlInput: { maxLength: 8 } }}
-                />
-                <TextField
-                  label={t('table.placement_location')}
-                  value={placementLocationStateSearch}
-                  onChange={(e) => setPlacementLocationSearch(e.target.value)}
-                  size="small"
-                  sx={{
-                    flexShrink: 0,
-                  }}
-                />
-              </Box>
+              <Grid2 container spacing={2}>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_number')}
+                  </Typography>
+                  <TextField
+                    label={t('table.vacancy_number')}
+                    value={vacancyNumberSearch}
+                    onChange={(e) => setVacancyNumberSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.placement_location')}
+                  </Typography>
+                  <TextField
+                    label={t('table.placement_location')}
+                    value={placementLocationStateSearch}
+                    onChange={(e) => setPlacementLocationStateSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.position_name')}
+                  </Typography>
+                  <TextField
+                    label={t('table.position_name')}
+                    value={positionNameSearch}
+                    onChange={(e) => setPositionNameSearch(e.target.value)}
+                    fullWidth
+                  />
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.type')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('0')}
+                            onChange={handlePositionTypeChange}
+                            value="0"
+                          />
+                        }
+                        label={t('search_filter.virka')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={positionTypeSearch.includes('1')}
+                            onChange={handlePositionTypeChange}
+                            value="1"
+                          />
+                        }
+                        label={t('search_filter.toimi')}
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+                <Grid2 size={3}>
+                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                    {t('table.vacancy_status')}
+                  </Typography>
+                  <FormControl component="fieldset" fullWidth>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('0')}
+                            onChange={handleVacancyStatusChange}
+                            value="0"
+                          />
+                        }
+                        label={t('vacancy_statuses.abolished')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('1')}
+                            onChange={handleVacancyStatusChange}
+                            value="1"
+                          />
+                        }
+                        label={t('vacancy_statuses.established')}
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={vacancyStatusSearch.includes('2')}
+                            onChange={handleVacancyStatusChange}
+                            value="2"
+                          />
+                        }
+                        label={t('vacancy_statuses.active')}
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid2>
+              </Grid2>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Button
                   variant="contained"

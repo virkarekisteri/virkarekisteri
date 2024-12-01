@@ -23,4 +23,14 @@ public class PositionEmployee
     [MaxLength(255)]
     [Column("Nimi")]
     public required string EmployeeName { get; set; }
+
+    [MaxLength(255)]
+    [Column("Sahkoposti")]
+    public string? Email { get; set; }
+
+    [Column("Replacement")]
+    public bool Replacement { get; set; }
+
+    [Column("InLeave")]
+    public bool InLeave { get; set; }
 }

@@ -43,7 +43,13 @@
     "start_date": "Start date",
     "ending_date": "Ending date",
     "no_end_date": "No end date",
-    "save": "Save"
+    "save": "Save",
+    "replacement": "Replacement",
+    "replacement_active": "Replacement active",
+    "replacement_details": "Replacement details",
+    "replacement_start_date": "Replacement start date",
+    "replacement_end_date": "Replacement end date",
+    "replacement_name": "Name of replacement"
   },
   "table": {
     "created_at": "Created at",
@@ -54,8 +60,8 @@
     "vacancy_size": "Vacancy size",
     "vacancy_status": "Vacancy status",
     "rows_per_page": "Rows per page",
-    "position_name": "Position name",
-    "organization_tree": "Organization tree"
+    "organization_tree": "Organization tree",
+    "position_name": "Position name"
   },
   "user_menu": {
     "logout": "Log Out"
@@ -68,7 +74,9 @@
   "search_filter": {
     "search": "Search",
     "reset": "Reset search terms",
-    "search_filters": "Search filters"
+    "search_filters": "Search filters",
+    "virka": "Position",
+    "toimi": "Post"
   },
   "change_logs": {
     "title": "History of changes",

@@ -43,7 +43,13 @@
     "start_date": "",
     "ending_date": "",
     "no_end_date": "",
-    "save": ""
+    "save": "",
+    "replacement": "",
+    "replacement_active": "",
+    "replacement_details": "",
+    "replacement_start_date": "",
+    "replacement_end_date": "",
+    "replacement_name": ""
   },
   "table": {
     "created_at": "",
@@ -52,10 +58,10 @@
     "vacancy_size": "",
     "rows_per_page": "",
     "vacancy_number": "",
-    "position_name": "",
     "organization_tree": "",
     "placement_location": "",
-    "vacancy_status": ""
+    "vacancy_status": "",
+    "position_name": ""
   },
   "user_menu": {
     "logout": ""
@@ -68,7 +74,9 @@
   "search_filter": {
     "search": "",
     "reset": "",
-    "search_filters": ""
+    "search_filters": "",
+    "virka": "",
+    "toimi": ""
   },
   "change_logs": {
     "title": "",

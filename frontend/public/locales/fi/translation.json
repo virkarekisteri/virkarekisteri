@@ -40,10 +40,16 @@
   "employee": {
     "employee_name": "Viranhaltijan nimi",
     "details": "Viranhaltijan tiedot",
-    "start_date": "Virkaan asettamispäivämäärä",
-    "ending_date": "Virkasopimuksen päättämispäivämäärä",
+    "start_date": "Virkaan asettamispäivä",
+    "ending_date": "Virkasopimuksen päättämispäivä",
     "no_end_date": "Ei määräaikaa",
-    "save": "Tallenna"
+    "save": "Tallenna",
+    "replacement": "Sijaisuus",
+    "replacement_active": "Sijaisuus voimassa",
+    "replacement_details": "Sijaisuuden tiedot",
+    "replacement_start_date": "Sijaisuuden alkamispäivä",
+    "replacement_end_date": "Sijaisuuden päättymispäivä",
+    "replacement_name": "Sijaisen nimi"
   },
   "table": {
     "created_at": "Perustamisajankohta",
@@ -68,7 +74,9 @@
   "search_filter": {
     "search": "Hae",
     "reset": "Tyhjennä",
-    "search_filters": "Hakusuodattimet"
+    "search_filters": "Hakusuodattimet",
+    "virka": "Virka",
+    "toimi": "Toimi"
   },
   "change_logs": {
     "title": "Viran muutoshistoria",
