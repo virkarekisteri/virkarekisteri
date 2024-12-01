@@ -63,11 +63,12 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
       delete data.replacementStartDate;
       delete data.replacementEndingDate;
       delete data.isReplacement;
+      delete data.decisionNumber;
 
       if (isEmployeeSet) {
         dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
       } else {
-        dispatch(addPositionEmployee(data));
+        dispatch(addPositionEmployee({ positionEmployee: data, decisionNumber: "" }));
       }
 
       onClose();
@@ -183,35 +184,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                 </Grid2>
                 {isEmployeeSet && (
                   <>
-                    <Box
-                      sx={{
-                        height: '2px',
-                        backgroundColor: '#223b7c',
-                        width: '100%',
-                        my: 0,
-                        marginTop: 2,
-                        marginBottom: 2,
-                      }}
-                    />
-                    <Grid2 container spacing={2} size={12} justifyContent="left">
-                      <Grid2 size={6}>
-                        <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                          {t('edit_position.creation_decision_number')}
-                        </Typography>
-                        <Field name="decisionNumber">
-                          {({ input }) => (
-                            <TextField
-                              {...input}
-                              margin="normal"
-                              required
-                              fullWidth
-                              id="decisionNumber"
-                              label={t('edit_position.creation_decision_number')}
-                            />
-                          )}
-                        </Field>
-                      </Grid2>
-                    </Grid2>
+
 
                     <Field name="isReplacement" type="checkbox">
                       {({ input }) => (
@@ -235,7 +208,35 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                   </>
                 )}
 
-                {isReplacementToggle && <ReplacementAccordion />}
+                {isReplacementToggle && <><ReplacementAccordion /><Box
+                  sx={{
+                    height: '2px',
+                    backgroundColor: '#223b7c',
+                    width: '100%',
+                    my: 0,
+                    marginTop: 2,
+                    marginBottom: 2,
+                  }}
+                />
+                  <Grid2 container spacing={2} size={12} justifyContent="left">
+                    <Grid2 size={6}>
+                      <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                        {t('edit_position.creation_decision_number')}
+                      </Typography>
+                      <Field name="decisionNumber">
+                        {({ input }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="decisionNumber"
+                            label={t('edit_position.creation_decision_number')}
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
+                  </Grid2></>}
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('employee.save')}
