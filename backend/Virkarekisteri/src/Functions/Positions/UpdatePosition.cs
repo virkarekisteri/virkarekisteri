@@ -161,8 +161,7 @@ public class UpdatePosition(
             return true;
 
         // Treat "0,00" or "0" as equivalent to null/empty
-        var isZeroOrEmpty = (string? value) =>
-            value == null || value == "0,00" || value == "0";
+        var isZeroOrEmpty = (string? value) => value == null || value == "0,00" || value == "0";
 
         if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
             return true;

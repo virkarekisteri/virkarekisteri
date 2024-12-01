@@ -28,7 +28,7 @@ public class AddPositionEmployee(
 
         if (error is not null)
             return error;
-        
+
         var requestPosition = addPositionEmployeeRequest.PositionEmployee;
         var decisionNumber = addPositionEmployeeRequest.DecisionNumber;
 
@@ -55,15 +55,17 @@ public class AddPositionEmployee(
         {
             var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
             position.ReplacementEmployeeId = createdPositionEmployee.Id;
-            await changeLogRepository.AddChangeLogEntry(new ChangeLog
+            await changeLogRepository.AddChangeLogEntry(
+                new ChangeLog
                 {
                     PositionId = createdPositionEmployee.PositionId,
                     EditedField = "Substitute",
                     OldValue = string.Empty,
                     NewValue = createdPositionEmployee.EmployeeName,
                     Editor = editor,
-                    DecisionNumber = decisionNumber ?? "Unknown"
-                });
+                    DecisionNumber = decisionNumber ?? "Unknown",
+                }
+            );
         }
         else
             position.PositionEmployeeId = createdPositionEmployee.Id;
