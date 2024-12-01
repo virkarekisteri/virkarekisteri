@@ -58,7 +58,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
   const [isFieldEnabled, setIsFieldEnabled] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async () => {
     try {
       //jotain
     } catch (error) {
@@ -70,7 +70,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
     setOpenDialog(true);
   };
 
-  const handleCloseDialog = (value: string) => {
+  const handleCloseDialog = () => {
     setOpenDialog(false);
   };
 
@@ -122,7 +122,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
                       id="auto-complete"
                       autoComplete
                       includeInputInList
-                      onChange={(event, newValue) => {
+                      onChange={(_event, newValue) => {
                         setSelectedOption(newValue);
                         setIsFieldEnabled(Boolean(newValue));
                       }}
@@ -226,7 +226,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
                     )}
                   </Grid2>
                 </Grid2>
-                <Grid2 container spacing={2} size={12} justifyContent="left" marginTop={2}>
+                <Grid2 container spacing={2} size={12} justifyContent="left" marginTop={1}>
                   <Grid2 size={6}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('edit_position.creation_decision_number')}
@@ -263,12 +263,12 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
                     )}
                   </Field>
                 </Grid2>
-                <Grid2 size={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Grid2 size={6} mt={2} sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
                   <Button
                     type="submit"
                     variant="contained"
                     onClick={handleClickOpenDialog}
-                    sx={{ backgroundColor: '#223B7C', margin: 3 }}
+                    sx={{ backgroundColor: '#223B7C' }}
                     disabled={submitting || pristine}
                   >
                     {t('mass_changes.make_change')}
