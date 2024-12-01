@@ -126,7 +126,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
               replacementEmployeeName: replacementEmployee?.employeeName,
               replacementStartDate: replacementEmployee?.startDate
                 ? formatDateForInput(replacementEmployee.startDate.toString())
-                : 'No start date',
+                : null,
               replacementEndingDate: replacementEmployee?.endingDate
                 ? formatDateForInput(replacementEmployee.endingDate.toString())
                 : null,
