@@ -38,20 +38,21 @@ const theme = createTheme({
   },
 });
 
-await msalInstance.initialize();
-setupMsalEventListeners(store);
+msalInstance.initialize().then(() => {
+  setupMsalEventListeners(store);
 
-root.render(
-  <StrictMode>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <CssBaseline />
-          <MsalProvider instance={msalInstance}>
-            <App />
-          </MsalProvider>
-        </Provider>
-      </ThemeProvider>
-    </StyledEngineProvider>
-  </StrictMode>,
-);
+  root.render(
+    <StrictMode>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <CssBaseline />
+            <MsalProvider instance={msalInstance}>
+              <App />
+            </MsalProvider>
+          </Provider>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </StrictMode>,
+  );
+});

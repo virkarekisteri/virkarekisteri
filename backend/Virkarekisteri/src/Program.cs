@@ -1,5 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Virkarekisteri.Middleware;
@@ -20,8 +21,8 @@ var host = new HostBuilder()
             services.AddScoped<IChangeLogRepository, ChangeLogRepository>();
             services.AddDbContext<VirkarekisteriDb>(options =>
                 options.UseSqlServer(
-                    config.Configuration["SqlConnectionString"],
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(2)
+                    config.Configuration.GetConnectionString("SqlConnectionString"),
+                    sqlOptions => sqlOptions.EnableRetryOnFailure(1)
                 )
             );
         }
