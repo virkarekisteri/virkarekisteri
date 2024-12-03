@@ -136,5 +136,8 @@
     "eligibility": "Eligibility",
     "creation_decision_number": "Creation decision number",
     "creation_description": "Decision description"
+  },
+  "error": {
+    "pricing_id_error": "Pricing ID can only be upto 10 characters long"
   }
 }

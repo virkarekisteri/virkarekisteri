@@ -13,7 +13,7 @@ const RenderReadonlyTextField = ({ label, value }: OwnProps) => {
       fullWidth
       variant="standard"
       slotProps={{
-        input: { disableUnderline: true },
+        input: { disableUnderline: true, readOnly: true },
       }}
     />
   );

@@ -135,6 +135,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                 ? formatDateForInput(replacementEmployee.endingDate.toString())
                 : null,
               decisionNumber: '',
+              isReplacement: replacementEmployee?.replacement ?? false,
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>

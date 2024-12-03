@@ -43,7 +43,8 @@ public class UpdatePosition(
         if (error != null)
             return error;
 
-        logger.LogInformation("Deserialized DTO: {@UpdateDto}", updateDto);
+        if (updateDto.PricingId != null && updateDto.PricingId.Length > 10)
+            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
 
         // Fetch the existing position from the database
         var existingPosition = await positionRepository.GetPosition(positionId);

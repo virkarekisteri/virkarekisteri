@@ -136,5 +136,8 @@
     "eligibility": "",
     "creation_decision_number": "",
     "creation_description": ""
+  },
+  "error": {
+    "pricing_id_error": ""
   }
 }

@@ -114,13 +114,13 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.vacancy_size')}
             </Typography>
-            <RenderReadonlyTextField value={(position.vacancySize ? position.vacancySize * 100 : 0).toString()} />
+            <RenderReadonlyTextField value={(position.vacancySize ? position.vacancySize * 100 : 0).toFixed()} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('basic_details.vacancy_fill')}
             </Typography>
-            <RenderReadonlyTextField value={(position.vacancyFill ? position.vacancyFill * 100 : 0).toString()} />
+            <RenderReadonlyTextField value={(position.vacancyFill ? position.vacancyFill * 100 : 0).toFixed()} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
