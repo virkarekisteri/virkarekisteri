@@ -13,5 +13,11 @@ public class UpdatePositionDto
     public string? Details { get; set; }
     public int? Type { get; set; }
     public Guid? OrgTreeId { get; set; }
-    public string? PositionName { get; set; }
+    public PositionNameDto? PositionName { get; set; }
+    public string? DecisionNumber { get; set; }
+}
+
+public class PositionNameDto
+{
+    public string? Name { get; set; }
 }

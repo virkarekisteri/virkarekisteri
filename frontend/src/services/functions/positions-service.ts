@@ -25,6 +25,11 @@ export const uploadCsv = async (formData: FormData): Promise<void> => {
   return response.data;
 };
 
+export const fetchPositionChangeLogs = async (positionId: string) => {
+  const response = await apiClient.get(`/positions/${positionId}/changelog`);
+  return response.data;
+};
+
 export const updatePosition = async (id: string, data: Partial<Position>): Promise<Position> => {
   try {
     const response = await apiClient.put<Position>(`/positions/${id}`, data);

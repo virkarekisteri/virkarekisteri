@@ -12,7 +12,9 @@ namespace Virkarekisteri.Functions.Positions;
 public class UpdatePosition(
     ILogger<UpdatePosition> logger,
     IPositionRepository positionRepository,
-    IPositionNameRepository positionNameRepository
+    IPositionNameRepository positionNameRepository,
+    IChangeLogRepository changeLogRepository,
+    IOrganizationTreeRepository organizationTreeRepository
 )
 {
     /// <summary>
@@ -37,46 +39,134 @@ public class UpdatePosition(
 
         // Deserialize payload into UpdatePositionDto
         var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionDto>(req);
+
         if (error != null)
             return error;
+
+        if (updateDto.PricingId != null && updateDto.PricingId.Length > 10)
+            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
 
         // Fetch the existing position from the database
         var existingPosition = await positionRepository.GetPosition(positionId);
         if (existingPosition == null)
             return new NotFoundResult();
 
-        if (updateDto.PricingId != null && updateDto.PricingId.Length > 10)
-            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
+        var changeLogs = new List<ChangeLog>();
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+        var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
 
         // Map only provided fields from UpdatePositionDto to the existing Position
+        LogChange("EndedAt", existingPosition.EndedAt?.ToString(), updateDto.EndedAt?.ToString());
         existingPosition.EndedAt = updateDto.EndedAt ?? existingPosition.EndedAt;
-        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber ?? existingPosition.EndingDecisionNumber;
-        existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
-        existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
-        existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
-        existingPosition.PricingId = updateDto.PricingId ?? existingPosition.PricingId;
-        existingPosition.EducationLevel = updateDto.EducationLevel ?? existingPosition.EducationLevel;
-        existingPosition.WorkExperience = updateDto.WorkExperience ?? existingPosition.WorkExperience;
-        existingPosition.Details = updateDto.Details ?? existingPosition.Details;
-        existingPosition.Type = updateDto.Type ?? existingPosition.Type;
-        existingPosition.OrgTreeId = updateDto.OrgTreeId ?? existingPosition.OrgTreeId;
 
-        if (!string.IsNullOrEmpty(updateDto.PositionName))
+        LogChange("EndingDecisionNumber", existingPosition.EndingDecisionNumber, updateDto.EndingDecisionNumber);
+        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber ?? existingPosition.EndingDecisionNumber;
+
+        LogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
+        existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
+
+        LogChange("VacancyFill", existingPosition.VacancyFill?.ToString(), updateDto.VacancyFill?.ToString());
+        existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
+
+        LogChange("VacancySize", existingPosition.VacancySize?.ToString(), updateDto.VacancySize?.ToString());
+        existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
+
+        LogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);
+        existingPosition.PricingId = updateDto.PricingId ?? existingPosition.PricingId;
+
+        LogChange("EducationLevel", existingPosition.EducationLevel, updateDto.EducationLevel);
+        existingPosition.EducationLevel = updateDto.EducationLevel ?? existingPosition.EducationLevel;
+
+        LogChange("WorkExperience", existingPosition.WorkExperience, updateDto.WorkExperience);
+        existingPosition.WorkExperience = updateDto.WorkExperience ?? existingPosition.WorkExperience;
+
+        LogChange("Details", existingPosition.Details, updateDto.Details);
+        existingPosition.Details = updateDto.Details ?? existingPosition.Details;
+
+        LogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
+        existingPosition.Type = updateDto.Type ?? existingPosition.Type;
+
+        if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
         {
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName);
+            var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
+                existingPosition.OrgTreeId
+            );
+            var newOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
+                updateDto.OrgTreeId.Value
+            );
+
+            LogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
+
+            existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
+        }
+
+        if (updateDto.PositionName?.Name is not null)
+        {
+            var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName.Name);
             if (positionNameId == null)
             {
-                // Create a new PositionName if it doesn't exist
-                positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName);
+                positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName.Name);
             }
+            var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
+            var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
+
+            LogChange("PositionName", oldPositionName, newPositionName);
             existingPosition.PositionNameId = positionNameId.Value;
         }
 
         await positionRepository.UpdatePosition(existingPosition);
 
+        foreach (var changeLog in changeLogs)
+        {
+            await changeLogRepository.AddChangeLogEntry(changeLog);
+        }
+
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
+
+        void LogChange(string field, string? oldValue, string? newValue)
+        {
+            // No need to log changes if there are none and the values are the same
+            if (AreValuesEquivalent(oldValue, newValue))
+                return;
+
+            changeLogs.Add(
+                new ChangeLog
+                {
+                    PositionId = positionId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.UtcNow,
+                    DecisionNumber = decisionNumber,
+                }
+            );
+        }
+    }
+
+    private static bool AreValuesEquivalent(string? oldValue, string? newValue)
+    {
+        // Normalize null/empty values
+        oldValue = string.IsNullOrWhiteSpace(oldValue) ? null : oldValue.Trim();
+        newValue = string.IsNullOrWhiteSpace(newValue) ? null : newValue.Trim();
+
+        // Skip if both are null/empty
+        if (oldValue == null && newValue == null)
+            return true;
+
+        // Skip if both values are identical
+        if (oldValue == newValue)
+            return true;
+
+        // Treat "0,00" or "0" as equivalent to null/empty
+        var isZeroOrEmpty = (string? value) => value == null || value == "0,00" || value == "0";
+
+        if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
+            return true;
+
+        return false;
     }
 }

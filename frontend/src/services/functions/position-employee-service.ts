@@ -1,7 +1,7 @@
 import apiClient from 'services/api-client';
 import type { PositionEmployee } from 'models/PositionEmployee';
 
-export const createPositionEmployee = async (data: PositionEmployee) => {
+export const createPositionEmployee = async (data: { positionEmployee: PositionEmployee; decisionNumber: string }) => {
   const response = await apiClient.post('/positionemployees', data);
   return response.data;
 };

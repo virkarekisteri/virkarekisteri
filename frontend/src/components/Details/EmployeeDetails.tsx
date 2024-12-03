@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid2, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Grid2, Typography, alpha } from '@mui/material';
 import EmployeeModal from 'components/Modal/EmployeeModal';
 import type { Position } from 'models/Position';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -99,12 +99,32 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
               <Typography variant="h6">{t('employee.replacement_active')}</Typography>
             </Box>
           )}
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{t('employee.details')}</Typography>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              sx={{
+                backgroundColor: alpha('#223B7C', 1),
+                color: 'white',
+                minHeight: '45px',
+                '&.Mui-expanded': {
+                  minHeight: '45px',
+                },
+                '& .MuiAccordionSummary-content': {
+                  margin: 0,
+                },
+              }}
+            >
+              <Typography>{t('employee.details')}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Grid2 container spacing={2} sx={{ padding: 2, border: '1px solid #ccc', background: '#F5F5F5' }}>
+            <AccordionDetails
+              sx={{
+                padding: '16px',
+                backgroundColor: alpha('#f5f5f5', 1),
+              }}
+            >
+              <Grid2 container spacing={2}>
                 <Grid2 size={12} container spacing={2} alignItems="center">
                   <Grid2 size={4}>
                     <RenderReadonlyTextField

@@ -12,6 +12,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class AddPositionEmployee(
     ILogger<AddPositionEmployee> logger,
     IPositionEmployeeRepository repository,
+    IChangeLogRepository changeLogRepository,
     IPositionRepository positionRepository
 )
 {
@@ -23,10 +24,13 @@ public class AddPositionEmployee(
     {
         logger.LogInformation("Adding new employee to position from JSON POST request body");
 
-        var (error, requestPosition) = await TryDeserializeRequestBody<PositionEmployee>(req);
+        var (error, addPositionEmployeeRequest) = await TryDeserializeRequestBody<AddPositionEmployeeRequestDto>(req);
 
         if (error is not null)
             return error;
+
+        var requestPosition = addPositionEmployeeRequest.PositionEmployee;
+        var decisionNumber = addPositionEmployeeRequest.DecisionNumber;
 
         if (requestPosition.StartDate > requestPosition.EndingDate)
             return new BadRequestObjectResult("Ending date must be after the starting date.");
@@ -51,7 +55,21 @@ public class AddPositionEmployee(
             return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
 
         if (requestPosition.Replacement)
+        {
+            var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
             position.ReplacementEmployeeId = createdPositionEmployee.Id;
+            await changeLogRepository.AddChangeLogEntry(
+                new ChangeLog
+                {
+                    PositionId = createdPositionEmployee.PositionId,
+                    EditedField = "Substitute",
+                    OldValue = string.Empty,
+                    NewValue = createdPositionEmployee.EmployeeName,
+                    Editor = editor,
+                    DecisionNumber = decisionNumber ?? "Unknown",
+                }
+            );
+        }
         else
             position.PositionEmployeeId = createdPositionEmployee.Id;
 

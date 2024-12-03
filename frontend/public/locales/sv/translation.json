@@ -78,12 +78,41 @@
     "virka": "",
     "toimi": ""
   },
+  "change_logs": {
+    "title": "",
+    "timestamp": "",
+    "editor": "",
+    "edited_field": "",
+    "old_value": "",
+    "new_value": "",
+    "no_logs_found": "",
+    "fields": {
+      "EmployeeName": "",
+      "EndingDate": "",
+      "StartDate": "",
+      "PositionId": "",
+      "EndedAt": "",
+      "EndingDecisionNumber": "",
+      "PlacementLocation": "",
+      "VacancyFill": "",
+      "VacancySize": "",
+      "PricingId": "",
+      "EducationLevel": "",
+      "WorkExperience": "",
+      "Details": "",
+      "Type": "",
+      "OrgTreeId": "",
+      "PositionName": "",
+      "Substitute": ""
+    },
+    "DecisionNumber": ""
+  },
   "basic_details": {
     "vacancy_fill": ""
   },
   "position_type": {
-    "type_post": "",
-    "type_position": ""
+    "post": "",
+    "position": ""
   },
   "edit_position": {
     "title": "",
