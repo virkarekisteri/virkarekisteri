@@ -13,6 +13,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
     IPositionEmployeeRepository positionEmployeeRepository,
+    IChangeLogRepository changeLogRepository,
     IPositionRepository positionRepository
 )
 {
@@ -38,7 +39,7 @@ public class UpdatePositionEmployee(
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionEmployeeId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
 
-        var (error, requestEmployee) = await TryDeserializeRequestBody<PositionEmployee>(req);
+        var (error, updateDto) = await TryDeserializeRequestBody<UpdatePositionEmployeeDto>(req);
 
         if (error is not null)
             return error;
@@ -48,25 +49,75 @@ public class UpdatePositionEmployee(
         if (existingPositionEmployee == null)
             return new NotFoundResult();
 
-        if (!requestEmployee.InLeave && existingPositionEmployee.InLeave)
-        {
-            var position = await positionRepository.GetPosition(requestEmployee.PositionId);
-            if (position == null)
-                return new BadRequestObjectResult("Position not found");
+        var changeLogs = new List<ChangeLog>();
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+        var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
-            position.ReplacementEmployeeId = null;
-            await positionRepository.UpdatePosition(position);
+        void LogChange(string field, string? oldValue, string? newValue)
+        {
+            if (oldValue != newValue)
+            {
+                changeLogs.Add(
+                    new ChangeLog
+                    {
+                        PositionId = existingPositionEmployee.PositionId,
+                        EditedField = field,
+                        OldValue = oldValue ?? string.Empty,
+                        NewValue = newValue ?? string.Empty,
+                        Editor = editor,
+                        DecisionNumber = decisionNumber,
+                    }
+                );
+            }
+        }
+
+        LogChange(
+            "StartDate",
+            existingPositionEmployee.StartDate.ToString("yyyy-MM-dd"),
+            updateDto.StartDate?.ToString("yyyy-MM-dd")
+        );
+        LogChange(
+            "EndingDate",
+            existingPositionEmployee.EndingDate?.ToString("yyyy-MM-dd"),
+            updateDto.EndingDate?.ToString("yyyy-MM-dd")
+        );
+        LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), updateDto.PositionId?.ToString());
+        LogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
+
+        if (updateDto.InLeave.HasValue && !updateDto.InLeave.Value && existingPositionEmployee.InLeave)
+        {
+            if (updateDto.PositionId.HasValue)
+            {
+                var position = await positionRepository.GetPosition(updateDto.PositionId.Value);
+                if (position == null)
+                    return new BadRequestObjectResult("Position not found");
+
+                position.ReplacementEmployeeId = null;
+
+                // Substitute is removed
+                LogChange("Substitute", string.Empty, existingPositionEmployee.EmployeeName);
+                await positionRepository.UpdatePosition(position);
+            }
+            else
+            {
+                return new BadRequestObjectResult("PositionId is required");
+            }
         }
 
         // Update the existing position employee with the new values
-        existingPositionEmployee.StartDate = requestEmployee.StartDate;
-        existingPositionEmployee.EndingDate = requestEmployee.EndingDate;
-        existingPositionEmployee.PositionId = requestEmployee.PositionId;
-        existingPositionEmployee.EmployeeName = requestEmployee.EmployeeName;
-        existingPositionEmployee.Replacement = requestEmployee.Replacement;
-        existingPositionEmployee.InLeave = requestEmployee.InLeave;
+        existingPositionEmployee.StartDate = updateDto.StartDate ?? existingPositionEmployee.StartDate;
+        existingPositionEmployee.EndingDate = updateDto.EndingDate ?? existingPositionEmployee.EndingDate;
+        existingPositionEmployee.PositionId = updateDto.PositionId ?? existingPositionEmployee.PositionId;
+        existingPositionEmployee.EmployeeName = updateDto.EmployeeName ?? existingPositionEmployee.EmployeeName;
+        existingPositionEmployee.Replacement = updateDto.Replacement ?? existingPositionEmployee.Replacement;
+        existingPositionEmployee.InLeave = updateDto.InLeave ?? existingPositionEmployee.InLeave;
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
+
+        foreach (var changeLog in changeLogs)
+        {
+            await changeLogRepository.AddChangeLogEntry(changeLog);
+        }
 
         return new OkObjectResult(existingPositionEmployee);
     }

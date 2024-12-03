@@ -78,12 +78,41 @@
     "virka": "Virka",
     "toimi": "Toimi"
   },
+  "change_logs": {
+    "title": "Viran muutoshistoria",
+    "timestamp": "Aikaleima",
+    "editor": "Muokkaaja",
+    "edited_field": "Muokattu kenttä",
+    "old_value": "Vanha arvo",
+    "new_value": "Uusi arvo",
+    "no_logs_found": "Muutoksia ei ole tehty",
+    "fields": {
+      "EmployeeName": "Viranhaltijan nimi",
+      "EndingDate": "Päättymispäivä",
+      "StartDate": "Aloituspäivä",
+      "PositionId": "Virka ID",
+      "EndedAt": "Päättymispäivä",
+      "EndingDecisionNumber": "Lopetuksen päätösnumero",
+      "PlacementLocation": "Sijoituspaikka",
+      "VacancyFill": "Täyttö",
+      "VacancySize": "Koko",
+      "PricingId": "Hinnoittelutunnus",
+      "EducationLevel": "Koulutustaso",
+      "WorkExperience": "Työkokemus",
+      "Details": "Lisätiedot",
+      "Type": "Tyyppi",
+      "OrgTreeId": "Kustannuspaikka",
+      "PositionName": "Virkanimike",
+      "Substitute": "Sijainen"
+    },
+    "DecisionNumber": "Päätösnumero"
+  },
   "basic_details": {
     "vacancy_fill": "Täyttö-%"
   },
   "position_type": {
-    "type_post": "Toimi",
-    "type_position": "Virka"
+    "post": "Toimi",
+    "position": "Virka"
   },
   "edit_position": {
     "title": "Muokkaa viran tietoja",

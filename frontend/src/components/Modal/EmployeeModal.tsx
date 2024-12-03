@@ -39,13 +39,16 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
     try {
       const data = { ...values, positionId: position.id };
 
-      if (values.isReplacement) {
+      if (isReplacementToggle) {
         const replacementData = {
-          employeeName: values.replacementEmployeeName,
-          startDate: values.replacementStartDate,
-          endingDate: values.replacementEndingDate,
-          positionId: position.id ?? '',
-          replacement: true,
+          positionEmployee: {
+            employeeName: values.replacementEmployeeName,
+            startDate: values.replacementStartDate,
+            endingDate: values.replacementEndingDate,
+            positionId: position.id ?? '',
+            replacement: true,
+          },
+          decisionNumber: values.decisionNumber,
         };
 
         dispatch(addPositionEmployee(replacementData as any));
@@ -64,7 +67,8 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
       if (isEmployeeSet) {
         dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
       } else {
-        dispatch(addPositionEmployee(data));
+        delete data.decisionNumber;
+        dispatch(addPositionEmployee({ positionEmployee: data, decisionNumber: '' }));
       }
 
       onClose();
@@ -130,6 +134,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
               replacementEndingDate: replacementEmployee?.endingDate
                 ? formatDateForInput(replacementEmployee.endingDate.toString())
                 : null,
+              decisionNumber: '',
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -200,6 +205,35 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                 )}
 
                 {isReplacementToggle && <ReplacementAccordion />}
+                <Box
+                  sx={{
+                    height: '2px',
+                    backgroundColor: '#223b7c',
+                    width: '100%',
+                    my: 0,
+                    marginTop: 2,
+                    marginBottom: 2,
+                  }}
+                />
+                <Grid2 container spacing={2} size={12} justifyContent="left">
+                  <Grid2 size={6}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('edit_position.creation_decision_number')}
+                    </Typography>
+                    <Field name="decisionNumber">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="decisionNumber"
+                          label={t('edit_position.creation_decision_number')}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
+                </Grid2>
                 <Grid2 sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button type="submit" variant="contained" disabled={submitting || pristine}>
                     {t('employee.save')}

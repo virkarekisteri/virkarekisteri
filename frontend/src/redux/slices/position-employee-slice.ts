@@ -24,7 +24,7 @@ export const positionEmployeeSlice = createAppSlice({
   initialState,
   reducers: (create) => ({
     addPositionEmployee: create.asyncThunk(
-      async (data: PositionEmployee) => {
+      async (data: { positionEmployee: PositionEmployee; decisionNumber: string }) => {
         return await createPositionEmployee(data);
       },
       {

@@ -6,6 +6,7 @@ namespace Virkarekisteri.Repositories;
 public interface IPositionNameRepository
 {
     Task<Guid?> GetPositionNameIdByName(string name);
+    Task<string?> GetPositionNameById(Guid id);
     Task<Guid> CreatePositionName(string name);
     Task<List<PositionName>> GetAllPositionNames();
 }
@@ -16,6 +17,12 @@ public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameReposito
     {
         var positionName = await db.PositionNames.FirstOrDefaultAsync(pn => pn.Name == name);
         return positionName?.Id;
+    }
+
+    public async Task<string?> GetPositionNameById(Guid id)
+    {
+        var positionName = await db.PositionNames.FirstOrDefaultAsync(pn => pn.Id == id);
+        return positionName?.Name;
     }
 
     public async Task<Guid> CreatePositionName(string name)

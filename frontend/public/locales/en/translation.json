@@ -78,12 +78,41 @@
     "virka": "Position",
     "toimi": "Post"
   },
+  "change_logs": {
+    "title": "History of changes",
+    "timestamp": "Timestamp",
+    "editor": "Editor",
+    "edited_field": "Edited field",
+    "old_value": "Old value",
+    "new_value": "New value",
+    "no_logs_found": "No changes have been made",
+    "fields": {
+      "EmployeeName": "Employee name",
+      "EndingDate": "Ending date",
+      "StartDate": "Start date",
+      "PositionId": "Position ID",
+      "EndedAt": "Ending date",
+      "EndingDecisionNumber": "Ending decision number",
+      "PlacementLocation": "Placement location",
+      "VacancyFill": "Fill",
+      "VacancySize": "Size",
+      "PricingId": "Pricing ID",
+      "EducationLevel": "Education level",
+      "WorkExperience": "Work experience",
+      "Details": "Additional details",
+      "Type": "Type",
+      "OrgTreeId": "Organization tree",
+      "PositionName": "Position name",
+      "Substitute": "Substitute"
+    },
+    "DecisionNumber": "Decision number"
+  },
   "basic_details": {
     "vacancy_fill": "Fill-%"
   },
   "position_type": {
-    "type_post": "Post",
-    "type_position": "Position"
+    "post": "Post",
+    "position": "Position"
   },
   "edit_position": {
     "title": "Edit position details",

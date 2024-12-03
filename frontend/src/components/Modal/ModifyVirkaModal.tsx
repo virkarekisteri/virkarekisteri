@@ -31,7 +31,7 @@ interface ModifyVirkaModalProps {
 }
 
 interface FormValues {
-  endedAt?: string;
+  endedAt?: Date;
   endingDecisionNumber?: string;
   placementLocation?: string;
   vacancyFill?: number;
@@ -43,6 +43,7 @@ interface FormValues {
   workExperience?: string;
   details?: string;
   type?: number;
+  decisionNumber?: string;
 }
 
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
@@ -74,7 +75,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         endingDecisionNumber: values.endingDecisionNumber,
         placementLocation: values.placementLocation,
         vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
-        positionName: values.positionName?.name,
+        positionName: values.positionName ? { name: values.positionName.name } : undefined,
         orgTreeId: values.orgTree,
         pricingId: values.pricingId,
         vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
@@ -82,6 +83,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         workExperience: values.workExperience,
         details: values.details,
         type: values.type,
+        decisionNumber: values.decisionNumber,
       };
       await dispatch(updatePosition({ id: position.id, data: updateData }));
       await dispatch(getPositions());
@@ -145,8 +147,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
               workExperience: position.workExperience,
               details: position.details,
               vacancyNumber: position.vacancyNumber,
-              //creationDecisionNumber: position.creationDecisionNumber, <-- this will be DecisionNumber (Nvarchar)
-              //creationDescription: position.creationDescription, <-- this will be DecisionDescription
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -239,7 +239,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={position.placementLocation || t('edit_position.placement_location')}
+                          placeholder={position.placementLocation ?? t('edit_position.placement_location')}
                         />
                       )}
                     </Field>
@@ -281,7 +281,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={position.pricingId || t('edit_position.pricing_id')}
+                          placeholder={position.pricingId ?? t('edit_position.pricing_id')}
                         />
                       )}
                     </Field>
@@ -305,7 +305,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               inputProps: { min: 0, max: 100 },
                             },
                           }}
-                          placeholder={position.vacancySize?.toString() || t('edit_position.vacancy_size')}
+                          placeholder={position.vacancySize?.toString() ?? t('edit_position.vacancy_size')}
                         />
                       )}
                     </Field>
@@ -329,7 +329,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               inputProps: { min: 0, max: 100 },
                             },
                           }}
-                          placeholder={position.vacancyFill?.toString() || t('edit_position.vacancy_fill')}
+                          placeholder={position.vacancyFill?.toString() ?? t('edit_position.vacancy_fill')}
                         />
                       )}
                     </Field>
@@ -367,7 +367,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="educationLevel"
                           label={t('edit_position.education_level')}
-                          placeholder={position.educationLevel || t('edit_position.education_level')}
+                          placeholder={position.educationLevel ?? t('edit_position.education_level')}
                         />
                       )}
                     </Field>
@@ -388,7 +388,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="workExperience"
                           label={t('edit_position.work_experience')}
-                          placeholder={position.workExperience || t('edit_position.work_experience')}
+                          placeholder={position.workExperience ?? t('edit_position.work_experience')}
                         />
                       )}
                     </Field>
@@ -409,7 +409,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="details"
                           label={t('additional_details')}
-                          placeholder={position.details || t('additional_details')}
+                          placeholder={position.details ?? t('additional_details')}
                         />
                       )}
                     </Field>
@@ -438,39 +438,19 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Typography component={'div'} fontWeight={'fontWeightBold'}>
                         {t('edit_position.creation_decision_number')}
                       </Typography>
-                      <Field name="creationDecisionNumber">
+                      <Field name="decisionNumber">
                         {({ input }) => (
                           <TextField
                             {...input}
                             margin="normal"
                             required
                             fullWidth
-                            id="creationDecisionNumber"
+                            id="decisionNumber"
                             label={t('edit_position.creation_decision_number')}
                           />
                         )}
                       </Field>
                     </Grid2>
-                  </Grid2>
-
-                  {/* Creation description */}
-                  <Grid2 size={12}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.creation_description')}
-                    </Typography>
-                    <Field name="creation_description">
-                      {({ input }) => (
-                        <TextField
-                          {...input}
-                          margin="normal"
-                          fullWidth
-                          multiline
-                          maxRows={4}
-                          id="creation_description"
-                          label={t('edit_position.creation_description')}
-                        />
-                      )}
-                    </Field>
                   </Grid2>
                 </Grid2>
 
