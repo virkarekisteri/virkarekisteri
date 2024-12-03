@@ -54,26 +54,6 @@ public class UpdatePosition(
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
-        void LogChange(string field, string? oldValue, string? newValue)
-        {
-            // No need to log changes if there are none and the values are the same
-            if (AreValuesEquivalent(oldValue, newValue))
-                return;
-
-            changeLogs.Add(
-                new ChangeLog
-                {
-                    PositionId = positionId,
-                    EditedField = field,
-                    OldValue = oldValue ?? string.Empty,
-                    NewValue = newValue ?? string.Empty,
-                    Editor = editor,
-                    Timestamp = DateTime.UtcNow,
-                    DecisionNumber = decisionNumber,
-                }
-            );
-        }
-
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
 
         // Map only provided fields from UpdatePositionDto to the existing Position
@@ -144,6 +124,26 @@ public class UpdatePosition(
 
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
+
+        void LogChange(string field, string? oldValue, string? newValue)
+        {
+            // No need to log changes if there are none and the values are the same
+            if (AreValuesEquivalent(oldValue, newValue))
+                return;
+
+            changeLogs.Add(
+                new ChangeLog
+                {
+                    PositionId = positionId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.UtcNow,
+                    DecisionNumber = decisionNumber,
+                }
+            );
+        }
     }
 
     private static bool AreValuesEquivalent(string? oldValue, string? newValue)

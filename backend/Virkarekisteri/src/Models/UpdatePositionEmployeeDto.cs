@@ -1,3 +1,5 @@
+namespace Virkarekisteri.Models;
+
 public class UpdatePositionEmployeeDto
 {
     public Guid? Id { get; set; }

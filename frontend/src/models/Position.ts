@@ -38,6 +38,4 @@ export interface Position {
   orgTreeId: string;
 
   vacancyStatus: number;
-
-  decisionNumber?: string;
 }

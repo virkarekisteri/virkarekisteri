@@ -183,27 +183,25 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                   </Grid2>
                 </Grid2>
                 {isEmployeeSet && (
-                  <>
-                    <Field name="isReplacement" type="checkbox">
-                      {({ input }) => (
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              {...input}
-                              checked={isReplacementToggle}
-                              onChange={(event) => {
-                                input.onChange(event);
-                                setIsReplacementToggle(event.target.checked);
-                              }}
-                              name="isReplacement"
-                              color="primary"
-                            />
-                          }
-                          label={t('employee.replacement')}
-                        />
-                      )}
-                    </Field>
-                  </>
+                  <Field name="isReplacement" type="checkbox">
+                    {({ input }) => (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...input}
+                            checked={isReplacementToggle}
+                            onChange={(event) => {
+                              input.onChange(event);
+                              setIsReplacementToggle(event.target.checked);
+                            }}
+                            name="isReplacement"
+                            color="primary"
+                          />
+                        }
+                        label={t('employee.replacement')}
+                      />
+                    )}
+                  </Field>
                 )}
 
                 {isReplacementToggle && <ReplacementAccordion />}

@@ -22,7 +22,7 @@ var host = new HostBuilder()
             services.AddDbContext<VirkarekisteriDb>(options =>
                 options.UseSqlServer(
                     config.Configuration.GetConnectionString("SqlConnectionString"),
-                    sqlOptions => sqlOptions.EnableRetryOnFailure(1)
+                    sqlOptions => sqlOptions.EnableRetryOnFailure(6, TimeSpan.FromSeconds(10), null)
                 )
             );
         }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
@@ -6,7 +6,6 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import type { ChangeLogEntry } from 'models/ChangeLogEntry';
-import { useState, useEffect } from 'react';
 import { fetchPositionChangeLogs } from 'services/functions/positions-service';
 import { format } from 'date-fns';
 
@@ -34,7 +33,7 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
       }
     };
 
-    loadChangeLogs();
+    loadChangeLogs().catch(console.error);
   }, [position.id]);
 
   return (

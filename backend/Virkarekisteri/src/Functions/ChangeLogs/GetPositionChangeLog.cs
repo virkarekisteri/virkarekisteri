@@ -28,12 +28,10 @@ public class GetPositionChangeLog(ILogger<GetPositionChangeLog> logger, IChangeL
 
         var changeLogs = await changeLogRepository.GetChangeLogsByPositionId(positionId);
 
-        if (changeLogs is null || !changeLogs.Any())
-        {
-            logger.LogInformation("No change logs found for position ID: {PositionId}", positionId);
-            return new OkObjectResult(new List<object>());
-        }
+        if (changeLogs.Count != 0)
+            return new OkObjectResult(changeLogs);
 
-        return new OkObjectResult(changeLogs);
+        logger.LogInformation("No change logs found for position ID: {PositionId}", positionId);
+        return new OkObjectResult(new List<object>());
     }
 }
