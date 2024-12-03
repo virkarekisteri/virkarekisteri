@@ -45,6 +45,9 @@ public class UpdatePosition(
         if (existingPosition == null)
             return new NotFoundResult();
 
+        if (updateDto.PricingId != null && updateDto.PricingId.Length > 10)
+            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
+
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
 
         // Map only provided fields from UpdatePositionDto to the existing Position

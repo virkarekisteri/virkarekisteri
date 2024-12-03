@@ -107,5 +107,8 @@
     "eligibility": "Kelpoisuusehdot",
     "creation_decision_number": "Päätösnumero",
     "creation_description": "Päätöksen selite"
+  },
+  "error": {
+    "pricing_id_error": "Hinnoittelutunnus voi olla vain kymmenen (10) merkkiä pitkä."
   }
 }

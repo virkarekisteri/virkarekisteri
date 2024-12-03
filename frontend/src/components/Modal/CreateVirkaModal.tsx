@@ -52,6 +52,13 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     }
   }, [dispatch, open]);
 
+  const validatePricingId = (value: string) => {
+    if (value && value.length > 10) {
+      return t('error.pricing_id_error');
+    }
+    return undefined;
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
     const positionNameObj: PositionName = {
@@ -235,14 +242,16 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('create_position.pricing_id')}
                     </Typography>
-                    <Field name="pricingId">
-                      {({ input }) => (
+                    <Field name="pricingId" validate={validatePricingId}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           margin="normal"
                           fullWidth
                           id="pricingId"
                           label={t('create_position.pricing_id')}
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                         />
                       )}
                     </Field>

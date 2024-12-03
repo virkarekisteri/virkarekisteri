@@ -63,6 +63,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     }
   }, [dispatch, open, dataFromBackend]);
 
+  const validatePricingId = (value: string) => {
+    if (value && value.length > 10) {
+      return t('error.pricing_id_error');
+    }
+    return undefined;
+  };
   const onSubmit = async (values: FormValues) => {
     if (!position.id) {
       return;
@@ -135,8 +141,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
             onSubmit={onSubmit}
             initialValues={{
               type: position.type,
-              vacancySize: Number(position.vacancySize) * 100,
-              vacancyFill: Number(position.vacancyFill) * 100,
+              vacancySize: (Number(position.vacancySize) * 100).toFixed(),
+              vacancyFill: (Number(position.vacancyFill) * 100).toFixed(),
               positionName: position.positionName,
               orgTree: position.orgTreeId,
               placementLocation: position.placementLocation,
@@ -275,13 +281,15 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                     <Typography component="div" fontWeight="bold">
                       {t('edit_position.pricing_id')}
                     </Typography>
-                    <Field name="pricingId">
-                      {({ input }) => (
+                    <Field name="pricingId" validate={validatePricingId}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           placeholder={position.pricingId || t('edit_position.pricing_id')}
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                         />
                       )}
                     </Field>

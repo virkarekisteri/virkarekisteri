@@ -47,6 +47,9 @@ public class AddPositionEmployee(
         if (position == null)
             return new OkObjectResult(createdPositionEmployee);
 
+        if (position.PricingId != null && position.PricingId.Length > 10)
+            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
+
         if (requestPosition.Replacement)
             position.ReplacementEmployeeId = createdPositionEmployee.Id;
         else
