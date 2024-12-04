@@ -103,7 +103,8 @@
       "Type": "Type",
       "OrgTreeId": "Organization tree",
       "PositionName": "Position name",
-      "Substitute": "Substitute"
+      "Substitute": "Substitute",
+      "CreatedPosition": "Created new position"
     },
     "DecisionNumber": "Decision number"
   },

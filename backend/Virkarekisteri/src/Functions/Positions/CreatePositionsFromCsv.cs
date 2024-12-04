@@ -12,7 +12,8 @@ namespace Virkarekisteri.Functions.Positions;
 public class CreatePositionsFromCsv(
     ILogger<CreatePositionsFromCsv> logger,
     IPositionRepository positionRepository,
-    IPositionNameRepository positionNameRepository
+    IPositionNameRepository positionNameRepository,
+    IChangeLogRepository changeLogRepository
 )
 {
     [Function("CreatePositionsFromCsv")]
@@ -140,6 +141,20 @@ public class CreatePositionsFromCsv(
             try
             {
                 await positionRepository.CreatePosition(position);
+
+                var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+                var changeLog = new ChangeLog
+                {
+                    Id = Guid.NewGuid(),
+                    PositionId = position.Id,
+                    EditedField = "CreatedPosition",
+                    OldValue = string.Empty,
+                    NewValue = position.VacancyNumber ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.UtcNow,
+                    DecisionNumber = string.Empty
+                };
+                await changeLogRepository.AddChangeLogEntry(changeLog);
             }
             catch (Exception ex)
             {
