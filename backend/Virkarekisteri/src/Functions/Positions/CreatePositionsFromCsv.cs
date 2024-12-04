@@ -140,19 +140,19 @@ public class CreatePositionsFromCsv(
         {
             try
             {
-                await positionRepository.CreatePosition(position);
+                var createdPosition = await positionRepository.CreatePosition(position);
 
                 var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
                 var changeLog = new ChangeLog
                 {
                     Id = Guid.NewGuid(),
-                    PositionId = position.Id,
+                    PositionId = createdPosition.Id,
                     EditedField = "CreatedPosition",
                     OldValue = string.Empty,
-                    NewValue = position.VacancyNumber ?? string.Empty,
+                    NewValue = createdPosition.VacancyNumber ?? string.Empty,
                     Editor = editor,
                     Timestamp = DateTime.UtcNow,
-                    DecisionNumber = string.Empty
+                    DecisionNumber = createdPosition.CreationDecisionNumber ?? string.Empty,
                 };
                 await changeLogRepository.AddChangeLogEntry(changeLog);
             }
