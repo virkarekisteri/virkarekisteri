@@ -30,8 +30,6 @@ public class ChangeLogRepository(VirkarekisteriDb db) : IChangeLogRepository
 
     public async Task<List<ChangeLog>> GetAllChangeLogs()
     {
-        return await db.ChangeLogs
-            .OrderByDescending(c => c.Timestamp)
-            .ToListAsync();
+        return await db.ChangeLogs.OrderByDescending(c => c.Timestamp).ToListAsync();
     }
 }

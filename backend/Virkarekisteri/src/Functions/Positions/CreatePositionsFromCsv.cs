@@ -152,7 +152,7 @@ public class CreatePositionsFromCsv(
                     NewValue = position.VacancyNumber ?? string.Empty,
                     Editor = editor,
                     Timestamp = DateTime.UtcNow,
-                    DecisionNumber = string.Empty
+                    DecisionNumber = string.Empty,
                 };
                 await changeLogRepository.AddChangeLogEntry(changeLog);
             }
