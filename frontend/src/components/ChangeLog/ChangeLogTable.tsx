@@ -19,6 +19,7 @@ import { fetchAllChangeLogs } from 'services/functions/change-log-service';
 import { useAppSelector } from 'redux/hooks';
 import { selectPositionData } from 'redux/slices/position-slice';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
 
 const ChangeLogTable = () => {
@@ -56,6 +57,10 @@ const ChangeLogTable = () => {
 
     const getTranslatedField = (field: string) => {
         return t(`change_logs.fields.${field}`, field);
+    };
+
+    const formatTimestamp = (timestamp: string) => {
+        return format(new Date(timestamp), 'dd.MM.yyyy HH:mm:ss');
     };
 
     if (loading) {
@@ -137,7 +142,7 @@ const ChangeLogTable = () => {
                                         <IconButton size="small" sx={{ ml: 1 }}>
                                             {expandedRow === row.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                         </IconButton>
-                                        {new Date(row.timestamp).toLocaleDateString()}
+                                        {formatTimestamp(row.timestamp)}
                                     </Box>
                                 </TableCell>
                                 <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getVacancyNumber(row.positionId)}</TableCell>
