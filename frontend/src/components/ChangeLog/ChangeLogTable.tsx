@@ -38,6 +38,12 @@ const ChangeLogTable = () => {
         setExpandedRow(expandedRow === id ? null : id);
     };
 
+
+    const getTranslatedField = (field: string) => {
+        return t(`change_logs.fields.${field}`, field);
+    };
+
+
     const handleSort = (key: keyof ChangeLogEntry) => {
         setSortConfig((prevConfig) => {
             if (prevConfig && prevConfig.key === key) {
@@ -224,8 +230,7 @@ const ChangeLogTable = () => {
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                                         {getVacancyNumber(row.positionId)}
                                     </TableCell>
-                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editedField}</TableCell>
-                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getTranslatedField(row.editedField)}</TableCell>                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
                                 </TableRow>
 
