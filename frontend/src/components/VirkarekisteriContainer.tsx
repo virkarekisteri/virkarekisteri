@@ -5,7 +5,12 @@ import UploadCsvModal from './Modal/UploadCsvModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import { fetchPosition, getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
+import {
+  fetchPosition,
+  getPositions,
+  selectIndividualPosition,
+  selectPositionLoading,
+} from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
@@ -20,7 +25,6 @@ const VirkarekisterContainer = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-
 
   const { t } = useTranslation();
 
@@ -74,8 +78,9 @@ const VirkarekisterContainer = () => {
                     },
                   },
                 }}
-              ><Tab label={t("tabs.positions")} />
-                <Tab label={t("tabs.history")} />
+              >
+                <Tab label={t('tabs.positions')} />
+                <Tab label={t('tabs.history')} />
               </Tabs>
             </Grid2>
 
