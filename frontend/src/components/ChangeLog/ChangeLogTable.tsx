@@ -147,22 +147,20 @@ const ChangeLogTable = () => {
             {/* Search Controls */}
             <Box display="flex" gap={2} mb={2}>
                 <TextField
-                    label="Search by Vacancy Number"
+                    label="Etsi vakanssinumerolla"
                     value={searchVacancyNumber}
                     onChange={(e) => setSearchVacancyNumber(e.target.value)}
-                    fullWidth
                 />
                 <TextField
-                    label="Search by Date"
+                    label="Etsi päivämäärällä"
                     value={searchDate}
                     onChange={(e) => setSearchDate(e.target.value)}
-                    fullWidth
                 />
                 <Button variant="contained" onClick={handleSearch}>
-                    Search
+                    Hae
                 </Button>
                 <Button variant="outlined" onClick={handleResetSearch}>
-                    Reset
+                    Tyhjennä
                 </Button>
             </Box>
 
