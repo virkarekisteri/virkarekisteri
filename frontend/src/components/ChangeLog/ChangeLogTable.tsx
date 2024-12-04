@@ -139,20 +139,20 @@ const ChangeLogTable = () => {
             {/* Search Controls */}
             <Box display="flex" gap={2} mb={2}>
                 <TextField
-                    label="Etsi vakanssinumerolla"
+                    label={t("change_logs.search.byNumber")}
                     value={searchVacancyNumber}
                     onChange={(e) => setSearchVacancyNumber(e.target.value)}
                 />
                 <TextField
-                    label="Etsi päivämäärällä"
+                    label={t("change_logs.search.byDate")}
                     value={searchDate}
                     onChange={(e) => setSearchDate(e.target.value)}
                 />
                 <Button variant="contained" onClick={handleSearch}>
-                    Hae
+                    {t("search_filter.search")}
                 </Button>
                 <Button variant="outlined" onClick={handleResetSearch}>
-                    Tyhjennä
+                    {t("search_filter.reset")}
                 </Button>
             </Box>
 
@@ -171,7 +171,7 @@ const ChangeLogTable = () => {
                                 onClick={() => handleSort('timestamp')}
                             >
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    Muokkaus PVM
+                                    {t('change_logs.table.timestamp')}
                                     <Box sx={{ width: '16px', textAlign: 'center' }}>
                                         {sortConfig?.key === 'timestamp' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
@@ -187,7 +187,7 @@ const ChangeLogTable = () => {
                                 onClick={() => handleSort('positionId')}
                             >
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    Vakanssinumero
+                                    {t('change_logs.table.vacancy_number')}
                                     <Box sx={{ width: '16px', textAlign: 'center' }}>
                                         {sortConfig?.key === 'positionId' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
@@ -203,7 +203,7 @@ const ChangeLogTable = () => {
                                 onClick={() => handleSort('editedField')}
                             >
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    Muokattu kenttä
+                                    {t('change_logs.table.edited_field')}
                                     <Box sx={{ width: '16px', textAlign: 'center' }}>
                                         {sortConfig?.key === 'editedField' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
@@ -219,7 +219,7 @@ const ChangeLogTable = () => {
                                 onClick={() => handleSort('decisionNumber')}
                             >
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    Päätösnumero
+                                    {t('change_logs.table.decision_number')}
                                     <Box sx={{ width: '16px', textAlign: 'center' }}>
                                         {sortConfig?.key === 'decisionNumber' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
@@ -235,7 +235,7 @@ const ChangeLogTable = () => {
                                 onClick={() => handleSort('editor')}
                             >
                                 <Box display="flex" alignItems="center" gap={2}>
-                                    Muokkaaja
+                                    {t('change_logs.table.editor')}
                                     <Box sx={{ width: '16px', textAlign: 'center' }}>
                                         {sortConfig?.key === 'editor' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
@@ -269,7 +269,8 @@ const ChangeLogTable = () => {
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                                         {getVacancyNumber(row.positionId, positions)}
                                     </TableCell>
-                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getTranslatedField(row.editedField)}</TableCell>                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getTranslatedField(row.editedField)}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
                                 </TableRow>
 
@@ -278,15 +279,15 @@ const ChangeLogTable = () => {
                                     <TableRow>
                                         <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
                                             <Typography fontWeight="bold" sx={{ mb: 2 }}>
-                                                Muutos
+                                                {t('change_logs.table.change')}
                                             </Typography>
                                             <Box display="flex" justifyContent="space-between" paddingX={5}>
                                                 <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
-                                                    <Typography fontWeight="bold">Vanha arvo</Typography>
+                                                    <Typography fontWeight="bold">{t("change_logs.table.old_value")}</Typography>
                                                     <Typography>{row.oldValue || '-'}</Typography>
                                                 </Box>
                                                 <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
-                                                    <Typography fontWeight="bold">Uusi arvo</Typography>
+                                                    <Typography fontWeight="bold">{t("change_logs.table.new_value")}</Typography>
                                                     <Typography>{row.newValue || '-'}</Typography>
                                                 </Box>
                                             </Box>

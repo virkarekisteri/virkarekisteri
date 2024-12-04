@@ -63,6 +63,10 @@
     "organization_tree": "Kustannuspaikka",
     "placement_location": "Sijoituspaikka"
   },
+  "tabs": {
+    "positions": "Virkalistaus",
+    "history": "Historiatiedot"
+  },
   "user_menu": {
     "logout": "Kirjaudu Ulos"
   },
@@ -106,7 +110,21 @@
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka"
     },
-    "DecisionNumber": "Päätösnumero"
+    "DecisionNumber": "Päätösnumero",
+    "search": {
+      "byNumber": "Etsi vakanssinumerolla",
+      "byDate": "Etsi päivämäärällä"
+    },
+    "table": {
+      "timestamp": "Muokkausaika",
+      "vacancy_number": "Vakanssinumero",
+      "editor": "Muokkaaja",
+      "edited_field": "Muokattu kenttä",
+      "old_value": "Vanha arvo",
+      "new_value": "Uusi arvo",
+      "change": "Muutos",
+      "decision_number": "Päätösnumero"
+    }
   },
   "basic_details": {
     "vacancy_fill": "Täyttö-%"

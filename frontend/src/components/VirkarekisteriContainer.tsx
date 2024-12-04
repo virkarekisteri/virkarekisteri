@@ -57,25 +57,25 @@ const VirkarekisterContainer = () => {
                 aria-label="Virkarekisteri Views"
                 sx={{
                   '& .MuiTabs-indicator': {
-                    backgroundColor: '#223B7C', // The blue indicator color
+                    backgroundColor: '#223B7C',
                     height: '4px',
                   },
                   '& .MuiTab-root': {
-                    color: '#FFFFFF', // Default text color
-                    backgroundColor: '#B0BEC5', // Default background color
+                    color: '#FFFFFF',
+                    backgroundColor: '#B0BEC5',
                     fontWeight: 'bold',
                     textTransform: 'none',
                     padding: '10px 20px',
-                    borderRadius: '4px 4px 0 0', // Rounded top corners
+                    borderRadius: '4px 4px 0 0',
                     marginRight: '8px',
                     '&.Mui-selected': {
-                      color: '#FFFFFF', // Selected text color
-                      backgroundColor: '#223B7C', // Selected background color
+                      color: '#FFFFFF',
+                      backgroundColor: '#223B7C',
                     },
                   },
                 }}
-              ><Tab label="Virkalistaus" />
-                <Tab label="Historiatiedot" />
+              ><Tab label={t("tabs.positions")} />
+                <Tab label={t("tabs.history")} />
               </Tabs>
             </Grid2>
 
