@@ -22,7 +22,7 @@ import { fetchAllChangeLogs } from 'services/functions/change-log-service';
 import { useAppSelector } from 'redux/hooks';
 import { selectPositionData } from 'redux/slices/position-slice';
 import { useTranslation } from 'react-i18next';
-import { format } from 'date-fns';
+import { formatTimestamp, getVacancyNumber } from './utils';
 
 const ChangeLogTable = () => {
     const { t } = useTranslation();
@@ -39,16 +39,28 @@ const ChangeLogTable = () => {
 
     const positions = useAppSelector(selectPositionData);
 
-    const handleRowToggle = (id: string) => {
-        setExpandedRow(expandedRow === id ? null : id);
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchAllChangeLogs();
+                setChangeLogs(data);
+                setFilteredChangeLogs(data);
+            } catch (error) {
+                console.error('Error fetching change logs:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
+        fetchData();
+    }, []);
 
     const getTranslatedField = (field: string) => {
         return t(`change_logs.fields.${field}`, field);
     };
 
-
+    // Sorting logic
     const handleSort = (key: keyof ChangeLogEntry) => {
         setSortConfig((prevConfig) => {
             if (prevConfig && prevConfig.key === key) {
@@ -76,53 +88,7 @@ const ChangeLogTable = () => {
         });
     }, [filteredChangeLogs, sortConfig]);
 
-    const handleSearch = () => {
-        const filtered = changeLogs.filter((log) => {
-            const matchesVacancyNumber = searchVacancyNumber
-                ? getVacancyNumber(log.positionId).includes(searchVacancyNumber)
-                : true;
-            const matchesDate = searchDate
-                ? formatTimestamp(log.timestamp).includes(searchDate)
-                : true;
-            return matchesVacancyNumber && matchesDate;
-        });
-        setFilteredChangeLogs(filtered);
-        setPage(0); // Reset to first page
-    };
-
-    const handleResetSearch = () => {
-        setSearchVacancyNumber('');
-        setSearchDate('');
-        setFilteredChangeLogs(changeLogs);
-        setPage(0); // Reset to first page
-    };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchAllChangeLogs();
-                setChangeLogs(data);
-                setFilteredChangeLogs(data);
-            } catch (error) {
-                console.error('Error fetching change logs:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const getVacancyNumber = (positionId: string): string => {
-        const position = positions.find((pos) => pos.id === positionId);
-        return position?.vacancyNumber || '-';
-    };
-
-    const formatTimestamp = (timestamp: string) => {
-        return format(new Date(timestamp), 'dd.MM.yyyy HH:mm:ss');
-    };
-
+    // Pagination logic
     const paginatedChangeLogs = sortedChangeLogs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     const handleChangePage = (_: unknown, newPage: number) => {
@@ -131,7 +97,33 @@ const ChangeLogTable = () => {
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0); // Reset to the first page
+        setPage(0);
+    };
+
+    // Search logic
+    const handleSearch = () => {
+        const filtered = changeLogs.filter((log) => {
+            const matchesVacancyNumber = searchVacancyNumber
+                ? getVacancyNumber(log.positionId, positions).includes(searchVacancyNumber)
+                : true;
+            const matchesDate = searchDate
+                ? formatTimestamp(log.timestamp).includes(searchDate)
+                : true;
+            return matchesVacancyNumber && matchesDate;
+        });
+        setFilteredChangeLogs(filtered);
+        setPage(0);
+    };
+
+    const handleResetSearch = () => {
+        setSearchVacancyNumber('');
+        setSearchDate('');
+        setFilteredChangeLogs(changeLogs);
+        setPage(0);
+    };
+
+    const handleRowToggle = (id: string) => {
+        setExpandedRow(expandedRow === id ? null : id);
     };
 
     if (loading) {
@@ -275,7 +267,7 @@ const ChangeLogTable = () => {
                                         </Box>
                                     </TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                                        {getVacancyNumber(row.positionId)}
+                                        {getVacancyNumber(row.positionId, positions)}
                                     </TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getTranslatedField(row.editedField)}</TableCell>                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
