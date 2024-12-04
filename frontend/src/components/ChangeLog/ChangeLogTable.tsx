@@ -11,6 +11,7 @@ import {
     CircularProgress,
     alpha,
     Typography,
+    TablePagination,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -28,6 +29,9 @@ const ChangeLogTable = () => {
     const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [sortConfig, setSortConfig] = useState<{ key: keyof ChangeLogEntry; direction: 'asc' | 'desc' } | null>(null);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
     const positions = useAppSelector(selectPositionData);
 
     const handleRowToggle = (id: string) => {
@@ -82,12 +86,19 @@ const ChangeLogTable = () => {
         return position?.vacancyNumber || '-';
     };
 
-    const getTranslatedField = (field: string) => {
-        return t(`change_logs.fields.${field}`, field);
-    };
-
     const formatTimestamp = (timestamp: string) => {
         return format(new Date(timestamp), 'dd.MM.yyyy HH:mm:ss');
+    };
+
+    const paginatedChangeLogs = sortedChangeLogs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+    const handleChangePage = (_: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0); // Reset to the first page
     };
 
     if (loading) {
@@ -99,145 +110,164 @@ const ChangeLogTable = () => {
     }
 
     return (
-        <TableContainer>
-            <Table sx={{ minWidth: 650 }}>
-                {/* Table Header */}
-                <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
-                    <TableRow>
-                        <TableCell
-                            sx={{
-                                color: 'white',
-                                fontSize: '1.2rem',
-                                cursor: 'pointer',
-                                padding: '8px 16px',
-                            }}
-                            onClick={() => handleSort('timestamp')}
-                        >
-                            <Box display="flex" alignItems="center" gap={2}>
-                                Muokkaus PVM
-                                <Box sx={{ width: '16px', textAlign: 'center' }}>
-                                    {sortConfig?.key === 'timestamp' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                                </Box>
-                            </Box>
-                        </TableCell>
-                        <TableCell
-                            sx={{
-                                color: 'white',
-                                fontSize: '1.2rem',
-                                cursor: 'pointer',
-                                padding: '8px 16px',
-                            }}
-                            onClick={() => handleSort('positionId')}
-                        >
-                            <Box display="flex" alignItems="center" gap={2}>
-                                Vakanssinumero
-                                <Box sx={{ width: '16px', textAlign: 'center' }}>
-                                    {sortConfig?.key === 'positionId' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                                </Box>
-                            </Box>
-                        </TableCell>
-                        <TableCell
-                            sx={{
-                                color: 'white',
-                                fontSize: '1.2rem',
-                                cursor: 'pointer',
-                                padding: '8px 16px',
-                            }}
-                            onClick={() => handleSort('editedField')}
-                        >
-                            <Box display="flex" alignItems="center" gap={2}>
-                                Muokattu kenttä
-                                <Box sx={{ width: '16px', textAlign: 'center' }}>
-                                    {sortConfig?.key === 'editedField' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                                </Box>
-                            </Box>
-                        </TableCell>
-                        <TableCell
-                            sx={{
-                                color: 'white',
-                                fontSize: '1.2rem',
-                                cursor: 'pointer',
-                                padding: '8px 16px',
-                            }}
-                            onClick={() => handleSort('decisionNumber')}
-                        >
-                            <Box display="flex" alignItems="center" gap={2}>
-                                Päätösnumero
-                                <Box sx={{ width: '16px', textAlign: 'center' }}>
-                                    {sortConfig?.key === 'decisionNumber' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                                </Box>
-                            </Box>
-                        </TableCell>
-                        <TableCell
-                            sx={{
-                                color: 'white',
-                                fontSize: '1.2rem',
-                                cursor: 'pointer',
-                                padding: '8px 16px',
-                            }}
-                            onClick={() => handleSort('editor')}
-                        >
-                            <Box display="flex" alignItems="center" gap={2}>
-                                Muokkaaja
-                                <Box sx={{ width: '16px', textAlign: 'center' }}>
-                                    {sortConfig?.key === 'editor' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                                </Box>
-                            </Box>
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-
-                {/* Table Body */}
-                <TableBody>
-                    {sortedChangeLogs.map((row) => (
-                        <React.Fragment key={row.id}>
-                            <TableRow
+        <Box>
+            <TableContainer>
+                <Table sx={{ minWidth: 650 }}>
+                    {/* Table Header */}
+                    <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
+                        <TableRow>
+                            <TableCell
                                 sx={{
-                                    backgroundColor: sortedChangeLogs.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2),
+                                    color: 'white',
+                                    fontSize: '1.2rem',
                                     cursor: 'pointer',
+                                    padding: '8px 16px',
                                 }}
-                                onClick={() => handleRowToggle(row.id)}
+                                onClick={() => handleSort('timestamp')}
                             >
-                                <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                                    <Box display="flex" alignItems="center">
-                                        <IconButton size="small" sx={{ ml: 1 }}>
-                                            {expandedRow === row.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                                        </IconButton>
-                                        {formatTimestamp(row.timestamp)}
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    Muokkaus PVM
+                                    <Box sx={{ width: '16px', textAlign: 'center' }}>
+                                        {sortConfig?.key === 'timestamp' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                                     </Box>
-                                </TableCell>
-                                <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getVacancyNumber(row.positionId)}</TableCell>
-                                <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{getTranslatedField(row.editedField)}</TableCell>
-                                <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
-                                <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
-                            </TableRow>
+                                </Box>
+                            </TableCell>
+                            <TableCell
+                                sx={{
+                                    color: 'white',
+                                    fontSize: '1.2rem',
+                                    cursor: 'pointer',
+                                    padding: '8px 16px',
+                                }}
+                                onClick={() => handleSort('positionId')}
+                            >
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    Vakanssinumero
+                                    <Box sx={{ width: '16px', textAlign: 'center' }}>
+                                        {sortConfig?.key === 'positionId' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                                    </Box>
+                                </Box>
+                            </TableCell>
+                            <TableCell
+                                sx={{
+                                    color: 'white',
+                                    fontSize: '1.2rem',
+                                    cursor: 'pointer',
+                                    padding: '8px 16px',
+                                }}
+                                onClick={() => handleSort('editedField')}
+                            >
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    Muokattu kenttä
+                                    <Box sx={{ width: '16px', textAlign: 'center' }}>
+                                        {sortConfig?.key === 'editedField' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                                    </Box>
+                                </Box>
+                            </TableCell>
+                            <TableCell
+                                sx={{
+                                    color: 'white',
+                                    fontSize: '1.2rem',
+                                    cursor: 'pointer',
+                                    padding: '8px 16px',
+                                }}
+                                onClick={() => handleSort('decisionNumber')}
+                            >
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    Päätösnumero
+                                    <Box sx={{ width: '16px', textAlign: 'center' }}>
+                                        {sortConfig?.key === 'decisionNumber' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                                    </Box>
+                                </Box>
+                            </TableCell>
+                            <TableCell
+                                sx={{
+                                    color: 'white',
+                                    fontSize: '1.2rem',
+                                    cursor: 'pointer',
+                                    padding: '8px 16px',
+                                }}
+                                onClick={() => handleSort('editor')}
+                            >
+                                <Box display="flex" alignItems="center" gap={2}>
+                                    Muokkaaja
+                                    <Box sx={{ width: '16px', textAlign: 'center' }}>
+                                        {sortConfig?.key === 'editor' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                                    </Box>
+                                </Box>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
 
-                            {/* Expanded Row */}
-                            {expandedRow === row.id && (
-                                <TableRow>
-                                    <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
-                                        <Typography fontWeight="bold" sx={{ mb: 2 }}>
-                                            Muutos
-                                        </Typography>
-                                        <Box display="flex" justifyContent="space-between" paddingX={5}>
-                                            <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
-                                                <Typography fontWeight="bold">Vanha arvo</Typography>
-                                                <Typography>{row.oldValue || '-'}</Typography>
-                                            </Box>
-                                            <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
-                                                <Typography fontWeight="bold">Uusi arvo</Typography>
-                                                <Typography>{row.newValue || '-'}</Typography>
-                                            </Box>
+                    {/* Table Body */}
+                    <TableBody>
+                        {paginatedChangeLogs.map((row) => (
+                            <React.Fragment key={row.id}>
+                                <TableRow
+                                    sx={{
+                                        backgroundColor:
+                                            paginatedChangeLogs.indexOf(row) % 2 === 0
+                                                ? '#F9F9F9'
+                                                : alpha('#223B7C', 0.2),
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => handleRowToggle(row.id)}
+                                >
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                                        <Box display="flex" alignItems="center">
+                                            <IconButton size="small" sx={{ ml: 1 }}>
+                                                {expandedRow === row.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                            </IconButton>
+                                            {formatTimestamp(row.timestamp)}
                                         </Box>
                                     </TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                                        {getVacancyNumber(row.positionId)}
+                                    </TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editedField}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
                                 </TableRow>
-                            )}
 
-                        </React.Fragment>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                                {/* Expanded Row */}
+                                {expandedRow === row.id && (
+                                    <TableRow>
+                                        <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
+                                            <Typography fontWeight="bold" sx={{ mb: 2 }}>
+                                                Muutos
+                                            </Typography>
+                                            <Box display="flex" justifyContent="space-between" paddingX={5}>
+                                                <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
+                                                    <Typography fontWeight="bold">Vanha arvo</Typography>
+                                                    <Typography>{row.oldValue || '-'}</Typography>
+                                                </Box>
+                                                <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
+                                                    <Typography fontWeight="bold">Uusi arvo</Typography>
+                                                    <Typography>{row.newValue || '-'}</Typography>
+                                                </Box>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            {/* Pagination */}
+            <Box display="flex" justifyContent="center" mt={2}>
+                <TablePagination
+                    component="div"
+                    count={sortedChangeLogs.length}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage={t('table.rows_per_page')}
+                />
+            </Box>
+        </Box>
     );
 };
 
