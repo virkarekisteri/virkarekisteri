@@ -12,6 +12,8 @@ import {
     alpha,
     Typography,
     TablePagination,
+    TextField,
+    Button,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -27,10 +29,13 @@ const ChangeLogTable = () => {
 
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
     const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
+    const [filteredChangeLogs, setFilteredChangeLogs] = useState<ChangeLogEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [sortConfig, setSortConfig] = useState<{ key: keyof ChangeLogEntry; direction: 'asc' | 'desc' } | null>(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [searchVacancyNumber, setSearchVacancyNumber] = useState('');
+    const [searchDate, setSearchDate] = useState('');
 
     const positions = useAppSelector(selectPositionData);
 
@@ -54,8 +59,8 @@ const ChangeLogTable = () => {
     };
 
     const sortedChangeLogs = React.useMemo(() => {
-        if (!sortConfig) return changeLogs;
-        return [...changeLogs].sort((a, b) => {
+        if (!sortConfig) return filteredChangeLogs;
+        return [...filteredChangeLogs].sort((a, b) => {
             const aValue = a[sortConfig.key];
             const bValue = b[sortConfig.key];
 
@@ -69,7 +74,28 @@ const ChangeLogTable = () => {
             }
             return 0;
         });
-    }, [changeLogs, sortConfig]);
+    }, [filteredChangeLogs, sortConfig]);
+
+    const handleSearch = () => {
+        const filtered = changeLogs.filter((log) => {
+            const matchesVacancyNumber = searchVacancyNumber
+                ? getVacancyNumber(log.positionId).includes(searchVacancyNumber)
+                : true;
+            const matchesDate = searchDate
+                ? formatTimestamp(log.timestamp).includes(searchDate)
+                : true;
+            return matchesVacancyNumber && matchesDate;
+        });
+        setFilteredChangeLogs(filtered);
+        setPage(0); // Reset to first page
+    };
+
+    const handleResetSearch = () => {
+        setSearchVacancyNumber('');
+        setSearchDate('');
+        setFilteredChangeLogs(changeLogs);
+        setPage(0); // Reset to first page
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,6 +103,7 @@ const ChangeLogTable = () => {
             try {
                 const data = await fetchAllChangeLogs();
                 setChangeLogs(data);
+                setFilteredChangeLogs(data);
             } catch (error) {
                 console.error('Error fetching change logs:', error);
             } finally {
@@ -117,6 +144,28 @@ const ChangeLogTable = () => {
 
     return (
         <Box>
+            {/* Search Controls */}
+            <Box display="flex" gap={2} mb={2}>
+                <TextField
+                    label="Search by Vacancy Number"
+                    value={searchVacancyNumber}
+                    onChange={(e) => setSearchVacancyNumber(e.target.value)}
+                    fullWidth
+                />
+                <TextField
+                    label="Search by Date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    fullWidth
+                />
+                <Button variant="contained" onClick={handleSearch}>
+                    Search
+                </Button>
+                <Button variant="outlined" onClick={handleResetSearch}>
+                    Reset
+                </Button>
+            </Box>
+
             <TableContainer>
                 <Table sx={{ minWidth: 650 }}>
                     {/* Table Header */}
