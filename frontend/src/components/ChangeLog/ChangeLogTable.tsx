@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -9,48 +9,45 @@ import {
     Box,
     Typography,
     IconButton,
+    CircularProgress
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
-const mockChangeLogData = [
-    {
-        id: 1,
-        muokkausPvm: '09.10.2024',
-        vakanssinumero: '40100100',
-        muokattuKentta: 'Viran haltija',
-        paatosnumero: 'Poj § 120/20',
-        muokkaaja: 'Minni Hiiri',
-        changes: [
-            { vanhaArvo: 'Matti Meikäläinen', uusiArvo: 'Hannu Hanh', selite: 'Viranhaltija muutettu' },
-        ],
-    },
-    {
-        id: 2,
-        muokkausPvm: '18.09.2024',
-        vakanssinumero: '40100100',
-        muokattuKentta: 'Viran tila',
-        paatosnumero: 'Kok. 09/24',
-        muokkaaja: 'Aku Ankka',
-        changes: [],
-    },
-    {
-        id: 3,
-        muokkausPvm: '24.07.2024',
-        vakanssinumero: '40862500',
-        muokattuKentta: 'Kelpoisuusehto',
-        paatosnumero: 'Poj § 111/19',
-        muokkaaja: 'Valma Virkailija',
-        changes: [],
-    },
-];
+import type { ChangeLogEntry } from 'models/ChangeLogEntry';
+import { fetchAllChangeLogs } from 'services/functions/change-log-service';
 
 const ChangeLogTable = () => {
-    const [expandedRow, setExpandedRow] = useState<number | null>(null);
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    const handleRowToggle = (id: number) => {
+    const handleRowToggle = (id: string) => {
         setExpandedRow(expandedRow === id ? null : id);
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchAllChangeLogs();
+                setChangeLogs(data);
+            } catch (error) {
+                console.error('Error fetching change logs:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <TableContainer>
@@ -63,79 +60,93 @@ const ChangeLogTable = () => {
                             fontSize: '1.2rem',
                             cursor: 'pointer',
                             padding: '8px 16px',
-                        }}>Muokkaus PVM</TableCell>
+                        }}
+                        >
+                            Muokkaus PVM
+                        </TableCell>
                         <TableCell sx={{
                             color: 'white',
                             fontSize: '1.2rem',
                             cursor: 'pointer',
                             padding: '8px 16px',
-                        }}>Vakanssinumero</TableCell>
+                        }}
+                        >
+                            Vakanssinumero
+                        </TableCell>
                         <TableCell sx={{
                             color: 'white',
                             fontSize: '1.2rem',
                             cursor: 'pointer',
                             padding: '8px 16px',
-                        }}>Muokattu kenttä</TableCell>
+                        }}
+                        >
+                            Muokattu kenttä
+                        </TableCell>
                         <TableCell sx={{
                             color: 'white',
                             fontSize: '1.2rem',
                             cursor: 'pointer',
                             padding: '8px 16px',
-                        }}>Päätösnumero</TableCell>
+                        }}
+                        >
+                            Päätösnumero
+                        </TableCell>
                         <TableCell sx={{
                             color: 'white',
                             fontSize: '1.2rem',
                             cursor: 'pointer',
                             padding: '8px 16px',
-                        }}>Muokkaaja</TableCell>
+                        }}
+                        >
+                            Muokkaaja
+                        </TableCell>
                     </TableRow>
                 </TableHead>
 
                 {/* Table Body */}
                 <TableBody>
-                    {mockChangeLogData.map((row) => (
+                    {changeLogs.map((row) => (
                         <React.Fragment key={row.id}>
                             {/* Main Row */}
                             <TableRow
                                 sx={{
-                                    backgroundColor: row.id % 2 === 0 ? '#F9F9F9' : '#FFFFFF',
+                                    backgroundColor: changeLogs.indexOf(row) % 2 === 0 ? '#F9F9F9' : '#FFFFFF',
                                     cursor: 'pointer',
                                 }}
                                 onClick={() => handleRowToggle(row.id)}
                             >
-                                <TableCell>{row.muokkausPvm}</TableCell>
-                                <TableCell>{row.vakanssinumero}</TableCell>
-                                <TableCell>{row.muokattuKentta}</TableCell>
-                                <TableCell>{row.paatosnumero}</TableCell>
                                 <TableCell>
                                     <Box display="flex" alignItems="center">
-                                        {row.muokkaaja}
                                         <IconButton size="small" sx={{ ml: 1 }}>
                                             {expandedRow === row.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                         </IconButton>
+                                        {new Date(row.timestamp).toLocaleDateString()}
                                     </Box>
+                                </TableCell>
+                                <TableCell>{row.positionId}</TableCell>
+                                <TableCell>{row.editedField}</TableCell>
+                                <TableCell>{row.decisionNumber}</TableCell>
+                                <TableCell>
+                                    {row.editor}
+
                                 </TableCell>
                             </TableRow>
 
                             {/* Expanded Row */}
-                            {expandedRow === row.id && row.changes.length > 0 && (
+                            {expandedRow === row.id && (
                                 <TableRow>
                                     <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
                                         <Typography fontWeight="bold" sx={{ mb: 2 }}>
                                             Muutos
                                         </Typography>
-                                        <Box display="flex" justifyContent="space-between">
+                                        <Box display="flex" justifyContent="space-between" paddingLeft="5rem" paddingRight="5rem">
                                             <Box>
                                                 <Typography fontWeight="bold">Vanha arvo</Typography>
-                                                <Typography>{row.changes[0]?.vanhaArvo || '-'}</Typography>
+                                                <Typography>{row.oldValue || '-'}</Typography>
                                             </Box>
                                             <Box>
                                                 <Typography fontWeight="bold">Uusi arvo</Typography>
-                                                <Typography>{row.changes[0]?.uusiArvo || '-'}</Typography>
-                                            </Box>
-                                            <Box>
-                                                <Typography fontWeight="bold">Selite</Typography>
-                                                <Typography>{row.changes[0]?.selite || '-'}</Typography>
+                                                <Typography>{row.newValue || '-'}</Typography>
                                             </Box>
                                         </Box>
                                     </TableCell>
