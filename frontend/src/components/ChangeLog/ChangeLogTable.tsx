@@ -161,12 +161,12 @@ const ChangeLogTable = () => {
                                         <Typography fontWeight="bold" sx={{ mb: 2 }}>
                                             Muutos
                                         </Typography>
-                                        <Box display="flex" justifyContent="left" paddingLeft={5} paddingRight={5} gap={20}>
-                                            <Box>
+                                        <Box display="flex" justifyContent="space-between" paddingX={5}>
+                                            <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
                                                 <Typography fontWeight="bold">Vanha arvo</Typography>
                                                 <Typography>{row.oldValue || '-'}</Typography>
                                             </Box>
-                                            <Box>
+                                            <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
                                                 <Typography fontWeight="bold">Uusi arvo</Typography>
                                                 <Typography>{row.newValue || '-'}</Typography>
                                             </Box>
