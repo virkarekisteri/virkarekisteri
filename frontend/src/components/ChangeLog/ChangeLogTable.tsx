@@ -10,6 +10,7 @@ import {
     IconButton,
     CircularProgress,
     alpha,
+    Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -210,6 +211,28 @@ const ChangeLogTable = () => {
                                 <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
                                 <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell>
                             </TableRow>
+
+                            {/* Expanded Row */}
+                            {expandedRow === row.id && (
+                                <TableRow>
+                                    <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
+                                        <Typography fontWeight="bold" sx={{ mb: 2 }}>
+                                            Muutos
+                                        </Typography>
+                                        <Box display="flex" justifyContent="space-between" paddingX={5}>
+                                            <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
+                                                <Typography fontWeight="bold">Vanha arvo</Typography>
+                                                <Typography>{row.oldValue || '-'}</Typography>
+                                            </Box>
+                                            <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
+                                                <Typography fontWeight="bold">Uusi arvo</Typography>
+                                                <Typography>{row.newValue || '-'}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
                         </React.Fragment>
                     ))}
                 </TableBody>
