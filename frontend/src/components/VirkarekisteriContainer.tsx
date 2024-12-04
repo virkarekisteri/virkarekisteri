@@ -5,7 +5,7 @@ import UploadCsvModal from './Modal/UploadCsvModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
+import { fetchPosition, getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
@@ -30,8 +30,9 @@ const VirkarekisterContainer = () => {
   const handleOpenUploadModal = () => setOpenUploadModal(true);
   const handleCloseUploadModal = () => setOpenUploadModal(false);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
+    dispatch(fetchPosition(null));
   };
 
   const position = useAppSelector(selectIndividualPosition);
