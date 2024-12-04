@@ -50,15 +50,35 @@ const VirkarekisterContainer = () => {
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 container size={12} alignItems="center" justifyContent="space-between" sx={{ gap: 2 }}>
-            {/* Tabs on the Left */}
             <Grid2 size="auto">
-              <Tabs value={activeTab} onChange={handleTabChange} aria-label="Virkarekisteri Views">
-                <Tab label="Virat" />
-                <Tab label="Historia" />
+              <Tabs
+                value={activeTab}
+                onChange={handleTabChange}
+                aria-label="Virkarekisteri Views"
+                sx={{
+                  '& .MuiTabs-indicator': {
+                    backgroundColor: '#223B7C', // The blue indicator color
+                    height: '4px',
+                  },
+                  '& .MuiTab-root': {
+                    color: '#FFFFFF', // Default text color
+                    backgroundColor: '#B0BEC5', // Default background color
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '4px 4px 0 0', // Rounded top corners
+                    marginRight: '8px',
+                    '&.Mui-selected': {
+                      color: '#FFFFFF', // Selected text color
+                      backgroundColor: '#223B7C', // Selected background color
+                    },
+                  },
+                }}
+              ><Tab label="Virkalistaus" />
+                <Tab label="Historiatiedot" />
               </Tabs>
             </Grid2>
 
-            {/* Buttons on the Right */}
             <Grid2 size="auto" display="flex" gap={2}>
               <Button
                 variant="contained"
