@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid2 } from '@mui/material';
+import { Box, Button, CircularProgress, Grid2, Tabs, Tab } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import LandingPage from './LandingPage';
+import ChangeLogTable from './ChangeLog/ChangeLogTable';
 
 const VirkarekisterContainer = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +19,8 @@ const VirkarekisterContainer = () => {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+
 
   const { t } = useTranslation();
 
@@ -26,6 +29,10 @@ const VirkarekisterContainer = () => {
 
   const handleOpenUploadModal = () => setOpenUploadModal(true);
   const handleCloseUploadModal = () => setOpenUploadModal(false);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
 
   const position = useAppSelector(selectIndividualPosition);
   const dataLoading = useAppSelector(selectPositionLoading);
@@ -41,60 +48,82 @@ const VirkarekisterContainer = () => {
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
-          <Grid2 size={12} display="flex" justifyContent="right" alignItems={'flex-end'} sx={{ gap: 5 }}>
-            <Button
-              variant="contained"
-              onClick={handleOpenUploadModal}
-              sx={{
-                backgroundColor: '#223B7C',
-                color: 'white',
-                fontSize: '1.2rem',
-                padding: '20px',
-                height: '45px',
-                display: 'flex',
-                borderRadius: '25px 8px 8px 25px',
-              }}
-              startIcon={
-                <Box
-                  component="span"
-                  sx={{
-                    marginRight: '40px',
-                  }}
-                >
-                  +
-                </Box>
-              }
-            >
-              {t('create_csv_position.upload_csv')}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleOpenCreateModal}
-              sx={{
-                backgroundColor: '#223B7C',
-                color: 'white',
-                fontSize: '1.2rem',
-                padding: '20px',
-                height: '45px',
-                display: 'flex',
-                borderRadius: '25px 8px 8px 25px',
-              }}
-              startIcon={
-                <Box
-                  component="span"
-                  sx={{
-                    marginRight: '40px',
-                  }}
-                >
-                  +
-                </Box>
-              }
-            >
-              {t('new_position')}
-            </Button>
+          <Grid2 container size={12} alignItems="center" justifyContent="space-between" sx={{ gap: 2 }}>
+            {/* Tabs on the Left */}
+            <Grid2 size="auto">
+              <Tabs value={activeTab} onChange={handleTabChange} aria-label="Virkarekisteri Views">
+                <Tab label="Virat" />
+                <Tab label="Historia" />
+              </Tabs>
+            </Grid2>
+
+            {/* Buttons on the Right */}
+            <Grid2 size="auto" display="flex" gap={2}>
+              <Button
+                variant="contained"
+                onClick={handleOpenUploadModal}
+                sx={{
+                  backgroundColor: '#223B7C',
+                  color: 'white',
+                  fontSize: '1.2rem',
+                  padding: '20px',
+                  height: '45px',
+                  display: 'flex',
+                  borderRadius: '25px 8px 8px 25px',
+                }}
+                startIcon={
+                  <Box
+                    component="span"
+                    sx={{
+                      marginRight: '40px',
+                    }}
+                  >
+                    +
+                  </Box>
+                }
+              >
+                {t('create_csv_position.upload_csv')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleOpenCreateModal}
+                sx={{
+                  backgroundColor: '#223B7C',
+                  color: 'white',
+                  fontSize: '1.2rem',
+                  padding: '20px',
+                  height: '45px',
+                  display: 'flex',
+                  borderRadius: '25px 8px 8px 25px',
+                }}
+                startIcon={
+                  <Box
+                    component="span"
+                    sx={{
+                      marginRight: '40px',
+                    }}
+                  >
+                    +
+                  </Box>
+                }
+              >
+                {t('new_position')}
+              </Button>
+            </Grid2>
           </Grid2>
           <Grid2 size={12}>
-            <VirkarekisteriTable />
+            {activeTab === 0 && (
+              <>
+                {dataLoading ? (
+                  <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <VirkarekisteriTable />
+                )}
+              </>
+            )}
+            {activeTab === 1 && <ChangeLogTable />}
           </Grid2>
           <Grid2 size={12}>
             {dataLoading ? (
