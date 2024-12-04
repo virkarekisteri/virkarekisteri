@@ -5,14 +5,17 @@ import type { Position } from 'models/Position';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from 'react-i18next';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
-import type { PositionEmployee } from 'models/PositionEmployee';
-import { fetchPositionEmployee } from 'redux/slices/position-employee-slice';
-import { useAppDispatch } from 'redux/hooks';
 import { formatDate } from 'utils/formatDate';
+import { useGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { t } = useTranslation();
+
+  const { data: positionEmployee } = useGetPositionEmployeeQuery(position.positionEmployeeId ?? skipToken);
+  const { data: replacementEmployee } = useGetPositionEmployeeQuery(position.replacementEmployeeId ?? skipToken);
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -21,28 +24,6 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
     setModalOpen(false);
   };
 
-  const [positionEmployee, setPositionEmployee] = useState<PositionEmployee | undefined>();
-  const [replacementEmployee, setReplacementEmployee] = useState<PositionEmployee | undefined>();
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      if (position.positionEmployeeId) {
-        const originalEmployeeResult = await dispatch(fetchPositionEmployee(position.positionEmployeeId));
-        const originalEmployee = originalEmployeeResult.payload as PositionEmployee;
-
-        if (position.replacementEmployeeId) {
-          const replacementEmployeeResult = await dispatch(fetchPositionEmployee(position.replacementEmployeeId));
-          const replacementEmployee = replacementEmployeeResult.payload as PositionEmployee;
-          setReplacementEmployee(replacementEmployee);
-        }
-        setPositionEmployee(originalEmployee);
-      }
-    };
-
-    fetchEmployee();
-  }, [dispatch, position.positionEmployeeId, position.replacementEmployeeId]);
   const isEmployeeSet = position.positionEmployeeId !== null;
 
   const [isReplacementActive, setIsReplacementActive] = useState(false);

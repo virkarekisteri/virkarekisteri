@@ -18,16 +18,17 @@ import {
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
-import { addPosition } from 'redux/slices/position-slice';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { fetchPositionNames, selectPositionNames, selectPositionNamesLoading } from 'redux/slices/position-name-slice';
 import type { PositionName } from 'models/PositionName';
-import { getOrganizationTrees, selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
+import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
+import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
+
 interface CreateVirkaModalProps {
   open: boolean;
   handleClose: () => void;
@@ -35,22 +36,19 @@ interface CreateVirkaModalProps {
 
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const positionNames = useAppSelector(selectPositionNames);
-  const positionNamesLoading = useAppSelector(selectPositionNamesLoading);
+
+  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
+    open ? undefined : skipToken,
+  );
+  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
+
+  const [createPosition] = useCreatePositionMutation();
+
   const positionNameOptions = positionNames.map((option) => option.name);
 
-  const organizationTrees = useAppSelector(selectOrganizationTreeData);
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
-
-  useEffect(() => {
-    if (open) {
-      dispatch(fetchPositionNames());
-      dispatch(getOrganizationTrees());
-    }
-  }, [dispatch, open]);
 
   const validatePricingId = (value: string) => {
     if (value && value.length > 10) {
@@ -84,7 +82,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         vacancyStatus: values.vacancyStaus ?? '',
       };
 
-      await dispatch(addPosition(positionData));
+      createPosition(positionData);
       handleClose();
     } catch (error) {
       console.error(error);

@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, CircularProgress, Grid2 } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
-import { getPositions, selectIndividualPosition, selectPositionLoading } from 'redux/slices/position-slice';
-import { useAppDispatch, useAppSelector } from 'redux/hooks';
+import { useAppSelector } from 'redux/hooks';
 import PositionDetails from './Details/PositionDetails';
 import { useIsAuthenticated, AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
 import LandingPage from './LandingPage';
+import { useGetPositionQuery, useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { selectSelectedPosition } from 'redux/slices/position-slice';
 
 const VirkarekisterContainer = () => {
-  const dispatch = useAppDispatch();
-
   const isAuthenticated = useIsAuthenticated();
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -27,12 +27,10 @@ const VirkarekisterContainer = () => {
   const handleOpenUploadModal = () => setOpenUploadModal(true);
   const handleCloseUploadModal = () => setOpenUploadModal(false);
 
-  const position = useAppSelector(selectIndividualPosition);
-  const dataLoading = useAppSelector(selectPositionLoading);
+  const selectedPositionId = useAppSelector(selectSelectedPosition);
 
-  useEffect(() => {
-    if (isAuthenticated) dispatch(getPositions());
-  }, [dispatch, isAuthenticated]);
+  const { isLoading } = useGetPositionsQuery(isAuthenticated ? undefined : skipToken);
+  const { data: position } = useGetPositionQuery(isAuthenticated ? (selectedPositionId ?? skipToken) : skipToken);
 
   return (
     <>
@@ -97,12 +95,12 @@ const VirkarekisterContainer = () => {
             <VirkarekisteriTable />
           </Grid2>
           <Grid2 size={12}>
-            {dataLoading ? (
+            {isLoading ? (
               <Box display="flex" justifyContent="center" alignItems="center" height="100%">
                 <CircularProgress />
               </Box>
             ) : (
-              position && <PositionDetails position={position} />
+              selectedPositionId && position && <PositionDetails position={position} />
             )}
           </Grid2>
         </Grid2>

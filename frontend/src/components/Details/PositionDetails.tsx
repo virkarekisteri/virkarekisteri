@@ -12,14 +12,12 @@ interface PositionDetailsProps {
 const PositionDetails: React.FC<PositionDetailsProps> = ({ position }) => {
   return (
     <>
-      <Box sx={{ backgroundColor: '#f0f0f0', padding: 2, width: '100%' }}>
-        {position && <BasicDetails position={position} />}
-      </Box>
+      <Box sx={{ backgroundColor: '#f0f0f0', padding: 2, width: '100%' }}>{<BasicDetails position={position} />}</Box>
       <Box sx={{ backgroundColor: '#f0f0f0', padding: '0rem 2.5rem 1rem 2.5rem', width: '100%' }}>
-        {position && <EmployeeDetails position={position} />}
+        {<EmployeeDetails position={position} />}
       </Box>
       <Box sx={{ backgroundColor: '#f0f0f0', padding: '0rem 2.5rem 2rem 2.5rem', width: '100%' }}>
-        {position && <PositionChangeLog position={position} />}
+        {<PositionChangeLog position={position} />}
       </Box>
     </>
   );
