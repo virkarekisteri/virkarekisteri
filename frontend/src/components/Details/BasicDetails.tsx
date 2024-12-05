@@ -4,10 +4,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
-import { useAppSelector } from 'redux/hooks';
-import { selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
+import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 
 interface BasicDetailsProps {
   position: Position;
@@ -15,6 +14,9 @@ interface BasicDetailsProps {
 
 const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
+
+  const { data: orgTrees = [] } = useGetOrganizationTreesQuery();
+
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const handleOpenEditModal = () => {
@@ -25,7 +27,6 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
     setEditModalOpen(false);
   };
 
-  const orgTrees = useAppSelector(selectOrganizationTreeData);
   const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
 
   const statusTextMap: Record<number, string> = {

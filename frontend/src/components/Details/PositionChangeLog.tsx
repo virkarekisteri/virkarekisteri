@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
-import type { ChangeLogEntry } from 'models/ChangeLogEntry';
-import { fetchPositionChangeLogs } from 'services/functions/positions-service';
 import { format } from 'date-fns';
+import { useGetPositionChangeLogsQuery } from 'redux/api-slices/functions/positions-api';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 interface PositionChangeLogProps {
   position: Position;
@@ -15,7 +15,8 @@ interface PositionChangeLogProps {
 
 const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
   const { t } = useTranslation();
-  const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
+
+  const { data: changeLogs = [] } = useGetPositionChangeLogsQuery(position.id ?? skipToken);
 
   const formatTimestamp = (timestamp: string) => {
     return format(new Date(timestamp), 'dd.MM.yyyy HH:mm:ss');
@@ -24,17 +25,6 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
   const getTranslatedField = (field: string) => {
     return t(`change_logs.fields.${field}`, field);
   };
-
-  useEffect(() => {
-    const loadChangeLogs = async () => {
-      if (position.id) {
-        const logs = await fetchPositionChangeLogs(position.id);
-        setChangeLogs(logs);
-      }
-    };
-
-    loadChangeLogs().catch(console.error);
-  }, [position.id]);
 
   return (
     <Accordion>

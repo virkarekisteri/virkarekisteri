@@ -14,8 +14,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'redux/hooks';
-import { uploadPositionsFromCsv, getPositions } from 'redux/slices/position-slice';
+import { useImportPositionsCsvMutation } from 'redux/api-slices/functions/positions-api';
 
 interface UploadCsvModalProps {
   open: boolean;
@@ -24,16 +23,17 @@ interface UploadCsvModalProps {
 
 const UploadCsvModal: React.FC<UploadCsvModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+
+  const [importPositionsCsv, { isLoading }] = useImportPositionsCsvMutation();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+
+  // Ideally, the logic of having these states should be replaced with RTK query's built-in response data and error
   const [errors, setErrors] = useState<string[]>([]);
   const [successCount, setSuccessCount] = useState<number | null>(null);
 
   const resetStates = () => {
     setSelectedFile(null);
-    setUploading(false);
     setErrors([]);
     setSuccessCount(null);
   };
@@ -53,7 +53,6 @@ const UploadCsvModal: React.FC<UploadCsvModalProps> = ({ open, handleClose }) =>
   const handleFileUpload = async () => {
     if (!selectedFile) return;
 
-    setUploading(true);
     setErrors([]);
     setSuccessCount(null);
 
@@ -61,23 +60,17 @@ const UploadCsvModal: React.FC<UploadCsvModalProps> = ({ open, handleClose }) =>
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      const response = await dispatch(uploadPositionsFromCsv(formData));
-      const payloadErrors = response.payload as { errors: string[] };
-      const payloadSuccessCount = response.payload as { successCount: number };
+      const response = await importPositionsCsv(formData).unwrap();
 
-      setErrors(payloadErrors.errors);
-      setSuccessCount(payloadSuccessCount.successCount);
+      setErrors(response.errors);
+      setSuccessCount(response.successCount);
 
-      if (!payloadErrors.errors.length) {
+      if (!response.errors.length) {
         setSelectedFile(null);
       }
-
-      dispatch(getPositions());
     } catch (error) {
       console.error('File upload failed:', error);
       setErrors(['Unexpected error occurred during upload.']);
-    } finally {
-      setUploading(false);
     }
   };
 
@@ -119,10 +112,10 @@ const UploadCsvModal: React.FC<UploadCsvModalProps> = ({ open, handleClose }) =>
             <Button
               variant="contained"
               onClick={handleFileUpload}
-              disabled={uploading || !selectedFile}
+              disabled={isLoading || !selectedFile}
               sx={{ backgroundColor: '#223B7C' }}
             >
-              {uploading ? <CircularProgress size={24} /> : t('create_csv_position.upload')}
+              {isLoading ? <CircularProgress size={24} /> : t('create_csv_position.upload')}
             </Button>
             <input type="file" accept=".csv" onChange={handleFileChange} />
           </Grid2>
