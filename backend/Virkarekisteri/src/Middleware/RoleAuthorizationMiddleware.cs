@@ -47,25 +47,24 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
             ?.Claims.Where(c => c.Type == "roles")
             .SelectMany(c => Enum.TryParse<RoleHierarchy>(c.Value, out var role) ? new[] { role } : []);
 
-        var editor =
-            jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
-            ?? jwtToken?.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
-
-        if (!string.IsNullOrEmpty(editor))
+        // if any of the user's roles are higher up in the hierarchy than the required role, we're good
+        if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
         {
-            // Store editor in HttpContext.Items for access in the function
-            httpContext.Items["Editor"] = editor;
+            var editor =
+                jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
+                ?? jwtToken?.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+
+            if (!string.IsNullOrEmpty(editor))
+            {
+                // Store editor in HttpContext.Items for access in the function
+                httpContext.Items["Editor"] = editor;
+            }
+
+            return next(context);
         }
 
-        // if any of the user's roles are higher up in the hierarchy than the required role, we're good
-        // if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
-        // {
-        //     return next(context);
-        // }
-        return next(context);
+        httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
 
-        // httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
-        //
-        // return Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }
