@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid2, Tab, Tabs } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
@@ -13,6 +13,7 @@ import { useGetPositionQuery, useGetPositionsQuery } from 'redux/api-slices/func
 import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
 import ChangeLogTable from './ChangeLog/ChangeLogTable';
+import type { Position } from 'models/Position';
 
 const VirkarekisterContainer = () => {
   const isAuthenticated = useIsAuthenticated();
@@ -37,9 +38,17 @@ const VirkarekisterContainer = () => {
   const handleCloseUploadModal = () => setOpenUploadModal(false);
 
   const selectedPositionId = useAppSelector(selectSelectedPosition);
+  const [selectedPosition, setSelectedPosition] = useState<Position | undefined>(undefined);
 
   const { isLoading } = useGetPositionsQuery(isAuthenticated ? undefined : skipToken);
-  const { data: position } = useGetPositionQuery(isAuthenticated ? (selectedPositionId ?? skipToken) : skipToken);
+  const { data: fetchedPosition, isLoading: singlePositionLoading } = useGetPositionQuery(
+    isAuthenticated ? (selectedPositionId ?? skipToken) : skipToken,
+  );
+
+  useEffect(() => {
+    if (!selectedPositionId) setSelectedPosition(undefined);
+    else if (fetchedPosition) setSelectedPosition(fetchedPosition);
+  }, [fetchedPosition, selectedPositionId]);
 
   return (
     <>
@@ -147,12 +156,12 @@ const VirkarekisterContainer = () => {
             {activeTab === 1 && <ChangeLogTable />}
           </Grid2>
           <Grid2 size={12}>
-            {isLoading ? (
+            {singlePositionLoading ? (
               <Box display="flex" justifyContent="center" alignItems="center" height="100%">
                 <CircularProgress />
               </Box>
             ) : (
-              position && <PositionDetails position={position} />
+              selectedPosition && <PositionDetails position={selectedPosition} />
             )}
           </Grid2>
         </Grid2>
