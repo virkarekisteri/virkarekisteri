@@ -4,11 +4,13 @@ import { Box, TextField, Button, IconButton, Typography, Modal, Grid2, FormContr
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'redux/hooks';
-import { addPositionEmployee, updatePositionEmployee } from 'redux/slices/position-employee-slice';
 import type { Position } from 'models/Position';
 import type { PositionEmployee } from 'models/PositionEmployee';
 import ReplacementAccordion from './ReplacementAccordion';
+import {
+  useCreatePositionEmployeeMutation,
+  useUpdatePositionEmployeeMutation,
+} from 'redux/api-slices/functions/position-employees-api';
 
 interface AddEmployeeModalProps {
   open: boolean;
@@ -28,8 +30,10 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
   replacementEmployee,
 }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const [isReplacementToggle, setIsReplacementToggle] = useState(false);
+
+  const [createPositionEmployee] = useCreatePositionEmployeeMutation();
+  const [updatePositionEmployee] = useUpdatePositionEmployeeMutation();
 
   useEffect(() => {
     setIsReplacementToggle(replacementEmployee?.replacement ?? false);
@@ -51,10 +55,10 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
           decisionNumber: values.decisionNumber,
         };
 
-        dispatch(addPositionEmployee(replacementData as any));
+        createPositionEmployee(replacementData as any);
 
         if (employee?.id) {
-          dispatch(updatePositionEmployee({ ...employee, inLeave: true }));
+          updatePositionEmployee({ ...employee, inLeave: true });
         }
         return;
       }
@@ -65,10 +69,10 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
       delete data.isReplacement;
 
       if (isEmployeeSet) {
-        dispatch(updatePositionEmployee({ ...employee, ...data, inLeave: false }));
+        updatePositionEmployee({ ...employee, ...data, inLeave: false });
       } else {
         delete data.decisionNumber;
-        dispatch(addPositionEmployee({ positionEmployee: data, decisionNumber: '' }));
+        createPositionEmployee({ positionEmployee: data, decisionNumber: '' });
       }
 
       onClose();

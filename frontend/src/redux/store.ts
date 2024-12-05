@@ -2,11 +2,10 @@ import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { positionSlice } from './slices/position-slice';
-import positionNameSlice from './slices/position-name-slice';
-import organizationTreeSlice from './slices/organization-tree-slice';
 import { authSlice } from './slices/auth-slice';
+import { baseApi } from './api-slices/functions/base-api';
 
-const rootReducer = combineSlices(positionSlice, positionNameSlice, organizationTreeSlice, authSlice);
+const rootReducer = combineSlices(positionSlice, authSlice, baseApi);
 
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
@@ -19,11 +18,6 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
-          ignoredActions: [
-            'positions/uploadPositionsFromCsv/pending',
-            'positions/uploadPositionsFromCsv/fulfilled',
-            'positions/uploadPositionsFromCsv/rejected',
-          ],
           ignoredActionPaths: [
             'meta.arg',
             'meta.arg.file',
@@ -33,7 +27,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
           ],
           ignoredPaths: ['positions.meta.arg', 'positions.meta.arg.file'],
         },
-      }),
+      }).concat(baseApi.middleware),
     preloadedState,
   });
   setupListeners(store.dispatch);

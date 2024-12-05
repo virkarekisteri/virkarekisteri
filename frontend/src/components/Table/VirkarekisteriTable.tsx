@@ -27,14 +27,19 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Column } from 'react-table';
 import { useTable, useSortBy } from 'react-table';
-import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { fetchPosition, selectPositionData } from 'redux/slices/position-slice';
+import { useAppDispatch } from 'redux/hooks';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { selectOrganizationTreeData, getOrganizationTrees } from 'redux/slices/organization-tree-slice';
+import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/functions/positions-api';
+import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 
 const DataTable: React.FC = () => {
   const dispatch = useAppDispatch();
-  const dataFromBackend = useAppSelector(selectPositionData);
+
+  const { data: positions = [] } = useGetPositionsQuery();
+  const { data: organizationTrees } = useGetOrganizationTreesQuery();
+  const [getPosition] = useLazyGetPositionQuery();
+
   const { t } = useTranslation();
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
@@ -42,20 +47,13 @@ const DataTable: React.FC = () => {
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
-  const [filteredData, setFilteredData] = useState(dataFromBackend);
+  const [filteredData, setFilteredData] = useState(positions);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    setFilteredData(dataFromBackend);
-  }, [dataFromBackend]);
-  const organizationTrees = useAppSelector(selectOrganizationTreeData);
-
-  useEffect(() => {
-    if (!organizationTrees.length) {
-      dispatch(getOrganizationTrees());
-    }
-  }, [dispatch, organizationTrees]);
+    setFilteredData(positions);
+  }, [positions]);
 
   const columns: Column<Position>[] = React.useMemo<Column<Position>[]>(
     () => [
@@ -72,7 +70,7 @@ const DataTable: React.FC = () => {
         Header: t('table.organization_tree'),
         accessor: 'orgTreeId',
         Cell: ({ value }: { value: string }) => {
-          const orgTree = organizationTrees.find((tree) => tree.id === value);
+          const orgTree = organizationTrees?.find((tree) => tree.id === value);
           return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
         },
       },
@@ -120,18 +118,21 @@ const DataTable: React.FC = () => {
     ],
     [t, organizationTrees],
   );
+
   const handleRowClick = async (row: Position) => {
     if (row.id === selectedRowId) {
       setSelectedRowId(null); // Clear selection
-      await dispatch(fetchPosition(null)); // Dispatch with null
-    } else {
-      setSelectedRowId(row.id ?? null); // Set new selection
-      await dispatch(fetchPosition(row.id!)); // Dispatch with row ID
+      dispatch(clearSelectedPosition());
+    } else if (row.id) {
+      setSelectedRowId(row.id); // Set new selection
+
+      getPosition(row.id, true);
+      dispatch(selectPosition(row.id));
     }
   };
 
   const handleSearch = () => {
-    const filtered = dataFromBackend.filter((position) => {
+    const filtered = positions.filter((position) => {
       if (position) {
         const matchesVakanssinumero = vacancyNumberSearch
           ? (position.vacancyNumber?.toLocaleLowerCase().includes(vacancyNumberSearch.toLocaleLowerCase()) ?? false)
@@ -166,7 +167,7 @@ const DataTable: React.FC = () => {
     setPositionNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
-    setFilteredData(dataFromBackend);
+    setFilteredData(positions);
     setPage(0);
   };
 

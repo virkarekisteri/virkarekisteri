@@ -5,14 +5,43 @@ import type { Position } from 'models/Position';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from 'react-i18next';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
-import type { PositionEmployee } from 'models/PositionEmployee';
-import { fetchPositionEmployee } from 'redux/slices/position-employee-slice';
-import { useAppDispatch } from 'redux/hooks';
 import { formatDate } from 'utils/formatDate';
+import { useGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
+import { skipToken } from '@reduxjs/toolkit/query';
+import type { PositionEmployee } from 'models/PositionEmployee';
 
 const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { t } = useTranslation();
+
+  const [currentPositionEmployee, setCurrentPositionEmployee] = useState<PositionEmployee | undefined>(undefined);
+  const [currentReplacementEmployee, setCurrentReplacementEmployee] = useState<PositionEmployee | undefined>(undefined);
+  const [isEmployeeSet, setIsEmployeeSet] = useState<boolean>(false);
+
+  const { data: fetchedPositionEmployee } = useGetPositionEmployeeQuery(position.positionEmployeeId ?? skipToken);
+  const { data: fetchedReplacementEmployee } = useGetPositionEmployeeQuery(position.replacementEmployeeId ?? skipToken);
+
+  useEffect(() => {
+    if (position.positionEmployeeId) {
+      setCurrentPositionEmployee(fetchedPositionEmployee);
+      setIsEmployeeSet(true);
+    } else {
+      setCurrentPositionEmployee(undefined);
+      setIsEmployeeSet(false);
+    }
+
+    if (position.replacementEmployeeId) {
+      setCurrentReplacementEmployee(fetchedReplacementEmployee);
+    } else {
+      setCurrentReplacementEmployee(undefined);
+    }
+  }, [
+    position.positionEmployeeId,
+    position.replacementEmployeeId,
+    fetchedPositionEmployee,
+    fetchedReplacementEmployee,
+  ]);
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -21,37 +50,15 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
     setModalOpen(false);
   };
 
-  const [positionEmployee, setPositionEmployee] = useState<PositionEmployee | undefined>();
-  const [replacementEmployee, setReplacementEmployee] = useState<PositionEmployee | undefined>();
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      if (position.positionEmployeeId) {
-        const originalEmployeeResult = await dispatch(fetchPositionEmployee(position.positionEmployeeId));
-        const originalEmployee = originalEmployeeResult.payload as PositionEmployee;
-
-        if (position.replacementEmployeeId) {
-          const replacementEmployeeResult = await dispatch(fetchPositionEmployee(position.replacementEmployeeId));
-          const replacementEmployee = replacementEmployeeResult.payload as PositionEmployee;
-          setReplacementEmployee(replacementEmployee);
-        }
-        setPositionEmployee(originalEmployee);
-      }
-    };
-
-    fetchEmployee();
-  }, [dispatch, position.positionEmployeeId, position.replacementEmployeeId]);
-  const isEmployeeSet = position.positionEmployeeId !== null;
-
   const [isReplacementActive, setIsReplacementActive] = useState(false);
 
   useEffect(() => {
-    if (replacementEmployee) {
+    if (currentReplacementEmployee) {
       const today = new Date();
-      const replacementStartDate = new Date(replacementEmployee.startDate);
-      const replacementEndDate = replacementEmployee.endingDate ? new Date(replacementEmployee.endingDate) : null;
+      const replacementStartDate = new Date(currentReplacementEmployee.startDate);
+      const replacementEndDate = currentReplacementEmployee.endingDate
+        ? new Date(currentReplacementEmployee.endingDate)
+        : null;
 
       if (replacementStartDate <= today && (!replacementEndDate || replacementEndDate >= today)) {
         setIsReplacementActive(true);
@@ -59,7 +66,7 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
         setIsReplacementActive(false);
       }
     }
-  }, [replacementEmployee]);
+  }, [currentReplacementEmployee]);
 
   return (
     <Box>
@@ -92,7 +99,7 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
           </Button>
         </Box>
       </Grid2>
-      {positionEmployee && (
+      {currentPositionEmployee && (
         <Box>
           {isReplacementActive && (
             <Box sx={{ bgcolor: 'info.main', color: 'white', p: 2, mb: 2 }}>
@@ -130,9 +137,9 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                     <RenderReadonlyTextField
                       label={t('employee.employee_name')}
                       value={
-                        isReplacementActive && replacementEmployee
-                          ? replacementEmployee.employeeName
-                          : positionEmployee.employeeName
+                        isReplacementActive && currentReplacementEmployee
+                          ? currentReplacementEmployee.employeeName
+                          : currentPositionEmployee.employeeName
                       }
                     />
                   </Grid2>
@@ -140,9 +147,9 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                     <RenderReadonlyTextField
                       label={t('employee.start_date')}
                       value={
-                        isReplacementActive && replacementEmployee
-                          ? formatDate(replacementEmployee.startDate.toString())
-                          : formatDate(positionEmployee.startDate.toString())
+                        isReplacementActive && currentReplacementEmployee
+                          ? formatDate(currentReplacementEmployee.startDate.toString())
+                          : formatDate(currentPositionEmployee.startDate.toString())
                       }
                     />
                   </Grid2>
@@ -150,12 +157,12 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                     <RenderReadonlyTextField
                       label={t('employee.ending_date')}
                       value={
-                        isReplacementActive && replacementEmployee
-                          ? replacementEmployee.endingDate
-                            ? formatDate(replacementEmployee.endingDate.toString())
+                        isReplacementActive && currentReplacementEmployee
+                          ? currentReplacementEmployee.endingDate
+                            ? formatDate(currentReplacementEmployee.endingDate.toString())
                             : t('employee.no_end_date')
-                          : positionEmployee.endingDate
-                            ? formatDate(positionEmployee.endingDate?.toString())
+                          : currentPositionEmployee.endingDate
+                            ? formatDate(currentPositionEmployee.endingDate?.toString())
                             : t('employee.no_end_date')
                       }
                     />
@@ -172,8 +179,8 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
         onClose={handleCloseModal}
         position={position}
         isEmployeeSet={isEmployeeSet}
-        employee={positionEmployee}
-        replacementEmployee={replacementEmployee}
+        employee={currentPositionEmployee}
+        replacementEmployee={currentReplacementEmployee}
       />
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   TextField,
@@ -18,11 +18,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
-import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { selectPositionData } from 'redux/slices/position-slice';
-import { fetchPositionNames, selectPositionNames } from 'redux/slices/position-name-slice';
-import { getOrganizationTrees, selectOrganizationTreeData } from 'redux/slices/organization-tree-slice';
-import { getPositions, updatePosition } from 'redux/slices/position-slice';
+import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
+import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
+import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 
 interface ModifyVirkaModalProps {
   open: boolean;
@@ -48,21 +46,15 @@ interface FormValues {
 
 const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, position }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const positionNames = useAppSelector(selectPositionNames);
-  const dataFromBackend = useAppSelector(selectPositionData);
 
-  const organizationTrees = useAppSelector(selectOrganizationTreeData);
+  const { data: positionNames = [] } = useGetPositionNamesQuery();
+  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
+
+  const [updatePosition] = useUpdatePositionMutation();
+
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
-
-  useEffect(() => {
-    if (open) {
-      dispatch(fetchPositionNames());
-      dispatch(getOrganizationTrees());
-    }
-  }, [dispatch, open, dataFromBackend]);
 
   const validatePricingId = (value: string) => {
     if (value && value.length > 10) {
@@ -70,6 +62,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     }
     return undefined;
   };
+
   const onSubmit = async (values: FormValues) => {
     if (!position.id) {
       return;
@@ -91,8 +84,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         type: values.type,
         decisionNumber: values.decisionNumber,
       };
-      await dispatch(updatePosition({ id: position.id, data: updateData }));
-      await dispatch(getPositions());
+      updatePosition({ id: position.id, position: updateData });
       handleClose();
     } catch (error) {
       console.error('Failed to update position:', error);
