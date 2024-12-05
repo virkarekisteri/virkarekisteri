@@ -39,9 +39,6 @@ const PositionsApi = baseApi.injectEndpoints({
       query: (form) => ({
         url: '/positions/import',
         method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
         body: form,
       }),
       invalidatesTags: [{ type: 'Positions', id: 'LIST' }],
