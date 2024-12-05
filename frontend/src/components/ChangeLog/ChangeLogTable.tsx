@@ -18,43 +18,30 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import type { ChangeLogEntry } from 'models/ChangeLogEntry';
-import { fetchAllChangeLogs } from 'services/functions/change-log-service';
-import { useAppSelector } from 'redux/hooks';
-import { selectPositionData } from 'redux/slices/position-slice';
 import { useTranslation } from 'react-i18next';
 import { formatTimestamp, getVacancyNumber } from './utils';
+import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
+import { useGetChangeLogsQuery } from 'redux/api-slices/functions/changelogs-api';
 
 const ChangeLogTable = () => {
   const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [changeLogs, setChangeLogs] = useState<ChangeLogEntry[]>([]);
   const [filteredChangeLogs, setFilteredChangeLogs] = useState<ChangeLogEntry[]>([]);
-  const [loading, setLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState<{ key: keyof ChangeLogEntry; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchVacancyNumber, setSearchVacancyNumber] = useState('');
   const [searchDate, setSearchDate] = useState('');
 
-  const positions = useAppSelector(selectPositionData);
+  const { data: positions = [], isLoading: positionsLoading } = useGetPositionsQuery();
+  const { data: changeLogs = [], isLoading: changeLogsLoading } = useGetChangeLogsQuery();
+
+  const isLoading = positionsLoading || changeLogsLoading;
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchAllChangeLogs();
-        setChangeLogs(data);
-        setFilteredChangeLogs(data);
-      } catch (error) {
-        console.error('Error fetching change logs:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+    setFilteredChangeLogs(changeLogs);
+  }, [changeLogs]);
 
   const getTranslatedField = (field: string) => {
     return t(`change_logs.fields.${field}`, field);
@@ -122,7 +109,7 @@ const ChangeLogTable = () => {
     setExpandedRow(expandedRow === id ? null : id);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100%">
         <CircularProgress />

@@ -70,7 +70,7 @@ public class CreatePosition(
             NewValue = createdPosition.VacancyNumber ?? string.Empty,
             Editor = editor,
             Timestamp = DateTime.UtcNow,
-            DecisionNumber = createdPosition.CreationDecisionNumber ?? string.Empty,
+            DecisionNumber = createdPosition.CreationDecisionNumber,
         };
         await changeLogRepository.AddChangeLogEntry(changeLog);
 

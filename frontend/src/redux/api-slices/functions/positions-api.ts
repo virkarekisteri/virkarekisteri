@@ -1,7 +1,6 @@
 import { baseApi } from './base-api';
 import type { Position } from 'models/Position';
 import type { CsvImportResponse } from 'models/CsvImportResponse';
-import type { ChangeLogEntry } from 'models/ChangeLogEntry';
 
 const PositionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -43,10 +42,6 @@ const PositionsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Positions', id: 'LIST' }],
     }),
-    getPositionChangeLogs: build.query<ChangeLogEntry[], string>({
-      query: (id) => `/positions/${id}/changelog`,
-      providesTags: (_result, _error, id) => [{ type: 'ChangeLogs', id }],
-    }),
   }),
 });
 
@@ -57,5 +52,4 @@ export const {
   useCreatePositionMutation,
   useUpdatePositionMutation,
   useImportPositionsCsvMutation,
-  useGetPositionChangeLogsQuery,
 } = PositionsApi;

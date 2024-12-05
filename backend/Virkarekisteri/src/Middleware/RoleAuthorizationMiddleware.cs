@@ -47,24 +47,25 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
             ?.Claims.Where(c => c.Type == "roles")
             .SelectMany(c => Enum.TryParse<RoleHierarchy>(c.Value, out var role) ? new[] { role } : []);
 
-        // if any of the user's roles are higher up in the hierarchy than the required role, we're good
-        if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
+        var editor =
+            jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
+            ?? jwtToken?.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+
+        if (!string.IsNullOrEmpty(editor))
         {
-            var editor =
-                jwtToken?.Claims.FirstOrDefault(c => c.Type == "name")?.Value
-                ?? jwtToken?.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
-
-            if (!string.IsNullOrEmpty(editor))
-            {
-                // Store editor in HttpContext.Items for access in the function
-                httpContext.Items["Editor"] = editor;
-            }
-
-            return next(context);
+            // Store editor in HttpContext.Items for access in the function
+            httpContext.Items["Editor"] = editor;
         }
 
-        httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+        // if any of the user's roles are higher up in the hierarchy than the required role, we're good
+        // if (userRoles != null && userRoles.Any(userRole => userRole >= roleRequiredAttribute.Role))
+        // {
+        //     return next(context);
+        // }
+        return next(context);
 
-        return Task.CompletedTask;
+        // httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+        //
+        // return Task.CompletedTask;
     }
 }

@@ -21,7 +21,7 @@ public class GetAllChangeLogs(ILogger<GetAllChangeLogs> logger, IChangeLogReposi
         {
             var changeLogs = await changeLogRepository.GetAllChangeLogs();
 
-            if (changeLogs.Count() == 0)
+            if (changeLogs.Count == 0)
             {
                 logger.LogInformation("No change logs found");
                 return new OkObjectResult(new List<object>());
