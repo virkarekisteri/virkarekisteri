@@ -139,5 +139,14 @@
   },
   "error": {
     "pricing_id_error": "Pricing ID can only be upto 10 characters long"
+  },
+  "end_position": {
+    "title": "End position",
+    "end_date": "End date",
+    "vacancy_number": "Vacancy number",
+    "position_name": "Vacancy name",
+    "decision_number": "Decision number",
+    "cancel": "Back",
+    "confirm": "Confirm"
   }
 }

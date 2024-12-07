@@ -139,5 +139,14 @@
   },
   "error": {
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kymmenen (10) merkkiä pitkä."
+  },
+  "end_position": {
+    "title": "Lakkauta virka",
+    "end_date": "Lakkautus päivämäärä",
+    "vacancy_number": "Vakanssinumero",
+    "position_name": "Virkanimike",
+    "decision_number": "Päätösnumero",
+    "cancel": "Takaisin",
+    "confirm": "Lakkauta virka"
   }
 }

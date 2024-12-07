@@ -15,6 +15,7 @@ public class UpdatePositionDto
     public Guid? OrgTreeId { get; set; }
     public PositionNameDto? PositionName { get; set; }
     public string? DecisionNumber { get; set; }
+    public int? VacancyStatus { get; set; }
 }
 
 public class PositionNameDto

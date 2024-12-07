@@ -7,6 +7,7 @@ import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import EndPositionModal from 'components/Modal/EndPositionModal';
 
 interface BasicDetailsProps {
   position: Position;
@@ -27,6 +28,11 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
     setEditModalOpen(false);
   };
 
+  const [openEndModal, setOpenEndModal] = useState(false);
+
+  const handleOpenEndModal = () => setOpenEndModal(true);
+  const handleCloseEndModal = () => setOpenEndModal(false);
+
   const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
 
   const statusTextMap: Record<number, string> = {
@@ -42,33 +48,60 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
 
   return (
     <Box>
-      <Box sx={{ padding: 2, textAlign: 'right' }}>
-        <Button
-          variant="contained"
-          onClick={handleOpenEditModal}
-          sx={{
-            backgroundColor: '#223B7C',
-            color: 'white',
-            fontSize: '1rem',
-            padding: '10px 20px',
-            height: '36px',
-            display: 'inline-flex',
-            borderRadius: '25px 8px 8px 25px',
-          }}
-          startIcon={
-            <Box
-              component="span"
-              sx={{
-                marginRight: '8px',
-              }}
-            >
-              ✎
-            </Box>
-          }
-        >
-          {t('edit_position.title')}
-        </Button>
-      </Box>
+      {position.vacancyStatus !== 0 && (
+        <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            variant="contained"
+            onClick={handleOpenEndModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1rem',
+              padding: '10px 20px',
+              height: '36px',
+              display: 'inline-flex',
+              borderRadius: '8px 25px 25px 8px',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '8px',
+                }}
+              >
+                ✖
+              </Box>
+            }
+          >
+            {t('end_position.title')}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleOpenEditModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1rem',
+              padding: '10px 20px',
+              height: '36px',
+              display: 'inline-flex',
+              borderRadius: '25px 8px 8px 25px',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '8px',
+                }}
+              >
+                ✎
+              </Box>
+            }
+          >
+            {t('edit_position.title')}
+          </Button>
+        </Box>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -217,6 +250,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </AccordionDetails>
         </Accordion>
       </Box>
+      <EndPositionModal open={openEndModal} onClose={handleCloseEndModal} position={position} />
       <ModifyVirkaModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} />
     </Box>
   );
