@@ -87,6 +87,7 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
                           label={t('end_position.end_date')}
                           type="date"
                           fullWidth
+                          required
                           sx={{ mt: 2 }}
                           slotProps={{ inputLabel: { shrink: true } }}
                         />
@@ -111,6 +112,7 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
                           {...input}
                           label={t('end_position.decision_number')}
                           fullWidth
+                          required
                           rows={4}
                           sx={{ mt: 2 }}
                         />
