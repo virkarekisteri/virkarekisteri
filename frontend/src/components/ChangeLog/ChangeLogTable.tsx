@@ -59,17 +59,14 @@ const ChangeLogTable = () => {
 
   const sortedChangeLogs = React.useMemo(() => {
     if (!sortConfig) return filteredChangeLogs;
-  
+
     return [...filteredChangeLogs].sort((a, b) => {
       const aValue = a[sortConfig.key] as string;
       const bValue = b[sortConfig.key] as string;
-  
-      return sortConfig.direction === 'asc'
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+
+      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
   }, [filteredChangeLogs, sortConfig]);
-  
 
   // Pagination logic
   const paginatedChangeLogs = sortedChangeLogs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
