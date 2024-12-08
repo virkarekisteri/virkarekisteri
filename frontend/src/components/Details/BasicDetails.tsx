@@ -7,6 +7,7 @@ import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { RequiresEditRole } from 'components/role-guards';
 
 interface BasicDetailsProps {
   position: Position;
@@ -43,31 +44,33 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   return (
     <Box>
       <Box sx={{ padding: 2, textAlign: 'right' }}>
-        <Button
-          variant="contained"
-          onClick={handleOpenEditModal}
-          sx={{
-            backgroundColor: '#223B7C',
-            color: 'white',
-            fontSize: '1rem',
-            padding: '10px 20px',
-            height: '36px',
-            display: 'inline-flex',
-            borderRadius: '25px 8px 8px 25px',
-          }}
-          startIcon={
-            <Box
-              component="span"
-              sx={{
-                marginRight: '8px',
-              }}
-            >
-              ✎
-            </Box>
-          }
-        >
-          {t('edit_position.title')}
-        </Button>
+        <RequiresEditRole>
+          <Button
+            variant="contained"
+            onClick={handleOpenEditModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1rem',
+              padding: '10px 20px',
+              height: '36px',
+              display: 'inline-flex',
+              borderRadius: '25px 8px 8px 25px',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '8px',
+                }}
+              >
+                ✎
+              </Box>
+            }
+          >
+            {t('edit_position.title')}
+          </Button>
+        </RequiresEditRole>
       </Box>
       <Box
         sx={{
