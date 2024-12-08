@@ -335,7 +335,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
                 </Grid2>
 
-                <Accordion sx={{ mt: 2, mb: 2 }}>
+                <Accordion sx={{ mt: 2, mb: 2 }} defaultExpanded>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
@@ -398,7 +398,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     </Grid2>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion sx={{ mt: 2, mb: 4 }}>
+                <Accordion sx={{ mt: 2, mb: 4 }} defaultExpanded>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
                     aria-controls="panel1a-content"
