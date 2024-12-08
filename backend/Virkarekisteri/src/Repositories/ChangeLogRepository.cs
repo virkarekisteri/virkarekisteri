@@ -7,6 +7,7 @@ public interface IChangeLogRepository
 {
     Task<ChangeLog> AddChangeLogEntry(ChangeLog changeLogEntry);
     Task<List<ChangeLog>> GetChangeLogsByPositionId(Guid positionId);
+    Task<List<ChangeLog>> GetAllChangeLogs();
 }
 
 public class ChangeLogRepository(VirkarekisteriDb db) : IChangeLogRepository
@@ -25,5 +26,10 @@ public class ChangeLogRepository(VirkarekisteriDb db) : IChangeLogRepository
             .ChangeLogs.Where(cl => cl.PositionId == positionId)
             .OrderByDescending(cl => cl.Timestamp)
             .ToListAsync();
+    }
+
+    public async Task<List<ChangeLog>> GetAllChangeLogs()
+    {
+        return await db.ChangeLogs.OrderByDescending(c => c.Timestamp).ToListAsync();
     }
 }
