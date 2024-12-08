@@ -17,12 +17,12 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
   const { t } = useTranslation();
   const [updatePosition] = useUpdatePositionMutation();
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: Position) => {
     if (!position.id) return undefined;
     const updateData = {
       vacancyStatus: 0,
-      endedAt: values.endDate,
-      decisionNumber: values.decisionNumber,
+      endedAt: values.endedAt,
+      decisionNumber: values.endingDecisionNumber,
     };
     updatePosition({ id: position.id, position: updateData });
     onClose();
@@ -80,7 +80,7 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
                     <RenderReadonlyTextField value={position.positionName.name} />
                   </Grid2>
                   <Grid2 size={6}>
-                    <Field name="endDate">
+                    <Field name="endedAt">
                       {({ input }) => (
                         <TextField
                           {...input}
@@ -106,7 +106,7 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('end_position.decision_number')}
                     </Typography>
-                    <Field name="decisionNumber">
+                    <Field name="endingDecisionNumber">
                       {({ input }) => (
                         <TextField
                           {...input}
