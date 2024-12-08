@@ -57,6 +57,13 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     return undefined;
   };
 
+  const validateVacancySize = (value: string) => {
+    if ((value && Number(value) < 0) || Number(value) > 100) {
+      return t('error.vacancy_size_error');
+    }
+    return undefined;
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
     const positionNameObj: PositionName = {
@@ -212,8 +219,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
 
                   <Grid2 size={4}>
-                    <Field name="vacancySize">
-                      {({ input }) => (
+                    <Field name="vacancySize" validate={validateVacancySize}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           margin="normal"
@@ -221,6 +228,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           id="vacancySize"
                           label={t('create_position.vacancy_size')}
                           type="number"
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,

@@ -63,6 +63,22 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     return undefined;
   };
 
+  const validateVacancySize = (value: string) => {
+    if ((value && Number(value) < 0) || Number(value) > 100) {
+      return t('error.vacancy_size_error');
+    }
+    return undefined;
+  };
+
+  const validateVacancyFill = (value: string, allValues: { [key: string]: any }) => {
+    if ((value && Number(value) < 0) || Number(value) > 100) {
+      return t('error.vacancy_fill_error');
+    } else if (Number(value) > Number(allValues.vacancySize)) {
+      return t('error.vacancy_fill_greater_than_size');
+    }
+    return undefined;
+  };
+
   const onSubmit = async (values: FormValues) => {
     if (!position.id) {
       return;
@@ -288,7 +304,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           helperText={meta.touched && meta.error}
                           slotProps={{
                             inputLabel: {
-                              shrink: true, // Keeps the label permanently "shrunk" (static at the top)
+                              shrink: true,
                             },
                           }}
                         />
@@ -298,23 +314,25 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Vacancy Size */}
                   <Grid2 size={6}>
-                    <Field name="vacancySize">
-                      {({ input }) => (
+                    <Field name="vacancySize" validate={validateVacancySize}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           type="number"
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                               inputProps: { min: 0, max: 100 },
                             },
                             inputLabel: {
-                              shrink: true, // Keeps the label permanently "shrunk" (static at the top)
+                              shrink: true,
                             },
                           }}
-                          placeholder={position.vacancySize?.toString()}
+                          placeholder={(position.vacancySize ? position.vacancySize * 100 : 0).toFixed()}
                           label={t('edit_position.vacancy_size')}
                         />
                       )}
@@ -323,23 +341,25 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Vacancy Fill */}
                   <Grid2 size={6}>
-                    <Field name="vacancyFill">
-                      {({ input }) => (
+                    <Field name="vacancyFill" validate={validateVacancyFill}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           type="number"
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                               inputProps: { min: 0, max: 100 },
                             },
                             inputLabel: {
-                              shrink: true, // Keeps the label permanently "shrunk" (static at the top)
+                              shrink: true,
                             },
                           }}
-                          placeholder={position.vacancyFill?.toString()}
+                          placeholder={(position.vacancyFill ? position.vacancyFill * 100 : 0).toFixed()}
                           label={t('edit_position.vacancy_fill')}
                         />
                       )}

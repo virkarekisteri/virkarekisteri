@@ -46,6 +46,15 @@ public class UpdatePosition(
         if (updateDto.PricingId != null && updateDto.PricingId.Length > 10)
             return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
 
+        if (updateDto.VacancyFill != null && updateDto.VacancyFill < 0 && updateDto.VacancyFill > 100)
+            return new BadRequestObjectResult("VacancyFill must be between 0 and 100.");
+
+        if (updateDto.VacancySize != null && updateDto.VacancySize < 0 && updateDto.VacancySize > 100)
+            return new BadRequestObjectResult("VacancySize must be between 0 and 100.");
+
+        if (updateDto.VacancyFill > updateDto.VacancySize)
+            return new BadRequestObjectResult("VacancyFill cannot be greater than VacancySize.");
+
         // Fetch the existing position from the database
         var existingPosition = await positionRepository.GetPosition(positionId);
         if (existingPosition == null)
