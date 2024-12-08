@@ -6,7 +6,7 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { useGetPositionChangeLogsQuery } from 'redux/api-slices/functions/positions-api';
+import { useGetPositionChangeLogsQuery } from 'redux/api-slices/functions/changelogs-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface PositionChangeLogProps {
