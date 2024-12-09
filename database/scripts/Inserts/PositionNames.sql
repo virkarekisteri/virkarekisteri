@@ -42,4 +42,5 @@ VALUES
     ('ryhmäperhepäivähoitaja'),
     ('varhaiskasvatuksen erityisopettaja'),
     ('perhepäivähoidon ohjaaja');
+
 GO
