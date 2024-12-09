@@ -289,7 +289,7 @@ const ChangeLogTable = () => {
                           <Typography>
                             {row.editedField === 'Type'
                               ? mapTypeValue(row.oldValue)
-                              : transformValue(row.editedField, row.oldValue) || '-'}
+                              : (transformValue(row.editedField, row.oldValue) ?? '-')}
                           </Typography>
                         </Box>
                         <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
@@ -297,7 +297,7 @@ const ChangeLogTable = () => {
                           <Typography>
                             {row.editedField === 'Type'
                               ? mapTypeValue(row.newValue)
-                              : transformValue(row.editedField, row.newValue) || '-'}
+                              : (transformValue(row.editedField, row.newValue) ?? '-')}
                           </Typography>
                         </Box>
                       </Box>

@@ -74,6 +74,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     return undefined;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validateVacancyFill = (value: string, allValues: Record<string, any>) => {
     if ((value && Number(value) < 0) || Number(value) > 100) {
       return t('error.vacancy_fill_error');
@@ -193,7 +194,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                             options={positionNames}
                             getOptionLabel={(option) => option.name || ''}
                             value={positionNames.find((option) => option.id === input.value?.id) || null}
-                            onChange={(_event, value) => input.onChange(value ? value : null)}
+                            onChange={(_event, value) => input.onChange(value)}
                             renderInput={(params) => (
                               <TextField
                                 {...params}

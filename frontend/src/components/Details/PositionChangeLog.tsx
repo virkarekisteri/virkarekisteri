@@ -73,27 +73,15 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
       >
         {changeLogs.length > 0 ? (
           <Grid2 container spacing={2}>
-            {changeLogs.map((log, index) => {
+            {changeLogs.map((log) => {
               const oldValue =
                 log.editedField === 'Type' ? mapTypeValue(log.oldValue) : transformValue(log.editedField, log.oldValue);
 
               const newValue =
                 log.editedField === 'Type' ? mapTypeValue(log.newValue) : transformValue(log.editedField, log.newValue);
 
-              console.log('Transforming value:', {
-                field: log.editedField,
-                oldValue: log.oldValue,
-                newValue: log.newValue,
-              });
-
-              console.log('Transforming value:', {
-                field: log.editedField,
-                oldValue: log.oldValue,
-                newValue: log.newValue,
-              });
-
               return (
-                <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
+                <Grid2 key={log.id} size={{ xs: 12 }} container spacing={1} alignItems="center">
                   <Grid2 size={{ xs: 2 }}>
                     <RenderReadonlyTextField
                       label={t('change_logs.timestamp')}
