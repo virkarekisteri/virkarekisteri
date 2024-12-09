@@ -47,6 +47,7 @@ const DataTable: React.FC = () => {
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [selectedRows, setSelectedRows] = useState<Position[]>([]);
   const [filteredData, setFilteredData] = useState(positions);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -120,15 +121,28 @@ const DataTable: React.FC = () => {
   );
 
   const handleRowClick = async (row: Position) => {
-    if (row.id === selectedRowId) {
-      setSelectedRowId(null); // Clear selection
-      dispatch(clearSelectedPosition());
-    } else if (row.id) {
-      setSelectedRowId(row.id); // Set new selection
-
-      getPosition(row.id, true);
-      dispatch(selectPosition(row.id));
-    }
+    setSelectedRows((prev) => {
+      const isAlreadySelected = prev.some((selected) => selected.id === row.id);
+      const updatedSelectedRows = isAlreadySelected
+        ? prev.filter((selected) => selected.id !== row.id)
+        : [...prev, row];
+      if (updatedSelectedRows.length === 0) {
+        console.log('Ei yhtään riviä valittuna.');
+        setSelectedRowId(null);
+        dispatch(clearSelectedPosition());
+      } else {
+        console.log(
+          'Valitut rivit:',
+          updatedSelectedRows.map((r) => r.id), // Nämä pitää viedä eteenpäin ja käsitellä ->
+        );
+        setSelectedRowId(row.id || null);
+        if (row.id) {
+          getPosition(row.id, true);
+          dispatch(selectPosition(row.id));
+        }
+      }
+      return updatedSelectedRows;
+    });
   };
 
   const handleSearch = () => {
@@ -410,12 +424,11 @@ const DataTable: React.FC = () => {
                   <TableRow
                     {...row.getRowProps()}
                     sx={{
-                      backgroundColor:
-                        row.original.id === selectedRowId
-                          ? alpha('#223B7C', 0.5)
-                          : index % 2 === 0
-                            ? '#F9F9F9'
-                            : alpha('#223B7C', 0.2),
+                      backgroundColor: selectedRows.some((r) => r.id === row.original.id)
+                        ? alpha('#223B7C', 0.5)
+                        : index % 2 === 0
+                          ? '#F9F9F9'
+                          : alpha('#223B7C', 0.2),
                       cursor: 'pointer',
                     }}
                     onClick={() => handleRowClick(row.original)}

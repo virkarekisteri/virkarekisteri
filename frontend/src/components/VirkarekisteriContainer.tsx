@@ -114,6 +114,34 @@ const VirkarekisterContainer = () => {
               <RequiresEditRole>
                 <Button
                   variant="contained"
+                  onClick={() => {
+                    handleOpenMassModal();
+                    handleClick();
+                  }}
+                  sx={{
+                    backgroundColor: '#223B7C',
+                    color: 'white',
+                    fontSize: '1.2rem',
+                    padding: '20px',
+                    height: '45px',
+                    display: 'flex',
+                    borderRadius: '25px 8px 8px 25px',
+                  }}
+                  startIcon={
+                    <Box
+                      component="span"
+                      sx={{
+                        marginRight: '40px',
+                      }}
+                    >
+                      +
+                    </Box>
+                  }
+                >
+                  {t('mass_changes.make_changes')}
+                </Button>
+                <Button
+                  variant="contained"
                   onClick={handleOpenUploadModal}
                   sx={{
                     backgroundColor: '#223B7C',
@@ -161,34 +189,6 @@ const VirkarekisterContainer = () => {
                   }
                 >
                   {t('new_position')}
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    handleOpenMassModal();
-                    handleClick();
-                  }}
-                  sx={{
-                    backgroundColor: '#223B7C',
-                    color: 'white',
-                    fontSize: '1.2rem',
-                    padding: '20px',
-                    height: '45px',
-                    display: 'flex',
-                    borderRadius: '25px 8px 8px 25px',
-                  }}
-                  startIcon={
-                    <Box
-                      component="span"
-                      sx={{
-                        marginRight: '40px',
-                      }}
-                    >
-                      +
-                    </Box>
-                  }
-                >
-                  {t('mass_changes.make_changes')}
                 </Button>
               </RequiresEditRole>
               <Snackbar
