@@ -35,6 +35,12 @@ const VirkarekisterContainer = () => {
 
   const { t } = useTranslation();
 
+  const [selectedRows, setSelectedRows] = useState<Position[]>([]);
+
+  const handleUpdateSelectedRows = (rows: Position[]) => {
+    setSelectedRows(rows);
+  };
+
   const handleOpenCreateModal = () => setOpenCreateModal(true);
   const handleCloseCreateModal = () => setOpenCreateModal(false);
 
@@ -77,7 +83,7 @@ const VirkarekisterContainer = () => {
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
-        <MassChangesModal open={openMassModal} handleClose={handleCloseMassModal} />
+        <MassChangesModal open={openMassModal} handleClose={handleCloseMassModal} selectedRows={selectedRows} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 container size={12} alignItems="center" justifyContent="space-between" sx={{ gap: 2 }}>
             <Grid2 size="auto">
@@ -208,7 +214,7 @@ const VirkarekisterContainer = () => {
                     <CircularProgress />
                   </Box>
                 ) : (
-                  <VirkarekisteriTable />
+                  <VirkarekisteriTable onRowSelectionChange={handleUpdateSelectedRows} />
                 )}
               </>
             )}

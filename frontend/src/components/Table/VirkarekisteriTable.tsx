@@ -33,7 +33,33 @@ import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 
-const DataTable: React.FC = () => {
+interface DataTableProps {
+  onRowSelectionChange: (selectedRows: Position[]) => void;
+}
+
+const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
+  const handleRowClick = async (row: Position) => {
+    setSelectedRows((prev) => {
+      const isAlreadySelected = prev.some((selected) => selected.id === row.id);
+      const updatedSelectedRows = isAlreadySelected
+        ? prev.filter((selected) => selected.id !== row.id)
+        : [...prev, row];
+      if (updatedSelectedRows.length === 0) {
+        setSelectedRowId(null);
+        dispatch(clearSelectedPosition());
+      } else {
+        setSelectedRowId(row.id || null);
+
+        if (row.id) {
+          getPosition(row.id, true);
+          dispatch(selectPosition(row.id));
+        }
+      }
+      onRowSelectionChange(updatedSelectedRows);
+      return updatedSelectedRows;
+    });
+  };
+
   const dispatch = useAppDispatch();
 
   const { data: positions = [] } = useGetPositionsQuery();
@@ -119,31 +145,6 @@ const DataTable: React.FC = () => {
     ],
     [t, organizationTrees],
   );
-
-  const handleRowClick = async (row: Position) => {
-    setSelectedRows((prev) => {
-      const isAlreadySelected = prev.some((selected) => selected.id === row.id);
-      const updatedSelectedRows = isAlreadySelected
-        ? prev.filter((selected) => selected.id !== row.id)
-        : [...prev, row];
-      if (updatedSelectedRows.length === 0) {
-        console.log('Ei yhtään riviä valittuna.');
-        setSelectedRowId(null);
-        dispatch(clearSelectedPosition());
-      } else {
-        console.log(
-          'Valitut rivit:',
-          updatedSelectedRows.map((r) => r.id), // Nämä pitää viedä eteenpäin ja käsitellä ->
-        );
-        setSelectedRowId(row.id || null);
-        if (row.id) {
-          getPosition(row.id, true);
-          dispatch(selectPosition(row.id));
-        }
-      }
-      return updatedSelectedRows;
-    });
-  };
 
   const handleSearch = () => {
     const filtered = positions.filter((position) => {

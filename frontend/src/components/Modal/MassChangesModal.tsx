@@ -6,13 +6,15 @@ import { Field, Form } from 'react-final-form';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { skipToken } from '@reduxjs/toolkit/query';
+import type { Position } from 'models/Position';
 
 interface MassChangesModalProps {
   open: boolean;
   handleClose: () => void;
+  selectedRows: Position[];
 }
 
-const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }) => {
+const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, selectedRows }) => {
   const { t } = useTranslation();
 
   const options = [
@@ -39,7 +41,8 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose }
 
   const onSubmit = async () => {
     try {
-      //jotain
+      console.log('Valitut positiot:', selectedRows); // Tulostaa kaikki valitut rivit
+      handleClose();
     } catch (error) {
       console.error(error);
     }
