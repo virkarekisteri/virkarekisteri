@@ -51,7 +51,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     .sort((a, b) => a.number.localeCompare(b.number));
 
   const validatePricingId = (value: string) => {
-    if (value && value.length > 10) {
+    if (value && value.length > 20) {
       return t('error.pricing_id_error');
     }
     return undefined;
