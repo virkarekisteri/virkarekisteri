@@ -12,6 +12,7 @@ import LandingPage from './LandingPage';
 import { useGetPositionQuery, useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
+import { RequiresEditRole } from './role-guards';
 import ChangeLogTable from './ChangeLog/ChangeLogTable';
 import type { Position } from 'models/Position';
 
@@ -56,6 +57,7 @@ const VirkarekisterContainer = () => {
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
+
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 container size={12} alignItems="center" justifyContent="space-between" sx={{ gap: 2 }}>
             <Grid2 size="auto">
@@ -89,56 +91,58 @@ const VirkarekisterContainer = () => {
             </Grid2>
 
             <Grid2 size="auto" display="flex" gap={2}>
-              <Button
-                variant="contained"
-                onClick={handleOpenUploadModal}
-                sx={{
-                  backgroundColor: '#223B7C',
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  padding: '20px',
-                  height: '45px',
-                  display: 'flex',
-                  borderRadius: '25px 8px 8px 25px',
-                }}
-                startIcon={
-                  <Box
-                    component="span"
-                    sx={{
-                      marginRight: '40px',
-                    }}
-                  >
-                    +
-                  </Box>
-                }
-              >
-                {t('create_csv_position.upload_csv')}
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleOpenCreateModal}
-                sx={{
-                  backgroundColor: '#223B7C',
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  padding: '20px',
-                  height: '45px',
-                  display: 'flex',
-                  borderRadius: '25px 8px 8px 25px',
-                }}
-                startIcon={
-                  <Box
-                    component="span"
-                    sx={{
-                      marginRight: '40px',
-                    }}
-                  >
-                    +
-                  </Box>
-                }
-              >
-                {t('new_position')}
-              </Button>
+              <RequiresEditRole>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenUploadModal}
+                  sx={{
+                    backgroundColor: '#223B7C',
+                    color: 'white',
+                    fontSize: '1.2rem',
+                    padding: '20px',
+                    height: '45px',
+                    display: 'flex',
+                    borderRadius: '25px 8px 8px 25px',
+                  }}
+                  startIcon={
+                    <Box
+                      component="span"
+                      sx={{
+                        marginRight: '40px',
+                      }}
+                    >
+                      +
+                    </Box>
+                  }
+                >
+                  {t('create_csv_position.upload_csv')}
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenCreateModal}
+                  sx={{
+                    backgroundColor: '#223B7C',
+                    color: 'white',
+                    fontSize: '1.2rem',
+                    padding: '20px',
+                    height: '45px',
+                    display: 'flex',
+                    borderRadius: '25px 8px 8px 25px',
+                  }}
+                  startIcon={
+                    <Box
+                      component="span"
+                      sx={{
+                        marginRight: '40px',
+                      }}
+                    >
+                      +
+                    </Box>
+                  }
+                >
+                  {t('new_position')}
+                </Button>
+              </RequiresEditRole>
             </Grid2>
           </Grid2>
           <Grid2 size={12}>
