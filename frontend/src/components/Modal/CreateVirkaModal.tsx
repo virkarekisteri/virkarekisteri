@@ -58,7 +58,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   };
 
   const validateVacancySize = (value: string) => {
-    if ((value && Number(value) < 0) || Number(value) > 100) {
+    if (!/^\d+$/.test(value)) {
+      return t('error.vacancy_size_integer_error');
+    }
+    const numValue = Number(value);
+    if ((value && numValue < 0) || numValue > 100) {
       return t('error.vacancy_size_error');
     }
     return undefined;
@@ -229,7 +233,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                           label={t('create_position.vacancy_size')}
                           type="number"
                           error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error}
+                          helperText={meta.touched && meta.error ? meta.error : ''}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
