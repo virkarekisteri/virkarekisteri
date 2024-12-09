@@ -63,6 +63,10 @@
     "organization_tree": "Organization tree",
     "position_name": "Position name"
   },
+  "tabs": {
+    "positions": "Positions list",
+    "history": "History information"
+  },
   "user_menu": {
     "logout": "Log Out"
   },
@@ -73,7 +77,7 @@
   },
   "search_filter": {
     "search": "Search",
-    "reset": "Reset search terms",
+    "reset": "Reset",
     "search_filters": "Search filters",
     "virka": "Position",
     "toimi": "Post"
@@ -103,9 +107,24 @@
       "Type": "Type",
       "OrgTreeId": "Organization tree",
       "PositionName": "Position name",
-      "Substitute": "Substitute"
+      "Substitute": "Substitute",
+      "CreatedPosition": "Created new position"
     },
-    "DecisionNumber": "Decision number"
+    "DecisionNumber": "Decision number",
+    "search": {
+      "byNumber": "Search by vacancy number",
+      "byDate": "Search by date"
+    },
+    "table": {
+      "timestamp": "Edit time",
+      "vacancy_number": "Vacancy number",
+      "editor": "Editor",
+      "edited_field": "Edited field",
+      "old_value": "Old value",
+      "new_value": "New value",
+      "change": "Change",
+      "decision_number": "Decision number"
+    }
   },
   "basic_details": {
     "vacancy_fill": "Fill-%"
