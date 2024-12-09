@@ -12,9 +12,9 @@ VALUES
     ('Lukion ja perusopetuksen yhteinen lehtori'),
     ('Lukion ja lukion aikuislinjan yhteinen lehtori'),
     ('Lukion aikuislinjan ja lukion yhteinen lehtori'),
-    ('Päätoiminen lukion tuntiopettaja'),
+    ('Lukion päätoiminen tuntiopettaja'),
     (
-        'Päätoiminen lukion ja perusopetuksen tuntiopettaja'
+        'Lukion ja perusopetuksen päätoiminen tuntiopettaja'
     ),
     ('Lukion erityisopetuksen tuntiopettaja'),
     ('Peruskoulun oppilaanohjaaja'),
@@ -25,10 +25,21 @@ VALUES
     ('Erityisluokanopettaja'),
     ('Konsultoiva erityisopettaja'),
     ('Valmistava opettaja'),
-    ('Päätoiminen perusopetuksen tuntiopettaja'),
+    ('Perusopetuksen päätoiminen tuntiopettaja'),
     (
-        'Päätoiminen perusopetuksen ja lukion tuntiopettaja'
+        'Perusopetuksen ja lukion päätoiminen tuntiopettaja'
     ),
-    ('Erityisopetuksen tuntiopettaja');
-
+    ('Erityisopetuksen tuntiopettaja'),
+    ('Lukion sivutoiminen tuntiopettaja'),
+    ('Perusopetuksen sivutoiminen tuntiopettaja'),
+    ('varhaiskasvatusjohtaja'),
+    ('aluejohtaja'),
+    ('toimistosihteeri'),
+    ('päiväkodinjohtaja'),
+    ('varhaiskasvatuksen opettaja'),
+    ('varhaiskasvatuksen lastenhoitaja'),
+    ('päiväkotihuoltaja'),
+    ('ryhmäperhepäivähoitaja'),
+    ('varhaiskasvatuksen erityisopettaja'),
+    ('perhepäivähoidon ohjaaja');
 GO
