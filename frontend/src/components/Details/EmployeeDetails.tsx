@@ -102,7 +102,7 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
       {currentPositionEmployee && (
         <Box>
           {isReplacementActive && (
-            <Box sx={{ bgcolor: 'info.main', color: 'white', p: 2, mb: 2 }}>
+            <Box sx={{ bgcolor: alpha('#223B7C', 1), color: 'white', p: 2, mb: 2 }}>
               <Typography variant="h6">{t('employee.replacement_active')}</Typography>
             </Box>
           )}
@@ -136,38 +136,52 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.employee_name')}
-                      value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? currentReplacementEmployee.employeeName
-                          : currentPositionEmployee.employeeName
-                      }
+                      value={currentPositionEmployee.employeeName}
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.start_date')}
-                      value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? formatDate(currentReplacementEmployee.startDate.toString())
-                          : formatDate(currentPositionEmployee.startDate.toString())
-                      }
+                      value={formatDate(currentPositionEmployee.startDate.toString())}
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.ending_date')}
                       value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? currentReplacementEmployee.endingDate
-                            ? formatDate(currentReplacementEmployee.endingDate.toString())
-                            : t('employee.no_end_date')
-                          : currentPositionEmployee.endingDate
-                            ? formatDate(currentPositionEmployee.endingDate?.toString())
-                            : t('employee.no_end_date')
+                        currentPositionEmployee.endingDate
+                          ? formatDate(currentPositionEmployee.endingDate?.toString())
+                          : t('employee.no_end_date')
                       }
                     />
                   </Grid2>
                 </Grid2>
+                {isReplacementActive && currentReplacementEmployee && (
+                  <Grid2 size={12} container spacing={2} alignItems="center">
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.replacement_name')}
+                        value={currentReplacementEmployee.employeeName}
+                      />
+                    </Grid2>
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.start_date')}
+                        value={formatDate(currentReplacementEmployee.startDate.toString())}
+                      />
+                    </Grid2>
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.ending_date')}
+                        value={
+                          currentReplacementEmployee.endingDate
+                            ? formatDate(currentReplacementEmployee.endingDate.toString())
+                            : t('employee.no_end_date')
+                        }
+                      />
+                    </Grid2>
+                  </Grid2>
+                )}
               </Grid2>
             </AccordionDetails>
           </Accordion>
