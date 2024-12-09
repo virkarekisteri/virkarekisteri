@@ -74,7 +74,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     return undefined;
   };
 
-  const validateVacancyFill = (value: string, allValues: { [key: string]: any }) => {
+  const validateVacancyFill = (value: string, allValues: Record<string, any>) => {
     if ((value && Number(value) < 0) || Number(value) > 100) {
       return t('error.vacancy_fill_error');
     } else if (Number(value) > Number(allValues.vacancySize)) {
