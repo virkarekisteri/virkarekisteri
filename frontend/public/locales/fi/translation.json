@@ -160,6 +160,7 @@
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kymmenen (10) merkkiä pitkä.",
     "vacancy_fill_error": "Täyttö-% pitää olla välillä 0-100.",
     "vacancy_size_error": "Koko-% pitää olla välillä 0-100.",
-    "vacancy_fill_greater_than_size": "Täyttö-% ei voi olla suurempi kuin koko-%."
+    "vacancy_fill_greater_than_size": "Täyttö-% ei voi olla suurempi kuin koko-%.",
+    "vacancy_size_integer_error": "Luvun pitää olla kokonaisluku."
   }
 }
