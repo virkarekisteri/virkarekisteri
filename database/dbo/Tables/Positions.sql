@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[Positions] (
     [PaattymisPvm] DATETIME,
     [VakanssiKoko] DECIMAL(3, 2),
     [VakanssinTaytto] DECIMAL(3, 2),
-    [Hinnoittelutunnus] NVARCHAR(10),
+    [Hinnoittelutunnus] NVARCHAR(20),
     [LuontiPaatosNumero] NVARCHAR(50) NOT NULL,
     [LopetusPaatosNumero] NVARCHAR(50),
     [Laji] INT NOT NULL,

@@ -244,36 +244,42 @@ const DataTable: React.FC = () => {
             >
               <Grid2 container spacing={2}>
                 <Grid2 size={6}>
-                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                    {t('table.vacancy_number')}
-                  </Typography>
                   <TextField
                     label={t('table.vacancy_number')}
                     value={vacancyNumberSearch}
                     onChange={(e) => setVacancyNumberSearch(e.target.value)}
                     fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                    {t('table.placement_location')}
-                  </Typography>
                   <TextField
                     label={t('table.placement_location')}
                     value={placementLocationStateSearch}
                     onChange={(e) => setPlacementLocationStateSearch(e.target.value)}
                     fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
                   />
                 </Grid2>
                 <Grid2 size={6}>
-                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                    {t('table.position_name')}
-                  </Typography>
                   <TextField
                     label={t('table.position_name')}
                     value={positionNameSearch}
                     onChange={(e) => setPositionNameSearch(e.target.value)}
                     fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
                   />
                 </Grid2>
                 <Grid2 size={3}>

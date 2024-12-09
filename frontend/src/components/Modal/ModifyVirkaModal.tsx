@@ -57,8 +57,29 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     .sort((a, b) => a.number.localeCompare(b.number));
 
   const validatePricingId = (value: string) => {
-    if (value && value.length > 10) {
+    if (value && value.length > 20) {
       return t('error.pricing_id_error');
+    }
+    return undefined;
+  };
+
+  const validateVacancySize = (value: string) => {
+    if (!/^\d+$/.test(value)) {
+      return t('error.vacancy_size_integer_error');
+    }
+    const numValue = Number(value);
+    if ((value && numValue < 0) || numValue > 100) {
+      return t('error.vacancy_size_error');
+    }
+    return undefined;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validateVacancyFill = (value: string, allValues: Record<string, any>) => {
+    if ((value && Number(value) < 0) || Number(value) > 100) {
+      return t('error.vacancy_fill_error');
+    } else if (Number(value) > Number(allValues.vacancySize)) {
+      return t('error.vacancy_fill_greater_than_size');
     }
     return undefined;
   };
@@ -167,16 +188,13 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                   {/* Position Name */}
                   <Grid2 container spacing={2} size={12} justifyContent="left">
                     <Grid2 size={6}>
-                      <Typography component="div" fontWeight="bold">
-                        {t('edit_position.position_name')}
-                      </Typography>
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
                             options={positionNames}
                             getOptionLabel={(option) => option.name || ''}
                             value={positionNames.find((option) => option.id === input.value?.id) || null}
-                            onChange={(_event, value) => input.onChange(value ? value : null)}
+                            onChange={(_event, value) => input.onChange(value)}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -184,7 +202,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                 margin="normal"
                                 required
                                 label={t('edit_position.position_name')}
-                                placeholder={position.positionName?.name || t('edit_position.position_name')}
+                                placeholder={position.positionName?.name}
+                                slotProps={{
+                                  inputLabel: {
+                                    shrink: true,
+                                  },
+                                }}
                               />
                             )}
                           />
@@ -195,9 +218,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Organization Tree */}
                   <Grid2 size={6}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.organization_tree')}
-                    </Typography>
                     <Field name="orgTree">
                       {({ input }) => (
                         <Autocomplete
@@ -219,6 +239,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                   ? `${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.number} ${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.name}`
                                   : t('edit_position.organization_tree')
                               }
+                              slotProps={{
+                                inputLabel: {
+                                  shrink: true,
+                                },
+                              }}
                             />
                           )}
                         />
@@ -228,16 +253,19 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Placement Location */}
                   <Grid2 size={6}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.placement_location')}
-                    </Typography>
                     <Field name="placementLocation">
                       {({ input }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={position.placementLocation ?? t('edit_position.placement_location')}
+                          placeholder={position.placementLocation}
+                          label={t('edit_position.placement_location')}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>
@@ -245,13 +273,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Type */}
                   <Grid2 size={6}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.type')}
-                    </Typography>
                     <Field name="type">
                       {({ input }) => (
                         <FormControl fullWidth margin="normal">
-                          <InputLabel id="type-select-label">{t('edit_position.type')} *</InputLabel>
+                          <InputLabel shrink={true} id="type-select-label">
+                            {t('edit_position.type')} *
+                          </InputLabel>
                           <Select
                             required
                             labelId="type-select-label"
@@ -270,18 +297,21 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Pricing ID */}
                   <Grid2 size={6}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.pricing_id')}
-                    </Typography>
                     <Field name="pricingId" validate={validatePricingId}>
                       {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={position.pricingId ?? t('edit_position.pricing_id')}
+                          placeholder={position.pricingId}
+                          label={t('edit_position.pricing_id')}
                           error={meta.error && meta.touched}
                           helperText={meta.touched && meta.error}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>
@@ -289,23 +319,26 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Vacancy Size */}
                   <Grid2 size={6}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.vacancy_size')}
-                    </Typography>
-                    <Field name="vacancySize">
-                      {({ input }) => (
+                    <Field name="vacancySize" validate={validateVacancySize}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           type="number"
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error ? meta.error : ''}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                               inputProps: { min: 0, max: 100 },
                             },
+                            inputLabel: {
+                              shrink: true,
+                            },
                           }}
-                          placeholder={position.vacancySize?.toString() ?? t('edit_position.vacancy_size')}
+                          placeholder={(position.vacancySize ? position.vacancySize * 100 : 0).toFixed()}
+                          label={t('edit_position.vacancy_size')}
                         />
                       )}
                     </Field>
@@ -313,23 +346,26 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Vacancy Fill */}
                   <Grid2 size={6}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.vacancy_fill')}
-                    </Typography>
-                    <Field name="vacancyFill">
-                      {({ input }) => (
+                    <Field name="vacancyFill" validate={validateVacancyFill}>
+                      {({ input, meta }) => (
                         <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           type="number"
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
                           slotProps={{
                             input: {
                               endAdornment: <InputAdornment position="start">%</InputAdornment>,
                               inputProps: { min: 0, max: 100 },
                             },
+                            inputLabel: {
+                              shrink: true,
+                            },
                           }}
-                          placeholder={position.vacancyFill?.toString() ?? t('edit_position.vacancy_fill')}
+                          placeholder={(position.vacancyFill ? position.vacancyFill * 100 : 0).toFixed()}
+                          label={t('edit_position.vacancy_fill')}
                         />
                       )}
                     </Field>
@@ -354,9 +390,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Education Level */}
                   <Grid2 size={12}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.education_level')}
-                    </Typography>
                     <Field name="educationLevel">
                       {({ input }) => (
                         <TextField
@@ -367,7 +400,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="educationLevel"
                           label={t('edit_position.education_level')}
-                          placeholder={position.educationLevel ?? t('edit_position.education_level')}
+                          placeholder={position.educationLevel}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>
@@ -375,9 +413,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Work Experience */}
                   <Grid2 size={12}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.work_experience')}
-                    </Typography>
                     <Field name="workExperience">
                       {({ input }) => (
                         <TextField
@@ -388,7 +423,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="workExperience"
                           label={t('edit_position.work_experience')}
-                          placeholder={position.workExperience ?? t('edit_position.work_experience')}
+                          placeholder={position.workExperience}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>
@@ -396,9 +436,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Additional Details */}
                   <Grid2 size={12}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('additional_details')}
-                    </Typography>
                     <Field name="details">
                       {({ input }) => (
                         <TextField
@@ -409,7 +446,12 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                           maxRows={4}
                           id="details"
                           label={t('additional_details')}
-                          placeholder={position.details ?? t('additional_details')}
+                          placeholder={position.details}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>
@@ -435,9 +477,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                   {/* Creation decision number */}
                   <Grid2 container spacing={2} size={12} justifyContent="left">
                     <Grid2 size={6}>
-                      <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                        {t('edit_position.creation_decision_number')}
-                      </Typography>
                       <Field name="decisionNumber">
                         {({ input }) => (
                           <TextField
@@ -447,6 +486,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                             fullWidth
                             id="decisionNumber"
                             label={t('edit_position.creation_decision_number')}
+                            slotProps={{
+                              inputLabel: {
+                                shrink: true,
+                              },
+                            }}
                           />
                         )}
                       </Field>

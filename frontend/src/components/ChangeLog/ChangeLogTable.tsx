@@ -112,6 +112,33 @@ const ChangeLogTable = () => {
     );
   }
 
+  const mapTypeValue = (value: string) => {
+    if (value === '1') {
+      return t('position_type.position');
+    } else if (value === '2') {
+      return t('position_type.post');
+    }
+    return value;
+  };
+
+  const transformToPercentage = (value: string | number | null) => {
+    if (value === null || value === undefined) {
+      return '-';
+    }
+    const numericValue = typeof value === 'number' ? value : parseFloat(value.replace(',', '.'));
+    if (!isNaN(numericValue)) {
+      return (numericValue * 100).toFixed(0); // Convert to percentage and fix to 0 decimal places
+    }
+    return value.toString();
+  };
+
+  const transformValue = (field: string, value: string | null) => {
+    if ((field === 'VacancyFill' || field === 'VacancySize') && value) {
+      return transformToPercentage(value);
+    }
+    return value;
+  };
+
   return (
     <Box>
       {/* Search Controls */}
@@ -259,11 +286,19 @@ const ChangeLogTable = () => {
                       <Box display="flex" justifyContent="space-between" paddingX={5}>
                         <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
                           <Typography fontWeight="bold">{t('change_logs.table.old_value')}</Typography>
-                          <Typography>{row.oldValue || '-'}</Typography>
+                          <Typography>
+                            {row.editedField === 'Type'
+                              ? mapTypeValue(row.oldValue)
+                              : (transformValue(row.editedField, row.oldValue) ?? '-')}
+                          </Typography>
                         </Box>
                         <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
                           <Typography fontWeight="bold">{t('change_logs.table.new_value')}</Typography>
-                          <Typography>{row.newValue || '-'}</Typography>
+                          <Typography>
+                            {row.editedField === 'Type'
+                              ? mapTypeValue(row.newValue)
+                              : (transformValue(row.editedField, row.newValue) ?? '-')}
+                          </Typography>
                         </Box>
                       </Box>
                     </TableCell>

@@ -26,6 +26,25 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
     return t(`change_logs.fields.${field}`, field);
   };
 
+  const mapTypeValue = (value: string) => {
+    if (value === '1') {
+      return t('position_type.position');
+    } else if (value === '2') {
+      return t('position_type.post');
+    }
+    return value;
+  };
+
+  const transformValue = (field: string, value: string | null) => {
+    if ((field === 'VacancyFill' || field === 'VacancySize') && value) {
+      const numericValue = typeof value === 'number' ? value : parseFloat(value.replace(',', '.'));
+      if (!isNaN(numericValue)) {
+        return (numericValue * 100).toFixed(0);
+      }
+    }
+    return value;
+  };
+
   return (
     <Accordion>
       <AccordionSummary
@@ -54,37 +73,48 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
       >
         {changeLogs.length > 0 ? (
           <Grid2 container spacing={2}>
-            {changeLogs.map((log, index) => (
-              <Grid2 key={index} size={{ xs: 12 }} container spacing={1} alignItems="center">
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField label={t('change_logs.timestamp')} value={formatTimestamp(log.timestamp)} />
+            {changeLogs.map((log) => {
+              const oldValue =
+                log.editedField === 'Type' ? mapTypeValue(log.oldValue) : transformValue(log.editedField, log.oldValue);
+
+              const newValue =
+                log.editedField === 'Type' ? mapTypeValue(log.newValue) : transformValue(log.editedField, log.newValue);
+
+              return (
+                <Grid2 key={log.id} size={{ xs: 12 }} container spacing={1} alignItems="center">
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField
+                      label={t('change_logs.timestamp')}
+                      value={formatTimestamp(log.timestamp)}
+                    />
+                  </Grid2>
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField label={t('change_logs.editor')} value={log.editor} />
+                  </Grid2>
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField
+                      label={t('change_logs.edited_field')}
+                      value={getTranslatedField(log.editedField)}
+                    />
+                  </Grid2>
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField
+                      label={t('change_logs.old_value')}
+                      value={oldValue && oldValue.trim() !== '' ? oldValue : '-'}
+                    />
+                  </Grid2>
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField
+                      label={t('change_logs.new_value')}
+                      value={newValue && newValue.trim() !== '' ? newValue : '-'}
+                    />
+                  </Grid2>
+                  <Grid2 size={{ xs: 2 }}>
+                    <RenderReadonlyTextField label={t('change_logs.DecisionNumber')} value={log.decisionNumber} />
+                  </Grid2>
                 </Grid2>
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField label={t('change_logs.editor')} value={log.editor} />
-                </Grid2>
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField
-                    label={t('change_logs.edited_field')}
-                    value={getTranslatedField(log.editedField)}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField
-                    label={t('change_logs.old_value')}
-                    value={log.oldValue && log.oldValue.trim() !== '' ? log.oldValue : '-'}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField
-                    label={t('change_logs.new_value')}
-                    value={log.newValue && log.newValue.trim() !== '' ? log.newValue : '-'}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 2 }}>
-                  <RenderReadonlyTextField label={t('change_logs.DecisionNumber')} value={log.decisionNumber} />
-                </Grid2>
-              </Grid2>
-            ))}
+              );
+            })}
           </Grid2>
         ) : (
           <Typography variant="body1" sx={{ padding: 2, textAlign: 'left' }}>
