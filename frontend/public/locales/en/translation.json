@@ -68,7 +68,8 @@
     "history": "History information"
   },
   "user_menu": {
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "role": "Role"
   },
   "vacancy_statuses": {
     "abolished": "Abolished",

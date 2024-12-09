@@ -66,7 +66,9 @@ const UserMenu = () => {
           onClose={handleClose}
         >
           <MenuItem className={'pointer-events-none'}>{name}</MenuItem>
-          <MenuItem className={'pointer-events-none'}>Role: {role}</MenuItem>
+          <MenuItem className={'pointer-events-none'}>
+            {t('user_menu.role')}: {role}
+          </MenuItem>
           <MenuItem onClick={handleLogout}>{t('user_menu.logout')}</MenuItem>
         </Menu>
       </AuthenticatedTemplate>

@@ -87,7 +87,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         positionName: positionNameObj,
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
-        details: values.additionalDetails ?? '',
+        details: values.details ?? '',
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
         vacancyStatus: values.vacancyStaus ?? '',

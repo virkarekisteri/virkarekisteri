@@ -68,7 +68,8 @@
     "history": "Historiatiedot"
   },
   "user_menu": {
-    "logout": "Kirjaudu Ulos"
+    "logout": "Kirjaudu Ulos",
+    "role": "Rooli"
   },
   "vacancy_statuses": {
     "abolished": "Lakkautettu",

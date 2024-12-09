@@ -68,7 +68,8 @@
     "history": ""
   },
   "user_menu": {
-    "logout": ""
+    "logout": "",
+    "role": ""
   },
   "vacancy_statuses": {
     "abolished": "",
