@@ -21,7 +21,10 @@ const PositionsApi = baseApi.injectEndpoints({
         method: 'POST',
         body: position,
       }),
-      invalidatesTags: [{ type: 'Positions', id: 'LIST' }],
+      invalidatesTags: [
+        { type: 'Positions', id: 'LIST' },
+        { type: 'PositionNames', id: 'LIST' },
+      ],
     }),
     updatePosition: build.mutation<Position, { id: string; position: Partial<Position> }>({
       query: ({ id, position }) => ({
@@ -32,6 +35,7 @@ const PositionsApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Positions', id },
         { type: 'ChangeLogs', id },
+        { type: 'PositionNames', id: 'LIST' },
       ],
     }),
     importPositionsCsv: build.mutation<CsvImportResponse, FormData>({
