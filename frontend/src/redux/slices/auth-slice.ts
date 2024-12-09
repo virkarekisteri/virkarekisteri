@@ -5,8 +5,8 @@ import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 
 enum RoleHierarchy {
-  Read,
-  Edit,
+  Reader,
+  Editor,
   Admin,
 }
 
@@ -39,9 +39,9 @@ export const authSlice = createAppSlice({
   selectors: {
     selectName: (state) => state.name,
     selectEmail: (state) => state.email,
-    selectIsEditor: (state) => state.roles?.some((role) => role >= RoleHierarchy.Edit) ?? false,
+    selectIsEditor: (state) => state.roles?.some((role) => role >= RoleHierarchy.Editor) ?? false,
     selectIsAdmin: (state) => state.roles?.includes(RoleHierarchy.Admin) ?? false,
-    selectHighestRole: (state) => RoleHierarchy[Math.max(...(state.roles ?? [RoleHierarchy.Read]))],
+    selectHighestRole: (state) => RoleHierarchy[Math.max(...(state.roles ?? [RoleHierarchy.Reader]))],
   },
 });
 
