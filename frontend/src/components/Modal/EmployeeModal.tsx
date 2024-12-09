@@ -103,6 +103,8 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
           boxShadow: 24,
           p: 0,
           borderRadius: 1,
+          maxHeight: '90vh',
+          overflow: 'auto',
         }}
       >
         <Box
