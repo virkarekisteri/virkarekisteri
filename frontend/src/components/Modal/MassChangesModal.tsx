@@ -7,6 +7,7 @@ import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-na
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { Position } from 'models/Position';
+import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
 
 interface MassChangesModalProps {
   open: boolean;
@@ -18,11 +19,11 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { t } = useTranslation();
 
   const options = [
-    t('create_position.organization_tree'),
-    t('create_position.position_name'),
-    t('create_position.pricing_id'),
-    t('create_position.education_level'),
-    t('create_position.work_experience'),
+    { label: t('create_position.organization_tree'), value: 'orgTreeId' },
+    { label: t('create_position.position_name'), value: 'positionName' },
+    { label: t('create_position.pricing_id'), value: 'pricingId' },
+    { label: t('create_position.education_level'), value: 'educationLevel' },
+    { label: t('create_position.work_experience'), value: 'workExperience' },
   ];
 
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
@@ -30,31 +31,55 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   );
   const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
   const positionNameOptions = positionNames.map((option) => option.name);
-
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
 
-  const [selectedOption, setSelectedOption] = useState<string | null>('');
-  // const [isFieldEnabled, setIsFieldEnabled] = useState(false);
-  // const [openDialog, setOpenDialog] = React.useState(false);
+  const [updatePosition] = useUpdatePositionMutation();
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: Record<string, any>) => {
+    if (!selectedOption) {
+      console.error('No field selected for mass update.');
+      return;
+    }
+
     try {
-      console.log('Valitut positiot:', selectedRows); // Tulostaa kaikki valitut rivit
+      const updatePromises = selectedRows.map(async (position) => {
+        if (!position.id) {
+          console.error(`Skipping position without ID:`, position);
+          return;
+        }
+
+        // Prepare the update data based on selectedOption and form values
+        const updateData = {
+          orgTreeId: selectedOption === 'orgTreeId' && values.newValue ? values.newValue.id : undefined,
+          positionName: selectedOption === 'positionName' && values.newValue ? { name: values.newValue } : undefined,
+          pricingId: selectedOption === 'pricingId' && values.newValue ? values.newValue : undefined,
+          educationLevel: selectedOption === 'educationLevel' && values.newValue ? values.newValue : undefined,
+          workExperience: selectedOption === 'workExperience' && values.newValue ? values.newValue : undefined,
+          decisionNumber: values.decisionNumber || undefined,
+        };
+
+        // Log the data being updated
+        console.log(`Updating position ${position.id} with data:`, updateData);
+
+        try {
+          await updatePosition({ id: position.id, position: updateData });
+        } catch (error) {
+          console.error(`Failed to update position ${position.id}:`, error);
+        }
+      });
+
+      // Wait for all updates to complete
+      await Promise.all(updatePromises);
+
+      console.log('All selected positions processed.');
       handleClose();
     } catch (error) {
-      console.error(error);
+      console.error('Failed to process positions:', error);
     }
   };
-
-  //const handleClickOpenDialog = () => {
-  //  setOpenDialog(true);
-  //};
-
-  //const handleCloseDialog = () => {
-  //  setOpenDialog(false);
-  //};
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -101,12 +126,12 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                     </Typography>
                     <Autocomplete
                       options={options}
+                      getOptionLabel={(option) => option.label}
                       id="auto-complete"
                       autoComplete
                       includeInputInList
                       onChange={(_event, newValue) => {
-                        setSelectedOption(newValue);
-                        // setIsFieldEnabled(Boolean(newValue));
+                        setSelectedOption(newValue?.value || null);
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -116,17 +141,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                           fullWidth
                           id="positionName"
                           label={t('mass_changes.field_type')}
-                          sx={{
-                            '& input[type="search"]::-webkit-search-cancel-button': {
-                              WebkitAppearance: 'none',
-                            },
-                          }}
-                          slotProps={{
-                            input: {
-                              ...params.InputProps,
-                              type: 'search',
-                            },
-                          }}
                         />
                       )}
                     />
@@ -135,24 +149,20 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('mass_changes.new_value')}
                     </Typography>
-                    {selectedOption !== 'Kustannuspaikka' &&
-                      selectedOption !== 'Organization tree' &&
-                      selectedOption !== 'Virkanimike' &&
-                      selectedOption !== 'Position name' && (
-                        <TextField margin="normal" required fullWidth id="emptyField" label={''} />
-                      )}
-                    {(selectedOption === 'Virkanimike' || selectedOption === 'Position name') && (
-                      <Field name="positionName">
-                        {({ input }) => (
+                    <Field name="newValue">
+                      {({ input }) =>
+                        selectedOption === 'positionName' || selectedOption === 'orgTreeId' ? (
                           <Autocomplete
                             {...input}
-                            freeSolo
-                            options={positionNameOptions}
-                            loading={positionNamesLoading}
-                            getOptionLabel={(option) => option}
-                            onInputChange={(_event, value) => {
-                              input.onChange(value);
-                            }}
+                            options={
+                              selectedOption === 'positionName'
+                                ? positionNameOptions
+                                : filteredOrgTrees.map((tree) => ({
+                                    id: tree.id,
+                                    label: `${tree.number} ${tree.name}`,
+                                  }))
+                            }
+                            getOptionLabel={(option) => (typeof option === 'string' ? option : option.label || '')}
                             onChange={(_event, value) => {
                               input.onChange(value);
                             }}
@@ -162,96 +172,68 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="positionName"
-                                label={t('create_position.position_name')}
-                                sx={{}}
+                                label={t(
+                                  selectedOption === 'positionName'
+                                    ? 'create_position.position_name'
+                                    : 'create_position.organization_tree',
+                                )}
                               />
                             )}
                           />
-                        )}
-                      </Field>
-                    )}
-                    {(selectedOption === 'Kustannuspaikka' || selectedOption === 'Organization tree') && (
-                      <Field name="orgTreeId">
-                        {({ input }) => (
-                          <Autocomplete
+                        ) : (
+                          <TextField
                             {...input}
-                            options={filteredOrgTrees}
-                            getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
-                            onChange={(_event, value) => {
-                              input.onChange(value);
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="orgTreeId"
-                                label={t('create_position.organization_tree')}
-                                sx={{
-                                  '& input[type="search"]::-webkit-search-cancel-button': {
-                                    WebkitAppearance: 'none',
-                                  },
-                                }}
-                                slotProps={{
-                                  input: {
-                                    ...params.InputProps,
-                                    type: 'search',
-                                  },
-                                }}
-                              />
-                            )}
+                            margin="normal"
+                            required
+                            fullWidth
+                            label={t('mass_changes.new_value')}
                           />
-                        )}
-                      </Field>
-                    )}
+                        )
+                      }
+                    </Field>
                   </Grid2>
                 </Grid2>
-                <Grid2 container spacing={2} size={12} justifyContent="left" marginTop={1}>
+                <Grid2 container spacing={2} marginTop={1}>
                   <Grid2 size={6}>
                     <Typography component={'div'} fontWeight={'fontWeightBold'}>
                       {t('edit_position.creation_decision_number')}
                     </Typography>
-                    <Field name="creationDecisionNumber">
+                    <Field name="decisionNumber">
                       {({ input }) => (
                         <TextField
                           {...input}
                           margin="normal"
                           required
                           fullWidth
-                          id="creationDecisionNumber"
                           label={t('edit_position.creation_decision_number')}
                         />
                       )}
                     </Field>
                   </Grid2>
+                  <Grid2 size={12}>
+                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
+                      {t('edit_position.creation_description')}
+                    </Typography>
+                    <Field name="creationDescription">
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          fullWidth
+                          multiline
+                          maxRows={4}
+                          label={t('edit_position.creation_description')}
+                        />
+                      )}
+                    </Field>
+                  </Grid2>
                 </Grid2>
-                <Grid2 size={12}>
-                  <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                    {t('edit_position.creation_description')}
-                  </Typography>
-                  <Field name="creation_description">
-                    {({ input }) => (
-                      <TextField
-                        {...input}
-                        margin="normal"
-                        fullWidth
-                        multiline
-                        maxRows={4}
-                        id="creation_description"
-                        label={t('edit_position.creation_description')}
-                      />
-                    )}
-                  </Field>
-                </Grid2>
-                <Grid2 size={6} mt={2} sx={{ display: 'flex', alignItems: 'right', justifyContent: 'right' }}>
+                <Grid2 container justifyContent="flex-end" marginTop={2}>
                   <Button
                     type="submit"
                     variant="contained"
-                    //onClick={handleClickOpenDialog}
                     sx={{ backgroundColor: '#223B7C' }}
-                    disabled={submitting || pristine}
+                    disabled={submitting || pristine || !selectedOption}
                   >
                     {t('mass_changes.make_change')}
                   </Button>
