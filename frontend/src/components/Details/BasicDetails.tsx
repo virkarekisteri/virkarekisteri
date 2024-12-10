@@ -51,32 +51,32 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
     <Box>
       {position.vacancyStatus !== 0 && (
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            variant="contained"
-            onClick={handleOpenEndModal}
-            sx={{
-              backgroundColor: '#223B7C',
-              color: 'white',
-              fontSize: '1rem',
-              padding: '10px 20px',
-              height: '36px',
-              display: 'inline-flex',
-              borderRadius: '8px 25px 25px 8px',
-            }}
-            startIcon={
-              <Box
-                component="span"
-                sx={{
-                  marginRight: '8px',
-                }}
-              >
-                ✖
-              </Box>
-            }
-          >
-            {t('end_position.title')}
-          </Button>
           <RequiresEditRole>
+            <Button
+              variant="contained"
+              onClick={handleOpenEndModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1rem',
+                padding: '10px 20px',
+                height: '36px',
+                display: 'inline-flex',
+                borderRadius: '8px 25px 25px 8px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '8px',
+                  }}
+                >
+                  ✖
+                </Box>
+              }
+            >
+              {t('end_position.title')}
+            </Button>
             <Button
               variant="contained"
               onClick={handleOpenEditModal}
