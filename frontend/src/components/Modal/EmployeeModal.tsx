@@ -103,6 +103,8 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
           boxShadow: 24,
           p: 0,
           borderRadius: 1,
+          maxHeight: '90vh',
+          overflow: 'auto',
         }}
       >
         <Box
@@ -145,17 +147,20 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
                   <Grid2 size={6}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('employee.employee_name')}
-                    </Typography>
                     <Field name="employeeName">
-                      {({ input }) => <TextField {...input} margin="normal" required fullWidth />}
+                      {({ input }) => (
+                        <TextField
+                          {...input}
+                          margin="normal"
+                          required
+                          fullWidth
+                          label={t('employee.employee_name')}
+                          slotProps={{ inputLabel: { shrink: true } }}
+                        />
+                      )}
                     </Field>
                   </Grid2>
                   <Grid2 size={6}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('employee.start_date')}
-                    </Typography>
                     <Field name="startDate">
                       {({ input }) => (
                         <TextField
@@ -164,6 +169,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                           required
                           fullWidth
                           type="date"
+                          label={t('employee.start_date')}
                           slotProps={{ inputLabel: { shrink: true } }}
                         />
                       )}
@@ -171,9 +177,6 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                   </Grid2>
                   <Grid2 size={6}></Grid2>
                   <Grid2 size={6}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('employee.ending_date')}
-                    </Typography>
                     <Field name="endingDate">
                       {({ input }) => (
                         <TextField
@@ -181,6 +184,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                           margin="normal"
                           fullWidth
                           type="date"
+                          label={t('employee.ending_date')}
                           slotProps={{ inputLabel: { shrink: true } }}
                         />
                       )}
@@ -222,9 +226,6 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                 />
                 <Grid2 container spacing={2} size={12} justifyContent="left">
                   <Grid2 size={6}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.creation_decision_number')}
-                    </Typography>
                     <Field name="decisionNumber">
                       {({ input }) => (
                         <TextField
@@ -234,6 +235,11 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
                           fullWidth
                           id="decisionNumber"
                           label={t('edit_position.creation_decision_number')}
+                          slotProps={{
+                            inputLabel: {
+                              shrink: true,
+                            },
+                          }}
                         />
                       )}
                     </Field>

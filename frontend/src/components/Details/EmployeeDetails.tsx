@@ -9,6 +9,7 @@ import { formatDate } from 'utils/formatDate';
 import { useGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { PositionEmployee } from 'models/PositionEmployee';
+import { RequiresEditRole } from 'components/role-guards';
 
 const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -73,38 +74,40 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
       {position.vacancyStatus !== 0 && (
         <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
           <Box sx={{ padding: 2, textAlign: 'right' }}>
-            <Button
-              variant="contained"
-              onClick={handleOpenModal}
-              sx={{
-                backgroundColor: '#223B7C',
-                color: 'white',
-                fontSize: '1rem',
-                padding: '10px 20px',
-                height: '36px',
-                display: 'inline-flex',
-                borderRadius: '25px 8px 8px 25px',
-              }}
-              startIcon={
-                <Box
-                  component="span"
-                  sx={{
-                    marginRight: '8px',
-                  }}
-                >
-                  ✎
-                </Box>
-              }
-            >
-              {isEmployeeSet ? t('edit_employee') : t('add_employee')}
-            </Button>
+            <RequiresEditRole>
+              <Button
+                variant="contained"
+                onClick={handleOpenModal}
+                sx={{
+                  backgroundColor: '#223B7C',
+                  color: 'white',
+                  fontSize: '1rem',
+                  padding: '10px 20px',
+                  height: '36px',
+                  display: 'inline-flex',
+                  borderRadius: '25px 8px 8px 25px',
+                }}
+                startIcon={
+                  <Box
+                    component="span"
+                    sx={{
+                      marginRight: '8px',
+                    }}
+                  >
+                    ✎
+                  </Box>
+                }
+              >
+                {isEmployeeSet ? t('edit_employee') : t('add_employee')}
+              </Button>
+            </RequiresEditRole>
           </Box>
         </Grid2>
       )}
       {currentPositionEmployee && (
         <Box>
           {isReplacementActive && (
-            <Box sx={{ bgcolor: 'info.main', color: 'white', p: 2, mb: 2 }}>
+            <Box sx={{ bgcolor: alpha('#223B7C', 1), color: 'white', p: 2, mb: 2 }}>
               <Typography variant="h6">{t('employee.replacement_active')}</Typography>
             </Box>
           )}
@@ -138,38 +141,52 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.employee_name')}
-                      value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? currentReplacementEmployee.employeeName
-                          : currentPositionEmployee.employeeName
-                      }
+                      value={currentPositionEmployee.employeeName}
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.start_date')}
-                      value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? formatDate(currentReplacementEmployee.startDate.toString())
-                          : formatDate(currentPositionEmployee.startDate.toString())
-                      }
+                      value={formatDate(currentPositionEmployee.startDate.toString())}
                     />
                   </Grid2>
                   <Grid2 size={4}>
                     <RenderReadonlyTextField
                       label={t('employee.ending_date')}
                       value={
-                        isReplacementActive && currentReplacementEmployee
-                          ? currentReplacementEmployee.endingDate
-                            ? formatDate(currentReplacementEmployee.endingDate.toString())
-                            : t('employee.no_end_date')
-                          : currentPositionEmployee.endingDate
-                            ? formatDate(currentPositionEmployee.endingDate?.toString())
-                            : t('employee.no_end_date')
+                        currentPositionEmployee.endingDate
+                          ? formatDate(currentPositionEmployee.endingDate?.toString())
+                          : t('employee.no_end_date')
                       }
                     />
                   </Grid2>
                 </Grid2>
+                {isReplacementActive && currentReplacementEmployee && (
+                  <Grid2 size={12} container spacing={2} alignItems="center">
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.replacement_name')}
+                        value={currentReplacementEmployee.employeeName}
+                      />
+                    </Grid2>
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.start_date')}
+                        value={formatDate(currentReplacementEmployee.startDate.toString())}
+                      />
+                    </Grid2>
+                    <Grid2 size={4}>
+                      <RenderReadonlyTextField
+                        label={t('employee.ending_date')}
+                        value={
+                          currentReplacementEmployee.endingDate
+                            ? formatDate(currentReplacementEmployee.endingDate.toString())
+                            : t('employee.no_end_date')
+                        }
+                      />
+                    </Grid2>
+                  </Grid2>
+                )}
               </Grid2>
             </AccordionDetails>
           </Accordion>

@@ -63,8 +63,13 @@
     "organization_tree": "Kustannuspaikka",
     "placement_location": "Sijoituspaikka"
   },
+  "tabs": {
+    "positions": "Virkalistaus",
+    "history": "Historiatiedot"
+  },
   "user_menu": {
-    "logout": "Kirjaudu Ulos"
+    "logout": "Kirjaudu Ulos",
+    "role": "Rooli"
   },
   "vacancy_statuses": {
     "abolished": "Lakkautettu",
@@ -103,9 +108,24 @@
       "Type": "Tyyppi",
       "OrgTreeId": "Kustannuspaikka",
       "PositionName": "Virkanimike",
-      "Substitute": "Sijainen"
+      "Substitute": "Sijainen",
+      "CreatedPosition": "Luotu uusi virka"
     },
-    "DecisionNumber": "Päätösnumero"
+    "DecisionNumber": "Päätösnumero",
+    "search": {
+      "byNumber": "Etsi vakanssinumerolla",
+      "byDate": "Etsi päivämäärällä"
+    },
+    "table": {
+      "timestamp": "Muokkausaika",
+      "vacancy_number": "Vakanssinumero",
+      "editor": "Muokkaaja",
+      "edited_field": "Muokattu kenttä",
+      "old_value": "Vanha arvo",
+      "new_value": "Uusi arvo",
+      "change": "Muutos",
+      "decision_number": "Päätösnumero"
+    }
   },
   "basic_details": {
     "vacancy_fill": "Täyttö-%"
@@ -138,7 +158,11 @@
     "creation_description": "Päätöksen selite"
   },
   "error": {
-    "pricing_id_error": "Hinnoittelutunnus voi olla vain kymmenen (10) merkkiä pitkä."
+    "pricing_id_error": "Hinnoittelutunnus voi olla vain kymmenen (10) merkkiä pitkä.",
+    "vacancy_fill_error": "Täyttö-% pitää olla välillä 0-100.",
+    "vacancy_size_error": "Koko-% pitää olla välillä 0-100.",
+    "vacancy_fill_greater_than_size": "Täyttö-% ei voi olla suurempi kuin koko-%.",
+    "vacancy_size_integer_error": "Luvun pitää olla kokonaisluku."
   },
   "end_position": {
     "title": "Lakkauta virka",

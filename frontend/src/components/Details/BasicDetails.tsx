@@ -7,6 +7,7 @@ import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
 
 interface BasicDetailsProps {
@@ -75,31 +76,33 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           >
             {t('end_position.title')}
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleOpenEditModal}
-            sx={{
-              backgroundColor: '#223B7C',
-              color: 'white',
-              fontSize: '1rem',
-              padding: '10px 20px',
-              height: '36px',
-              display: 'inline-flex',
-              borderRadius: '25px 8px 8px 25px',
-            }}
-            startIcon={
-              <Box
-                component="span"
-                sx={{
-                  marginRight: '8px',
-                }}
-              >
-                ✎
-              </Box>
-            }
-          >
-            {t('edit_position.title')}
-          </Button>
+          <RequiresEditRole>
+            <Button
+              variant="contained"
+              onClick={handleOpenEditModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1rem',
+                padding: '10px 20px',
+                height: '36px',
+                display: 'inline-flex',
+                borderRadius: '25px 8px 8px 25px',
+              }}
+              startIcon={
+                <Box
+                  component="span"
+                  sx={{
+                    marginRight: '8px',
+                  }}
+                >
+                  ✎
+                </Box>
+              }
+            >
+              {t('edit_position.title')}
+            </Button>
+          </RequiresEditRole>
         </Box>
       )}
       <Box
@@ -202,13 +205,13 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             }}
           >
             <Grid2 size={12}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('create_position.education_level')}
               </Typography>
               <RenderReadonlyTextField value={position.educationLevel} />
             </Grid2>
             <Grid2 size={12}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('create_position.work_experience')}
               </Typography>
               <RenderReadonlyTextField value={position.workExperience} />
@@ -242,7 +245,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             }}
           >
             <Grid2 size={12}>
-              <Typography component={'div'} fontWeight={'fontWeightBold'}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('additional_details')}
               </Typography>
               <RenderReadonlyTextField value={position.details} />

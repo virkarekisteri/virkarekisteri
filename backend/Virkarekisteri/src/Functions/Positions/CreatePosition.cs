@@ -12,7 +12,8 @@ namespace Virkarekisteri.Functions.Positions;
 public class CreatePosition(
     ILogger<CreatePosition> logger,
     IPositionRepository positionRepository,
-    IPositionNameRepository positionNameRepository
+    IPositionNameRepository positionNameRepository,
+    IChangeLogRepository changeLogRepository
 )
 {
     /// <summary>
@@ -58,6 +59,21 @@ public class CreatePosition(
         requestPosition.PositionName = null; // Nullify to avoid conflicts
 
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
+
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+        var changeLog = new ChangeLog
+        {
+            Id = Guid.NewGuid(),
+            PositionId = createdPosition.Id,
+            EditedField = "CreatedPosition",
+            OldValue = string.Empty,
+            NewValue = createdPosition.VacancyNumber ?? string.Empty,
+            Editor = editor,
+            Timestamp = DateTime.UtcNow,
+            DecisionNumber = createdPosition.CreationDecisionNumber,
+        };
+        await changeLogRepository.AddChangeLogEntry(changeLog);
+
         return new OkObjectResult(createdPosition);
     }
 }

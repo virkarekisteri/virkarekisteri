@@ -5,8 +5,8 @@
 // (remember enum members are constants of an undelying intregral type, in this case int, starting from 0)
 public enum RoleHierarchy
 {
-    Read,
-    Edit,
+    Reader,
+    Editor,
     Admin,
 }
 
@@ -16,10 +16,10 @@ public abstract class RequiredRoleAttribute(RoleHierarchy role) : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-public class RequiresReadRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Read);
+public class RequiresReadRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Reader);
 
 [AttributeUsage(AttributeTargets.Method)]
-public class RequiresEditRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Edit);
+public class RequiresEditRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Editor);
 
 [AttributeUsage(AttributeTargets.Method)]
 public class RequiresAdminRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Admin);

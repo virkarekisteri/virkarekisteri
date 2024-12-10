@@ -6,7 +6,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useTranslation } from 'react-i18next';
 import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { useAppSelector } from 'redux/hooks';
-import { selectName } from 'redux/slices/auth-slice';
+import { selectHighestRole, selectName } from 'redux/slices/auth-slice';
 
 const UserMenu = () => {
   const { instance } = useMsal();
@@ -15,6 +15,7 @@ const UserMenu = () => {
   const { t } = useTranslation();
 
   const name = useAppSelector(selectName);
+  const role = useAppSelector(selectHighestRole);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -64,7 +65,10 @@ const UserMenu = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem>{name}</MenuItem>
+          <MenuItem className={'pointer-events-none'}>{name}</MenuItem>
+          <MenuItem className={'pointer-events-none'}>
+            {t('user_menu.role')}: {role}
+          </MenuItem>
           <MenuItem onClick={handleLogout}>{t('user_menu.logout')}</MenuItem>
         </Menu>
       </AuthenticatedTemplate>

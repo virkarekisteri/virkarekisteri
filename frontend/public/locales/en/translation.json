@@ -63,8 +63,13 @@
     "organization_tree": "Organization tree",
     "position_name": "Position name"
   },
+  "tabs": {
+    "positions": "Positions list",
+    "history": "History information"
+  },
   "user_menu": {
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "role": "Role"
   },
   "vacancy_statuses": {
     "abolished": "Abolished",
@@ -73,7 +78,7 @@
   },
   "search_filter": {
     "search": "Search",
-    "reset": "Reset search terms",
+    "reset": "Reset",
     "search_filters": "Search filters",
     "virka": "Position",
     "toimi": "Post"
@@ -103,9 +108,24 @@
       "Type": "Type",
       "OrgTreeId": "Organization tree",
       "PositionName": "Position name",
-      "Substitute": "Substitute"
+      "Substitute": "Substitute",
+      "CreatedPosition": "Created new position"
     },
-    "DecisionNumber": "Decision number"
+    "DecisionNumber": "Decision number",
+    "search": {
+      "byNumber": "Search by vacancy number",
+      "byDate": "Search by date"
+    },
+    "table": {
+      "timestamp": "Edit time",
+      "vacancy_number": "Vacancy number",
+      "editor": "Editor",
+      "edited_field": "Edited field",
+      "old_value": "Old value",
+      "new_value": "New value",
+      "change": "Change",
+      "decision_number": "Decision number"
+    }
   },
   "basic_details": {
     "vacancy_fill": "Fill-%"
@@ -138,7 +158,11 @@
     "creation_description": "Decision description"
   },
   "error": {
-    "pricing_id_error": "Pricing ID can only be upto 10 characters long"
+    "pricing_id_error": "Pricing ID can only be upto 10 characters long",
+    "vacancy_fill_error": "Fill-% must be between 0-100.",
+    "vacancy_size_error": "Size-% must be between 0-100.",
+    "vacancy_fill_greater_than_size": "Fill-% cannot be greater than Size-%.",
+    "vacancy_size_integer_error": "Number must be an integer."
   },
   "end_position": {
     "title": "End position",

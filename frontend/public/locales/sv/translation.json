@@ -63,8 +63,13 @@
     "vacancy_status": "",
     "position_name": ""
   },
+  "tabs": {
+    "positions": "",
+    "history": ""
+  },
   "user_menu": {
-    "logout": ""
+    "logout": "",
+    "role": ""
   },
   "vacancy_statuses": {
     "abolished": "",
@@ -103,9 +108,24 @@
       "Type": "",
       "OrgTreeId": "",
       "PositionName": "",
-      "Substitute": ""
+      "Substitute": "",
+      "CreatedPosition": ""
     },
-    "DecisionNumber": ""
+    "DecisionNumber": "",
+    "search": {
+      "byNumber": "",
+      "byDate": ""
+    },
+    "table": {
+      "timestamp": "",
+      "vacancy_number": "",
+      "editor": "",
+      "edited_field": "",
+      "old_value": "",
+      "new_value": "",
+      "change": "",
+      "decision_number": ""
+    }
   },
   "basic_details": {
     "vacancy_fill": ""
