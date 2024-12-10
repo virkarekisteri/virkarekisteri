@@ -191,10 +191,19 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
-                            options={positionNames}
-                            getOptionLabel={(option) => option.name || ''}
-                            value={positionNames.find((option) => option.id === input.value?.id) || null}
-                            onChange={(_event, value) => input.onChange(value)}
+                            freeSolo
+                            options={positionNames.map((option) => option.name)}
+                            value={input.value?.name || ''}
+                            onInputChange={(_event, value) => {
+                              input.onChange({ name: value });
+                            }}
+                            onChange={(_event, value) => {
+                              if (typeof value === 'string') {
+                                input.onChange({ name: value });
+                              } else if (value) {
+                                input.onChange({ name: value });
+                              }
+                            }}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -202,7 +211,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                 margin="normal"
                                 required
                                 label={t('edit_position.position_name')}
-                                placeholder={position.positionName?.name}
+                                placeholder={t('edit_position.position_name')}
                                 slotProps={{
                                   inputLabel: {
                                     shrink: true,
