@@ -15,6 +15,11 @@ interface MassChangesModalProps {
   selectedRows: Position[];
 }
 
+interface FormValues {
+  newValue?: { id: string; label: string } | string; // For orgTreeId or positionName
+  decisionNumber?: string;
+}
+
 const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, selectedRows }) => {
   const { t } = useTranslation();
 
@@ -38,27 +43,27 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  const onSubmit = async (values: Record<string, any>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const onSubmit = async (values: FormValues) => {
     if (!selectedOption) {
+      console.error('No field selected for update');
       return;
     }
 
     try {
-      const updatePromises = selectedRows.map(async (position) => {
-        if (!position.id) {
-          return;
-        }
+      const validPositions = selectedRows.filter((position) => position?.id);
 
-        // Prepare the update data using existing values. This is needed due to how change log/history log works
+      const updatePromises = validPositions.map(async (position) => {
         const updateData = {
           endedAt: position.endedAt,
           endingDecisionNumber: position.endingDecisionNumber,
           placementLocation: position.placementLocation,
-          vacancyFill: position.vacancyFill ? position.vacancyFill : undefined,
-          positionName: values.positionName ? { name: values.positionName.name } : undefined,
+          vacancyFill: position.vacancyFill || undefined,
+          positionName: position.positionName?.name ? { name: position.positionName.name } : undefined,
           orgTreeId: position.orgTreeId,
           pricingId: position.pricingId,
-          vacancySize: position.vacancySize ? position.vacancySize : undefined,
+          vacancySize: position.vacancySize || undefined,
           educationLevel: position.educationLevel,
           workExperience: position.workExperience,
           details: position.details,
@@ -66,30 +71,31 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           decisionNumber: values.decisionNumber,
         };
 
-        // Override only the selected field with the new value
-        if (selectedOption === 'orgTreeId' && values.newValue) {
+        // Override the specific field with the new value
+        if (selectedOption === 'orgTreeId' && typeof values.newValue === 'object' && values.newValue !== null) {
           updateData.orgTreeId = values.newValue.id;
-        } else if (selectedOption === 'positionName' && values.newValue) {
+        } else if (selectedOption === 'positionName' && typeof values.newValue === 'string') {
           updateData.positionName = { name: values.newValue };
-        } else if (selectedOption === 'pricingId' && values.newValue) {
+        } else if (selectedOption === 'pricingId' && typeof values.newValue === 'string') {
           updateData.pricingId = values.newValue;
-        } else if (selectedOption === 'educationLevel' && values.newValue) {
+        } else if (selectedOption === 'educationLevel' && typeof values.newValue === 'string') {
           updateData.educationLevel = values.newValue;
-        } else if (selectedOption === 'workExperience' && values.newValue) {
+        } else if (selectedOption === 'workExperience' && typeof values.newValue === 'string') {
           updateData.workExperience = values.newValue;
         }
 
         try {
-          await updatePosition({ id: position.id, position: updateData });
+          await updatePosition({ id: position.id!, position: updateData });
         } catch (error) {
           console.error(`Failed to update position ${position.id}:`, error);
+          throw error;
         }
       });
 
       await Promise.all(updatePromises);
       handleClose();
     } catch (error) {
-      console.error('Failed to process positions:', error);
+      console.error('Unexpected error in onSubmit:', error);
     }
   };
 
@@ -166,6 +172,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                         selectedOption === 'positionName' || selectedOption === 'orgTreeId' ? (
                           <Autocomplete
                             {...input}
+                            loading={positionNamesLoading}
                             options={
                               selectedOption === 'positionName'
                                 ? positionNameOptions

@@ -45,11 +45,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         ? prev.filter((selected) => selected.id !== row.id)
         : [...prev, row];
       if (updatedSelectedRows.length === 0) {
-        setSelectedRowId(null);
         dispatch(clearSelectedPosition());
       } else {
-        setSelectedRowId(row.id || null);
-
         if (row.id) {
           getPosition(row.id, true);
           dispatch(selectPosition(row.id));
@@ -72,7 +69,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
-  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
   const [selectedRows, setSelectedRows] = useState<Position[]>([]);
   const [filteredData, setFilteredData] = useState(positions);
   const [page, setPage] = useState(0);
