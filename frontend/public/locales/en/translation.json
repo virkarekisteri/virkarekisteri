@@ -158,7 +158,7 @@
     "creation_description": "Decision description"
   },
   "error": {
-    "pricing_id_error": "Pricing ID can only be upto 10 characters long",
+    "pricing_id_error": "Pricing ID can only be upto 20 characters long",
     "vacancy_fill_error": "Fill-% must be between 0-100.",
     "vacancy_size_error": "Size-% must be between 0-100.",
     "vacancy_fill_greater_than_size": "Fill-% cannot be greater than Size-%.",
