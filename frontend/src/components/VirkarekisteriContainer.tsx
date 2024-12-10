@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { SnackbarCloseReason } from '@mui/material';
-import { Box, Button, CircularProgress, Grid2, Tab, Tabs, Snackbar } from '@mui/material';
+import { Box, Button, CircularProgress, Grid2, Tab, Tabs, Snackbar, alpha } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
 import MassChangesModal from './Modal/MassChangesModal';
@@ -224,7 +224,7 @@ const VirkarekisterContainer = () => {
           <Box
             sx={{
               height: '2px',
-              backgroundColor: '#223b7c',
+              backgroundColor: alpha('#223B7C', 0.2),
               width: '100%',
               my: 0,
             }}
