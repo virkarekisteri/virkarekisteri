@@ -43,7 +43,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
 
   const onSubmit = async (values: FormValues) => {
     if (!selectedOption) {
