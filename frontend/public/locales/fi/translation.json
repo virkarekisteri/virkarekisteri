@@ -109,7 +109,8 @@
       "OrgTreeId": "Kustannuspaikka",
       "PositionName": "Virkanimike",
       "Substitute": "Sijainen",
-      "CreatedPosition": "Luotu uusi virka"
+      "CreatedPosition": "Luotu uusi virka",
+      "CreatedEmployee": "Lisätty uusi viranhaltija"
     },
     "DecisionNumber": "Päätösnumero",
     "search": {

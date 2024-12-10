@@ -109,7 +109,8 @@
       "OrgTreeId": "Organization tree",
       "PositionName": "Position name",
       "Substitute": "Substitute",
-      "CreatedPosition": "Created new position"
+      "CreatedPosition": "Created new position",
+      "CreatedEmployee": "Added new employee"
     },
     "DecisionNumber": "Decision number",
     "search": {
