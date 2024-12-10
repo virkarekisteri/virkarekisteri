@@ -163,5 +163,14 @@
     "vacancy_size_error": "Koko-% pitää olla välillä 0-100.",
     "vacancy_fill_greater_than_size": "Täyttö-% ei voi olla suurempi kuin koko-%.",
     "vacancy_size_integer_error": "Luvun pitää olla kokonaisluku."
+  },
+  "end_position": {
+    "title": "Lakkauta virka",
+    "end_date": "Lakkautus päivämäärä",
+    "vacancy_number": "Vakanssinumero",
+    "position_name": "Virkanimike",
+    "decision_number": "Päätösnumero",
+    "cancel": "Takaisin",
+    "confirm": "Lakkauta virka"
   }
 }

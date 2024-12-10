@@ -163,5 +163,14 @@
     "vacancy_size_error": "Size-% must be between 0-100.",
     "vacancy_fill_greater_than_size": "Fill-% cannot be greater than Size-%.",
     "vacancy_size_integer_error": "Number must be an integer."
+  },
+  "end_position": {
+    "title": "End position",
+    "end_date": "End date",
+    "vacancy_number": "Vacancy number",
+    "position_name": "Vacancy name",
+    "decision_number": "Decision number",
+    "cancel": "Back",
+    "confirm": "Confirm"
   }
 }
