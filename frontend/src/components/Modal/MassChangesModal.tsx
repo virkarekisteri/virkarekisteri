@@ -43,8 +43,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-   
-
   const onSubmit = async (values: FormValues) => {
     if (!selectedOption) {
       console.error('No field selected for update');
