@@ -76,10 +76,18 @@ public class UpdatePosition(
         LogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
         existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
 
-        LogChange("VacancyFill", existingPosition.VacancyFill?.ToString(), updateDto.VacancyFill?.ToString());
+        LogChange(
+            "VacancyFill",
+            existingPosition.VacancyFill?.ToString("0.##"),
+            updateDto.VacancyFill?.ToString("0.##")
+        );
         existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
 
-        LogChange("VacancySize", existingPosition.VacancySize?.ToString(), updateDto.VacancySize?.ToString());
+        LogChange(
+            "VacancySize",
+            existingPosition.VacancySize?.ToString("0.##"),
+            updateDto.VacancySize?.ToString("0.##")
+        );
         existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
 
         LogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);
