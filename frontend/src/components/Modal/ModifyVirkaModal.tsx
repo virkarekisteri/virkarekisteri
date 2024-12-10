@@ -105,6 +105,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         type: values.type,
         decisionNumber: values.decisionNumber,
       };
+      console.log(`Updating position ${position.id} with data:`, updateData);
       updatePosition({ id: position.id, position: updateData });
       handleClose();
     } catch (error) {

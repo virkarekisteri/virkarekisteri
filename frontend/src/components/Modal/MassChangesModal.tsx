@@ -51,17 +51,36 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           return;
         }
 
-        // Prepare the update data based on selectedOption and form values
+        // Prepare the update data using existing values
         const updateData = {
-          orgTreeId: selectedOption === 'orgTreeId' && values.newValue ? values.newValue.id : undefined,
-          positionName: selectedOption === 'positionName' && values.newValue ? { name: values.newValue } : undefined,
-          pricingId: selectedOption === 'pricingId' && values.newValue ? values.newValue : undefined,
-          educationLevel: selectedOption === 'educationLevel' && values.newValue ? values.newValue : undefined,
-          workExperience: selectedOption === 'workExperience' && values.newValue ? values.newValue : undefined,
-          decisionNumber: values.decisionNumber || undefined,
+          endedAt: position.endedAt,
+          endingDecisionNumber: position.endingDecisionNumber,
+          placementLocation: position.placementLocation,
+          vacancyFill: values.vacancyFill,
+          positionName: values.positionName ? { name: values.positionName.name } : undefined,
+          orgTreeId: position.orgTreeId,
+          pricingId: position.pricingId,
+          vacancySize: values.vacancySize,
+          educationLevel: position.educationLevel,
+          workExperience: position.workExperience,
+          details: position.details,
+          type: position.type,
+          decisionNumber: values.decisionNumber,
         };
 
-        // Log the data being updated
+        // Override only the selected field with the new value
+        if (selectedOption === 'orgTreeId' && values.newValue) {
+          updateData.orgTreeId = values.newValue.id;
+        } else if (selectedOption === 'positionName' && values.newValue) {
+          updateData.positionName = { name: values.newValue };
+        } else if (selectedOption === 'pricingId' && values.newValue) {
+          updateData.pricingId = values.newValue;
+        } else if (selectedOption === 'educationLevel' && values.newValue) {
+          updateData.educationLevel = values.newValue;
+        } else if (selectedOption === 'workExperience' && values.newValue) {
+          updateData.workExperience = values.newValue;
+        }
+
         console.log(`Updating position ${position.id} with data:`, updateData);
 
         try {
