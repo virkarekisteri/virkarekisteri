@@ -14,7 +14,7 @@ public class ChangeLogRepository(VirkarekisteriDb db) : IChangeLogRepository
 {
     public async Task<ChangeLog> AddChangeLogEntry(ChangeLog changeLogEntry)
     {
-        changeLogEntry.Timestamp = DateTime.UtcNow;
+        changeLogEntry.Timestamp = DateTime.UtcNow.ToLocalTime();
         await db.ChangeLogs.AddAsync(changeLogEntry);
         await db.SaveChangesAsync();
         return changeLogEntry;

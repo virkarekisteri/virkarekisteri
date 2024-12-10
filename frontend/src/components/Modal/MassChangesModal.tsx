@@ -40,27 +40,25 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
 
   const onSubmit = async (values: Record<string, any>) => {
     if (!selectedOption) {
-      console.error('No field selected for mass update.');
       return;
     }
 
     try {
       const updatePromises = selectedRows.map(async (position) => {
         if (!position.id) {
-          console.error(`Skipping position without ID:`, position);
           return;
         }
 
-        // Prepare the update data using existing values
+        // Prepare the update data using existing values. This is needed due to how change log/history log works
         const updateData = {
           endedAt: position.endedAt,
           endingDecisionNumber: position.endingDecisionNumber,
           placementLocation: position.placementLocation,
-          vacancyFill: values.vacancyFill,
+          vacancyFill: position.vacancyFill ? position.vacancyFill : undefined,
           positionName: values.positionName ? { name: values.positionName.name } : undefined,
           orgTreeId: position.orgTreeId,
           pricingId: position.pricingId,
-          vacancySize: values.vacancySize,
+          vacancySize: position.vacancySize ? position.vacancySize : undefined,
           educationLevel: position.educationLevel,
           workExperience: position.workExperience,
           details: position.details,
@@ -81,8 +79,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           updateData.workExperience = values.newValue;
         }
 
-        console.log(`Updating position ${position.id} with data:`, updateData);
-
         try {
           await updatePosition({ id: position.id, position: updateData });
         } catch (error) {
@@ -90,10 +86,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
         }
       });
 
-      // Wait for all updates to complete
       await Promise.all(updatePromises);
-
-      console.log('All selected positions processed.');
       handleClose();
     } catch (error) {
       console.error('Failed to process positions:', error);
