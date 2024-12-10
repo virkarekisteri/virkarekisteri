@@ -58,11 +58,14 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   };
 
   const validateVacancySize = (value: string) => {
+    if (value == null || value === '') {
+      return undefined; // Allow empty string
+    }
     if (!/^\d+$/.test(value)) {
       return t('error.vacancy_size_integer_error');
     }
     const numValue = Number(value);
-    if ((value && numValue < 0) || numValue > 100) {
+    if (numValue < 0 || numValue > 100) {
       return t('error.vacancy_size_error');
     }
     return undefined;
