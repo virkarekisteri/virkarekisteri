@@ -70,7 +70,14 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
   }, [currentReplacementEmployee]);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        backgroundColor: '#FFFFFF',
+        borderRadius: '0px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        padding: 0,
+      }}
+    >
       {position.vacancyStatus !== 0 && (
         <Grid2 size={12} display="flex" justifyContent="flex-end" alignItems={'flex-end'}>
           <Box sx={{ padding: 2, textAlign: 'right' }}>
@@ -107,13 +114,13 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
         </Grid2>
       )}
       {currentPositionEmployee && (
-        <Box>
+        <Box padding={2}>
           {isReplacementActive && (
             <Box sx={{ bgcolor: alpha('#223B7C', 1), color: 'white', p: 2, mb: 2 }}>
               <Typography variant="h6">{t('employee.replacement_active')}</Typography>
             </Box>
           )}
-          <Accordion>
+          <Accordion sx={{ mt: 0, mb: 0 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
               aria-controls="panel1a-content"
@@ -130,12 +137,12 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                 },
               }}
             >
-              <Typography>{t('employee.details')}</Typography>
+              <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>{t('employee.details')}</Typography>
             </AccordionSummary>
             <AccordionDetails
               sx={{
                 padding: '16px',
-                backgroundColor: alpha('#f5f5f5', 1),
+                backgroundColor: alpha('#fffff', 1),
               }}
             >
               <Grid2 container spacing={2}>

@@ -227,23 +227,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                       )}
                     </Field>
                   </Grid2>
-                  <Grid2 size={12}>
-                    <Typography component={'div'} fontWeight={'fontWeightBold'}>
-                      {t('edit_position.creation_description')}
-                    </Typography>
-                    <Field name="creationDescription">
-                      {({ input }) => (
-                        <TextField
-                          {...input}
-                          margin="normal"
-                          fullWidth
-                          multiline
-                          maxRows={4}
-                          label={t('edit_position.creation_description')}
-                        />
-                      )}
-                    </Field>
-                  </Grid2>
                 </Grid2>
                 <Grid2 container justifyContent="flex-end" marginTop={2}>
                   <Button

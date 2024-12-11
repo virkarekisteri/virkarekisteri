@@ -48,7 +48,13 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        backgroundColor: '#FFFFFF',
+        borderRadius: '0px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+      }}
+    >
       {position.vacancyStatus !== 0 && (
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
           <RequiresEditRole>
@@ -115,7 +121,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           p: 2,
-          height: 30,
+          height: 40,
           borderBottom: '1px solid #ccc',
           bgcolor: '#223B7C',
           color: 'white',
@@ -123,9 +129,17 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           borderTopRightRadius: 1,
         }}
       >
-        <Typography>{t('position.details')}</Typography>
+        <Typography
+          sx={{
+            color: 'white',
+            fontSize: '1.2rem',
+            textTransform: 'none',
+          }}
+        >
+          {t('position.details')}
+        </Typography>
       </Box>
-      <Box padding={3}>
+      <Box padding={2}>
         <Grid2 container spacing={2} size={12}>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -183,46 +197,6 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
           </Grid2>
         </Grid2>
 
-        <Accordion sx={{ mt: 2, mb: 2 }}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            sx={{
-              backgroundColor: alpha('#223B7C', 1),
-              color: 'white',
-              minHeight: '45px',
-              '&.Mui-expanded': {
-                minHeight: '45px',
-              },
-              '& .MuiAccordionSummary-content': {
-                margin: 0,
-              },
-            }}
-          >
-            <Typography>{t('eligibility')}</Typography>
-          </AccordionSummary>
-          <AccordionDetails
-            sx={{
-              padding: '16px',
-              backgroundColor: alpha('#f5f5f5', 1),
-            }}
-          >
-            <Grid2 size={12}>
-              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                {t('create_position.education_level')}
-              </Typography>
-              <RenderReadonlyTextField value={position.educationLevel} />
-            </Grid2>
-            <Grid2 size={12}>
-              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                {t('create_position.work_experience')}
-              </Typography>
-              <RenderReadonlyTextField value={position.workExperience} />
-            </Grid2>
-          </AccordionDetails>
-        </Accordion>
-
         <Accordion sx={{ mt: 2, mb: 4 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
@@ -240,12 +214,56 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               },
             }}
           >
-            <Typography>{t('additional_details')}</Typography>
+            <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+              {t('eligibility')}
+            </Typography>
           </AccordionSummary>
           <AccordionDetails
             sx={{
               padding: '16px',
-              backgroundColor: alpha('#f5f5f5', 1),
+              backgroundColor: alpha('#fffff', 1),
+            }}
+          >
+            <Grid2 size={12}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                {t('create_position.education_level')}
+              </Typography>
+              <RenderReadonlyTextField value={position.educationLevel} />
+            </Grid2>
+            <Grid2 size={12}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                {t('create_position.work_experience')}
+              </Typography>
+              <RenderReadonlyTextField value={position.workExperience} />
+            </Grid2>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion sx={{ mt: 2, mb: 0 }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
+              backgroundColor: alpha('#223B7C', 1),
+              color: 'white',
+              minHeight: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+              {t('additional_details')}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#fffff', 1),
             }}
           >
             <Grid2 size={12}>
