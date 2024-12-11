@@ -104,6 +104,7 @@ const VirkarekisterContainer = () => {
                     padding: '10px 20px',
                     borderRadius: '4px 4px 0 0',
                     marginRight: '8px',
+                    fontSize: '1.0rem',
                     '&.Mui-selected': {
                       color: '#FFFFFF',
                       backgroundColor: '#223B7C',
@@ -114,9 +115,17 @@ const VirkarekisterContainer = () => {
                 <Tab label={t('tabs.positions')} />
                 <Tab label={t('tabs.history')} />
               </Tabs>
+              <Box
+                sx={{
+                  height: '2px',
+                  backgroundColor: '#223b7c',
+                  width: '97.3%',
+                  my: 0,
+                }}
+              />
             </Grid2>
 
-            <Grid2 size="auto" display="flex" gap={2}>
+            <Grid2 size="auto" display="flex" gap={3}>
               <RequiresEditRole>
                 <Button
                   variant="contained"
@@ -127,17 +136,19 @@ const VirkarekisterContainer = () => {
                   sx={{
                     backgroundColor: '#223B7C',
                     color: 'white',
-                    fontSize: '1.2rem',
+                    fontSize: '1.0rem',
                     padding: '20px',
-                    height: '45px',
+                    height: '40px',
                     display: 'flex',
                     borderRadius: '25px 8px 8px 25px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
                   }}
                   startIcon={
                     <Box
                       component="span"
                       sx={{
-                        marginRight: '40px',
+                        marginRight: '8px',
                       }}
                     >
                       +
@@ -152,17 +163,19 @@ const VirkarekisterContainer = () => {
                   sx={{
                     backgroundColor: '#223B7C',
                     color: 'white',
-                    fontSize: '1.2rem',
+                    fontSize: '1.0rem',
                     padding: '20px',
-                    height: '45px',
+                    height: '40px',
                     display: 'flex',
                     borderRadius: '25px 8px 8px 25px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
                   }}
                   startIcon={
                     <Box
                       component="span"
                       sx={{
-                        marginRight: '40px',
+                        marginRight: '8px',
                       }}
                     >
                       +
@@ -177,17 +190,19 @@ const VirkarekisterContainer = () => {
                   sx={{
                     backgroundColor: '#223B7C',
                     color: 'white',
-                    fontSize: '1.2rem',
+                    fontSize: '1.0rem',
                     padding: '20px',
-                    height: '45px',
+                    height: '40px',
                     display: 'flex',
                     borderRadius: '25px 8px 8px 25px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
                   }}
                   startIcon={
                     <Box
                       component="span"
                       sx={{
-                        marginRight: '40px',
+                        marginRight: '8px',
                       }}
                     >
                       +
@@ -206,6 +221,14 @@ const VirkarekisterContainer = () => {
               />
             </Grid2>
           </Grid2>
+          <Box
+            sx={{
+              height: '2px',
+              backgroundColor: '#223b7c',
+              width: '100%',
+              my: 0,
+            }}
+          />
           <Grid2 size={12}>
             {activeTab === 0 && (
               <>

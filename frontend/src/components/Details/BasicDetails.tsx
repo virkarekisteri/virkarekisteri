@@ -63,6 +63,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
                 height: '36px',
                 display: 'inline-flex',
                 borderRadius: '8px 25px 25px 8px',
+                fontWeight: 'bold',
+                textTransform: 'none',
               }}
               startIcon={
                 <Box
@@ -88,6 +90,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
                 height: '36px',
                 display: 'inline-flex',
                 borderRadius: '25px 8px 8px 25px',
+                fontWeight: 'bold',
+                textTransform: 'none',
               }}
               startIcon={
                 <Box

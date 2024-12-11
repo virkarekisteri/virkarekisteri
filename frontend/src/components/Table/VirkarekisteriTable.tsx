@@ -238,7 +238,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               },
             }}
           >
-            <Typography sx={{ color: 'white', fontSize: '1.2rem' }}>{t('search_filter.search_filters')}</Typography>
+            <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+              {t('search_filter.search_filters')}
+            </Typography>
           </AccordionSummary>
 
           <AccordionDetails
@@ -399,10 +401,11 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     <TableCell
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       sx={{
-                        color: 'white',
-                        fontSize: '1.2rem',
                         cursor: 'pointer',
                         padding: '8px 16px',
+                        color: 'white',
+                        fontSize: '1.1rem',
+                        textTransform: 'none',
                       }}
                     >
                       {column.render('Header')}
