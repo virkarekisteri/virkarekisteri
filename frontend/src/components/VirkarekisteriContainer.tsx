@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid2, Tab, Tabs } from '@mui/material';
+import type { SnackbarCloseReason } from '@mui/material';
+import { Box, Button, CircularProgress, Grid2, Tab, Tabs, Snackbar } from '@mui/material';
 import CreateVirkaModal from './Modal/CreateVirkaModal';
 import UploadCsvModal from './Modal/UploadCsvModal';
+import MassChangesModal from './Modal/MassChangesModal';
 import VirkarekisteriTable from './Table/VirkarekisteriTable';
 import TopAppBar from './TopAppBar/TopAppBar';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +25,7 @@ const VirkarekisterContainer = () => {
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+  const [openMassModal, setOpenMassModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -41,6 +44,9 @@ const VirkarekisterContainer = () => {
   const selectedPositionId = useAppSelector(selectSelectedPosition);
   const [selectedPosition, setSelectedPosition] = useState<Position | undefined>(undefined);
 
+  const handleOpenMassModal = () => setOpenMassModal(true);
+  const handleCloseMassModal = () => setOpenMassModal(false);
+
   const { isLoading } = useGetPositionsQuery(isAuthenticated ? undefined : skipToken);
   const { data: fetchedPosition, isLoading: singlePositionLoading } = useGetPositionQuery(
     isAuthenticated ? (selectedPositionId ?? skipToken) : skipToken,
@@ -51,13 +57,27 @@ const VirkarekisterContainer = () => {
     else if (fetchedPosition) setSelectedPosition(fetchedPosition);
   }, [fetchedPosition, selectedPositionId]);
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleClick = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (_event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
       <TopAppBar />
       <AuthenticatedTemplate>
         <CreateVirkaModal open={openCreateModal} handleClose={handleCloseCreateModal} />
         <UploadCsvModal open={openUploadModal} handleClose={handleCloseUploadModal} />
-
+        <MassChangesModal open={openMassModal} handleClose={handleCloseMassModal} />
         <Grid2 container spacing={3} margin="auto" width="90%" marginTop={3}>
           <Grid2 container size={12} alignItems="center" justifyContent="space-between" sx={{ gap: 2 }}>
             <Grid2 size="auto">
@@ -142,7 +162,42 @@ const VirkarekisterContainer = () => {
                 >
                   {t('new_position')}
                 </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleOpenMassModal();
+                    handleClick();
+                  }}
+                  sx={{
+                    backgroundColor: '#223B7C',
+                    color: 'white',
+                    fontSize: '1.2rem',
+                    padding: '20px',
+                    height: '45px',
+                    display: 'flex',
+                    borderRadius: '25px 8px 8px 25px',
+                  }}
+                  startIcon={
+                    <Box
+                      component="span"
+                      sx={{
+                        marginRight: '40px',
+                      }}
+                    >
+                      +
+                    </Box>
+                  }
+                >
+                  {t('mass_changes.make_changes')}
+                </Button>
               </RequiresEditRole>
+              <Snackbar
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={t('mass_changes.update_value_message')}
+              />
             </Grid2>
           </Grid2>
           <Grid2 size={12}>

@@ -173,5 +173,14 @@
     "decision_number": "Decision number",
     "cancel": "Back",
     "confirm": "Confirm"
+  },
+  "mass_changes": {
+    "make_changes": "Make mass changes",
+    "make_change": "Make change",
+    "edit_field": "Editable field",
+    "field_type": "Field type",
+    "new_value": "New value",
+    "changes_executed": "Changes successfully executed.",
+    "update_value_message": "The value of the field will be updated for every position"
   }
 }
