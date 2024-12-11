@@ -137,7 +137,9 @@ const EmployeeDetails: React.FC<{ position: Position }> = ({ position }) => {
                 },
               }}
             >
-              <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>{t('employee.details')}</Typography>
+              <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+                {t('employee.details')}
+              </Typography>
             </AccordionSummary>
             <AccordionDetails
               sx={{
