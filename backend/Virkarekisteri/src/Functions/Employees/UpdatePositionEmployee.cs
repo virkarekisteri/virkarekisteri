@@ -92,16 +92,26 @@ public class UpdatePositionEmployee(
                 if (position == null)
                     return new BadRequestObjectResult("Position not found");
 
-                position.ReplacementEmployeeId = null;
+                if (position.ReplacementEmployeeId.HasValue)
+                {
+                    var currentSubstituteName = string.Empty;
 
-                // Substitute is removed
-                LogChange("Substitute", string.Empty, existingPositionEmployee.EmployeeName);
-                await positionRepository.UpdatePosition(position);
+                    var currentSubstitute = await positionEmployeeRepository.GetPositionEmployee(
+                        position.ReplacementEmployeeId.Value
+                    );
+
+                    if (currentSubstitute != null)
+                        currentSubstituteName = currentSubstitute.EmployeeName;
+
+                    position.ReplacementEmployeeId = null;
+
+                    // Substitute is removed
+                    LogChange("Substitute", currentSubstituteName, existingPositionEmployee.EmployeeName);
+                    await positionRepository.UpdatePosition(position);
+                }
             }
             else
-            {
-                return new BadRequestObjectResult("PositionId is required");
-            }
+                return new BadRequestObjectResult("PositionId must be provided when an employee is no longer in leave");
         }
 
         // Update the existing position employee with the new values

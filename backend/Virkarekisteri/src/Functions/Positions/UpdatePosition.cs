@@ -43,14 +43,14 @@ public class UpdatePosition(
         if (error != null)
             return error;
 
-        if (updateDto.PricingId != null && updateDto.PricingId.Length > 20)
+        if (updateDto.PricingId is { Length: > 20 })
             return new BadRequestObjectResult("PricingId cannot be more than 20 characters.");
 
-        if (updateDto.VacancyFill != null && updateDto.VacancyFill < 0 && updateDto.VacancyFill > 100)
-            return new BadRequestObjectResult("VacancyFill must be between 0 and 100.");
+        if (updateDto.VacancyFill is < 0 or > 1)
+            return new BadRequestObjectResult("VacancyFill must be between 0% and 100%.");
 
-        if (updateDto.VacancySize != null && updateDto.VacancySize < 0 && updateDto.VacancySize > 100)
-            return new BadRequestObjectResult("VacancySize must be between 0 and 100.");
+        if (updateDto.VacancySize is < 0 or > 1)
+            return new BadRequestObjectResult("VacancySize must be between 0% and 100%.");
 
         if (updateDto.VacancyFill > updateDto.VacancySize)
             return new BadRequestObjectResult("VacancyFill cannot be greater than VacancySize.");
@@ -76,10 +76,18 @@ public class UpdatePosition(
         LogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
         existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
 
-        LogChange("VacancyFill", existingPosition.VacancyFill?.ToString(), updateDto.VacancyFill?.ToString());
+        LogChange(
+            "VacancyFill",
+            existingPosition.VacancyFill?.ToString("0.##"),
+            updateDto.VacancyFill?.ToString("0.##")
+        );
         existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
 
-        LogChange("VacancySize", existingPosition.VacancySize?.ToString(), updateDto.VacancySize?.ToString());
+        LogChange(
+            "VacancySize",
+            existingPosition.VacancySize?.ToString("0.##"),
+            updateDto.VacancySize?.ToString("0.##")
+        );
         existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
 
         LogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);

@@ -51,8 +51,8 @@ public class AddPositionEmployee(
         if (position == null)
             return new OkObjectResult(createdPositionEmployee);
 
-        if (position.PricingId != null && position.PricingId.Length > 10)
-            return new BadRequestObjectResult("PricingId cannot be more than 10 characters.");
+        if (position.PricingId != null && position.PricingId.Length > 20)
+            return new BadRequestObjectResult("PricingId cannot be more than 20 characters.");
 
         if (requestPosition.Replacement)
         {
@@ -71,7 +71,21 @@ public class AddPositionEmployee(
             );
         }
         else
+        {
+            var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
             position.PositionEmployeeId = createdPositionEmployee.Id;
+            await changeLogRepository.AddChangeLogEntry(
+                new ChangeLog
+                {
+                    PositionId = createdPositionEmployee.PositionId,
+                    EditedField = "CreatedEmployee",
+                    OldValue = string.Empty,
+                    NewValue = createdPositionEmployee.EmployeeName,
+                    Editor = editor,
+                    DecisionNumber = decisionNumber ?? "Unknown",
+                }
+            );
+        }
 
         await positionRepository.UpdatePosition(position);
 

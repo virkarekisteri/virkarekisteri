@@ -72,7 +72,7 @@ const EmployeeModal: React.FC<AddEmployeeModalProps> = ({
         updatePositionEmployee({ ...employee, ...data, inLeave: false });
       } else {
         delete data.decisionNumber;
-        createPositionEmployee({ positionEmployee: data, decisionNumber: '' });
+        createPositionEmployee({ positionEmployee: data, decisionNumber: values.decisionNumber });
       }
 
       onClose();

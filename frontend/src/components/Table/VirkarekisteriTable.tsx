@@ -291,9 +291,9 @@ const DataTable: React.FC = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={positionTypeSearch.includes('0')}
+                            checked={positionTypeSearch.includes('1')}
                             onChange={handlePositionTypeChange}
-                            value="0"
+                            value="1"
                           />
                         }
                         label={t('search_filter.virka')}
@@ -301,9 +301,9 @@ const DataTable: React.FC = () => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={positionTypeSearch.includes('1')}
+                            checked={positionTypeSearch.includes('2')}
                             onChange={handlePositionTypeChange}
-                            value="1"
+                            value="2"
                           />
                         }
                         label={t('search_filter.toimi')}
