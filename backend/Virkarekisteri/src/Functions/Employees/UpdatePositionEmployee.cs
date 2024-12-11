@@ -110,6 +110,8 @@ public class UpdatePositionEmployee(
                     await positionRepository.UpdatePosition(position);
                 }
             }
+            else
+                return new BadRequestObjectResult("PositionId must be provided when an employee is no longer in leave");
         }
 
         // Update the existing position employee with the new values

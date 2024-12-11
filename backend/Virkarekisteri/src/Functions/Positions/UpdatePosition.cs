@@ -43,14 +43,14 @@ public class UpdatePosition(
         if (error != null)
             return error;
 
-        if (updateDto.PricingId != null && updateDto.PricingId.Length > 20)
+        if (updateDto.PricingId is { Length: > 20 })
             return new BadRequestObjectResult("PricingId cannot be more than 20 characters.");
 
-        if (updateDto.VacancyFill != null && (updateDto.VacancyFill < 0 || updateDto.VacancyFill > 1))
-            return new BadRequestObjectResult("VacancyFill must be between 0.0 and 1.0.");
+        if (updateDto.VacancyFill is < 0 or > 1)
+            return new BadRequestObjectResult("VacancyFill must be between 0% and 100%.");
 
-        if (updateDto.VacancySize != null && (updateDto.VacancySize < 0 || updateDto.VacancySize > 1))
-            return new BadRequestObjectResult("VacancySize must be between 0.0 and 1.0.");
+        if (updateDto.VacancySize is < 0 or > 1)
+            return new BadRequestObjectResult("VacancySize must be between 0% and 100%.");
 
         if (updateDto.VacancyFill > updateDto.VacancySize)
             return new BadRequestObjectResult("VacancyFill cannot be greater than VacancySize.");
