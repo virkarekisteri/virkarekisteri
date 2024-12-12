@@ -38,19 +38,22 @@ interface DataTableProps {
 }
 
 const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
-  const handleRowClick = async (row: Position) => {
+  const handleRowClick = async (row: Position, event: React.MouseEvent) => {
     setSelectedRows((prev) => {
+      const isCtrlPressed = event.ctrlKey;
       const isAlreadySelected = prev.some((selected) => selected.id === row.id);
-      const updatedSelectedRows = isAlreadySelected
-        ? prev.filter((selected) => selected.id !== row.id)
-        : [...prev, row];
+
+      let updatedSelectedRows;
+
+      if (isCtrlPressed)
+        updatedSelectedRows = isAlreadySelected ? prev.filter((selected) => selected.id !== row.id) : [...prev, row];
+      else updatedSelectedRows = isAlreadySelected ? [] : [row];
+
       if (updatedSelectedRows.length === 0) {
         dispatch(clearSelectedPosition());
-      } else {
-        if (row.id) {
-          getPosition(row.id, true);
-          dispatch(selectPosition(row.id));
-        }
+      } else if (row.id && updatedSelectedRows.length === 1) {
+        getPosition(row.id, true);
+        dispatch(selectPosition(row.id));
       }
       onRowSelectionChange(updatedSelectedRows);
       return updatedSelectedRows;
@@ -431,7 +434,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                           : alpha('#223B7C', 0.2),
                       cursor: 'pointer',
                     }}
-                    onClick={() => handleRowClick(row.original)}
+                    onClick={(e) => handleRowClick(row.original, e)}
                   >
                     {row.cells.map((cell) => (
                       <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
