@@ -11,16 +11,20 @@ interface PositionDetailsProps {
 
 const PositionDetails: React.FC<PositionDetailsProps> = ({ position }) => {
   return (
-    <>
-      <Box sx={{ backgroundColor: '#f0f0f0', padding: 2, width: '100%' }}>{<BasicDetails position={position} />}</Box>
-      <Box sx={{ backgroundColor: '#f0f0f0', padding: '0rem 2.5rem 1rem 2.5rem', width: '100%' }}>
-        {<EmployeeDetails position={position} />}
-      </Box>
-      <Box sx={{ backgroundColor: '#f0f0f0', padding: '0rem 2.5rem 2rem 2.5rem', width: '100%' }}>
-        {<PositionChangeLog position={position} />}
-      </Box>
-    </>
+    <Box
+      sx={{
+        padding: 0,
+        width: '100%',
+        marginBottom: '100px',
+        '& > :nth-of-type(1)': { padding: 0 }, // Styles for BasicDetails
+        '& > :nth-of-type(2)': { padding: 0 }, // Styles for EmployeeDetails
+        '& > :nth-of-type(3)': { padding: 0 }, // Styles for PositionChangeLog
+      }}
+    >
+      <BasicDetails position={position} />
+      <EmployeeDetails position={position} />
+      <PositionChangeLog position={position} />
+    </Box>
   );
 };
-
 export default PositionDetails;

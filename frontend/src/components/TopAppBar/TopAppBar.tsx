@@ -20,9 +20,10 @@ const TopAppBar = () => {
           variant="h6"
           component="div"
           sx={{
-            fontSize: '1.8rem',
+            fontSize: '1.6rem',
             fontFamily: 'Trebuchet MS, sans-serif',
             whiteSpace: 'nowrap',
+            fontWeight: 'bold',
           }}
         >
           {t('app_name')}

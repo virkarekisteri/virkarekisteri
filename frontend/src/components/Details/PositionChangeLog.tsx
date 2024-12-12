@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Typography, alpha } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, alpha, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
@@ -46,83 +46,101 @@ const PositionChangeLog: React.FC<PositionChangeLogProps> = ({ position }) => {
   };
 
   return (
-    <Accordion>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        sx={{
-          backgroundColor: alpha('#223B7C', 1),
-          color: 'white',
-          minHeight: '45px',
-          '&.Mui-expanded': {
-            minHeight: '45px',
-          },
-          '& .MuiAccordionSummary-content': {
-            margin: 0,
-          },
-        }}
-      >
-        <Typography>{t('change_logs.title')}</Typography>
-      </AccordionSummary>
-      <AccordionDetails
-        sx={{
-          padding: '16px',
-          backgroundColor: alpha('#f5f5f5', 1),
-        }}
-      >
-        {changeLogs.length > 0 ? (
-          <Grid2 container spacing={2}>
-            {changeLogs.map((log) => {
-              const oldValue =
-                log.editedField === 'Type' ? mapTypeValue(log.oldValue) : transformValue(log.editedField, log.oldValue);
+    <Box
+      sx={{
+        backgroundColor: '#FFFFFF',
+        borderRadius: '0px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        padding: 2,
+        marginBottom: '16px',
+      }}
+    >
+      <Box padding={2}>
+        <Accordion sx={{ mt: 0, mb: 2 }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
+              backgroundColor: alpha('#223B7C', 1),
+              color: 'white',
+              minHeight: '45px',
+              '&.Mui-expanded': {
+                minHeight: '45px',
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+            }}
+          >
+            <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+              {t('change_logs.title')}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#fffff', 1),
+            }}
+          >
+            {changeLogs.length > 0 ? (
+              <Grid2 container spacing={2}>
+                {changeLogs.map((log) => {
+                  const oldValue =
+                    log.editedField === 'Type'
+                      ? mapTypeValue(log.oldValue)
+                      : transformValue(log.editedField, log.oldValue);
 
-              const newValue =
-                log.editedField === 'Type' ? mapTypeValue(log.newValue) : transformValue(log.editedField, log.newValue);
+                  const newValue =
+                    log.editedField === 'Type'
+                      ? mapTypeValue(log.newValue)
+                      : transformValue(log.editedField, log.newValue);
 
-              return (
-                <Grid2 key={log.id} size={{ xs: 12 }} container spacing={1} alignItems="center">
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField
-                      label={t('change_logs.timestamp')}
-                      value={formatTimestamp(log.timestamp)}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField label={t('change_logs.editor')} value={log.editor} />
-                  </Grid2>
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField
-                      label={t('change_logs.edited_field')}
-                      value={getTranslatedField(log.editedField)}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField
-                      label={t('change_logs.old_value')}
-                      value={oldValue && oldValue.trim() !== '' ? oldValue : '-'}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField
-                      label={t('change_logs.new_value')}
-                      value={newValue && newValue.trim() !== '' ? newValue : '-'}
-                    />
-                  </Grid2>
-                  <Grid2 size={{ xs: 2 }}>
-                    <RenderReadonlyTextField label={t('change_logs.DecisionNumber')} value={log.decisionNumber} />
-                  </Grid2>
-                </Grid2>
-              );
-            })}
-          </Grid2>
-        ) : (
-          <Typography variant="body1" sx={{ padding: 2, textAlign: 'left' }}>
-            {t('change_logs.no_logs_found')}
-          </Typography>
-        )}
-      </AccordionDetails>
-    </Accordion>
+                  return (
+                    <Grid2 key={log.id} size={{ xs: 12 }} container spacing={1} alignItems="center">
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField
+                          label={t('change_logs.timestamp')}
+                          value={formatTimestamp(log.timestamp)}
+                        />
+                      </Grid2>
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField label={t('change_logs.editor')} value={log.editor} />
+                      </Grid2>
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField
+                          label={t('change_logs.edited_field')}
+                          value={getTranslatedField(log.editedField)}
+                        />
+                      </Grid2>
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField
+                          label={t('change_logs.old_value')}
+                          value={oldValue && oldValue.trim() !== '' ? oldValue : '-'}
+                        />
+                      </Grid2>
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField
+                          label={t('change_logs.new_value')}
+                          value={newValue && newValue.trim() !== '' ? newValue : '-'}
+                        />
+                      </Grid2>
+                      <Grid2 size={{ xs: 2 }}>
+                        <RenderReadonlyTextField label={t('change_logs.DecisionNumber')} value={log.decisionNumber} />
+                      </Grid2>
+                    </Grid2>
+                  );
+                })}
+              </Grid2>
+            ) : (
+              <Typography variant="body1" sx={{ padding: 2, textAlign: 'left' }}>
+                {t('change_logs.no_logs_found')}
+              </Typography>
+            )}
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+    </Box>
   );
 };
 

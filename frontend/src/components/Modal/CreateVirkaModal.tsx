@@ -369,12 +369,14 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       },
                     }}
                   >
-                    <Typography>{t('eligibility')}</Typography>
+                    <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+                      {t('eligibility')}
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails
                     sx={{
                       padding: '16px',
-                      backgroundColor: alpha('#f5f5f5', 1),
+                      backgroundColor: alpha('#FFFFF', 1),
                     }}
                   >
                     <Grid2 size={12}>
@@ -436,12 +438,14 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       },
                     }}
                   >
-                    <Typography>{t('additional_details')}</Typography>
+                    <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+                      {t('additional_details')}
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails
                     sx={{
                       padding: '16px',
-                      backgroundColor: alpha('#f5f5f5', 1),
+                      backgroundColor: alpha('#FFFFF', 1),
                     }}
                   >
                     <Grid2 size={12}>

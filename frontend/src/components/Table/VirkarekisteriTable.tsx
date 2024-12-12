@@ -33,7 +33,33 @@ import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 
-const DataTable: React.FC = () => {
+interface DataTableProps {
+  onRowSelectionChange: (selectedRows: Position[]) => void;
+}
+
+const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
+  const handleRowClick = async (row: Position, event: React.MouseEvent) => {
+    setSelectedRows((prev) => {
+      const isCtrlPressed = event.ctrlKey;
+      const isAlreadySelected = prev.some((selected) => selected.id === row.id);
+
+      let updatedSelectedRows;
+
+      if (isCtrlPressed)
+        updatedSelectedRows = isAlreadySelected ? prev.filter((selected) => selected.id !== row.id) : [...prev, row];
+      else updatedSelectedRows = isAlreadySelected ? [] : [row];
+
+      if (updatedSelectedRows.length === 0) {
+        dispatch(clearSelectedPosition());
+      } else if (row.id && updatedSelectedRows.length === 1) {
+        getPosition(row.id, true);
+        dispatch(selectPosition(row.id));
+      }
+      onRowSelectionChange(updatedSelectedRows);
+      return updatedSelectedRows;
+    });
+  };
+
   const dispatch = useAppDispatch();
 
   const { data: positions = [] } = useGetPositionsQuery();
@@ -46,7 +72,7 @@ const DataTable: React.FC = () => {
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
-  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const [selectedRows, setSelectedRows] = useState<Position[]>([]);
   const [filteredData, setFilteredData] = useState(positions);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -118,18 +144,6 @@ const DataTable: React.FC = () => {
     ],
     [t, organizationTrees],
   );
-
-  const handleRowClick = async (row: Position) => {
-    if (row.id === selectedRowId) {
-      setSelectedRowId(null); // Clear selection
-      dispatch(clearSelectedPosition());
-    } else if (row.id) {
-      setSelectedRowId(row.id); // Set new selection
-
-      getPosition(row.id, true);
-      dispatch(selectPosition(row.id));
-    }
-  };
 
   const handleSearch = () => {
     const filtered = positions.filter((position) => {
@@ -227,7 +241,9 @@ const DataTable: React.FC = () => {
               },
             }}
           >
-            <Typography sx={{ color: 'white', fontSize: '1.2rem' }}>{t('search_filter.search_filters')}</Typography>
+            <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
+              {t('search_filter.search_filters')}
+            </Typography>
           </AccordionSummary>
 
           <AccordionDetails
@@ -388,10 +404,11 @@ const DataTable: React.FC = () => {
                     <TableCell
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       sx={{
-                        color: 'white',
-                        fontSize: '1.2rem',
                         cursor: 'pointer',
                         padding: '8px 16px',
+                        color: 'white',
+                        fontSize: '1.1rem',
+                        textTransform: 'none',
                       }}
                     >
                       {column.render('Header')}
@@ -410,15 +427,14 @@ const DataTable: React.FC = () => {
                   <TableRow
                     {...row.getRowProps()}
                     sx={{
-                      backgroundColor:
-                        row.original.id === selectedRowId
-                          ? alpha('#223B7C', 0.5)
-                          : index % 2 === 0
-                            ? '#F9F9F9'
-                            : alpha('#223B7C', 0.2),
+                      backgroundColor: selectedRows.some((r) => r.id === row.original.id)
+                        ? alpha('#223B7C', 0.5)
+                        : index % 2 === 0
+                          ? '#F9F9F9'
+                          : alpha('#223B7C', 0.2),
                       cursor: 'pointer',
                     }}
-                    onClick={() => handleRowClick(row.original)}
+                    onClick={(e) => handleRowClick(row.original, e)}
                   >
                     {row.cells.map((cell) => (
                       <TableCell {...cell.getCellProps()} sx={{ color: 'black', fontSize: '1rem' }}>
