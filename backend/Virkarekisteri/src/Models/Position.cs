@@ -75,17 +75,7 @@ public class Position
     [Column("ReplacementEmployeeId")]
     public Guid? ReplacementEmployeeId { get; set; }
 
+    [Required]
     [Column("VakanssinTila")]
-    public int VacancyStatus
-    {
-        get
-        {
-            if (PositionEmployeeId.HasValue && !EndedAt.HasValue)
-                return 2; // 2 == Active
-            else if (EndedAt.HasValue)
-                return 0; // 0 == Abolished
-            else
-                return 1; // 1 == Established
-        }
-    }
+    public int VacancyStatus { get; set; }
 }

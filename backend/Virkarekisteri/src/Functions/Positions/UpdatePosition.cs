@@ -157,7 +157,7 @@ public class UpdatePosition(
                     OldValue = oldValue ?? string.Empty,
                     NewValue = newValue ?? string.Empty,
                     Editor = editor,
-                    Timestamp = DateTime.UtcNow,
+                    Timestamp = DateTime.Now,
                     DecisionNumber = decisionNumber,
                 }
             );
