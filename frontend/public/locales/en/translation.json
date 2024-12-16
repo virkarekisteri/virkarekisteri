@@ -110,7 +110,9 @@
       "PositionName": "Position name",
       "Substitute": "Substitute",
       "CreatedPosition": "Created new position",
-      "CreatedEmployee": "Added new employee"
+      "CreatedEmployee": "Added new employee",
+      "VacancyStatus": "Vacancy status",
+      "EndedPosition": "Ended position"
     },
     "DecisionNumber": "Decision number",
     "search": {

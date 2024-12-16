@@ -80,7 +80,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     try {
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
-        endedAt: values.endedAt ? new Date(values.endedAt) : undefined,
+        endedAt: undefined,
         vacancySize: Number(values.vacancySize) / 100,
         vacancyFill: Number(values.vacancyFill) / 100,
         creationDecisionNumber: values.creationDecisionNumber ?? '',
@@ -93,7 +93,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         details: values.details ?? '',
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
-        vacancyStatus: values.vacancyStaus ?? '',
+        vacancyStatus: 1,
       };
 
       createPosition(positionData);

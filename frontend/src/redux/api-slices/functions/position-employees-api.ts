@@ -19,6 +19,7 @@ const positionEmployeesApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { positionEmployee }) => [
         { type: 'Positions', id: positionEmployee.positionId },
         { type: 'ChangeLogs', id: positionEmployee.positionId },
+        { type: 'ChangeLogs', id: 'LIST' },
       ],
     }),
     updatePositionEmployee: build.mutation<PositionEmployee, PositionEmployee>({
@@ -29,7 +30,9 @@ const positionEmployeesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: (_result, _error, { id, positionId }) => [
         { type: 'PositionEmployees', id },
+        { type: 'Positions', id: positionId },
         { type: 'ChangeLogs', id: positionId },
+        { type: 'ChangeLogs', id: 'LIST' },
       ],
     }),
   }),

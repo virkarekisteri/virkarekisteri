@@ -1,6 +1,7 @@
 import { baseApi } from './base-api';
 import type { Position } from 'models/Position';
 import type { CsvImportResponse } from 'models/CsvImportResponse';
+import type { EndPositionDto } from 'models/EndPositionDto';
 
 const PositionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -24,6 +25,7 @@ const PositionsApi = baseApi.injectEndpoints({
       invalidatesTags: [
         { type: 'Positions', id: 'LIST' },
         { type: 'PositionNames', id: 'LIST' },
+        { type: 'ChangeLogs', id: 'LIST' },
       ],
     }),
     updatePosition: build.mutation<Position, { id: string; position: Partial<Position> }>({
@@ -35,7 +37,20 @@ const PositionsApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Positions', id },
         { type: 'ChangeLogs', id },
+        { type: 'ChangeLogs', id: 'LIST' },
         { type: 'PositionNames', id: 'LIST' },
+      ],
+    }),
+    endPosition: build.mutation<void, { id: string; endDto: EndPositionDto }>({
+      query: ({ id, endDto }) => ({
+        url: `/positions/${id}/end`,
+        method: 'PATCH',
+        body: endDto,
+      }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'Positions', id },
+        { type: 'ChangeLogs', id },
+        { type: 'ChangeLogs', id: 'LIST' },
       ],
     }),
     importPositionsCsv: build.mutation<CsvImportResponse, FormData>({
@@ -44,7 +59,10 @@ const PositionsApi = baseApi.injectEndpoints({
         method: 'POST',
         body: form,
       }),
-      invalidatesTags: [{ type: 'Positions', id: 'LIST' }],
+      invalidatesTags: [
+        { type: 'Positions', id: 'LIST' },
+        { type: 'ChangeLogs', id: 'LIST' },
+      ],
     }),
   }),
 });
@@ -55,5 +73,6 @@ export const {
   useLazyGetPositionQuery,
   useCreatePositionMutation,
   useUpdatePositionMutation,
+  useEndPositionMutation,
   useImportPositionsCsvMutation,
 } = PositionsApi;

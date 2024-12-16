@@ -110,7 +110,9 @@
       "PositionName": "Virkanimike",
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka",
-      "CreatedEmployee": "Lisätty uusi viranhaltija"
+      "CreatedEmployee": "Lisätty uusi viranhaltija",
+      "VacancyStatus": "Vakanssin tila",
+      "EndedPosition": "Lakkautettu virka"
     },
     "DecisionNumber": "Päätösnumero",
     "search": {

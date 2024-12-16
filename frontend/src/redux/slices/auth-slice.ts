@@ -41,7 +41,7 @@ export const authSlice = createAppSlice({
     selectEmail: (state) => state.email,
     selectIsEditor: (state) => state.roles?.some((role) => role >= RoleHierarchy.Editor) ?? false,
     selectIsAdmin: (state) => state.roles?.includes(RoleHierarchy.Admin) ?? false,
-    selectHighestRole: (state) => RoleHierarchy[Math.max(...(state.roles ?? [RoleHierarchy.Reader]))],
+    selectHighestRole: (state) => (state.roles ? RoleHierarchy[Math.max(...state.roles)] : undefined),
   },
 });
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
-import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
+import { useEndPositionMutation } from 'redux/api-slices/functions/positions-api';
 import type { Position } from 'models/Position';
 
 interface EndPositionModalProps {
@@ -15,16 +15,17 @@ interface EndPositionModalProps {
 
 const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, position }) => {
   const { t } = useTranslation();
-  const [updatePosition] = useUpdatePositionMutation();
+  const [endPosition] = useEndPositionMutation();
 
   const handleSubmit = async (values: Position) => {
     if (!position.id) return undefined;
-    const updateData = {
-      vacancyStatus: 0,
-      endedAt: values.endedAt,
-      decisionNumber: values.endingDecisionNumber,
-    };
-    updatePosition({ id: position.id, position: updateData });
+
+    if (values.endedAt && values.endingDecisionNumber)
+      endPosition({
+        id: position.id,
+        endDto: { endAt: values.endedAt, endingDecisionNumber: values.endingDecisionNumber },
+      });
+
     onClose();
   };
 

@@ -14,7 +14,7 @@ import LandingPage from './LandingPage';
 import { useGetPositionQuery, useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
-import { RequiresEditRole } from './role-guards';
+import { RequiresAdminRole, RequiresEditRole } from './role-guards';
 import ChangeLogTable from './ChangeLog/ChangeLogTable';
 import type { Position } from 'models/Position';
 
@@ -126,9 +126,10 @@ const VirkarekisterContainer = () => {
             </Grid2>
 
             <Grid2 size="auto" display="flex" gap={3}>
-              <RequiresEditRole>
+              <RequiresAdminRole>
                 <Button
                   variant="contained"
+                  disabled={selectedRows.length < 2}
                   onClick={() => {
                     handleOpenMassModal();
                     handleClick();
@@ -184,6 +185,8 @@ const VirkarekisterContainer = () => {
                 >
                   {t('create_csv_position.upload_csv')}
                 </Button>
+              </RequiresAdminRole>
+              <RequiresEditRole>
                 <Button
                   variant="contained"
                   onClick={handleOpenCreateModal}

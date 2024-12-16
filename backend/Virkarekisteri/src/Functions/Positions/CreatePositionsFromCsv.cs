@@ -17,7 +17,7 @@ public class CreatePositionsFromCsv(
 )
 {
     [Function("CreatePositionsFromCsv")]
-    [RequiresEditRole]
+    [RequiresAdminRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "POST", Route = "positions/import")] HttpRequest req
     )
@@ -151,7 +151,7 @@ public class CreatePositionsFromCsv(
                     OldValue = string.Empty,
                     NewValue = createdPosition.VacancyNumber ?? string.Empty,
                     Editor = editor,
-                    Timestamp = DateTime.UtcNow,
+                    Timestamp = DateTime.Now,
                     DecisionNumber = createdPosition.CreationDecisionNumber,
                 };
                 await changeLogRepository.AddChangeLogEntry(changeLog);

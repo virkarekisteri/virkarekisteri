@@ -74,6 +74,16 @@ public class AddPositionEmployee(
         {
             var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
             position.PositionEmployeeId = createdPositionEmployee.Id;
+
+            if (
+                createdPositionEmployee.StartDate.Date <= DateTime.Now.Date
+                && (
+                    !createdPositionEmployee.EndingDate.HasValue
+                    || createdPositionEmployee.EndingDate.Value.Date > DateTime.Now.Date
+                )
+            )
+                position.VacancyStatus = 2;
+
             await changeLogRepository.AddChangeLogEntry(
                 new ChangeLog
                 {
