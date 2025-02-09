@@ -70,6 +70,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
+  const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRows, setSelectedRows] = useState<Position[]>([]);
@@ -103,6 +104,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       {
         Header: t('table.placement_location'),
         accessor: 'placementLocation',
+      },
+      {
+        Header: t('table.creation_decision_number'),
+        accessor: 'creationDecisionNumber',
       },
       {
         Header: t('table.vacancy_status'),
@@ -153,8 +158,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           : true;
         const matchesSijoituspaikka = placementLocationStateSearch
           ? (position?.placementLocation
-              ?.toLocaleLowerCase()
-              .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
+            ?.toLocaleLowerCase()
+            .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesPositionName = positionNameSearch
           ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
@@ -163,12 +168,15 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
         const matchesVacancyStatus =
           vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
+        const matchesDecisionNumber =
+          decisionNumberSearch.length > 0 ? decisionNumberSearch.includes(position.creationDecisionNumber.toString()) : true;
         return (
           matchesVakanssinumero &&
           matchesSijoituspaikka &&
           matchesPositionName &&
           matchesPositionType &&
-          matchesVacancyStatus
+          matchesVacancyStatus &&
+          matchesDecisionNumber
         );
       }
     });
@@ -179,6 +187,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setVacancyNumberSearch('');
     setPlacementLocationStateSearch('');
     setPositionNameSearch('');
+    setDecisionNumberSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
     setFilteredData(positions);
@@ -259,7 +268,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               }}
             >
               <Grid2 container spacing={2}>
-                <Grid2 size={6}>
+                <Grid2 size={4}>
                   <TextField
                     label={t('table.vacancy_number')}
                     value={vacancyNumberSearch}
@@ -272,7 +281,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     }}
                   />
                 </Grid2>
-                <Grid2 size={6}>
+                <Grid2 size={4}>
                   <TextField
                     label={t('table.placement_location')}
                     value={placementLocationStateSearch}
@@ -285,7 +294,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     }}
                   />
                 </Grid2>
-                <Grid2 size={6}>
+                <Grid2 size={4}>
                   <TextField
                     label={t('table.position_name')}
                     value={positionNameSearch}
@@ -298,7 +307,59 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     }}
                   />
                 </Grid2>
-                <Grid2 size={3}>
+                <Grid2 size={4}>
+                  <TextField
+                    label={t('table.creation_decision_number')}
+                    value={decisionNumberSearch}
+                    onChange={(e) => setDecisionNumberSearch(e.target.value)}
+                    fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <TextField
+                    label={t('table.creation_decision_number')}
+                    value={decisionNumberSearch}
+                    onChange={(e) => setDecisionNumberSearch(e.target.value)}
+                    fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <TextField
+                    label={t('table.creation_decision_number')}
+                    value={decisionNumberSearch}
+                    onChange={(e) => setDecisionNumberSearch(e.target.value)}
+                    fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                  />
+                </Grid2>
+                <Grid2 size={4}>
+                  <TextField
+                    label={t('table.creation_decision_number')}
+                    value={decisionNumberSearch}
+                    onChange={(e) => setDecisionNumberSearch(e.target.value)}
+                    fullWidth
+                    slotProps={{
+                      inputLabel: {
+                        shrink: true,
+                      },
+                    }}
+                  />
+                </Grid2>
+                <Grid2 size={2}>
                   <Typography component={'div'} fontWeight={'fontWeightBold'}>
                     {t('table.type')}
                   </Typography>
@@ -327,7 +388,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     </FormGroup>
                   </FormControl>
                 </Grid2>
-                <Grid2 size={3}>
+                <Grid2 size={2}>
                   <Typography component={'div'} fontWeight={'fontWeightBold'}>
                     {t('table.vacancy_status')}
                   </Typography>
@@ -366,29 +427,32 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     </FormGroup>
                   </FormControl>
                 </Grid2>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Button
+                    variant="contained"
+                    onClick={handleSearch}
+                    sx={{
+                      fontSize: '0.8rem',
+                      padding: '6px 35px',
+                      height: '40px'
+                    }}
+                  >
+                    {t('search_filter.search')}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={handleReset}
+                    sx={{
+                      fontSize: '0.8rem',
+                      padding: '6px 35px',
+                      height: '40px'
+                    }}
+                  >
+                    {t('search_filter.reset')}
+                  </Button>
+                </Box>
               </Grid2>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={handleSearch}
-                  sx={{
-                    fontSize: '0.8rem',
-                    padding: '6px 35px',
-                  }}
-                >
-                  {t('search_filter.search')}
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={handleReset}
-                  sx={{
-                    fontSize: '0.8rem',
-                    padding: '6px 35px',
-                  }}
-                >
-                  {t('search_filter.reset')}
-                </Button>
-              </Box>
+
             </Box>
           </AccordionDetails>
         </Accordion>
