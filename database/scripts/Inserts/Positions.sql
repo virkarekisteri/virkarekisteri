@@ -10,7 +10,8 @@ INSERT INTO
         Laji,
         Sijoituspaikka,
         PositionNameId,
-        OrgTreeId
+        OrgTreeId,
+		OnkoOpettaja
     )
 VALUES
     (
@@ -39,7 +40,8 @@ VALUES
             WHERE
                 [Number] = '1000'
                 AND [Alue] = 'KUSTANNUSPAIKKA'
-        )
+        ),
+        0
     ),
     (
         '2022-05-12',
@@ -67,7 +69,8 @@ VALUES
             WHERE
                 [Number] = '1412'
                 AND [Alue] = 'KUSTANNUSPAIKKA'
-        )
+        ),
+		1
     ),
     (
         '2021-09-10',
@@ -95,7 +98,8 @@ VALUES
             WHERE
                 [Number] = '4124'
                 AND [Alue] = 'KUSTANNUSPAIKKA'
-        )
+        ),
+		0
     );
 
 GO
