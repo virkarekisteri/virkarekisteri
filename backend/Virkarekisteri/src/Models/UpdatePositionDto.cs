@@ -16,6 +16,7 @@ public class UpdatePositionDto
     public PositionNameDto? PositionName { get; set; }
     public string? DecisionNumber { get; set; }
     public int? VacancyStatus { get; set; }
+    public bool? IsTeacher { get; set; }
 }
 
 public class PositionNameDto
