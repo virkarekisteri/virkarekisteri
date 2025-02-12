@@ -11,7 +11,7 @@ INSERT INTO
         Sijoituspaikka,
         PositionNameId,
         OrgTreeId,
-		OnkoOpettaja
+        OnkoOpettaja
     )
 VALUES
     (
@@ -70,7 +70,7 @@ VALUES
                 [Number] = '1412'
                 AND [Alue] = 'KUSTANNUSPAIKKA'
         ),
-		1
+        1
     ),
     (
         '2021-09-10',
@@ -99,7 +99,7 @@ VALUES
                 [Number] = '4124'
                 AND [Alue] = 'KUSTANNUSPAIKKA'
         ),
-		0
+        0
     );
 
 GO
