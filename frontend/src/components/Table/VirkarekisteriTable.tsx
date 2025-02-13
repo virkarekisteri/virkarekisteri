@@ -71,6 +71,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
+  const [organizationTreeSearch, setOrganizationTreeSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
   const [selectedRows, setSelectedRows] = useState<Position[]>([]);
@@ -161,6 +162,22 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             ?.toLocaleLowerCase()
             .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
+        const matchesDecisionNumber = decisionNumberSearch
+          ? (position?.creationDecisionNumber
+            ?.toLocaleLowerCase()
+            .includes(decisionNumberSearch.toLocaleLowerCase()) ?? false)
+          : true;
+
+        const orgTreeElement = organizationTrees?.find((tree) => tree.id.includes(position.orgTreeId.toLocaleLowerCase()))
+        const fullTreeWord = orgTreeElement?.number?.toLocaleLowerCase() + " " +
+          orgTreeElement?.name?.toLocaleLowerCase()
+        const matchesOrganizationTree = organizationTreeSearch
+          ? ((fullTreeWord
+            .includes(organizationTreeSearch.toLocaleLowerCase()) ||
+            fullTreeWord
+              .includes(organizationTreeSearch.toLocaleLowerCase())))
+          : true;
+
         const matchesPositionName = positionNameSearch
           ? (position?.positionName?.name.includes(positionNameSearch) ?? false)
           : true;
@@ -168,15 +185,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
         const matchesVacancyStatus =
           vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
-        const matchesDecisionNumber =
-          decisionNumberSearch.length > 0 ? decisionNumberSearch.includes(position.creationDecisionNumber.toString()) : true;
         return (
           matchesVakanssinumero &&
           matchesSijoituspaikka &&
           matchesPositionName &&
           matchesPositionType &&
           matchesVacancyStatus &&
-          matchesDecisionNumber
+          matchesDecisionNumber &&
+          matchesOrganizationTree
         );
       }
     });
@@ -322,9 +338,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                 </Grid2>
                 <Grid2 size={4}>
                   <TextField
-                    label={t('table.creation_decision_number')}
-                    value={decisionNumberSearch}
-                    onChange={(e) => setDecisionNumberSearch(e.target.value)}
+                    label={t('table.organization_tree')}
+                    value={organizationTreeSearch}
+                    onChange={(e) => setOrganizationTreeSearch(e.target.value)}
                     fullWidth
                     slotProps={{
                       inputLabel: {
