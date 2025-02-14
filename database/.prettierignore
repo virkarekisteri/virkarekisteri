@@ -4,3 +4,5 @@ bin/
 .vscode/
 *.json
 scripts/PostDeployment.sql
+scripts/Inserts/*.sql
+dbo/Tables/*.sql
