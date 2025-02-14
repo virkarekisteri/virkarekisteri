@@ -3,3 +3,5 @@ CREATE TABLE [dbo].[Subjects] (
   [Aine] NVARCHAR(100) NOT NULL,
   [Aktiivinen] BIT DEFAULT 1 NOT NULL
 )
+
+GO
