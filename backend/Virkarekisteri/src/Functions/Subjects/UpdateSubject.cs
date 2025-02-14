@@ -17,7 +17,7 @@ public class UpdateSubject(
 )
 {
     /// <summary>
-    /// /subjects/{id} PUT endpoint to update a subject in the database    
+    /// /subjects/{id} PUT endpoint to update a subject in the database
     /// </summary>
     /// <param name="req">Input PUT request with body containing Subject to update</param>
     /// <param name="id">The ID of the subject to update</param>
@@ -27,7 +27,8 @@ public class UpdateSubject(
     [Function("UpdateSubject")]
     [RequiresEditRole]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "subjects/{id}")] HttpRequest req, string id
+        [HttpTrigger(AuthorizationLevel.Function, "PUT", Route = "subjects/{id}")] HttpRequest req,
+        string id
     )
     {
         logger.LogInformation("1/3 : Updating subject with ID: {Id}", id);
@@ -94,7 +95,7 @@ public class UpdateSubject(
         existingPosition.Type = updateDto.Type ?? existingPosition.Type;
         */
 
-        await subjectRepository.UpdateSubject(existingSubject);   
+        await subjectRepository.UpdateSubject(existingSubject);
         return new NoContentResult(); // TODO: kommentoi pois kun logitus on valmis
 
         // TODO: More logging...

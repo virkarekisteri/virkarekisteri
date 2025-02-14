@@ -16,7 +16,7 @@ public class CreateSubject(
 )
 {
     /// <summary>
-    /// /subjects POST endpoint to add a new subject to the database    
+    /// /subjects POST endpoint to add a new subject to the database
     /// </summary>
     /// <param name="req">Input POST request with body containing Subject to create</param>
     /// <returns>
@@ -34,7 +34,7 @@ public class CreateSubject(
 
         if (error is not null)
             return error;
-        
+
         if (requestSubject.SubjectName == String.Empty)
         {
             return new BadRequestObjectResult("Subject's name must be provided.");
