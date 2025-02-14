@@ -2,6 +2,4 @@ CREATE TABLE [dbo].[Subjects] (
     [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
     [Aine] NVARCHAR(100) NOT NULL,
     [Aktiivinen] BIT DEFAULT 1 NOT NULL
-)
-
-GO
+) GO
