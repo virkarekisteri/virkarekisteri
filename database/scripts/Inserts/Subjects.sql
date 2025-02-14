@@ -1,8 +1,5 @@
 INSERT INTO
-    Subjects (
-        Aine,
-        Aktiivinen
-    )
+    Subjects (Aine, Aktiivinen)
 VALUES
     ('biologia', 1),
     ('elämänkatsomustieto', 1),
