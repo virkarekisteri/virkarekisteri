@@ -40,7 +40,17 @@ public class CreateSubject(
             return new BadRequestObjectResult("Subject's name must be provided.");
         }
 
-        var subject = await subjectRepository.CreateSubject(requestSubject);
+        // Call repository to check if subject exists before adding
+        var (exists, existingSubject) = await subjectRepository.CreateSubject(requestSubject);
+
+        if (exists)
+        {
+            return new ConflictObjectResult(new
+            {
+                message = "A subject with this name already exists.",
+                existingObject = existingSubject
+            });
+        }
 
         // TODO: Logitus uuden aineen lisäämisestä. Vaatinee oman taulunsa?
         /*
@@ -59,6 +69,6 @@ public class CreateSubject(
         await changeLogRepository.AddChangeLogEntry(changeLog);
         */
 
-        return new OkObjectResult(subject);
+        return new OkObjectResult(requestSubject);
     }
 }

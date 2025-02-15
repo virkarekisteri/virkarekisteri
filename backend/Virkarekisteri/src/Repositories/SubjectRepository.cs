@@ -7,7 +7,7 @@ public interface ISubjectRepository
 {
     Task<List<Subject>> GetSubjects();
     Task<Subject?> GetSubject(Guid id);
-    Task<Subject> CreateSubject(Subject subject);
+    Task<(bool Exists, Subject? Subject)> CreateSubject(Subject subject);
     Task UpdateSubject(Subject existingSubject);
 }
 
@@ -23,11 +23,21 @@ public class SubjectRepository(VirkarekisteriDb db) : ISubjectRepository
         return await db.Subjects.FirstOrDefaultAsync(s => s.Id == id);
     }
 
-    public async Task<Subject> CreateSubject(Subject subject)
+    public async Task<(bool Exists, Subject? Subject)> CreateSubject(Subject subject)
     {
+        // Check if a subject with the same name exists
+        var existingSubject = await db.Subjects
+            .FirstOrDefaultAsync(s => s.SubjectName == subject.SubjectName);
+
+        if (existingSubject != null)
+        {
+            return (true, existingSubject); // Return that it already exists
+        }
+
+        // Add the new subject if it does not exist
         db.Subjects.Add(subject);
         await db.SaveChangesAsync();
-        return subject;
+        return (false, subject);
     }
 
     public async Task UpdateSubject(Subject existingSubject)
