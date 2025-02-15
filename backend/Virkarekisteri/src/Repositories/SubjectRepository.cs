@@ -26,8 +26,7 @@ public class SubjectRepository(VirkarekisteriDb db) : ISubjectRepository
     public async Task<(bool Exists, Subject? Subject)> CreateSubject(Subject subject)
     {
         // Check if a subject with the same name exists
-        var existingSubject = await db.Subjects
-            .FirstOrDefaultAsync(s => s.SubjectName == subject.SubjectName);
+        var existingSubject = await db.Subjects.FirstOrDefaultAsync(s => s.SubjectName == subject.SubjectName);
 
         if (existingSubject != null)
         {

@@ -45,11 +45,9 @@ public class CreateSubject(
 
         if (exists)
         {
-            return new ConflictObjectResult(new
-            {
-                message = "A subject with this name already exists.",
-                existingObject = existingSubject
-            });
+            return new ConflictObjectResult(
+                new { message = "A subject with this name already exists.", existingObject = existingSubject }
+            );
         }
 
         // TODO: Logitus uuden aineen lisäämisestä. Vaatinee oman taulunsa?
