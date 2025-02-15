@@ -21,7 +21,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import type { Position } from 'models/Position';
 import React, { useEffect, useState } from 'react';
@@ -76,7 +76,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
   const [organizationTreeSearch, setOrganizationTreeSearch] = useState('');
   const [employeeNameSearch, setEmployeeNameSearch] = useState('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [startDateSearch, setStartDateSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
@@ -158,50 +158,61 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   );
 
   const handleSearch = async () => {
-    setLoading(true)
+    setLoading(true);
 
     const fetchedEmployees = await Promise.all(
-      positions.filter(position => position?.positionEmployeeId)
+      positions
+        .filter((position) => position?.positionEmployeeId)
         .map(async (position) => {
           const data = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
           return data.data ?? null;
-        })).then((data) => {
-          setLoading(false)
-          return data
-        })
+        }),
+    ).then((data) => {
+      setLoading(false);
+      return data;
+    });
 
     const filtered = positions.filter((position) => {
       if (position) {
         const matchesStartDate = startDateSearch
-          ? fetchedEmployees.find(item => (item?.id === position?.positionEmployeeId &&
-            new Date(item?.startDate ?? '') >= new Date(startDateSearch)) ?? false) : true
+          ? fetchedEmployees.find(
+              (item) =>
+                (item?.id === position?.positionEmployeeId &&
+                  new Date(item?.startDate ?? '') >= new Date(startDateSearch)) ??
+                false,
+            )
+          : true;
 
         const matchesEmployeeName = employeeNameSearch
-          ? fetchedEmployees.find(item => (item?.id === position?.positionEmployeeId &&
-            item?.employeeName.toLocaleLowerCase().includes(employeeNameSearch)) ?? false) : true
+          ? fetchedEmployees.find(
+              (item) =>
+                (item?.id === position?.positionEmployeeId &&
+                  item?.employeeName.toLocaleLowerCase().includes(employeeNameSearch)) ??
+                false,
+            )
+          : true;
 
         const matchesVakanssinumero = vacancyNumberSearch
           ? (position.vacancyNumber?.toLocaleLowerCase().includes(vacancyNumberSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesSijoituspaikka = placementLocationStateSearch
           ? (position?.placementLocation
-            ?.toLocaleLowerCase()
-            .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
+              ?.toLocaleLowerCase()
+              .includes(placementLocationStateSearch.toLocaleLowerCase()) ?? false)
           : true;
         const matchesDecisionNumber = decisionNumberSearch
-          ? (position?.creationDecisionNumber
-            ?.toLocaleLowerCase()
-            .includes(decisionNumberSearch.toLocaleLowerCase()) ?? false)
+          ? (position?.creationDecisionNumber?.toLocaleLowerCase().includes(decisionNumberSearch.toLocaleLowerCase()) ??
+            false)
           : true;
 
-        const orgTreeElement = organizationTrees?.find((tree) => tree.id.includes(position.orgTreeId.toLocaleLowerCase()))
-        const fullTreeWord = orgTreeElement?.number?.toLocaleLowerCase() + " " +
-          orgTreeElement?.name?.toLocaleLowerCase()
+        const orgTreeElement = organizationTrees?.find((tree) =>
+          tree.id.includes(position.orgTreeId.toLocaleLowerCase()),
+        );
+        const fullTreeWord =
+          orgTreeElement?.number?.toLocaleLowerCase() + ' ' + orgTreeElement?.name?.toLocaleLowerCase();
         const matchesOrganizationTree = organizationTreeSearch
-          ? ((fullTreeWord
-            .includes(organizationTreeSearch.toLocaleLowerCase()) ||
-            fullTreeWord
-              .includes(organizationTreeSearch.toLocaleLowerCase())))
+          ? fullTreeWord.includes(organizationTreeSearch.toLocaleLowerCase()) ||
+            fullTreeWord.includes(organizationTreeSearch.toLocaleLowerCase())
           : true;
 
         const matchesPositionName = positionNameSearch
@@ -384,7 +395,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                   <TextField
                     label={t('employee.start_date')}
                     value={startDateSearch}
-                    onChange={(e) => setStartDateSearch((e.target.value))}
+                    onChange={(e) => setStartDateSearch(e.target.value)}
                     fullWidth
                     type="date"
                     slotProps={{
@@ -475,14 +486,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     </FormGroup>
                   </FormControl>
                 </Grid2>
-                <Box sx={{ display: 'flex', gap: 2, alignItems: "center" }}>
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                   <Button
                     variant="contained"
                     onClick={handleSearch}
                     sx={{
                       fontSize: '0.8rem',
                       padding: '6px 35px',
-                      height: '40px'
+                      height: '40px',
                     }}
                   >
                     {t('search_filter.search')}
@@ -493,19 +504,22 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     sx={{
                       fontSize: '0.8rem',
                       padding: '6px 35px',
-                      height: '40px'
+                      height: '40px',
                     }}
                   >
                     {t('search_filter.reset')}
                   </Button>
                 </Box>
               </Grid2>
-
             </Box>
           </AccordionDetails>
         </Accordion>
       </Box>
-      {loading ? <Box style={{ display: "flex", justifyContent: "center", marginTop: "5%" }}><CircularProgress /></Box> :
+      {loading ? (
+        <Box style={{ display: 'flex', justifyContent: 'center', marginTop: '5%' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
         <Box sx={{ mt: 2 }}>
           <TableContainer component={Box} sx={{ border: '0px solid #ccc' }}>
             <Table {...getTableProps()} sx={{ minWidth: 650 }}>
@@ -525,7 +539,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                         }}
                       >
                         {column.render('Header')}
-                        <span style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}>
+                        <span
+                          style={{ marginLeft: '8px', display: 'inline-block', width: '16px', textAlign: 'center' }}
+                        >
                           {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
                         </span>
                       </TableCell>
@@ -560,13 +576,16 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TableCell colSpan={columns.length} sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}></TableCell>
+                  <TableCell
+                    colSpan={columns.length}
+                    sx={{ backgroundColor: '#223B7C', textAlign: 'right' }}
+                  ></TableCell>
                 </TableRow>
               </TableFooter>
             </Table>
           </TableContainer>
         </Box>
-      }
+      )}
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"

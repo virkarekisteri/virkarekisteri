@@ -38,5 +38,9 @@ const positionEmployeesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetPositionEmployeeQuery, useLazyGetPositionEmployeeQuery, useCreatePositionEmployeeMutation, useUpdatePositionEmployeeMutation } =
-  positionEmployeesApi;
+export const {
+  useGetPositionEmployeeQuery,
+  useLazyGetPositionEmployeeQuery,
+  useCreatePositionEmployeeMutation,
+  useUpdatePositionEmployeeMutation,
+} = positionEmployeesApi;
