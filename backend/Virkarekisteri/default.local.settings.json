@@ -2,7 +2,8 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "SKIP_AUTH": "true"
   },
   "ConnectionStrings": {
     "SqlConnectionString": "Server=(local),1433;Initial Catalog=virkaluettelo-database;Persist Security Info=False;User ID=sa;Password=MyLocalSqlP@ssw0rd;Encrypt=True;TrustServerCertificate=True;"
