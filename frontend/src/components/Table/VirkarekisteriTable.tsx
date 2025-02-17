@@ -16,7 +16,8 @@ import {
   alpha,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { DataGrid, GridDensity, GridToolbar } from '@mui/x-data-grid';
+import type { GridDensity} from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/hooks';
