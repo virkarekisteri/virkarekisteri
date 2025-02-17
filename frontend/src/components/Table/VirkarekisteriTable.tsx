@@ -187,7 +187,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           ? fetchedEmployees.find(
               (item) =>
                 (item?.id === position?.positionEmployeeId &&
-                  item?.employeeName.toLocaleLowerCase().includes(employeeNameSearch)) ??
+                  item?.employeeName.toLocaleLowerCase().includes(employeeNameSearch.toLocaleLowerCase())) ??
                 false,
             )
           : true;
