@@ -61,7 +61,8 @@
     "rows_per_page": "Rivejä sivulla:",
     "position_name": "Virkanimike",
     "organization_tree": "Kustannuspaikka",
-    "placement_location": "Sijoituspaikka"
+    "placement_location": "Sijoituspaikka",
+    "employee_name": "Viranhaltijan nimi"
   },
   "tabs": {
     "positions": "Virkalistaus",
