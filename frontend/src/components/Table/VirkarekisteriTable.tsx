@@ -16,7 +16,7 @@ import {
   alpha,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import type { GridDensity } from '@mui/x-data-grid';
+import type { GridDensity, GridRenderCellParams } from '@mui/x-data-grid';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,9 @@ import { clearSelectedPosition, selectPosition } from 'redux/slices/position-sli
 import { useGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
+import type { OrganizationTree } from 'models/OrganizationTree';
+
+/* eslint-disable react/prop-types */
 
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
@@ -93,13 +96,13 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   }, [positions]);
 
   // Viranhaltijan nimi solukko - näytölle
-  const EmployeeNameCell: React.FC<any> = (params) => {
+  const EmployeeNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
     const { data: employee } = useGetPositionEmployeeQuery(params.row.positionEmployeeId ?? skipToken);
     return <>{employee ? employee.employeeName : ''}</>;
   };
 
   // Virkaan asettamispäivä solukko - näytölle
-  const StartDateCell: React.FC<{ row: any }> = ({ row }) => {
+  const StartDateCell: React.FC<{ row: Position }> = ({ row }) => {
     const { data: employee } = useGetPositionEmployeeQuery(row.positionEmployeeId ?? skipToken);
     if (!employee || !employee.startDate) return <></>;
     return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
@@ -218,7 +221,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.position_name'),
       flex: 1,
       sortable: true,
-      renderCell: (params: any) => {
+      renderCell: (params: GridRenderCellParams<Position>) => {
         if (!params.row) return '';
         const pos = params.row.positionName;
         return pos && typeof pos === 'object' ? pos.name || '' : pos || '';
@@ -229,10 +232,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.organization_tree'),
       flex: 1,
       sortable: true,
-      renderCell: (params: any) => {
+      renderCell: (params: GridRenderCellParams<Position>) => {
         const id = params.row?.orgTreeId;
         if (!id || !organizationTrees) return '';
-        const orgTree = organizationTrees.find((tree: any) => tree.id === id);
+        const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
         return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
       },
     },
@@ -247,7 +250,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.vacancy_status'),
       flex: 1,
       sortable: true,
-      renderCell: (params: any) => {
+      renderCell: (params: GridRenderCellParams<Position>) => {
         const value = params.value;
         let statusText = '';
         let color = '';
@@ -289,7 +292,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.employee_name'),
       flex: 1,
       sortable: true,
-      renderCell: (params: any) => <EmployeeNameCell {...params} />,
+      renderCell: (params: GridRenderCellParams<Position>) => <EmployeeNameCell {...params} />,
     },
     {
       field: 'creationDecisionNumber',
@@ -302,7 +305,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('employee.start_date'),
       flex: 1,
       sortable: true,
-      renderCell: (params: any) => <StartDateCell row={params.row} />,
+      renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
     },
   ];
 
@@ -490,7 +493,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           columns={columns}
           density={density}
           onDensityChange={(newDensity) => setDensity(newDensity)}
-          getRowId={(row) => row.id ?? row.orgTreeId ?? 'unknown'}
+          getRowId={(row: Position) => row.id ?? row.orgTreeId ?? 'unknown'}
           pagination
           paginationModel={{ page, pageSize: rowsPerPage }}
           onPaginationModelChange={(model) => {
