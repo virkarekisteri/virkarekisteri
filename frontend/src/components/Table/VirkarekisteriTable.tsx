@@ -16,7 +16,7 @@ import {
   alpha,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import type { GridDensity} from '@mui/x-data-grid';
+import type { GridDensity } from '@mui/x-data-grid';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
