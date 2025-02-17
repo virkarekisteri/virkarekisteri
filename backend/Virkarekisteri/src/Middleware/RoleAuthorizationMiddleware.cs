@@ -19,6 +19,15 @@ public class RoleAuthorizationMiddleware : IFunctionsWorkerMiddleware
         if (httpContext is null)
             return next(context);
 
+        // check if the environment is local dev by checking local settings
+        var skipAuth = Environment.GetEnvironmentVariable("SKIP_AUTH");
+        if (skipAuth != null && skipAuth.Equals("true", StringComparison.OrdinalIgnoreCase))
+        {
+            // bypass role authentication for backend and use local dev admin as nickname
+            httpContext.Items["Editor"] = "LocalDevAdmin";
+            return next(context);
+        }
+
         // Use reflection to determine if this function has the RequiredRole attribute
         // Seems like a hack, but it's the only way to do it until the ASP.NET Core middleware pipeline
         // has been implemented in the Azure Functions ASP.NET Core integration
