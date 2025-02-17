@@ -80,7 +80,7 @@ public class Position
     public int VacancyStatus { get; set; }
 
     [Required]
-    [Column("OnkoOpettaja")]    
+    [Column("OnOpettaja")]    
     public bool IsTeacher { get; set; } = false;
 
 }

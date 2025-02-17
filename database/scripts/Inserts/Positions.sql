@@ -11,7 +11,7 @@ INSERT INTO
         Sijoituspaikka,
         PositionNameId,
         OrgTreeId,
-        OnkoOpettaja
+        OnOpettaja
     )
 VALUES
     (

@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[Positions] (
     [ReplacementEmployeeId] UNIQUEIDENTIFIER CONSTRAINT [FK_Positions_PositionReplacementEmployee] FOREIGN KEY ([ReplacementEmployeeId]) REFERENCES [dbo].[PositionEmployee] ([Id]),
     [OrgTreeId] UNIQUEIDENTIFIER NOT NULL CONSTRAINT [FK_Positions_OrganizationTree] FOREIGN KEY ([OrgTreeId]) REFERENCES [dbo].[OrganizationTree] ([Id]),
     [VakanssinTila] INT NOT NULL DEFAULT 1,
-    [OnkoOpettaja] BIT CONSTRAINT [DEFAULT_Positions_OnkoOpettaja] DEFAULT ((0)) NOT NULL
+    [OnOpettaja] BIT CONSTRAINT [DEFAULT_Positions_OnkoOpettaja] DEFAULT ((0)) NOT NULL
 );
 
 GO
