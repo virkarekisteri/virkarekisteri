@@ -22,7 +22,8 @@ public class GetPosition(ILogger<GetPosition> logger, ISubjectRepository subject
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "subjects/{id}")] HttpRequest req
     )
     {
-        logger.LogInformation("Getting subject by id: {Id}", req.RouteValues["id"]);
+        var sanitizedId = (req.RouteValues["id"] as string)?.Replace("\n", "").Replace("\r", "");
+        logger.LogInformation("Getting subject by id: {Id}", sanitizedId);
 
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var subjectId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
