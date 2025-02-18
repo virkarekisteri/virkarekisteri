@@ -105,6 +105,9 @@ public class UpdatePosition(
         LogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
         existingPosition.Type = updateDto.Type ?? existingPosition.Type;
 
+        LogChange("IsTeacher", existingPosition.IsTeacher.ToString(), updateDto.IsTeacher?.ToString());
+        existingPosition.IsTeacher = updateDto.IsTeacher ?? existingPosition.IsTeacher;
+
         if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
         {
             var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
