@@ -61,7 +61,8 @@
     "vacancy_status": "Vacancy status",
     "rows_per_page": "Rows per page",
     "organization_tree": "Organization tree",
-    "position_name": "Position name"
+    "position_name": "Position name",
+    "employee_name": "Employee name"
   },
   "tabs": {
     "positions": "Positions list",
