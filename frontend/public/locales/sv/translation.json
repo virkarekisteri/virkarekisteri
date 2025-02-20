@@ -15,7 +15,9 @@
     "work_experience": "",
     "type": "",
     "type_position": "",
-    "type_post": ""
+    "type_post": "",
+    "teacher": "",
+    "subjects": ""
   },
   "create_csv_position": {
     "success": "",
