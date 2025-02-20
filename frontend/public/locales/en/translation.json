@@ -15,7 +15,9 @@
     "work_experience": "Work experience",
     "type": "Type",
     "type_position": "Position",
-    "type_post": "Post"
+    "type_post": "Post",
+    "teacher": "Teacher",
+    "subjects": "Subjects"
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
