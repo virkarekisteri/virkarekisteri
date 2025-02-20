@@ -15,6 +15,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
+  SelectChangeEvent,
+  Chip,
+  ListItemText
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -26,8 +31,10 @@ import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
+import { useState } from 'react';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -41,6 +48,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     open ? undefined : skipToken,
   );
   const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
+
+  const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
+
+  const activeSubjectNames = subjects.filter(subject => subject.active === true).map(subject => subject.name);
 
   const [createPosition] = useCreatePositionMutation();
 
@@ -102,6 +113,25 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
       console.error(error);
     }
   };
+
+  // KOODI OPETTAJAN VIRALLE ALKAA
+
+  const [isTeacherPosition, setIsTeacherPosition] = useState(false);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+
+  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTeacherPosition(event.target.checked);
+    if (!event.target.checked) {
+      setSelectedSubjects([]);
+    }
+  };
+
+  const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
+    const { value } = event.target;
+    setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  // KOODI OPETTAJAN VIRALLE LOPPUU
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -350,6 +380,49 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
+                  {isTeacherPosition && (
+                    <Grid2 size={4}>
+                      <Field name="subjects">
+                        {({ input }) => (
+                          <FormControl fullWidth margin="normal">
+                            <InputLabel shrink={true} id="subjects">{`${t('create_position.subjects')}`}</InputLabel>
+                            <Select
+                              {...input}
+                              multiple
+                              value={selectedSubjects}
+                              onChange={handleSubjectChange}
+                              renderValue={(selected) => (
+                                <div>
+                                  {selected.map((subject) => (
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1 }} />
+                                  ))}
+                                </div>
+                              )}
+                              label={t('create_position.subjects')}
+                              displayEmpty
+                            >
+                              {activeSubjectNames.map((subject) => (
+                                <MenuItem key={subject.toString()} value={subject}>
+                                  <Checkbox checked={selectedSubjects.indexOf(subject) > -1} />
+                                  <ListItemText primary={subject} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </Grid2>
+                  )}
+                </Grid2>
+
+                <Grid2 size={2}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={isTeacherPosition} onChange={handleTeacherPositionChange} />
+                    }
+                    label={t('create_position.teacher')}
+                  />
                 </Grid2>
 
                 <Accordion sx={{ mt: 2, mb: 2 }} defaultExpanded>
