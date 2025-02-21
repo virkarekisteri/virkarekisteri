@@ -95,6 +95,10 @@ public class UpdateSubject(
         existingPosition.Type = updateDto.Type ?? existingPosition.Type;
         */
 
+        // Update the values of the existing subject
+        existingSubject.SubjectName = updateDto.SubjectName ?? existingSubject.SubjectName;
+        existingSubject.Active = updateDto.Active ?? existingSubject.Active;        
+
         await subjectRepository.UpdateSubject(existingSubject);
         return new NoContentResult(); // TODO: kommentoi pois kun logitus on valmis
 
