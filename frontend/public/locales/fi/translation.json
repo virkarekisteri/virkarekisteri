@@ -41,6 +41,8 @@
     "employee_name": "Viranhaltijan nimi",
     "details": "Viranhaltijan tiedot",
     "start_date": "Virkaan asettamispäivä",
+    "start_date_begins": "Virkaan asettamispäivä alkaen",
+    "start_date_ends": "Virkaan asettamispäivä päättyen",
     "ending_date": "Virkasopimuksen päättämispäivä",
     "no_end_date": "Ei määräaikaa",
     "save": "Tallenna",

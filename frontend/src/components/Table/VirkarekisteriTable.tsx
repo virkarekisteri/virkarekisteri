@@ -53,7 +53,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
   const [organizationTreeSearch, setOrganizationTreeSearch] = useState('');
-  const [startDateSearch, setStartDateSearch] = useState('');
+  const [startDateBeginsSearch, setStartDateBeginsSearch] = useState('');
+  const [startDateEndsSearch, setStartDateEndsSearch] = useState('');
   const [employeeNameSearch, setEmployeeNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
@@ -155,9 +156,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
 
       const employeeData = fetchedEmployees.find((emp) => emp && emp.id === position.positionEmployeeId);
 
-      const matchesStartDate = startDateSearch
+      const matchesStartDateBegin = startDateBeginsSearch
         ? employeeData &&
-          new Date(employeeData.startDate).setHours(0, 0, 0, 0) >= new Date(startDateSearch).setHours(0, 0, 0, 0)
+          new Date(employeeData.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+        : true;
+
+      const matchesStartDateEnding = startDateEndsSearch
+        ? employeeData &&
+          new Date(employeeData.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
         : true;
 
       const matchesEmployeeName = employeeNameSearch
@@ -172,7 +178,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesOrganizationTree &&
         matchesPositionType &&
         matchesVacancyStatus &&
-        matchesStartDate &&
+        matchesStartDateBegin &&
+        matchesStartDateEnding &&
         matchesEmployeeName
       );
     });
@@ -188,7 +195,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setPositionNameSearch('');
     setDecisionNumberSearch('');
     setOrganizationTreeSearch('');
-    setStartDateSearch('');
+    setStartDateBeginsSearch('');
+    setStartDateEndsSearch('');
     setEmployeeNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
@@ -387,10 +395,20 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </Grid2>
               <Grid2 size={4}>
                 <TextField
-                  label={t('employee.start_date')}
+                  label={t('employee.start_date_begins')}
                   type="date"
-                  value={startDateSearch}
-                  onChange={(e) => setStartDateSearch(e.target.value)}
+                  value={startDateBeginsSearch}
+                  onChange={(e) => setStartDateBeginsSearch(e.target.value)}
+                  fullWidth
+                  slotProps={{ inputLabel: { shrink: true } }}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <TextField
+                  label={t('employee.start_date_ends')}
+                  type="date"
+                  value={startDateEndsSearch}
+                  onChange={(e) => setStartDateEndsSearch(e.target.value)}
                   fullWidth
                   slotProps={{ inputLabel: { shrink: true } }}
                 />

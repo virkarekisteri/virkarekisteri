@@ -41,6 +41,8 @@
     "employee_name": "",
     "details": "",
     "start_date": "",
+    "start_date_begins": "",
+    "start_date_ends": "",
     "ending_date": "",
     "no_end_date": "",
     "save": "",
