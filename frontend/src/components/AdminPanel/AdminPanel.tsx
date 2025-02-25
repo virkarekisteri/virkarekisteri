@@ -17,38 +17,40 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import type { ChangeLogEntry } from 'models/ChangeLogEntry';
+import type { TeacherSubject } from 'models/TeacherSubject';
 import { useTranslation } from 'react-i18next';
 //import { formatTimestamp, getVacancyNumber } from './utils';
 //import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
-import { useGetChangeLogsQuery } from 'redux/api-slices/functions/changelogs-api';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
 const AdminPanel = () => {
   const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [filteredChangeLogs, setFilteredChangeLogs] = useState<ChangeLogEntry[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof ChangeLogEntry; direction: 'asc' | 'desc' } | null>(null);
+  const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchVacancyNumber, setSearchVacancyNumber] = useState('');
   const [searchDate, setSearchDate] = useState('');
 
   //const { data: positions = [], isLoading: positionsLoading } = useGetPositionsQuery();
-  const { data: changeLogs = [], isLoading: changeLogsLoading } = useGetChangeLogsQuery();
+  const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
 
-  const isLoading = /* positionsLoading || */ changeLogsLoading;
+  const isLoading = /* positionsLoading || */ teacherSubjectsLoading;
 
   useEffect(() => {
-    setFilteredChangeLogs(changeLogs);
-  }, [changeLogs]);
+    setFilteredTeacherSubjects(teacherSubjects);
+  }, [teacherSubjects]);
 
+  /*
   const getTranslatedField = (field: string) => {
     return t(`change_logs.fields.${field}`, field);
   };
+  */
 
   // Sorting logic
-  const handleSort = (key: keyof ChangeLogEntry) => {
+  const handleSort = (key: keyof TeacherSubject) => {
     setSortConfig((prevConfig) => {
       if (prevConfig && prevConfig.key === key) {
         return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
@@ -57,19 +59,19 @@ const AdminPanel = () => {
     });
   };
 
-  const sortedChangeLogs = React.useMemo(() => {
-    if (!sortConfig) return filteredChangeLogs;
+  const sortedTeacherSubjects = React.useMemo(() => {
+    if (!sortConfig) return filteredSubjects;
 
-    return [...filteredChangeLogs].sort((a, b) => {
+    return [...filteredSubjects].sort((a, b) => {
       const aValue = a[sortConfig.key] as string;
       const bValue = b[sortConfig.key] as string;
 
       return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
-  }, [filteredChangeLogs, sortConfig]);
+  }, [filteredSubjects, sortConfig]);
 
   // Pagination logic
-  const paginatedChangeLogs = sortedChangeLogs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedTeacherSubjects = sortedTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -82,7 +84,7 @@ const AdminPanel = () => {
 
   // Search logic
   const handleSearch = () => {
-    const filtered = changeLogs.filter((log) => {
+    const filtered = teacherSubjects.filter((log) => {
       /*
       const matchesVacancyNumber = searchVacancyNumber
         ? getVacancyNumber(log.positionId, positions).includes(searchVacancyNumber)
@@ -91,14 +93,14 @@ const AdminPanel = () => {
       */
       return 0; //matchesVacancyNumber && matchesDate;
     });
-    setFilteredChangeLogs(filtered);
+    setFilteredTeacherSubjects(filtered);
     setPage(0);
   };
 
   const handleResetSearch = () => {
     setSearchVacancyNumber('');
     setSearchDate('');
-    setFilteredChangeLogs(changeLogs);
+    setFilteredTeacherSubjects(teacherSubjects);
     setPage(0);
   };
 
@@ -228,12 +230,12 @@ const AdminPanel = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('decisionNumber')}
+                onClick={() => handleSort('SubjectName')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.name')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'decisionNumber' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'SubjectName' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -244,12 +246,12 @@ const AdminPanel = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('editor')}
+                onClick={() => handleSort('Active')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.status')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'editor' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'Active' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -258,14 +260,14 @@ const AdminPanel = () => {
 
           {/* Table Body */}
           <TableBody>
-            {paginatedChangeLogs.map((row) => (
-              <React.Fragment key={row.id}>
+            {paginatedTeacherSubjects.map((row) => (
+              <React.Fragment key={row.Id}>
                 <TableRow
                   sx={{
-                    backgroundColor: paginatedChangeLogs.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2),
+                    backgroundColor: paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2),
                     cursor: 'pointer',
                   }}
-                  onClick={() => handleRowToggle(row.id)}
+                  onClick={() => handleRowToggle(row.Id)}
                 >
                   {/* 
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
@@ -279,13 +281,14 @@ const AdminPanel = () => {
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     {getVacancyNumber(row.positionId, positions)}
                   </TableCell> */}
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{(row.editedField)}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.decisionNumber}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.SubjectName}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.Active}</TableCell>
                   {/* <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell> */}
                 </TableRow>
 
                 {/* Expanded Row */}
-                {expandedRow === row.id && (
+                {/* 
+                {expandedRow === row.Id && (
                   <TableRow>
                     <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
                       <Typography fontWeight="bold" sx={{ mb: 2 }}>
@@ -312,6 +315,7 @@ const AdminPanel = () => {
                     </TableCell>
                   </TableRow>
                 )}
+                */}
               </React.Fragment>
             ))}
           </TableBody>
@@ -322,7 +326,7 @@ const AdminPanel = () => {
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"
-          count={sortedChangeLogs.length}
+          count={sortedTeacherSubjects.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
