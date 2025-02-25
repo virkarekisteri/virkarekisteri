@@ -9,4 +9,5 @@ public class VirkarekisteriDb(DbContextOptions<VirkarekisteriDb> options) : DbCo
     public DbSet<OrganizationTree> OrganizationTrees { get; set; }
     public DbSet<PositionEmployee> PositionEmployees { get; set; }
     public DbSet<ChangeLog> ChangeLogs { get; set; }
+    public DbSet<Subject> Subjects { get; set; }
 }
