@@ -82,4 +82,6 @@ public class Position
     [Required]
     [Column("OnOpettaja")]
     public bool IsTeacher { get; set; } = false;
+
+    public List<PositionSubject> PositionSubjects { get; set; } = new List<PositionSubject>();
 }
