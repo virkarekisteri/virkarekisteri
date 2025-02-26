@@ -17,6 +17,7 @@ public class UpdatePositionDto
     public string? DecisionNumber { get; set; }
     public int? VacancyStatus { get; set; }
     public bool? IsTeacher { get; set; }
+    public List<Guid>? SubjectIds { get; set; } = new List<Guid>();
 }
 
 public class PositionNameDto
