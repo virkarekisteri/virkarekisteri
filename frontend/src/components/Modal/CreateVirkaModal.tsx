@@ -1,3 +1,5 @@
+import type {
+  SelectChangeEvent} from '@mui/material';
 import {
   Box,
   TextField,
@@ -17,7 +19,6 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-  SelectChangeEvent,
   Chip,
   ListItemText
 } from '@mui/material';
