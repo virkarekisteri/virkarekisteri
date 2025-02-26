@@ -7,10 +7,7 @@ const subjectsApi = baseApi.injectEndpoints({
       query: () => '/subjects',
       providesTags: (result) =>
         result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Subjects', id } as const)),
-              { type: 'Subjects' as const, id: 'LIST' },
-            ]
+          ? [...result.map(({ id }) => ({ type: 'Subjects', id }) as const), { type: 'Subjects' as const, id: 'LIST' }]
           : [{ type: 'Subjects' as const, id: 'LIST' }],
     }),
   }),

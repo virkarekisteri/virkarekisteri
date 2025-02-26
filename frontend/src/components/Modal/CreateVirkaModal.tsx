@@ -1,5 +1,4 @@
-import type {
-  SelectChangeEvent} from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   TextField,
@@ -20,7 +19,7 @@ import {
   Checkbox,
   FormControlLabel,
   Chip,
-  ListItemText
+  ListItemText,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -53,8 +52,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
 
   const activeSubjectNames = subjects
-    .filter(subject => subject.active === true)
-    .map(subject => subject.subjectName);
+    .filter((subject) => subject.active === true)
+    .map((subject) => subject.subjectName);
 
   const [createPosition] = useCreatePositionMutation();
 
@@ -405,17 +404,15 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                                   style: {
                                     maxHeight: 400,
                                   },
-                                }
+                                },
                               }}
                             >
-                              {activeSubjectNames
-                                .sort()
-                                .map((subject) => (
-                                  <MenuItem key={subject} value={subject}>
-                                    <Checkbox checked={selectedSubjects.includes(subject)} />
-                                    <ListItemText primary={subject} />
-                                  </MenuItem>
-                                ))}
+                              {activeSubjectNames.sort().map((subject) => (
+                                <MenuItem key={subject} value={subject}>
+                                  <Checkbox checked={selectedSubjects.includes(subject)} />
+                                  <ListItemText primary={subject} />
+                                </MenuItem>
+                              ))}
                             </Select>
                           </FormControl>
                         )}
@@ -426,9 +423,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 
                 <Grid2 size={2}>
                   <FormControlLabel
-                    control={
-                      <Checkbox checked={isTeacherPosition} onChange={handleTeacherPositionChange} />
-                    }
+                    control={<Checkbox checked={isTeacherPosition} onChange={handleTeacherPositionChange} />}
                     label={t('create_position.teacher')}
                   />
                 </Grid2>
