@@ -1,5 +1,5 @@
 export interface Subject {
   id: number;
-  name: string;
+  subjectName: string;
   active: boolean;
 }

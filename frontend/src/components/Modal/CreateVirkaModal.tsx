@@ -51,11 +51,28 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 
   const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
 
-  const activeSubjectNames = subjects.filter(subject => subject.active === true).map(subject => subject.name);
+  const activeSubjectNames = subjects
+    .filter(subject => subject.active === true)
+    .map(subject => subject.subjectName);
 
   const [createPosition] = useCreatePositionMutation();
 
   const positionNameOptions = positionNames.map((option) => option.name);
+
+  const [isTeacherPosition, setIsTeacherPosition] = useState(false);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+
+  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTeacherPosition(event.target.checked);
+    if (!event.target.checked) {
+      setSelectedSubjects([]);
+    }
+  };
+
+  const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
+    const { value } = event.target;
+    setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
+  };
 
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
@@ -113,25 +130,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
       console.error(error);
     }
   };
-
-  // KOODI OPETTAJAN VIRALLE ALKAA
-
-  const [isTeacherPosition, setIsTeacherPosition] = useState(false);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-
-  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsTeacherPosition(event.target.checked);
-    if (!event.target.checked) {
-      setSelectedSubjects([]);
-    }
-  };
-
-  const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
-    const { value } = event.target;
-    setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
-  };
-
-  // KOODI OPETTAJAN VIRALLE LOPPUU
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -401,13 +399,22 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               )}
                               label={t('create_position.subjects')}
                               displayEmpty
+                              MenuProps={{
+                                PaperProps: {
+                                  style: {
+                                    maxHeight: 400,
+                                  },
+                                }
+                              }}
                             >
-                              {activeSubjectNames.map((subject) => (
-                                <MenuItem key={subject.toString()} value={subject}>
-                                  <Checkbox checked={selectedSubjects.indexOf(subject) > -1} />
-                                  <ListItemText primary={subject} />
-                                </MenuItem>
-                              ))}
+                              {activeSubjectNames
+                                .sort()
+                                .map((subject) => (
+                                  <MenuItem key={subject} value={subject}>
+                                    <Checkbox checked={selectedSubjects.includes(subject)} />
+                                    <ListItemText primary={subject} />
+                                  </MenuItem>
+                                ))}
                             </Select>
                           </FormControl>
                         )}
