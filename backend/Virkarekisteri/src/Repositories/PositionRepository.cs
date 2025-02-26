@@ -45,7 +45,11 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     /// <returns>The requests Position</returns>
     public async Task<Position?> GetPosition(Guid id)
     {
-        return await db.Positions.Include(p => p.PositionName).FirstOrDefaultAsync(p => p.Id == id);
+        return await db
+            .Positions.Include(p => p.PositionName)
+            .Include(p => p.PositionSubjects) // Junction table
+            .ThenInclude(ps => ps.Subject) // Subjects
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     /// <summary>
@@ -59,6 +63,8 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
         {
             position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
         }
+
+        position.PositionSubjects ??= new List<PositionSubject>();
 
         await db.Positions.AddAsync(position);
         await db.SaveChangesAsync();
