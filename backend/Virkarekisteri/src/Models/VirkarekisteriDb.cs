@@ -14,20 +14,22 @@ public class VirkarekisteriDb(DbContextOptions<VirkarekisteriDb> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<PositionSubject>().ToTable("PositionSubject");
+
         // Many-to-many relationship between Position and Subject
-        modelBuilder.Entity<PositionSubject>().HasKey(ps => new { ps.PositionId, ps.SubjectId });
+        modelBuilder.Entity<PositionSubject>().HasKey(ps => new { ps.PositionId, ps.SubjectId }); // PK
 
         modelBuilder
             .Entity<PositionSubject>()
-            .HasOne(ps => ps.Position)
-            .WithMany(p => p.PositionSubjects)
+            .HasOne<Position>()
+            .WithMany()
             .HasForeignKey(ps => ps.PositionId)
             .HasConstraintName("FK_PositionSubject_Position");
 
         modelBuilder
             .Entity<PositionSubject>()
-            .HasOne(ps => ps.Subject)
-            .WithMany(s => s.PositionSubjects)
+            .HasOne<Subject>()
+            .WithMany()
             .HasForeignKey(ps => ps.SubjectId)
             .HasConstraintName("FK_PositionSubject_Subject");
     }

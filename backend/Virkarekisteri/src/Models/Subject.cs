@@ -16,6 +16,4 @@ public class Subject
     [Required]
     [Column("Aktiivinen")]
     public bool Active { get; set; }
-
-    public List<PositionSubject> PositionSubjects { get; set; } = new List<PositionSubject>();
 }
