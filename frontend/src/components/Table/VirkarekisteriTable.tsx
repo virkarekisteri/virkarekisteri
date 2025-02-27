@@ -37,7 +37,10 @@ interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
 }
 
-interface CustomData { replacement?: PositionEmployee, employee?: PositionEmployee }
+interface CustomData {
+  replacement?: PositionEmployee;
+  employee?: PositionEmployee;
+}
 
 const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const dispatch = useAppDispatch();
@@ -133,12 +136,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         .filter((position) => position?.positionEmployeeId)
         .map(async (position) => {
           // Haetaan viranhaltijan ja sijaisen tiedot rinnakkain
-          const customData: CustomData = {}
+          const customData: CustomData = {};
           const employee = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
           const replacementEmployee =
             employee.data?.inLeave && (await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true));
-          if (replacementEmployee) customData.replacement = replacementEmployee.data ?? undefined
-          customData.employee = employee.data ?? undefined
+          if (replacementEmployee) customData.replacement = replacementEmployee.data ?? undefined;
+          customData.employee = employee.data ?? undefined;
           return customData ?? null;
         }),
     ).then((data) => {
@@ -187,55 +190,55 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesStartDateBegin = startDateBeginsSearch
         ? employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement
           ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
-          new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
-          new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
-          new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
           : employeeNameSearch && employeeData?.employee
             ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
-            new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
             : replacementNameSearch && replacementData?.replacement
               ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
-              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-              : employeeData?.employee ?
-                new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
                 new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-                : replacementData?.replacement ?
-                  new Date(replacementData?.replacement?.startDate).setHours(0, 0, 0, 0) >=
+              : employeeData?.employee
+                ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
                   new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+                : replacementData?.replacement
+                  ? new Date(replacementData?.replacement?.startDate).setHours(0, 0, 0, 0) >=
+                    new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
                   : false
         : true;
 
       const matchesStartDateEnding = startDateEndsSearch
         ? employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement
           ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
-          new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
-          new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
-          new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
           : employeeNameSearch && employeeData?.employee
             ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
-            new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
             : replacementNameSearch && replacementData?.replacement
               ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
-              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-              : employeeData?.employee ?
-                new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <=
                 new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-                : replacementData?.replacement ?
-                  new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
+              : employeeData?.employee
+                ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <=
                   new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+                : replacementData?.replacement
+                  ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
+                    new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
                   : false
         : true;
 
       const matchesEmployeeName = employeeNameSearch
         ? employeeData &&
-        employeeData.employee &&
-        employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+          employeeData.employee &&
+          employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
         : true;
 
       const matchesReplacementName = replacementNameSearch
         ? replacementData &&
-        replacementData.replacement &&
-        replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+          replacementData.replacement &&
+          replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
