@@ -77,10 +77,21 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
             position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
         }
 
-        //position.PositionSubjects ??= new List<PositionSubject>();
-
+        // Save the position first to get the ID
         await db.Positions.AddAsync(position);
         await db.SaveChangesAsync();
+
+        // Save the subject IDs to the junction table
+        if (position.SubjectIds != null && position.SubjectIds.Any())
+        {
+            var positionSubjects = position
+                .SubjectIds.Select(subjectId => new PositionSubject { PositionId = position.Id, SubjectId = subjectId })
+                .ToList();
+
+            await db.PositionSubjects.AddRangeAsync(positionSubjects);
+            await db.SaveChangesAsync();
+        }
+
         return position;
     }
 
