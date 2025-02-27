@@ -19,7 +19,7 @@ public abstract class RequiredRoleAttribute(RoleHierarchy role) : Attribute
 public class RequiresReadRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Reader);
 
 [AttributeUsage(AttributeTargets.Method)]
-public class RequiresEditRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Reader);
+public class RequiresEditRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Editor);
 
 [AttributeUsage(AttributeTargets.Method)]
-public class RequiresAdminRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Reader);
+public class RequiresAdminRoleAttribute() : RequiredRoleAttribute(RoleHierarchy.Admin);

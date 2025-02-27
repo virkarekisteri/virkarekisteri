@@ -185,7 +185,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
             : (replacementNameSearch && replacementData) ?
               new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-              : true : true
+              : 
+            (employeeData || replacementData) ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) ||
+            new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) : false
+              : true
 
       const matchesStartDateEnding = startDateEndsSearch ?
         (employeeNameSearch && employeeData && replacementNameSearch && replacementData) ?
@@ -195,7 +198,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
             : (replacementNameSearch && replacementData) ?
               new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-              : true : true
+              : 
+              (employeeData || replacementData) ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) ||
+            new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) : false 
+              : true
 
       const matchesEmployeeName = employeeNameSearch
         ? (employeeData && employeeData.employee) && employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
