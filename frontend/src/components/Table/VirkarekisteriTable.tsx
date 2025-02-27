@@ -123,7 +123,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
   };
 
-
   const handleSearch = async () => {
     setLoading(true);
     const fetchedEmployees = await Promise.all(
@@ -131,11 +130,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         .filter((position) => position?.positionEmployeeId)
         .map(async (position) => {
           // Haetaan viranhaltijan ja sijaisen tiedot rinnakkain
-          const customData: { replacement: any, employee: any } = { replacement: {}, employee: {} }
+          const customData: { replacement: any; employee: any } = { replacement: {}, employee: {} };
           const employee = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
-          const replacementEmployee = employee.data?.inLeave && await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true);
-          replacementEmployee ? customData.replacement = replacementEmployee.data : '';
-          customData.employee = employee.data
+          const replacementEmployee =
+            employee.data?.inLeave && (await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true));
+          replacementEmployee ? (customData.replacement = replacementEmployee.data) : '';
+          customData.employee = employee.data;
           return customData ?? null;
         }),
     ).then((data) => {
@@ -174,41 +174,63 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
-      const employeeData = fetchedEmployees.find((emp) => emp.employee && emp.employee.id === position.positionEmployeeId);
-      const replacementData = fetchedEmployees.find((rep) => rep.replacement && rep.replacement.id === position.replacementEmployeeId);
+      const employeeData = fetchedEmployees.find(
+        (emp) => emp.employee && emp.employee.id === position.positionEmployeeId,
+      );
+      const replacementData = fetchedEmployees.find(
+        (rep) => rep.replacement && rep.replacement.id === position.replacementEmployeeId,
+      );
 
-      const matchesStartDateBegin = startDateBeginsSearch ?
-        (employeeNameSearch && employeeData && replacementNameSearch && replacementData) ?
-          (new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
-            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0))
-          : (employeeNameSearch && employeeData) ?
-            new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-            : (replacementNameSearch && replacementData) ?
-              new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-              : 
-            (employeeData || replacementData) ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) ||
-            new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) : false
-              : true
+      const matchesStartDateBegin = startDateBeginsSearch
+        ? employeeNameSearch && employeeData && replacementNameSearch && replacementData
+          ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+          : employeeNameSearch && employeeData
+            ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
+              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+            : replacementNameSearch && replacementData
+              ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
+                new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+              : employeeData || replacementData
+                ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) >=
+                    new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) ||
+                  new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) >=
+                    new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+                : false
+        : true;
 
-      const matchesStartDateEnding = startDateEndsSearch ?
-        (employeeNameSearch && employeeData && replacementNameSearch && replacementData) ?
-          (new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
-            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0))
-          : (employeeNameSearch && employeeData) ?
-            new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-            : (replacementNameSearch && replacementData) ?
-              new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-              : 
-              (employeeData || replacementData) ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) ||
-            new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) : false 
-              : true
+      const matchesStartDateEnding = startDateEndsSearch
+        ? employeeNameSearch && employeeData && replacementNameSearch && replacementData
+          ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+          : employeeNameSearch && employeeData
+            ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
+              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+            : replacementNameSearch && replacementData
+              ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
+                new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+              : employeeData || replacementData
+                ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <=
+                    new Date(startDateEndsSearch).setHours(0, 0, 0, 0) ||
+                  new Date(replacementData?.replacement.startDate).setHours(0, 0, 0, 0) <=
+                    new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+                : false
+        : true;
 
       const matchesEmployeeName = employeeNameSearch
-        ? (employeeData && employeeData.employee) && employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        ? employeeData &&
+          employeeData.employee &&
+          employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
         : true;
 
       const matchesReplacementName = replacementNameSearch
-        ? (replacementData && replacementData.replacement) && replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+        ? replacementData &&
+          replacementData.replacement &&
+          replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
