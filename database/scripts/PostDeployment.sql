@@ -12,6 +12,10 @@ PRINT 'INSERTING DATA TO OrganizationTree TABLE';
 :r .\Inserts\OrgTreeTulosyksikko.sql
 :r .\Inserts\OrgTreeKustannuspaikka.sql
 
+-- Insert data to Subjects table
+PRINT 'INSERTING DATA TO Subjects TABLE';
+:r .\Inserts\Subjects.sql
+
 -- Insert test data to Position table
 --PRINT 'INSERTING DATA TO Positions TABLE';
 --:r .\Inserts\Positions.sql

@@ -20,6 +20,7 @@
     <None Include="scripts\Inserts\OrgTreeTulosalue.sql" />
     <None Include="scripts\Inserts\OrgTreePalvelukeskus.sql" />
     <None Include="scripts\Inserts\OrgTreeKustannuspaikka.sql" />
+    <None Include="scripts\Inserts\Subjects.sql" />
   </ItemGroup>
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
