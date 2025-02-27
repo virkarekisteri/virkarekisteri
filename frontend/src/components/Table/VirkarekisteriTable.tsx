@@ -56,6 +56,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [startDateBeginsSearch, setStartDateBeginsSearch] = useState('');
   const [startDateEndsSearch, setStartDateEndsSearch] = useState('');
   const [employeeNameSearch, setEmployeeNameSearch] = useState('');
+  const [replacementNameSearch, setReplacementNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
 
@@ -102,6 +103,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     return <>{employee ? employee.employeeName : ''}</>;
   };
 
+  // Sijaisen nimi solukko - näytölle
+  const ReplacementNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
+    const { data: employee } = useGetPositionEmployeeQuery(params.row.replacementEmployeeId ?? skipToken);
+    return <>{employee && employee.replacement ? employee.employeeName : ''}</>;
+  };
+
   // Virkaan asettamispäivä solukko - näytölle
   const StartDateCell: React.FC<{ row: Position }> = ({ row }) => {
     const { data: employee } = useGetPositionEmployeeQuery(row.positionEmployeeId ?? skipToken);
@@ -109,14 +116,27 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
   };
 
+  // Sijaisuuden alkamispäivä solukko - näytölle
+  const ReplacementStartDateCell: React.FC<{ row: Position }> = ({ row }) => {
+    const { data: employee } = useGetPositionEmployeeQuery(row.replacementEmployeeId ?? skipToken);
+    if (!employee || !employee.startDate) return <></>;
+    return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
+  };
+
+
   const handleSearch = async () => {
     setLoading(true);
     const fetchedEmployees = await Promise.all(
       positions
         .filter((position) => position?.positionEmployeeId)
         .map(async (position) => {
-          const data = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
-          return data.data ?? null;
+          // Haetaan viranhaltijan ja sijaisen tiedot rinnakkain
+          const customData: { replacement: any, employee: any } = { replacement: {}, employee: {} }
+          const employee = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
+          const replacementEmployee = employee.data?.inLeave && await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true);
+          replacementEmployee ? customData.replacement = replacementEmployee.data : '';
+          customData.employee = employee.data
+          return customData ?? null;
         }),
     ).then((data) => {
       setLoading(false);
@@ -154,20 +174,35 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
-      const employeeData = fetchedEmployees.find((emp) => emp && emp.id === position.positionEmployeeId);
+      const employeeData = fetchedEmployees.find((emp) => emp.employee && emp.employee.id === position.positionEmployeeId);
+      const replacementData = fetchedEmployees.find((rep) => rep.replacement && rep.replacement.id === position.replacementEmployeeId);
 
-      const matchesStartDateBegin = startDateBeginsSearch
-        ? employeeData &&
-          new Date(employeeData.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-        : true;
+      const matchesStartDateBegin = startDateBeginsSearch ?
+        (employeeNameSearch && employeeData && replacementNameSearch && replacementData) ?
+          (new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0))
+          : (employeeNameSearch && employeeData) ?
+            new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+            : (replacementNameSearch && replacementData) ?
+              new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >= new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
+              : true : true
 
-      const matchesStartDateEnding = startDateEndsSearch
-        ? employeeData &&
-          new Date(employeeData.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-        : true;
+      const matchesStartDateEnding = startDateEndsSearch ?
+        (employeeNameSearch && employeeData && replacementNameSearch && replacementData) ?
+          (new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
+            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0))
+          : (employeeNameSearch && employeeData) ?
+            new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+            : (replacementNameSearch && replacementData) ?
+              new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <= new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
+              : true : true
 
       const matchesEmployeeName = employeeNameSearch
-        ? employeeData && employeeData.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        ? (employeeData && employeeData.employee) && employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        : true;
+
+      const matchesReplacementName = replacementNameSearch
+        ? (replacementData && replacementData.replacement) && replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
@@ -180,10 +215,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesVacancyStatus &&
         matchesStartDateBegin &&
         matchesStartDateEnding &&
-        matchesEmployeeName
+        matchesEmployeeName &&
+        matchesReplacementName
       );
     });
-
     setFilteredData(filtered);
     setPage(0);
     setLoading(false);
@@ -198,6 +233,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setStartDateBeginsSearch('');
     setStartDateEndsSearch('');
     setEmployeeNameSearch('');
+    setReplacementNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
     setFilteredData(positions);
@@ -303,6 +339,13 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       renderCell: (params: GridRenderCellParams<Position>) => <EmployeeNameCell {...params} />,
     },
     {
+      field: 'positionReplacementId',
+      headerName: t('employee.replacement_name'),
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementNameCell {...params} />,
+    },
+    {
       field: 'creationDecisionNumber',
       headerName: t('table.creation_decision_number'),
       flex: 1,
@@ -314,6 +357,13 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
+    },
+    {
+      field: 'replacement_start_date',
+      headerName: t('employee.replacement_start_date'),
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementStartDateCell row={params.row} />,
     },
   ];
 
@@ -386,15 +436,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </Grid2>
               <Grid2 size={4}>
                 <TextField
-                  label={t('table.organization_tree')}
-                  value={organizationTreeSearch}
-                  onChange={(e) => setOrganizationTreeSearch(e.target.value)}
-                  fullWidth
-                  slotProps={{ inputLabel: { shrink: true } }}
-                />
-              </Grid2>
-              <Grid2 size={4}>
-                <TextField
                   label={t('employee.start_date_begins')}
                   type="date"
                   value={startDateBeginsSearch}
@@ -415,9 +456,27 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </Grid2>
               <Grid2 size={4}>
                 <TextField
+                  label={t('table.organization_tree')}
+                  value={organizationTreeSearch}
+                  onChange={(e) => setOrganizationTreeSearch(e.target.value)}
+                  fullWidth
+                  slotProps={{ inputLabel: { shrink: true } }}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <TextField
                   label={t('employee.employee_name')}
                   value={employeeNameSearch}
                   onChange={(e) => setEmployeeNameSearch(e.target.value)}
+                  fullWidth
+                  slotProps={{ inputLabel: { shrink: true } }}
+                />
+              </Grid2>
+              <Grid2 size={4}>
+                <TextField
+                  label={t('employee.replacement_name')}
+                  value={replacementNameSearch}
+                  onChange={(e) => setReplacementNameSearch(e.target.value)}
                   fullWidth
                   slotProps={{ inputLabel: { shrink: true } }}
                 />
