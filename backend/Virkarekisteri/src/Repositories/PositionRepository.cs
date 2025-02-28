@@ -103,8 +103,33 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     /// <returns></returns>
     public async Task UpdatePosition(Position existingPosition)
     {
+        // Update the position details
         db.Positions.Update(existingPosition);
         await db.SaveChangesAsync();
+
+        // Remove old subjects that are no longer linked
+        await db
+            .PositionSubjects.Where(ps =>
+                ps.PositionId == existingPosition.Id && !existingPosition.SubjectIds.Contains(ps.SubjectId)
+            )
+            .ExecuteDeleteAsync();
+
+        // Add new subjects that are not yet linked
+        var existingSubjectIds = await db
+            .PositionSubjects.Where(ps => ps.PositionId == existingPosition.Id)
+            .Select(ps => ps.SubjectId)
+            .ToListAsync();
+
+        var newSubjectIds = existingPosition
+            .SubjectIds.Except(existingSubjectIds)
+            .Select(subjectId => new PositionSubject { PositionId = existingPosition.Id, SubjectId = subjectId })
+            .ToList();
+
+        if (newSubjectIds.Any())
+        {
+            await db.PositionSubjects.AddRangeAsync(newSubjectIds);
+            await db.SaveChangesAsync();
+        }
     }
 
     public async Task<Guid> GetOrgTreeIdByNumber(string number)
