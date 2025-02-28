@@ -21,16 +21,18 @@ public class VirkarekisteriDb(DbContextOptions<VirkarekisteriDb> options) : DbCo
 
         modelBuilder
             .Entity<PositionSubject>()
-            .HasOne<Position>()
+            .HasOne(ps => ps.Position)
             .WithMany()
             .HasForeignKey(ps => ps.PositionId)
-            .HasConstraintName("FK_PositionSubject_Position");
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_PositionSubject_Positions");
 
         modelBuilder
             .Entity<PositionSubject>()
-            .HasOne<Subject>()
+            .HasOne(ps => ps.Subject)
             .WithMany()
             .HasForeignKey(ps => ps.SubjectId)
-            .HasConstraintName("FK_PositionSubject_Subject");
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_PositionSubject_Subjects");
     }
 }

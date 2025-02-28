@@ -5,11 +5,17 @@ namespace Virkarekisteri.Models;
 
 public class PositionSubject
 {
-    [ForeignKey("Position")]
+    [Key]
+    [Column(Order = 1)]
     public Guid PositionId { get; set; }
+
+    [ForeignKey("PositionId")]
     public Position Position { get; set; }
 
-    [ForeignKey("Subject")]
+    [Key]
+    [Column(Order = 2)]
     public Guid SubjectId { get; set; }
+
+    [ForeignKey("SubjectId")]
     public Subject Subject { get; set; }
 }
