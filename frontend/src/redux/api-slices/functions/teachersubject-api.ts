@@ -7,7 +7,7 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
       query: () => '/subjects',
       providesTags: (result) =>
         result
-          ? [...result.map(({ Id }) => ({ type: 'TeacherSubjects', Id }) as const), { type: 'TeacherSubjects', id: 'LIST' }]
+          ? [...result.map(({ id }) => ({ type: 'TeacherSubjects', id }) as const), { type: 'TeacherSubjects', id: 'LIST' }]
           : [{ type: 'TeacherSubjects', id: 'LIST' }],
     }),
   /*

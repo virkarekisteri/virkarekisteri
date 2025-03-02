@@ -17,10 +17,10 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import type { TeacherSubject } from 'models/TeacherSubject';
 import { useTranslation } from 'react-i18next';
 //import { formatTimestamp, getVacancyNumber } from './utils';
 //import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
+import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
 const AdminPanel = () => {
@@ -143,6 +143,9 @@ const AdminPanel = () => {
     return value;
   };
 
+  console.log("asdf")
+  console.log(teacherSubjects)
+
   return (
     <Box>
       {/* Search Controls */}
@@ -230,7 +233,7 @@ const AdminPanel = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('SubjectName')}
+                onClick={() => handleSort('subjectName')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.name')}
@@ -246,7 +249,7 @@ const AdminPanel = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('Active')}
+                onClick={() => handleSort('active')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.status')}
@@ -261,13 +264,13 @@ const AdminPanel = () => {
           {/* Table Body */}
           <TableBody>
             {paginatedTeacherSubjects.map((row) => (
-              <React.Fragment key={row.Id}>
+              <React.Fragment key={row.id}>
                 <TableRow
                   sx={{
                     backgroundColor: paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2),
                     cursor: 'pointer',
                   }}
-                  onClick={() => handleRowToggle(row.Id)}
+                  onClick={() => handleRowToggle(row.id)}
                 >
                   {/* 
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
@@ -281,8 +284,8 @@ const AdminPanel = () => {
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     {getVacancyNumber(row.positionId, positions)}
                   </TableCell> */}
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.SubjectName}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.Active}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.active}</TableCell>
                   {/* <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell> */}
                 </TableRow>
 

@@ -1,5 +1,5 @@
 export interface TeacherSubject {
-  Id: string;
-  SubjectName: string;
-  Active: boolean;
+  id: string;
+  subjectName: string;
+  active: boolean;
 }
