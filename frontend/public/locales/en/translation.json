@@ -191,6 +191,9 @@
     "teacher_subjects": {
       "name": "Name",
       "status": "Status"
-    }
+    },
+    "search": {
+      "bySubjectName": "Search by subject name"
+    } 
   }
 }

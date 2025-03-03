@@ -18,8 +18,6 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
-//import { formatTimestamp, getVacancyNumber } from './utils';
-//import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
 import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
@@ -31,10 +29,8 @@ const AdminPanel = () => {
   const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchVacancyNumber, setSearchVacancyNumber] = useState('');
-  const [searchDate, setSearchDate] = useState('');
+  const [searchSubjectName, setSearchSubjectName] = useState('');
 
-  //const { data: positions = [], isLoading: positionsLoading } = useGetPositionsQuery();
   const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
 
   const isLoading = /* positionsLoading || */ teacherSubjectsLoading;
@@ -62,6 +58,26 @@ const AdminPanel = () => {
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
 
+    if (sortConfig.key == 'active') {
+      return [...filteredSubjects].sort((a, b) => {
+        const aActive = a[sortConfig.key] as boolean;
+        const bActive = b[sortConfig.key] as boolean;
+
+        if (aActive === bActive) {
+          // secondary sort by name  
+          const aName = a['subjectName'] as string;
+          const bName = b['subjectName'] as string;
+
+          return sortConfig.direction === 'asc' ? aName.localeCompare(bName) : bName.localeCompare(aName);
+        } else {
+          // primary sort by active/inactive
+        }
+
+        if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
+        else return aActive ? -1 : 1;
+      })
+    }
+
     return [...filteredSubjects].sort((a, b) => {
       const aValue = a[sortConfig.key] as string;
       const bValue = b[sortConfig.key] as string;
@@ -84,22 +100,19 @@ const AdminPanel = () => {
 
   // Search logic
   const handleSearch = () => {
-    const filtered = teacherSubjects.filter((log) => {
-      /*
-      const matchesVacancyNumber = searchVacancyNumber
-        ? getVacancyNumber(log.positionId, positions).includes(searchVacancyNumber)
+    const filtered = teacherSubjects.filter((s) => {
+      const matchesVacancyNumber = searchSubjectName
+        ? s['subjectName'].includes(searchSubjectName)
         : true;
-      const matchesDate = searchDate ? formatTimestamp(log.timestamp).includes(searchDate) : true;
-      */
-      return 0; //matchesVacancyNumber && matchesDate;
+      //const matchesDate = searchDate ? formatTimestamp(log.timestamp).includes(searchDate) : true;
+      return matchesVacancyNumber;// && matchesDate;
     });
     setFilteredTeacherSubjects(filtered);
     setPage(0);
   };
 
   const handleResetSearch = () => {
-    setSearchVacancyNumber('');
-    setSearchDate('');
+    setSearchSubjectName('');
     setFilteredTeacherSubjects(teacherSubjects);
     setPage(0);
   };
@@ -143,24 +156,15 @@ const AdminPanel = () => {
     return value;
   };
 
-  console.log("asdf")
-  console.log(teacherSubjects)
-
   return (
     <Box>
       {/* Search Controls */}
 
-      {/* 
       <Box display="flex" gap={2} mb={2}>
         <TextField
-          label={t('change_logs.search.byNumber')}
-          value={searchVacancyNumber}
-          onChange={(e) => setSearchVacancyNumber(e.target.value)}
-        />
-        <TextField
-          label={t('change_logs.search.byDate')}
-          value={searchDate}
-          onChange={(e) => setSearchDate(e.target.value)}
+          label={t('admin_panel.search.bySubjectName')}
+          value={searchSubjectName}
+          onChange={(e) => setSearchSubjectName(e.target.value)}
         />
         <Button variant="contained" onClick={handleSearch}>
           {t('search_filter.search')}
@@ -169,63 +173,13 @@ const AdminPanel = () => {
           {t('search_filter.reset')}
         </Button>
       </Box>
-      */}
 
       <TableContainer>
         <Table sx={{ minWidth: 650 }}>
           {/* Table Header */}
           <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
             <TableRow>
-              {/*
-              <TableCell
-                sx={{
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  padding: '8px 16px',
-                }}
-                onClick={() => handleSort('timestamp')}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  {t('change_logs.table.timestamp')}
-                  <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'timestamp' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                  </Box>
-                </Box>
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  padding: '8px 16px',
-                }}
-                onClick={() => handleSort('positionId')}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  {t('change_logs.table.vacancy_number')}
-                  <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'positionId' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                  </Box>
-                </Box>
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  padding: '8px 16px',
-                }}
-                onClick={() => handleSort('editedField')}
-              >
-                <Box display="flex" alignItems="center" gap={2}>
-                  {t('change_logs.table.edited_field')}
-                  <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'editedField' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                  </Box>
-                </Box>
-              </TableCell>
-              */}
+
               <TableCell
                 sx={{
                   color: 'white',
@@ -238,7 +192,7 @@ const AdminPanel = () => {
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.name')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'SubjectName' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'subjectName' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -254,7 +208,7 @@ const AdminPanel = () => {
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.status')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'Active' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'active' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -272,21 +226,9 @@ const AdminPanel = () => {
                   }}
                   onClick={() => handleRowToggle(row.id)}
                 >
-                  {/* 
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                    <Box display="flex" alignItems="center">
-                      <IconButton size="small" sx={{ ml: 1 }}>
-                        {expandedRow === row.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </IconButton>
-                      {formatTimestamp(row.timestamp)}
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                    {getVacancyNumber(row.positionId, positions)}
-                  </TableCell> */}
+
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.active}</TableCell>
-                  {/* <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.editor}</TableCell> */}
                 </TableRow>
 
                 {/* Expanded Row */}

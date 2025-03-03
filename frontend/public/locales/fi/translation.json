@@ -191,6 +191,9 @@
     "teacher_subjects": {
       "name": "Nimi",
       "status": "Tila"
-    }
+    },
+    "search": {
+      "bySubjectName": "Etsi aineen nimellä"
+    } 
   }
 }
