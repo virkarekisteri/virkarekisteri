@@ -190,7 +190,12 @@
   "admin_panel": {
     "teacher_subjects": {
       "name": "Nimi",
-      "status": "Tila"
+      "status": "Tila",
+      "details": "Aineen tiedot",
+      "active": "Aktiivinen",
+      "inactive": "Ei aktiivinen",
+      "edit_subject": "Muokkaa aineen tietoja",
+      "edit_history": "Muutoshistoria"
     },
     "search": {
       "bySubjectName": "Etsi aineen nimellä"

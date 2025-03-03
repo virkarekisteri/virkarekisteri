@@ -14,17 +14,19 @@ import {
   TablePagination,
   TextField,
   Button,
+  Grid2
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
 import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+import SubjectDetails from 'components/Details/SubjectDetails';
 
 const AdminPanel = () => {
   const { t } = useTranslation();
 
-  const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
   const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
@@ -57,24 +59,27 @@ const AdminPanel = () => {
 
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
-
+    console.log(sortConfig.direction)
+    
+    // sorting by active/inactive
     if (sortConfig.key == 'active') {
       return [...filteredSubjects].sort((a, b) => {
         const aActive = a[sortConfig.key] as boolean;
         const bActive = b[sortConfig.key] as boolean;
 
         if (aActive === bActive) {
-          // secondary sort by name  
+          // secondary sort by name, ascending
           const aName = a['subjectName'] as string;
           const bName = b['subjectName'] as string;
 
-          return sortConfig.direction === 'asc' ? aName.localeCompare(bName) : bName.localeCompare(aName);
+          return aName.localeCompare(bName);
+
         } else {
           // primary sort by active/inactive
+          if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
+          else return aActive ? -1 : 1;
         }
 
-        if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
-        else return aActive ? -1 : 1;
       })
     }
 
@@ -85,6 +90,9 @@ const AdminPanel = () => {
       return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
   }, [filteredSubjects, sortConfig]);
+
+
+
 
   // Pagination logic
   const paginatedTeacherSubjects = sortedTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -117,8 +125,8 @@ const AdminPanel = () => {
     setPage(0);
   };
 
-  const handleRowToggle = (id: string) => {
-    setExpandedRow(expandedRow === id ? null : id);
+  const handleRowToggle = (subject: TeacherSubject) => {
+    setExpandedRow(expandedRow && expandedRow.id === subject.id ? null : subject);
   };
 
   if (isLoading) {
@@ -128,34 +136,8 @@ const AdminPanel = () => {
       </Box>
     );
   }
-
-  const mapTypeValue = (value: string) => {
-    if (value === '1') {
-      return t('position_type.position');
-    } else if (value === '2') {
-      return t('position_type.post');
-    }
-    return value;
-  };
-
-  const transformToPercentage = (value: string | number | null) => {
-    if (value === null || value === undefined) {
-      return '-';
-    }
-    const numericValue = typeof value === 'number' ? value : parseFloat(value.replace(',', '.'));
-    if (!isNaN(numericValue)) {
-      return (numericValue * 100).toFixed(0); // Convert to percentage and fix to 0 decimal places
-    }
-    return value.toString();
-  };
-
-  const transformValue = (field: string, value: string | null) => {
-    if ((field === 'VacancyFill' || field === 'VacancySize') && value) {
-      return transformToPercentage(value);
-    }
-    return value;
-  };
-
+  
+  
   return (
     <Box>
       {/* Search Controls */}
@@ -221,46 +203,16 @@ const AdminPanel = () => {
               <React.Fragment key={row.id}>
                 <TableRow
                   sx={{
-                    backgroundColor: paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2),
+                    backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
                     cursor: 'pointer',
                   }}
-                  onClick={() => handleRowToggle(row.id)}
+                  onClick={() => handleRowToggle(row)}
                 >
 
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.active}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')}</TableCell>
                 </TableRow>
 
-                {/* Expanded Row */}
-                {/* 
-                {expandedRow === row.Id && (
-                  <TableRow>
-                    <TableCell colSpan={5} sx={{ padding: '16px', backgroundColor: '#F0F0F0' }}>
-                      <Typography fontWeight="bold" sx={{ mb: 2 }}>
-                        {t('change_logs.table.change')}
-                      </Typography>
-                      <Box display="flex" justifyContent="space-between" paddingX={5}>
-                        <Box sx={{ flex: 1, textAlign: 'left', paddingRight: 2 }}>
-                          <Typography fontWeight="bold">{t('change_logs.table.old_value')}</Typography>
-                          <Typography>
-                            {row.editedField === 'Type'
-                              ? mapTypeValue(row.oldValue)
-                              : (transformValue(row.editedField, row.oldValue) ?? '-')}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ flex: 1, textAlign: 'left', paddingLeft: 2 }}>
-                          <Typography fontWeight="bold">{t('change_logs.table.new_value')}</Typography>
-                          <Typography>
-                            {row.editedField === 'Type'
-                              ? mapTypeValue(row.newValue)
-                              : (transformValue(row.editedField, row.newValue) ?? '-')}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                )}
-                */}
               </React.Fragment>
             ))}
           </TableBody>
@@ -279,6 +231,16 @@ const AdminPanel = () => {
           labelRowsPerPage={t('table.rows_per_page')}
         />
       </Box>
+
+      <Grid2>
+          <Grid2 size={12}>
+          {
+            expandedRow ? <SubjectDetails position={expandedRow} /> : null
+          }
+          </Grid2>
+        </Grid2>
+
+
     </Box>
   );
 };

@@ -190,7 +190,12 @@
   "admin_panel": {
     "teacher_subjects": {
       "name": "Name",
-      "status": "Status"
+      "status": "Status",
+      "details":"Subject details",
+      "active": "Active",
+      "inactive": "Inactive",
+      "edit_subject": "Edit subject",
+      "edit_history": "Editing history"
     },
     "search": {
       "bySubjectName": "Search by subject name"
