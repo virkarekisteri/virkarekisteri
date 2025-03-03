@@ -337,19 +337,15 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.position_name'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => {
-        if (!params.row) return '';
-        const pos = params.row.positionName;
-        return pos && typeof pos === 'object' ? pos.name || '' : pos || '';
-      },
+      valueGetter: (params: { name: any }) => params.name || 'Error',
     },
     {
       field: 'orgTreeId',
       headerName: t('table.organization_tree'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => {
-        const id = params.row?.orgTreeId;
+      valueGetter: (params: any) => {
+        const id = params;
         if (!id || !organizationTrees) return '';
         const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
         return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
@@ -366,6 +362,24 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.vacancy_status'),
       flex: 1,
       sortable: true,
+      valueFormatter: (params: any) => {
+        const value: number = params;
+        let statusText = '';
+        switch (value) {
+          case 2:
+            statusText = t('vacancy_statuses.active');
+            break;
+          case 1:
+            statusText = t('vacancy_statuses.established');
+            break;
+          case 0:
+            statusText = t('vacancy_statuses.abolished');
+            break;
+          default:
+            break;
+        }
+        return statusText;
+      },
       renderCell: (params: GridRenderCellParams<Position>) => {
         const value = params.value;
         let statusText = '';
@@ -403,6 +417,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         );
       },
     },
+    // Molemmat employee vaativat ratkaisua
+    // TODO:
+    //     - toteuta/korjaa employee
+    //     - employee name ja employee start date
     {
       field: 'positionEmployeeId',
       headerName: t('table.employee_name'),
@@ -429,6 +447,15 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
+      valueGetter: (params: any) => {
+        console.log(params);
+      },
+    },
+    {
+      field: 'creationDecisionNumber',
+      headerName: t('table.creation_decision_number'),
+      flex: 1,
+      sortable: true,
     },
     {
       field: 'replacement_start_date',
