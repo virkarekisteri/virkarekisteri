@@ -64,7 +64,10 @@
     "placement_location": "",
     "vacancy_status": "",
     "position_name": "",
-    "employee_name": ""
+    "employee_name": "",
+    "replacement_name": "",
+    "replacement_start_date": "",
+    "replacement_end_date": ""
   },
   "tabs": {
     "positions": "",

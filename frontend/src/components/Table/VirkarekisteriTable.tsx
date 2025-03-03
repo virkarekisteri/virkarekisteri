@@ -187,58 +187,104 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         (rep) => rep.replacement && rep.replacement.id === position.replacementEmployeeId,
       );
 
-      const matchesStartDateBegin = startDateBeginsSearch
-        ? employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement
-          ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
-              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0) &&
-            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
-              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-          : employeeNameSearch && employeeData?.employee
-            ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
-              new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-            : replacementNameSearch && replacementData?.replacement
-              ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) >=
-                new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-              : employeeData?.employee
-                ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) >=
-                  new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-                : replacementData?.replacement
-                  ? new Date(replacementData?.replacement?.startDate).setHours(0, 0, 0, 0) >=
-                    new Date(startDateBeginsSearch).setHours(0, 0, 0, 0)
-                  : false
-        : true;
+      const setDate = (date: string) => {
+        return new Date(date).setHours(0, 0, 0, 0)
+      }
+   
+      const employeeStartDate = String(employeeData?.employee?.startDate)
+      const replacementStartDate = String(replacementData?.replacement?.startDate)
 
-      const matchesStartDateEnding = startDateEndsSearch
-        ? employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement
-          ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
-              new Date(startDateEndsSearch).setHours(0, 0, 0, 0) &&
-            new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
-              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-          : employeeNameSearch && employeeData?.employee
-            ? new Date(employeeData.employee.startDate).setHours(0, 0, 0, 0) <=
-              new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-            : replacementNameSearch && replacementData?.replacement
-              ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
-                new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-              : employeeData?.employee
-                ? new Date(employeeData?.employee.startDate).setHours(0, 0, 0, 0) <=
-                  new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-                : replacementData?.replacement
-                  ? new Date(replacementData.replacement.startDate).setHours(0, 0, 0, 0) <=
-                    new Date(startDateEndsSearch).setHours(0, 0, 0, 0)
-                  : false
-        : true;
+      let matchesStartDateBegin = true;
+
+      // Tarkistetaan onko virkaan asettamisen alkamispäivällä haettu
+      if (startDateBeginsSearch) {
+
+        // Tarkistetaan onko viranhaltijalla sekä sijaisella haettu
+        if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
+
+          // Jos viranhaltijan ja sijaisen alkamisaika on pienempi kuin haku, niin ei oteta mukaan eli false...
+          if (setDate(employeeStartDate) <
+            setDate(startDateBeginsSearch) &&
+            setDate(replacementStartDate) <
+            setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false
+          }
+        }
+        // Haetaan vain viranhaltijalla, jos pienempi alkamisaika kuin haku, annetaan false
+        else if (employeeNameSearch && employeeData?.employee) {
+          if (setDate(employeeStartDate) <
+            setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false
+          }
+        }
+        // Haetaan vain sijaisella, jos pienempi alkamisaika kuin haku, annetaan false
+        else if (replacementNameSearch && replacementData?.replacement) {
+          if (setDate(replacementStartDate) <
+            setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false
+          }
+        }
+        // Haetaan vain alkamisajalla ja tarkistettava item on viranhaltija
+        else if (employeeData?.employee) {
+          if (setDate(employeeStartDate) <
+            setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false
+          }
+        }
+        // Haetaan vain alkamisajalla ja tarkistettava item on sijainen
+        else if (replacementData?.replacement) {
+          if (setDate(employeeStartDate) <
+            setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false
+          }
+        }
+      }
+
+      // Sama kuin yllä, mutta katsotaan virkaan asettamispäivää päättyen
+
+      let matchesStartDateEnding = true
+
+      if (startDateEndsSearch) {
+        if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
+          if (setDate(employeeStartDate) >
+            setDate(startDateEndsSearch) &&
+            setDate(replacementStartDate) >
+            setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false
+          }
+        } else if (employeeNameSearch && employeeData?.employee) {
+          if (setDate(employeeStartDate) >
+            setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false
+          }
+        } else if (replacementNameSearch && replacementData?.replacement) {
+          if (setDate(replacementStartDate) >
+            setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false
+          }
+        } else if (employeeData?.employee) {
+          if (setDate(employeeStartDate) >
+            setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false
+          }
+        } else if (replacementData?.replacement) {
+          if (setDate(employeeStartDate) >
+            setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false
+          }
+        }
+      }
 
       const matchesEmployeeName = employeeNameSearch
         ? employeeData &&
-          employeeData.employee &&
-          employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        employeeData.employee &&
+        employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
         : true;
 
       const matchesReplacementName = replacementNameSearch
         ? replacementData &&
-          replacementData.replacement &&
-          replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+        replacementData.replacement &&
+        replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
@@ -376,7 +422,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     },
     {
       field: 'positionReplacementId',
-      headerName: t('employee.replacement_name'),
+      headerName: t('table.replacement_name'),
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <ReplacementNameCell {...params} />,
@@ -389,14 +435,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     },
     {
       field: 'start_date',
-      headerName: t('employee.start_date'),
+      headerName: t('table.start_date'),
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
     },
     {
       field: 'replacement_start_date',
-      headerName: t('employee.replacement_start_date'),
+      headerName: t('table.replacement_start_date'),
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams<Position>) => <ReplacementStartDateCell row={params.row} />,

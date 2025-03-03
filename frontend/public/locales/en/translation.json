@@ -64,7 +64,10 @@
     "rows_per_page": "Rows per page",
     "organization_tree": "Organization tree",
     "position_name": "Position name",
-    "employee_name": "Employee name"
+    "employee_name": "Employee name",
+    "replacement_name": "Name of replacement",
+    "replacement_start_date": "Replacement start date",
+    "replacement_end_date": "Replacement end date"
   },
   "tabs": {
     "positions": "Positions list",
