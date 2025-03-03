@@ -41,6 +41,8 @@
     "employee_name": "Employee name",
     "details": "Employee details",
     "start_date": "Start date",
+    "start_date_begins": "Start date begins",
+    "start_date_ends": "Start date ends",
     "ending_date": "Ending date",
     "no_end_date": "No end date",
     "save": "Save",
@@ -62,7 +64,10 @@
     "rows_per_page": "Rows per page",
     "organization_tree": "Organization tree",
     "position_name": "Position name",
-    "employee_name": "Employee name"
+    "employee_name": "Employee name",
+    "replacement_name": "Name of replacement",
+    "replacement_start_date": "Replacement start date",
+    "replacement_end_date": "Replacement end date"
   },
   "tabs": {
     "positions": "Positions list",
