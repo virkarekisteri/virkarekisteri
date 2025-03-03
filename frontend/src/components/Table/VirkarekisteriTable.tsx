@@ -26,8 +26,6 @@ import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
-import { useGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
 
@@ -73,6 +71,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     const stored = localStorage.getItem('dataGridRowsPerPage');
     return stored ? parseInt(stored, 10) : 10;
   });
+  const [enrichedPositions, setEnrichedPositions] = useState<Position[]>([]);
 
   // Valitut rivit
   const [, setSelectedRows] = useState<Position[]>([]);
@@ -99,77 +98,67 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     localStorage.setItem('dataGridRowsPerPage', rowsPerPage.toString());
   }, [rowsPerPage]);
 
+  //useEffect(() => {
+  //  setFilteredData(positions);
+  //}, [positions]);
+
   useEffect(() => {
-    setFilteredData(positions);
-  }, [positions]);
+    async function enrichPositionsData() {
+      setLoading(true);
+      // Haetaan kaikki viranhaltijan ja mahdollisen sijaisen tiedot Promise.allilla.
+      const fetchedEmployees: (CustomData | null)[] = await Promise.all(
+        positions
+          .filter((position) => position?.positionEmployeeId)
+          .map(async (position) => {
+            const customData: CustomData = {};
+            const employee = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
+            const replacementEmployee =
+              employee.data?.inLeave && (await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true));
+            if (replacementEmployee) {
+              customData.replacement = replacementEmployee.data ?? undefined;
+            }
+            customData.employee = employee.data ?? undefined;
+            return customData;
+          }),
+      );
 
-  // Viranhaltijan nimi solukko - näytölle
-  const EmployeeNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
-    const { data: employee } = useGetPositionEmployeeQuery(params.row.positionEmployeeId ?? skipToken);
-    return <>{employee ? employee.employeeName : ''}</>;
-  };
+      // Rikastetaan jokainen position lisäämällä muunnetut kentät
+      const positionsEnriched = positions.map((pos) => {
+        const custom = fetchedEmployees.find((cd: CustomData | null) => cd?.employee?.id === pos.positionEmployeeId);
 
-  // Sijaisen nimi solukko - näytölle
-  const ReplacementNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
-    const { data: employee } = useGetPositionEmployeeQuery(params.row.replacementEmployeeId ?? skipToken);
-    return <>{employee && employee.replacement ? employee.employeeName : ''}</>;
-  };
-
-  // Virkaan asettamispäivä solukko - näytölle
-  const StartDateCell: React.FC<{ row: Position }> = ({ row }) => {
-    const { data: employee } = useGetPositionEmployeeQuery(row.positionEmployeeId ?? skipToken);
-    if (!employee || !employee.startDate) return <></>;
-    return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
-  };
-
-  // Virkasopimuksen päättämispäivä solukko - näytölle
-  const EndDateCell: React.FC<{ row: Position }> = ({ row }) => {
-    const { data: employee } = useGetPositionEmployeeQuery(row.positionEmployeeId ?? skipToken);
-    if (!employee || !employee.endingDate) return <></>;
-    return <>{format(new Date(employee.endingDate), 'dd.MM.yyyy')}</>;
-  };
-
-  // Sijaisen nimi solukko - näytölle
-  const ReplacementNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
-    const { data: employee } = useGetPositionEmployeeQuery(params.row.replacementEmployeeId ?? skipToken);
-    return <>{employee && employee.replacement ? employee.employeeName : ''}</>;
-  };
-
-  // Sijaisuuden alkamispäivä solukko - näytölle
-  const ReplacementStartDateCell: React.FC<{ row: Position }> = ({ row }) => {
-    const { data: employee } = useGetPositionEmployeeQuery(row.replacementEmployeeId ?? skipToken);
-    if (!employee || !employee.startDate) return <></>;
-    return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
-  };
-
-  // Sijaisuuden päättymispäivä solukko - näytölle
-  const ReplacementEndDateCell: React.FC<{ row: Position }> = ({ row }) => {
-    const { data: employee } = useGetPositionEmployeeQuery(row.replacementEmployeeId ?? skipToken);
-    if (!employee || !employee.endingDate) return <></>;
-    return <>{format(new Date(employee.endingDate), 'dd.MM.yyyy')}</>;
-  };
-
-  const handleSearch = async () => {
-    setLoading(true);
-    const fetchedEmployees = await Promise.all(
-      positions
-        .filter((position) => position?.positionEmployeeId)
-        .map(async (position) => {
-          // Haetaan viranhaltijan ja sijaisen tiedot rinnakkain
-          const customData: CustomData = {};
-          const employee = await lazyEmployeeTrigger(position?.positionEmployeeId ?? '', true);
-          const replacementEmployee =
-            employee.data?.inLeave && (await lazyEmployeeTrigger(position?.replacementEmployeeId ?? '', true));
-          if (replacementEmployee) customData.replacement = replacementEmployee.data ?? undefined;
-          customData.employee = employee.data ?? undefined;
-          return customData ?? null;
-        }),
-    ).then((data) => {
+        return {
+          ...pos,
+          employeeName: custom?.employee?.employeeName || '',
+          employeeStartDate: custom?.employee?.startDate
+            ? format(new Date(custom.employee.startDate), 'dd.MM.yyyy')
+            : '',
+          employeeEndDate: custom?.employee?.endingDate
+            ? format(new Date(custom.employee.endingDate), 'dd.MM.yyyy')
+            : '',
+          replacementName: custom?.replacement?.employeeName || '',
+          replacementStartDate: custom?.replacement?.startDate
+            ? format(new Date(custom.replacement.startDate), 'dd.MM.yyyy')
+            : '',
+          replacementEndDate: custom?.replacement?.endingDate
+            ? format(new Date(custom.replacement.endingDate), 'dd.MM.yyyy')
+            : '',
+        };
+      });
+      // Tallennetaan rikastettu data omaan tilaan ja alustetaan filteredData sillä
+      setEnrichedPositions(positionsEnriched);
+      setFilteredData(positionsEnriched);
       setLoading(false);
-      return data;
-    });
+    }
 
-    const filtered = positions.filter((position) => {
+    if (positions.length > 0) {
+      enrichPositionsData();
+    }
+  }, [positions, lazyEmployeeTrigger]);
+
+  const handleSearch = () => {
+    setLoading(true);
+
+    const filtered = enrichedPositions.filter((position) => {
       if (!position) return false;
 
       const matchesVacancyNumber = vacancyNumberSearch
@@ -200,55 +189,55 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
-      const employeeData = fetchedEmployees.find(
-        (emp) => emp.employee && emp.employee.id === position.positionEmployeeId,
-      );
-      const replacementData = fetchedEmployees.find(
-        (rep) => rep.replacement && rep.replacement.id === position.replacementEmployeeId,
-      );
-
-      const setDate = (date: string) => {
-        return new Date(date).setHours(0, 0, 0, 0);
+      const parseDate = (dateStr: string): number => {
+        if (dateStr.includes('.')) {
+          const [day, month, year] = dateStr.split('.');
+          return new Date(+year, +month - 1, +day).setHours(0, 0, 0, 0);
+        }
+        return new Date(dateStr).setHours(0, 0, 0, 0);
       };
 
-      const employeeStartDate = String(employeeData?.employee?.startDate);
-      const replacementStartDate = String(replacementData?.replacement?.startDate);
+      const employeeStartDate = position.employeeStartDate;
+      const replacementStartDate = position.replacementStartDate;
 
       let matchesStartDateBegin = true;
 
       // Tarkistetaan onko virkaan asettamisen alkamispäivällä haettu
       if (startDateBeginsSearch) {
+        if (!position.employeeStartDate && !position.replacementStartDate) {
+          matchesStartDateBegin = false;
+        }
         // Tarkistetaan onko viranhaltijalla sekä sijaisella haettu
-        if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
+        else if (employeeNameSearch && position.employeeName && replacementNameSearch && position.replacementName) {
           // Jos viranhaltijan ja sijaisen alkamisaika on pienempi kuin haku, niin ei oteta mukaan eli false...
           if (
-            setDate(employeeStartDate) < setDate(startDateBeginsSearch) &&
-            setDate(replacementStartDate) < setDate(startDateBeginsSearch)
+            parseDate(employeeStartDate) < parseDate(startDateBeginsSearch) &&
+            parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)
           ) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain viranhaltijalla, jos pienempi alkamisaika kuin haku, annetaan false
-        else if (employeeNameSearch && employeeData?.employee) {
-          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+        else if (employeeNameSearch && position.employeeName) {
+          if (parseDate(employeeStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain sijaisella, jos pienempi alkamisaika kuin haku, annetaan false
-        else if (replacementNameSearch && replacementData?.replacement) {
-          if (setDate(replacementStartDate) < setDate(startDateBeginsSearch)) {
+        else if (replacementNameSearch && position.replacementName) {
+          if (parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on viranhaltija
-        else if (employeeData?.employee) {
-          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+        else if (position.employeeName) {
+          if (parseDate(employeeStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on sijainen
-        else if (replacementData?.replacement) {
-          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+        else if (position.replacementName) {
+          if (parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
@@ -257,44 +246,41 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       // Sama kuin yllä, mutta katsotaan virkaan asettamispäivää päättyen
 
       let matchesStartDateEnding = true;
-
       if (startDateEndsSearch) {
-        if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
+        if (!position.employeeEndDate && !position.replacementEndDate) {
+          matchesStartDateEnding = false;
+        } else if (employeeNameSearch && position.employeeName && replacementNameSearch && position.replacementName) {
           if (
-            setDate(employeeStartDate) > setDate(startDateEndsSearch) &&
-            setDate(replacementStartDate) > setDate(startDateEndsSearch)
+            parseDate(employeeStartDate) > parseDate(startDateEndsSearch) &&
+            parseDate(replacementStartDate) > parseDate(startDateEndsSearch)
           ) {
             matchesStartDateEnding = false;
           }
-        } else if (employeeNameSearch && employeeData?.employee) {
-          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+        } else if (employeeNameSearch && position.employeeName) {
+          if (parseDate(employeeStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (replacementNameSearch && replacementData?.replacement) {
-          if (setDate(replacementStartDate) > setDate(startDateEndsSearch)) {
+        } else if (replacementNameSearch && position.replacementName) {
+          if (parseDate(replacementStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (employeeData?.employee) {
-          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+        } else if (position.employeeName) {
+          if (parseDate(employeeStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (replacementData?.replacement) {
-          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+        } else if (position.replacementName) {
+          if (parseDate(replacementStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
         }
       }
 
       const matchesEmployeeName = employeeNameSearch
-        ? employeeData &&
-          employeeData.employee &&
-          employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        ? position.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
         : true;
 
       const matchesReplacementName = replacementNameSearch
-        ? replacementData &&
-          replacementData.replacement &&
-          replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+        ? position.replacementName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
@@ -328,7 +314,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setReplacementNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
-    setFilteredData(positions);
+    setFilteredData(enrichedPositions);
     setPage(0);
   };
 
@@ -365,7 +351,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
       valueGetter: (params: any) => {
-        console.log(params);
         const id = params;
         if (!id || !organizationTrees) return '';
         const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
@@ -438,79 +423,72 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         );
       },
     },
-    // Molemmat employee vaativat ratkaisua
-    // TODO:
-    //     - toteuta/korjaa employee
-    //     - employee name ja employee start date
+
     {
-      field: 'positionEmployeeId',
+      field: 'employeeName',
       headerName: t('table.employee_name'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => <EmployeeNameCell {...params} />,
-      valueGetter: (params: any) => {
-        //console.log(params);
-      },
     },
     {
-      field: 'start_date',
+      field: 'employeeStartDate',
       headerName: t('table.start_date'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
-      valueGetter: (params: any) => {
-        //console.log(params);
-      },
+      valueFormatter: (params: any) => params || '',
     },
     {
-      field: 'end_date',
+      field: 'employeeEndDate',
       headerName: t('employee.ending_date'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => <EndDateCell row={params.row} />,
-      valueGetter: (params: any) => {
-        //console.log(params);
-      },
+      valueFormatter: (params: any) => params || '',
     },
     {
-      field: 'positionReplacementId',
+      field: 'replacementName',
       headerName: t('employee.replacement_name'),
       flex: 1,
       sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementNameCell {...params} />,
+      valueFormatter: (params: any) => params || '',
     },
     {
-      field: 'replacement_start_date',
+      field: 'replacementStartDate',
       headerName: t('employee.replacement_start_date'),
       flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementStartDateCell row={params.row} />,
+      sortable: true,
+      valueFormatter: (params: any) => params || '',
     },
     {
-      field: 'replacement_end_date',
+      field: 'replacementEndDate',
       headerName: t('employee.replacement_end_date'),
       flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementEndDateCell row={params.row} />,
+      sortable: true,
+      valueFormatter: (params: any) => params || '',
     },
+
+    // ----------------------------------------------------
+
     {
       field: 'type',
       headerName: t('table.type'),
       flex: 1,
       sortable: true,
+      valueFormatter: (params: number) => {
+        switch (params) {
+          case 1:
+            return 'Virka';
+          case 2:
+            return 'Toimi';
+          default:
+            return params;
+        }
+      },
     },
     {
       field: 'creationDecisionNumber',
       headerName: t('table.creation_decision_number'),
       flex: 1,
       sortable: true,
-    },
-    {
-      field: 'replacement_start_date',
-      headerName: t('table.replacement_start_date'),
-      flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementStartDateCell row={params.row} />,
     },
   ];
 

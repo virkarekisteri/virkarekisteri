@@ -67,7 +67,8 @@
     "employee_name": "",
     "replacement_name": "",
     "replacement_start_date": "",
-    "replacement_end_date": ""
+    "replacement_end_date": "",
+    "start_date": ""
   },
   "tabs": {
     "positions": "",

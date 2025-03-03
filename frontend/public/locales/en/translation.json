@@ -67,7 +67,8 @@
     "employee_name": "Employee name",
     "replacement_name": "Name of replacement",
     "replacement_start_date": "Replacement start date",
-    "replacement_end_date": "Replacement end date"
+    "replacement_end_date": "Replacement end date",
+    "start_date": "Start date"
   },
   "tabs": {
     "positions": "Positions list",

@@ -67,7 +67,8 @@
     "employee_name": "Viranhaltijan nimi",
     "replacement_name": "Sijaisen nimi",
     "replacement_start_date": "Sijaisuuden alkamispäivä",
-    "replacement_end_date": "Sijaisuuden päättymispäivä"
+    "replacement_end_date": "Sijaisuuden päättymispäivä",
+    "start_date": "Virkaan asettamispäivä"
   },
   "tabs": {
     "positions": "Virkalistaus",
