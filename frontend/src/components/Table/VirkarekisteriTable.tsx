@@ -122,11 +122,31 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
   };
 
+  // Virkasopimuksen päättämispäivä solukko - näytölle
+  const EndDateCell: React.FC<{ row: Position }> = ({ row }) => {
+    const { data: employee } = useGetPositionEmployeeQuery(row.positionEmployeeId ?? skipToken);
+    if (!employee || !employee.endingDate) return <></>;
+    return <>{format(new Date(employee.endingDate), 'dd.MM.yyyy')}</>;
+  };
+
+  // Sijaisen nimi solukko - näytölle
+  const ReplacementNameCell: React.FC<GridRenderCellParams<Position>> = (params) => {
+    const { data: employee } = useGetPositionEmployeeQuery(params.row.replacementEmployeeId ?? skipToken);
+    return <>{employee && employee.replacement ? employee.employeeName : ''}</>;
+  };
+
   // Sijaisuuden alkamispäivä solukko - näytölle
   const ReplacementStartDateCell: React.FC<{ row: Position }> = ({ row }) => {
     const { data: employee } = useGetPositionEmployeeQuery(row.replacementEmployeeId ?? skipToken);
     if (!employee || !employee.startDate) return <></>;
     return <>{format(new Date(employee.startDate), 'dd.MM.yyyy')}</>;
+  };
+
+  // Sijaisuuden päättymispäivä solukko - näytölle
+  const ReplacementEndDateCell: React.FC<{ row: Position }> = ({ row }) => {
+    const { data: employee } = useGetPositionEmployeeQuery(row.replacementEmployeeId ?? skipToken);
+    if (!employee || !employee.endingDate) return <></>;
+    return <>{format(new Date(employee.endingDate), 'dd.MM.yyyy')}</>;
   };
 
   const handleSearch = async () => {
@@ -345,6 +365,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
       valueGetter: (params: any) => {
+        console.log(params);
         const id = params;
         if (!id || !organizationTrees) return '';
         const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
@@ -427,19 +448,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <EmployeeNameCell {...params} />,
-    },
-    {
-      field: 'positionReplacementId',
-      headerName: t('table.replacement_name'),
-      flex: 1,
-      sortable: true,
-      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementNameCell {...params} />,
-    },
-    {
-      field: 'creationDecisionNumber',
-      headerName: t('table.creation_decision_number'),
-      flex: 1,
-      sortable: true,
+      valueGetter: (params: any) => {
+        //console.log(params);
+      },
     },
     {
       field: 'start_date',
@@ -448,8 +459,45 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       sortable: true,
       renderCell: (params: GridRenderCellParams<Position>) => <StartDateCell row={params.row} />,
       valueGetter: (params: any) => {
-        console.log(params);
+        //console.log(params);
       },
+    },
+    {
+      field: 'end_date',
+      headerName: t('employee.ending_date'),
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams<Position>) => <EndDateCell row={params.row} />,
+      valueGetter: (params: any) => {
+        //console.log(params);
+      },
+    },
+    {
+      field: 'positionReplacementId',
+      headerName: t('employee.replacement_name'),
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementNameCell {...params} />,
+    },
+    {
+      field: 'replacement_start_date',
+      headerName: t('employee.replacement_start_date'),
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementStartDateCell row={params.row} />,
+    },
+    {
+      field: 'replacement_end_date',
+      headerName: t('employee.replacement_end_date'),
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Position>) => <ReplacementEndDateCell row={params.row} />,
+    },
+    {
+      field: 'type',
+      headerName: t('table.type'),
+      flex: 1,
+      sortable: true,
     },
     {
       field: 'creationDecisionNumber',
