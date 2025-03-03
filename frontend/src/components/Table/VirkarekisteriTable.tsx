@@ -188,103 +188,93 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       );
 
       const setDate = (date: string) => {
-        return new Date(date).setHours(0, 0, 0, 0)
-      }
-   
-      const employeeStartDate = String(employeeData?.employee?.startDate)
-      const replacementStartDate = String(replacementData?.replacement?.startDate)
+        return new Date(date).setHours(0, 0, 0, 0);
+      };
+
+      const employeeStartDate = String(employeeData?.employee?.startDate);
+      const replacementStartDate = String(replacementData?.replacement?.startDate);
 
       let matchesStartDateBegin = true;
 
       // Tarkistetaan onko virkaan asettamisen alkamispäivällä haettu
       if (startDateBeginsSearch) {
-
         // Tarkistetaan onko viranhaltijalla sekä sijaisella haettu
         if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
-
           // Jos viranhaltijan ja sijaisen alkamisaika on pienempi kuin haku, niin ei oteta mukaan eli false...
-          if (setDate(employeeStartDate) <
-            setDate(startDateBeginsSearch) &&
-            setDate(replacementStartDate) <
-            setDate(startDateBeginsSearch)) {
-            matchesStartDateBegin = false
+          if (
+            setDate(employeeStartDate) < setDate(startDateBeginsSearch) &&
+            setDate(replacementStartDate) < setDate(startDateBeginsSearch)
+          ) {
+            matchesStartDateBegin = false;
           }
         }
         // Haetaan vain viranhaltijalla, jos pienempi alkamisaika kuin haku, annetaan false
         else if (employeeNameSearch && employeeData?.employee) {
-          if (setDate(employeeStartDate) <
-            setDate(startDateBeginsSearch)) {
-            matchesStartDateBegin = false
+          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false;
           }
         }
         // Haetaan vain sijaisella, jos pienempi alkamisaika kuin haku, annetaan false
         else if (replacementNameSearch && replacementData?.replacement) {
-          if (setDate(replacementStartDate) <
-            setDate(startDateBeginsSearch)) {
-            matchesStartDateBegin = false
+          if (setDate(replacementStartDate) < setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on viranhaltija
         else if (employeeData?.employee) {
-          if (setDate(employeeStartDate) <
-            setDate(startDateBeginsSearch)) {
-            matchesStartDateBegin = false
+          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on sijainen
         else if (replacementData?.replacement) {
-          if (setDate(employeeStartDate) <
-            setDate(startDateBeginsSearch)) {
-            matchesStartDateBegin = false
+          if (setDate(employeeStartDate) < setDate(startDateBeginsSearch)) {
+            matchesStartDateBegin = false;
           }
         }
       }
 
       // Sama kuin yllä, mutta katsotaan virkaan asettamispäivää päättyen
 
-      let matchesStartDateEnding = true
+      let matchesStartDateEnding = true;
 
       if (startDateEndsSearch) {
         if (employeeNameSearch && employeeData?.employee && replacementNameSearch && replacementData?.replacement) {
-          if (setDate(employeeStartDate) >
-            setDate(startDateEndsSearch) &&
-            setDate(replacementStartDate) >
-            setDate(startDateEndsSearch)) {
-            matchesStartDateEnding = false
+          if (
+            setDate(employeeStartDate) > setDate(startDateEndsSearch) &&
+            setDate(replacementStartDate) > setDate(startDateEndsSearch)
+          ) {
+            matchesStartDateEnding = false;
           }
         } else if (employeeNameSearch && employeeData?.employee) {
-          if (setDate(employeeStartDate) >
-            setDate(startDateEndsSearch)) {
-            matchesStartDateEnding = false
+          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false;
           }
         } else if (replacementNameSearch && replacementData?.replacement) {
-          if (setDate(replacementStartDate) >
-            setDate(startDateEndsSearch)) {
-            matchesStartDateEnding = false
+          if (setDate(replacementStartDate) > setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false;
           }
         } else if (employeeData?.employee) {
-          if (setDate(employeeStartDate) >
-            setDate(startDateEndsSearch)) {
-            matchesStartDateEnding = false
+          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false;
           }
         } else if (replacementData?.replacement) {
-          if (setDate(employeeStartDate) >
-            setDate(startDateEndsSearch)) {
-            matchesStartDateEnding = false
+          if (setDate(employeeStartDate) > setDate(startDateEndsSearch)) {
+            matchesStartDateEnding = false;
           }
         }
       }
 
       const matchesEmployeeName = employeeNameSearch
         ? employeeData &&
-        employeeData.employee &&
-        employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+          employeeData.employee &&
+          employeeData.employee.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
         : true;
 
       const matchesReplacementName = replacementNameSearch
         ? replacementData &&
-        replacementData.replacement &&
-        replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+          replacementData.replacement &&
+          replacementData.replacement.employeeName.toLowerCase().includes(replacementNameSearch.toLowerCase())
         : true;
 
       return (
