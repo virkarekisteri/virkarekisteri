@@ -29,8 +29,6 @@ import { clearSelectedPosition, selectPosition } from 'redux/slices/position-sli
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
 
-/* eslint-disable react/prop-types */
-
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
 }
@@ -338,14 +336,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.position_name'),
       flex: 1,
       sortable: true,
-      valueGetter: (params: { name: any }) => params.name || 'Error',
+      valueGetter: (params: { name: string }) => params.name || 'Error',
     },
     {
       field: 'orgTreeId',
       headerName: t('table.organization_tree'),
       flex: 1,
       sortable: true,
-      valueGetter: (params: any) => {
+      valueGetter: (params: string) => {
         const id = params;
         if (!id || !organizationTrees) return '';
         const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
@@ -363,7 +361,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.vacancy_status'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => {
+      valueFormatter: (params: number) => {
         const value: number = params;
         let statusText = '';
         switch (value) {
@@ -429,35 +427,35 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.start_date'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => params || '',
+      valueFormatter: (params: string) => params || '',
     },
     {
       field: 'employeeEndDate',
       headerName: t('employee.ending_date'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => params || '',
+      valueFormatter: (params: string) => params || '',
     },
     {
       field: 'replacementName',
       headerName: t('employee.replacement_name'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => params || '',
+      valueFormatter: (params: string) => params || '',
     },
     {
       field: 'replacementStartDate',
       headerName: t('employee.replacement_start_date'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => params || '',
+      valueFormatter: (params: string) => params || '',
     },
     {
       field: 'replacementEndDate',
       headerName: t('employee.replacement_end_date'),
       flex: 1,
       sortable: true,
-      valueFormatter: (params: any) => params || '',
+      valueFormatter: (params: string) => params || '',
     },
     {
       field: 'type',
