@@ -29,8 +29,6 @@ import { clearSelectedPosition, selectPosition } from 'redux/slices/position-sli
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
 
- 
-
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
 }
