@@ -38,6 +38,15 @@ interface CustomData {
   employee?: PositionEmployee;
 }
 
+// Käsittelee päivämäärät
+const parseDate = (dateStr: string): number => {
+  if (dateStr.includes('.')) {
+    const [day, month, year] = dateStr.split('.');
+    return new Date(+year, +month - 1, +day).setHours(0, 0, 0, 0);
+  }
+  return new Date(dateStr).setHours(0, 0, 0, 0);
+};
+
 const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -183,17 +192,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
-      const parseDate = (dateStr: string): number => {
-        if (dateStr.includes('.')) {
-          const [day, month, year] = dateStr.split('.');
-          return new Date(+year, +month - 1, +day).setHours(0, 0, 0, 0);
-        }
-        return new Date(dateStr).setHours(0, 0, 0, 0);
-      };
-
       const employeeStartDate = position.employeeStartDate;
       const replacementStartDate = position.replacementStartDate;
-
       let matchesStartDateBegin = true;
 
       // Tarkistetaan onko virkaan asettamisen alkamispäivällä haettu
@@ -480,7 +480,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       sortable: true,
     },
   ];
-
   return (
     <>
       {/* Hakusuodattimet Accordion-komponentissa */}
