@@ -29,7 +29,7 @@ import { clearSelectedPosition, selectPosition } from 'redux/slices/position-sli
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
 
-/* eslint-disable react/prop-types */
+ 
 
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
