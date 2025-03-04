@@ -42,5 +42,4 @@ export interface Position {
   isTeacher?: boolean;
 
   subjectIds?: string[];
-
 }

@@ -71,10 +71,12 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   };
 
   const selectedSubjectIds = isTeacherPosition
-    ? selectedSubjects.map((subjectName) => {
-        const subject = subjects.find((s) => s.subjectName === subjectName);
-        return subject ? subject.id : null;
-      }).filter((id) => id !== null)
+    ? selectedSubjects
+        .map((subjectName) => {
+          const subject = subjects.find((s) => s.subjectName === subjectName);
+          return subject ? subject.id : null;
+        })
+        .filter((id) => id !== null)
     : [];
 
   const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
@@ -410,7 +412,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               renderValue={(selected) => (
                                 <div>
                                   {selected.map((subject) => (
-                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25}} />
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
                                   ))}
                                 </div>
                               )}
