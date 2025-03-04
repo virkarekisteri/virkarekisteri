@@ -38,4 +38,9 @@ export interface Position {
   orgTreeId: string;
 
   vacancyStatus: number;
+
+  isTeacher?: boolean;
+
+  subjectIds?: string[];
+
 }

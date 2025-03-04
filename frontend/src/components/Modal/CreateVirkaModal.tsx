@@ -35,6 +35,7 @@ import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -69,6 +70,13 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     }
   };
 
+  const selectedSubjectIds = isTeacherPosition
+    ? selectedSubjects.map((subjectName) => {
+        const subject = subjects.find((s) => s.subjectName === subjectName);
+        return subject ? subject.id : null;
+      }).filter((id) => id !== null)
+    : [];
+
   const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
     const { value } = event.target;
     setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
@@ -99,6 +107,13 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     return undefined;
   };
 
+  useEffect(() => {
+    if (!open) {
+      setIsTeacherPosition(false);
+      setSelectedSubjects([]);
+    }
+  }, [open]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
     const positionNameObj: PositionName = {
@@ -122,6 +137,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
         vacancyStatus: 1,
+        isTeacher: isTeacherPosition,
+        subjectIds: isTeacherPosition ? selectedSubjectIds : [],
       };
 
       createPosition(positionData);
@@ -393,7 +410,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               renderValue={(selected) => (
                                 <div>
                                   {selected.map((subject) => (
-                                    <Chip key={subject} label={subject} sx={{ marginRight: 1 }} />
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25}} />
                                   ))}
                                 </div>
                               )}
