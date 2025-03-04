@@ -98,10 +98,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     localStorage.setItem('dataGridRowsPerPage', rowsPerPage.toString());
   }, [rowsPerPage]);
 
-  //useEffect(() => {
-  //  setFilteredData(positions);
-  //}, [positions]);
-
   useEffect(() => {
     async function enrichPositionsData() {
       setLoading(true);
@@ -244,7 +240,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       }
 
       // Sama kuin yllä, mutta katsotaan virkaan asettamispäivää päättyen
-
       let matchesStartDateEnding = true;
       if (startDateEndsSearch) {
         if (!position.employeeEndDate && !position.replacementEndDate) {
@@ -423,7 +418,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         );
       },
     },
-
     {
       field: 'employeeName',
       headerName: t('table.employee_name'),
@@ -465,9 +459,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       sortable: true,
       valueFormatter: (params: any) => params || '',
     },
-
-    // ----------------------------------------------------
-
     {
       field: 'type',
       headerName: t('table.type'),
