@@ -42,8 +42,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const getTeacherSubjects = () => {
     if (position.isTeacher && position.subjectIds && subjects.length > 0) {
       return position.subjectIds
-        .map(subjectId => {
-          const subject = subjects.find(s => s.id === subjectId);
+        .map((subjectId) => {
+          const subject = subjects.find((s) => s.id === subjectId);
           return subject ? subject.subjectName : null;
         })
         .filter((subjectName): subjectName is string => subjectName !== null);
@@ -217,12 +217,9 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('create_position.subjects')}
               </Typography>
-              <RenderReadonlyTextField
-                value={teacherSubjects.join(', ')}
-              />
+              <RenderReadonlyTextField value={teacherSubjects.join(', ')} />
             </Grid2>
           )}
-
         </Grid2>
 
         <Accordion sx={{ mt: 2, mb: 4 }}>
