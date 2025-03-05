@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   TextField,
@@ -14,7 +15,6 @@ import {
   Autocomplete,
   FormControlLabel,
   Checkbox,
-  SelectChangeEvent,
   Chip,
   ListItemText,
 } from '@mui/material';
@@ -68,8 +68,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
   useEffect(() => {
     if (subjects.length > 0 && position.subjectIds && position.subjectIds.length > 0) {
       const subjectNames = position.subjectIds
-        .map(subjectId => {
-          const matchedSubject = subjects.find(s => s.id === subjectId);
+        .map((subjectId) => {
+          const matchedSubject = subjects.find((s) => s.id === subjectId);
           return matchedSubject ? matchedSubject.subjectName : null;
         })
         .filter((subjectName): subjectName is string => subjectName !== null);
@@ -90,8 +90,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   const subjectIds = isTeacherPosition
     ? selectedSubjects
-      .map(subjectName => subjects.find(s => s.subjectName === subjectName)?.id)
-      .filter((id): id is string => id !== undefined)
+        .map((subjectName) => subjects.find((s) => s.subjectName === subjectName)?.id)
+        .filter((id): id is string => id !== undefined)
     : undefined;
 
   const filteredOrgTrees = organizationTrees
@@ -427,12 +427,17 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                   {/* Is teacher checkbox */}
                   <Grid2 size={6}>
                     <FormControlLabel
-                      control={<Checkbox checked={isTeacherPosition} onChange={() => {
-                        if (isTeacherPosition) {
-                          setSelectedSubjects([]);
-                        }
-                        setIsTeacherPosition(!isTeacherPosition)
-                      }} />}
+                      control={
+                        <Checkbox
+                          checked={isTeacherPosition}
+                          onChange={() => {
+                            if (isTeacherPosition) {
+                              setSelectedSubjects([]);
+                            }
+                            setIsTeacherPosition(!isTeacherPosition);
+                          }}
+                        />
+                      }
                       label={t('edit_position.teacher')}
                     />
                   </Grid2>
@@ -461,7 +466,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               MenuProps={{
                                 PaperProps: {
                                   style: {
-                                    maxHeight: 400
+                                    maxHeight: 400,
                                   },
                                 },
                               }}
