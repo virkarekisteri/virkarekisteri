@@ -1,4 +1,6 @@
 import React from 'react';
+import type {
+  SelectChangeEvent} from '@mui/material';
 import {
   Box,
   TextField,
@@ -14,7 +16,6 @@ import {
   Autocomplete,
   FormControlLabel,
   Checkbox,
-  SelectChangeEvent,
   Chip,
   ListItemText,
 } from '@mui/material';
