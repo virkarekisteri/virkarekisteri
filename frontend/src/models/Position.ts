@@ -38,4 +38,16 @@ export interface Position {
   orgTreeId: string;
 
   vacancyStatus: number;
+
+  employeeName: string;
+
+  employeeStartDate: string;
+
+  employeeEndDate: string;
+
+  replacementName: string;
+
+  replacementStartDate: string;
+
+  replacementEndDate: string;
 }
