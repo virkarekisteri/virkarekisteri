@@ -165,7 +165,9 @@
     "details": "",
     "eligibility": "",
     "creation_decision_number": "",
-    "creation_description": ""
+    "creation_description": "",
+    "teacher": "",
+    "subjects": ""
   },
   "error": {
     "pricing_id_error": ""

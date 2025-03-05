@@ -166,7 +166,9 @@
     "details": "Position details",
     "eligibility": "Eligibility",
     "creation_decision_number": "Creation decision number",
-    "creation_description": "Decision description"
+    "creation_description": "Decision description",
+    "teacher": "Teacher",
+    "subjects": "Subjects"
   },
   "error": {
     "pricing_id_error": "Pricing ID can only be upto 20 characters long",
