@@ -77,7 +77,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
       setSelectedSubjects(subjectNames);
     }
     setIsTeacherPosition(position.isTeacher || false);
-  }, [subjects, position.subjectIds]);
+  }, [subjects, position.subjectIds, position.isTeacher]);
 
   const activeSubjectNames = subjects
     .filter((subject) => subject.active === true)
