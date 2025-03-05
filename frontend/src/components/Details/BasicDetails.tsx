@@ -9,6 +9,7 @@ import type { Position } from 'models/Position';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface BasicDetailsProps {
   position: Position;
@@ -18,6 +19,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
 
   const { data: orgTrees = [] } = useGetOrganizationTreesQuery();
+
+  const { data: subjects = [] } = useGetSubjectsQuery();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -35,6 +38,20 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const handleCloseEndModal = () => setOpenEndModal(false);
 
   const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
+
+  const getTeacherSubjects = () => {
+    if (position.isTeacher && position.subjectIds && subjects.length > 0) {
+      return position.subjectIds
+        .map(subjectId => {
+          const subject = subjects.find(s => s.id === subjectId);
+          return subject ? subject.subjectName : null;
+        })
+        .filter((subjectName): subjectName is string => subjectName !== null);
+    }
+    return [];
+  };
+
+  const teacherSubjects = getTeacherSubjects();
 
   const statusTextMap: Record<number, string> = {
     2: t('vacancy_statuses.active'),
@@ -195,6 +212,17 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             </Typography>
             <RenderReadonlyTextField value={position.pricingId?.toString()} />
           </Grid2>
+          {position.isTeacher && (
+            <Grid2 size={12} px={2}>
+              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                {t('create_position.subjects')}
+              </Typography>
+              <RenderReadonlyTextField
+                value={teacherSubjects.join(', ')}
+              />
+            </Grid2>
+          )}
+
         </Grid2>
 
         <Accordion sx={{ mt: 2, mb: 4 }}>
