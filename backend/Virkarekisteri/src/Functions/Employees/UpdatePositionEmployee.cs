@@ -53,7 +53,7 @@ public class UpdatePositionEmployee(
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
-        void LogChange(string field, string? oldValue, string? newValue)
+        void PositionLogChange(string field, string? oldValue, string? newValue)
         {
             if (oldValue != newValue)
             {
@@ -71,18 +71,22 @@ public class UpdatePositionEmployee(
             }
         }
 
-        LogChange(
+        PositionLogChange(
             "StartDate",
             existingPositionEmployee.StartDate.ToString("yyyy-MM-dd"),
             updateDto.StartDate?.ToString("yyyy-MM-dd")
         );
-        LogChange(
+        PositionLogChange(
             "EndingDate",
             existingPositionEmployee.EndingDate?.ToString("yyyy-MM-dd"),
             updateDto.EndingDate?.ToString("yyyy-MM-dd")
         );
-        LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), updateDto.PositionId?.ToString());
-        LogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
+        PositionLogChange(
+            "PositionId",
+            existingPositionEmployee.PositionId.ToString(),
+            updateDto.PositionId?.ToString()
+        );
+        PositionLogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
 
         if (updateDto.InLeave.HasValue && !updateDto.InLeave.Value && existingPositionEmployee.InLeave)
         {
@@ -106,7 +110,7 @@ public class UpdatePositionEmployee(
                     position.ReplacementEmployeeId = null;
 
                     // Substitute is removed
-                    LogChange("Substitute", currentSubstituteName, existingPositionEmployee.EmployeeName);
+                    PositionLogChange("Substitute", currentSubstituteName, existingPositionEmployee.EmployeeName);
                     await positionRepository.UpdatePosition(position);
                 }
             }
