@@ -112,7 +112,11 @@ public class UpdatePosition(
         PositionLogChange("IsTeacher", existingPosition.IsTeacher.ToString(), updateDto.IsTeacher?.ToString());
         existingPosition.IsTeacher = updateDto.IsTeacher ?? existingPosition.IsTeacher;
 
-        // TODO: PositionSubject liitoksen logitus
+        PositionLogChange(
+            "PositionSubjects",
+            existingPosition.SubjectIds.Any() ? string.Join(", ", existingPosition.SubjectIds) : string.Empty,
+            updateDto.SubjectIds.Any() ? string.Join(", ", updateDto.SubjectIds) : string.Empty
+        );
         existingPosition.SubjectIds = updateDto.SubjectIds ?? existingPosition.SubjectIds;
 
         if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
