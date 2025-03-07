@@ -12,8 +12,8 @@ namespace Virkarekisteri.Functions.Subjects;
 
 public class UpdateSubject(
     ILogger<UpdateSubject> logger,
-    ISubjectRepository subjectRepository,
-    IChangeLogRepository changeLogRepository
+    ISubjectRepository subjectRepository
+// TODO CRUD: IChangeLogRepository changeLogRepository
 )
 {
     /// <summary>
@@ -47,7 +47,7 @@ public class UpdateSubject(
         if (existingSubject == null)
             return new NotFoundResult();
 
-        // TODO: ChangeLogit aineen muokkauksesta
+        // TODO: ChangeLogit aineen muokkauksesta, oma CRUDChangeLog yms.
         /*
         var changeLogs = new List<ChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
@@ -102,7 +102,7 @@ public class UpdateSubject(
         await subjectRepository.UpdateSubject(existingSubject);
         return new NoContentResult(); // TODO: kommentoi pois kun logitus on valmis
 
-        // TODO: More logging...
+        // TODO: More logging... CRUDChangeLog yms.
         /*
         foreach (var changeLog in changeLogs)
         {

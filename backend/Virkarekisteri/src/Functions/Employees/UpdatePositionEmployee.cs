@@ -13,7 +13,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
     IPositionEmployeeRepository positionEmployeeRepository,
-    IChangeLogRepository changeLogRepository,
+    IPositionChangeLogRepository positionChangeLogRepository,
     IPositionRepository positionRepository
 )
 {
@@ -49,7 +49,7 @@ public class UpdatePositionEmployee(
         if (existingPositionEmployee == null)
             return new NotFoundResult();
 
-        var changeLogs = new List<ChangeLog>();
+        var positionChangeLogs = new List<PositionChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
@@ -57,8 +57,8 @@ public class UpdatePositionEmployee(
         {
             if (oldValue != newValue)
             {
-                changeLogs.Add(
-                    new ChangeLog
+                positionChangeLogs.Add(
+                    new PositionChangeLog
                     {
                         PositionId = existingPositionEmployee.PositionId,
                         EditedField = field,
@@ -124,9 +124,9 @@ public class UpdatePositionEmployee(
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 
-        foreach (var changeLog in changeLogs)
+        foreach (var positionChangeLog in positionChangeLogs)
         {
-            await changeLogRepository.AddChangeLogEntry(changeLog);
+            await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
         }
 
         return new OkObjectResult(existingPositionEmployee);
