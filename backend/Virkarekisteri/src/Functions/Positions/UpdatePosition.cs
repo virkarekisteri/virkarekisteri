@@ -13,7 +13,7 @@ public class UpdatePosition(
     ILogger<UpdatePosition> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IChangeLogRepository changeLogRepository,
+    IPositionChangeLogRepository positionChangeLogRepository,
     IOrganizationTreeRepository organizationTreeRepository
 )
 {
@@ -60,7 +60,7 @@ public class UpdatePosition(
         if (existingPosition == null)
             return new NotFoundResult();
 
-        var changeLogs = new List<ChangeLog>();
+        var positionChangeLogs = new List<PositionChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
@@ -141,9 +141,9 @@ public class UpdatePosition(
 
         await positionRepository.UpdatePosition(existingPosition);
 
-        foreach (var changeLog in changeLogs)
+        foreach (var positionChangeLog in positionChangeLogs)
         {
-            await changeLogRepository.AddChangeLogEntry(changeLog);
+            await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
         }
 
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
@@ -155,8 +155,8 @@ public class UpdatePosition(
             if (AreValuesEquivalent(oldValue, newValue))
                 return;
 
-            changeLogs.Add(
-                new ChangeLog
+            positionChangeLogs.Add(
+                new PositionChangeLog
                 {
                     PositionId = positionId,
                     EditedField = field,

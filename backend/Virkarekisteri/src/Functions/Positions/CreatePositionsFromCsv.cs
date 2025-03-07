@@ -13,7 +13,7 @@ public class CreatePositionsFromCsv(
     ILogger<CreatePositionsFromCsv> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IChangeLogRepository changeLogRepository
+    IPositionChangeLogRepository positionChangeLogRepository
 )
 {
     [Function("CreatePositionsFromCsv")]
@@ -143,7 +143,7 @@ public class CreatePositionsFromCsv(
                 var createdPosition = await positionRepository.CreatePosition(position);
 
                 var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
-                var changeLog = new ChangeLog
+                var positionChangeLog = new PositionChangeLog
                 {
                     Id = Guid.NewGuid(),
                     PositionId = createdPosition.Id,
@@ -154,7 +154,7 @@ public class CreatePositionsFromCsv(
                     Timestamp = DateTime.Now,
                     DecisionNumber = createdPosition.CreationDecisionNumber,
                 };
-                await changeLogRepository.AddChangeLogEntry(changeLog);
+                await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
             }
             catch (Exception ex)
             {

@@ -5,9 +5,12 @@ using Microsoft.Extensions.Logging;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Functions.ChangeLogs;
+namespace Virkarekisteri.Functions.PositionChangeLogs;
 
-public class GetPositionChangeLog(ILogger<GetPositionChangeLog> logger, IChangeLogRepository changeLogRepository)
+public class GetPositionChangeLog(
+    ILogger<GetPositionChangeLog> logger,
+    IPositionChangeLogRepository positionChangeLogRepository
+)
 {
     [Function("GetPositionChangeLog")]
     [RequiresReadRole]
@@ -26,10 +29,10 @@ public class GetPositionChangeLog(ILogger<GetPositionChangeLog> logger, IChangeL
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["positionId"]} as a Guid");
         }
 
-        var changeLogs = await changeLogRepository.GetChangeLogsByPositionId(positionId);
+        var positionChangeLogs = await positionChangeLogRepository.GetPositionChangeLogsByPositionId(positionId);
 
-        if (changeLogs.Count != 0)
-            return new OkObjectResult(changeLogs);
+        if (positionChangeLogs.Count != 0)
+            return new OkObjectResult(positionChangeLogs);
 
         logger.LogInformation("No change logs found for position ID: {PositionId}", positionId);
         return new OkObjectResult(new List<object>());
