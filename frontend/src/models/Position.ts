@@ -39,6 +39,18 @@ export interface Position {
 
   vacancyStatus: number;
 
+  employeeName: string;
+
+  employeeStartDate: string;
+
+  employeeEndDate: string;
+
+  replacementName: string;
+
+  replacementStartDate: string;
+
+  replacementEndDate: string;
+
   isTeacher?: boolean;
 
   subjectIds?: string[];
