@@ -28,6 +28,7 @@ import { useUpdateTeacherSubjectMutation } from 'redux/api-slices/functions/teac
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 //import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { idID } from '@mui/material/locale';
 
 interface EditSubjectModalProps {
   open: boolean;
@@ -118,7 +119,8 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
         decisionNumber: values.decisionNumber,
        */
       };
-      updateSubject({ id: position.id, subject: updateData });
+      console.log(updateData)
+      //updateSubject({ id: position.id, subject: updateData });
       handleClose();
     } catch (error) {
       console.error('Failed to update position:', error);
@@ -171,19 +173,9 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
             onSubmit={onSubmit}
             initialValues={{
               subjectName: position.subjectName,
-              active: true
+              active: false
 
-/*               type: position.type,
-              vacancySize: (Number(position.vacancySize) * 100).toFixed(),
-              vacancyFill: (Number(position.vacancyFill) * 100).toFixed(),
-              positionName: position.positionName,
-              orgTree: position.orgTreeId,
-              placementLocation: position.placementLocation,
-              pricingId: position.pricingId,
-              educationLevel: position.educationLevel,
-              workExperience: position.workExperience,
-              details: position.details,
-              vacancyNumber: position.vacancyNumber, */
+
             }}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
@@ -194,102 +186,13 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                       {t('position.details')}
                     </Typography>
                   </Box>
+
+
+                  {/* Name */}
                   <Grid2 size={12}>
-                    <Field name="active" type="checkbox">
-                    {({input}) => (
-                     /*  <FormControlLabel control={ */<Checkbox {...input} checked={input.active} /* name="active" *//>/* } label="aktiivinen" /> */
-                    )}
-                    </Field>
-                  </Grid2>
-
-                  {/* Static Vacancy Number */}
-{/*                   <Grid2 size={12}>
-                    <Typography component="div" fontWeight="bold">
-                      {t('edit_position.vacancy_number')}
-                    </Typography>
-                    <Typography sx={{ mt: 1 }}>{position.vacancyNumber}</Typography>
-                  </Grid2> */}
-
-                  {/* Position Name */}
-{/*                   <Grid2 container spacing={2} size={12} justifyContent="left">
-                    <Grid2 size={6}>
-                      <Field name="positionName">
-                        {({ input }) => (
-                          <Autocomplete
-                            freeSolo
-                            options={positionNames.map((option) => option.name)}
-                            value={input.value?.name || ''}
-                            onInputChange={(_event, value) => {
-                              input.onChange({ name: value });
-                            }}
-                            onChange={(_event, value) => {
-                              if (typeof value === 'string') {
-                                input.onChange({ name: value });
-                              } else if (value) {
-                                input.onChange({ name: value });
-                              }
-                            }}
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                fullWidth
-                                margin="normal"
-                                required
-                                label={t('edit_position.position_name')}
-                                placeholder={t('edit_position.position_name')}
-                                slotProps={{
-                                  inputLabel: {
-                                    shrink: true,
-                                  },
-                                }}
-                              />
-                            )}
-                          />
-                        )}
-                      </Field>
-                    </Grid2>
-                  </Grid2> */}
-
-                  {/* Organization Tree */}
-{/*                   <Grid2 size={6}>
-                    <Field name="orgTree">
-                      {({ input }) => (
-                        <Autocomplete
-                          options={filteredOrgTrees}
-                          getOptionLabel={(option) => `${option.number} ${option.name}`}
-                          value={filteredOrgTrees.find((tree) => tree.id === input.value) || null}
-                          onChange={(_event, value) => {
-                            input.onChange(value ? value.id : null);
-                          }}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              fullWidth
-                              margin="normal"
-                              required
-                              label={t('edit_position.organization_tree')}
-                              placeholder={
-                                filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)
-                                  ? `${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.number} ${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.name}`
-                                  : t('edit_position.organization_tree')
-                              }
-                              slotProps={{
-                                inputLabel: {
-                                  shrink: true,
-                                },
-                              }}
-                            />
-                          )}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Placement Location */}
-                  <Grid2 size={6}>
                     <Field name="subjectName">
                       {({ input }) => (
-                        <TextField
+                          <TextField
                           {...input}
                           fullWidth
                           margin="normal"
@@ -300,237 +203,24 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                               shrink: true,
                             },
                           }}
-                        />
-                      )}
+                          />
+                        )
+                      }
+                    </Field>
+                  {/* //</Grid2> */}
+
+                  {/* Active checkbox */}
+                  {/* <Grid2 size={12}> */}
+                    <Field name="active" type="checkbox">
+                    {({input}) => (
+                        <FormControlLabel control={
+                          <Checkbox {...input} /* checked={Boolean(input.value)} */ />
+                        } label="aktiivinen" />
+                      )
+                    }
                     </Field>
                   </Grid2>
 
-                  {/* Type */}
-{/*                   <Grid2 size={6}>
-                    <Field name="type">
-                      {({ input }) => (
-                        <FormControl fullWidth margin="normal">
-                          <InputLabel shrink={true} id="type-select-label">
-                            {t('edit_position.type')} *
-                          </InputLabel>
-                          <Select
-                            required
-                            labelId="type-select-label"
-                            id="type-select"
-                            value={input.value}
-                            onChange={(event) => input.onChange(event.target.value)}
-                            label={t('edit_position.type')}
-                          >
-                            <MenuItem value={1}>{t('edit_position.type_position')}</MenuItem>
-                            <MenuItem value={2}>{t('edit_position.type_post')}</MenuItem>
-                          </Select>
-                        </FormControl>
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Pricing ID */}
-{/*                   <Grid2 size={6}>
-                    <Field name="pricingId" validate={validatePricingId}>
-                      {({ input, meta }) => (
-                        <TextField
-                          {...input}
-                          fullWidth
-                          margin="normal"
-                          placeholder={position.pricingId}
-                          label={t('edit_position.pricing_id')}
-                          error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error}
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Vacancy Size */}
-{/*                   <Grid2 size={6}>
-                    <Field name="vacancySize" validate={validateVacancySize}>
-                      {({ input, meta }) => (
-                        <TextField
-                          {...input}
-                          fullWidth
-                          margin="normal"
-                          type="number"
-                          error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error ? meta.error : ''}
-                          slotProps={{
-                            input: {
-                              endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                              inputProps: { min: 0, max: 100 },
-                            },
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                          placeholder={(position.vacancySize ? position.vacancySize * 100 : 0).toFixed()}
-                          label={t('edit_position.vacancy_size')}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Vacancy Fill */}
-{/*                   <Grid2 size={6}>
-                    <Field name="vacancyFill" validate={validateVacancyFill}>
-                      {({ input, meta }) => (
-                        <TextField
-                          {...input}
-                          fullWidth
-                          margin="normal"
-                          type="number"
-                          error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error}
-                          slotProps={{
-                            input: {
-                              endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                              inputProps: { min: 0, max: 100 },
-                            },
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                          placeholder={(position.vacancyFill ? position.vacancyFill * 100 : 0).toFixed()}
-                          label={t('edit_position.vacancy_fill')}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Divider */}
-                  <Box
-                    sx={{
-                      height: '2px',
-                      backgroundColor: '#223b7c',
-                      width: '100%',
-                      my: 0,
-                    }}
-                  />
-
-                  {/* Subtitle */}
-                  <Box sx={{ px: 2, mt: 2 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#223b7c' }}>
-                      {t('eligibility')}
-                    </Typography>
-                  </Box>
-
-                  {/* Education Level */}
-{/*                   <Grid2 size={12}>
-                    <Field name="educationLevel">
-                      {({ input }) => (
-                        <TextField
-                          {...input}
-                          margin="normal"
-                          fullWidth
-                          multiline
-                          maxRows={4}
-                          id="educationLevel"
-                          label={t('edit_position.education_level')}
-                          placeholder={position.educationLevel}
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Work Experience */}
-{/*                   <Grid2 size={12}>
-                    <Field name="workExperience">
-                      {({ input }) => (
-                        <TextField
-                          {...input}
-                          margin="normal"
-                          fullWidth
-                          multiline
-                          maxRows={4}
-                          id="workExperience"
-                          label={t('edit_position.work_experience')}
-                          placeholder={position.workExperience}
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> */}
-
-                  {/* Additional Details */}
-{/*                   <Grid2 size={12}>
-                    <Field name="details">
-                      {({ input }) => (
-                        <TextField
-                          {...input}
-                          margin="normal"
-                          fullWidth
-                          multiline
-                          maxRows={4}
-                          id="details"
-                          label={t('additional_details')}
-                          placeholder={position.details}
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
-                        />
-                      )}
-                    </Field>
-                  </Grid2> 
-*/}
-
-                  {/* Divider */}
-                  <Box
-                    sx={{
-                      height: '2px',
-                      backgroundColor: '#223b7c',
-                      width: '100%',
-                      my: 0,
-                    }}
-                  />
-
-                  {/* Subtitle */}
-                  <Box sx={{ px: 2, mt: 2 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#223b7c' }}>
-                      {t('edit_position.decision')}
-                    </Typography>
-                  </Box>
-
-                  {/* Creation decision number */}
-                  {/* <Grid2 container spacing={2} size={12} justifyContent="left">
-                    <Grid2 size={6}>
-                      <Field name="decisionNumber">
-                        {({ input }) => (
-                          <TextField
-                            {...input}
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="decisionNumber"
-                            label={t('edit_position.creation_decision_number')}
-                            slotProps={{
-                              inputLabel: {
-                                shrink: true,
-                              },
-                            }}
-                          />
-                        )}
-                      </Field>
-                    </Grid2>
-                  </Grid2> */}
                 </Grid2>
 
                 {/* Buttons */}
