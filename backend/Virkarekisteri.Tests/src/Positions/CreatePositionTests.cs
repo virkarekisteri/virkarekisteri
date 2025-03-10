@@ -15,6 +15,7 @@ public class CreatePositionTests
 {
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly Mock<IPositionNameRepository> _positionNameRepositoryMock;
+    private readonly Mock<IChangeLogRepository> _changeLogRepositoryMock;
     private readonly CreatePosition _function;
 
     public CreatePositionTests()
@@ -22,10 +23,13 @@ public class CreatePositionTests
         Mock<ILogger<CreatePosition>> loggerMock = new();
         _positionRepositoryMock = new Mock<IPositionRepository>();
         _positionNameRepositoryMock = new Mock<IPositionNameRepository>();
+        _changeLogRepositoryMock = new Mock<IChangeLogRepository>();
+
         _function = new CreatePosition(
             loggerMock.Object,
             _positionRepositoryMock.Object,
-            _positionNameRepositoryMock.Object
+            _positionNameRepositoryMock.Object,
+            _changeLogRepositoryMock.Object
         );
     }
 
