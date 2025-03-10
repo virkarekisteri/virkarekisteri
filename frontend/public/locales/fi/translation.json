@@ -15,7 +15,9 @@
     "work_experience": "Työkokemus",
     "type": "Laji",
     "type_position": "Virka",
-    "type_post": "Toimi"
+    "type_post": "Toimi",
+    "teacher": "Opettaja",
+    "subjects": "Opetettavat aineet"
   },
   "create_csv_position": {
     "success": " virkaa luotu onnistuneesti.",
@@ -165,7 +167,9 @@
     "details": "Viran tiedot",
     "eligibility": "Kelpoisuusehdot",
     "creation_decision_number": "Päätösnumero",
-    "creation_description": "Päätöksen selite"
+    "creation_description": "Päätöksen selite",
+    "teacher": "Opettaja",
+    "subjects": "Opetettavat aineet"
   },
   "error": {
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kaksikymmentä (20) merkkiä pitkä.",

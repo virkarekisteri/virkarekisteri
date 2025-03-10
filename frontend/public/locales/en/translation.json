@@ -15,7 +15,9 @@
     "work_experience": "Work experience",
     "type": "Type",
     "type_position": "Position",
-    "type_post": "Post"
+    "type_post": "Post",
+    "teacher": "Teacher",
+    "subjects": "Subjects"
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
@@ -165,7 +167,9 @@
     "details": "Position details",
     "eligibility": "Eligibility",
     "creation_decision_number": "Creation decision number",
-    "creation_description": "Decision description"
+    "creation_description": "Decision description",
+    "teacher": "Teacher",
+    "subjects": "Subjects"
   },
   "error": {
     "pricing_id_error": "Pricing ID can only be upto 20 characters long",
