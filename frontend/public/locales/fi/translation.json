@@ -121,7 +121,9 @@
       "CreatedPosition": "Luotu uusi virka",
       "CreatedEmployee": "Lisätty uusi viranhaltija",
       "VacancyStatus": "Vakanssin tila",
-      "EndedPosition": "Lakkautettu virka"
+      "EndedPosition": "Lakkautettu virka",
+      "PositionSubjects": "Aineet",
+      "IsTeacher": "Opettaja"
     },
     "DecisionNumber": "Päätösnumero",
     "search": {
