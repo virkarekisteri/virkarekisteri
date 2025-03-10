@@ -195,10 +195,14 @@
       "active": "Active",
       "inactive": "Inactive",
       "edit_subject": "Edit subject",
-      "edit_history": "Editing history"
+      "edit_history": "Editing history",
+      "editwarning": "Changes made here will affect all positions of type teacher!"
     },
     "search": {
       "bySubjectName": "Search by subject name"
-    } 
+    },
+    "error": {
+      "subject_name_exists_error": "Subject name exists"
+    }
   }
 }

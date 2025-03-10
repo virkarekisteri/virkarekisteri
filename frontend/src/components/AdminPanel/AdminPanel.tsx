@@ -28,7 +28,7 @@ const AdminPanel = () => {
 
   const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null); // TODO: this should default to asc
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchSubjectName, setSearchSubjectName] = useState('');
@@ -59,7 +59,7 @@ const AdminPanel = () => {
 
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
-    console.log(sortConfig.direction)
+    //console.log(sortConfig.direction)
     
     // sorting by active/inactive
     if (sortConfig.key == 'active') {
@@ -235,7 +235,7 @@ const AdminPanel = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <SubjectDetails position={expandedRow} /> : null
+            expandedRow ? <SubjectDetails position={expandedRow} allSubjects={sortedTeacherSubjects}/> : null
           }
           </Grid2>
         </Grid2>

@@ -195,10 +195,14 @@
       "active": "Aktiivinen",
       "inactive": "Ei aktiivinen",
       "edit_subject": "Muokkaa aineen tietoja",
-      "edit_history": "Muutoshistoria"
+      "edit_history": "Muutoshistoria",
+      "editwarning": "Tässä tehdyt muokkaukset vaikuttava kaikkien opettajien-tyyppisten virkojen tietoihin!"
     },
     "search": {
       "bySubjectName": "Etsi aineen nimellä"
-    } 
+    },
+    "error": {
+      "subject_name_exists_error": "Aineen nimi on jo olemassa"
+    }
   }
 }

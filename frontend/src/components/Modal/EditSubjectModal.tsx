@@ -34,6 +34,7 @@ interface EditSubjectModalProps {
   open: boolean;
   handleClose: () => void;
   position: TeacherSubject;
+  allSubjects: TeacherSubject[];
 }
 
 interface FormValues {
@@ -54,16 +55,16 @@ interface FormValues {
   decisionNumber?: string; */
 }
 
-const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position }) => {
+const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
 
   const { t } = useTranslation();
 
-  const { data: positionNames = [] } = useGetPositionNamesQuery();
+  //const { data: positionNames = [] } = useGetPositionNamesQuery();
   const { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
 
   const [updateSubject] = useUpdateTeacherSubjectMutation();
 
-  const filteredOrgTrees = organizationTrees
+/*   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
 
@@ -83,15 +84,20 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
       return t('error.vacancy_size_error');
     }
     return undefined;
-  };
+  }; */
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validateVacancyFill = (value: string, allValues: Record<string, any>) => {
-    if ((value && Number(value) < 0) || Number(value) > 100) {
+  const validateSubjectName = (value: string, allValues: Record<string, any>) => {
+    console.log(allValues)
+    console.log(allSubjects)
+    if (allSubjects.some((subj) => {return (subj.subjectName === value && value != position.subjectName)}))
+      return t('admin_panel.error.subject_name_exists_error');
+    /* if ((value && Number(value) < 0) || Number(value) > 100) {
       return t('error.vacancy_fill_error');
     } else if (Number(value) > Number(allValues.vacancySize)) {
       return t('error.vacancy_fill_greater_than_size');
     }
+     */
     return undefined;
   };
 
@@ -102,25 +108,11 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
 
     try {
       const updateData = {
-        subjectName: values.subjectName,
+        subjectName: values.subjectName.toLowerCase(), // TODO: no duplicate validation here currently, I trust there's something on the backend
         active: values.active
-/*         endedAt: values.endedAt,
-        endingDecisionNumber: values.endingDecisionNumber,
-        placementLocation: values.placementLocation,
-        vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
-        positionName: values.positionName ? { name: values.positionName.name } : undefined,
-        orgTreeId: values.orgTree,
-        pricingId: values.pricingId,
-        vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
-        educationLevel: values.educationLevel,
-        workExperience: values.workExperience,
-        details: values.details,
-        type: values.type,
-        decisionNumber: values.decisionNumber,
-       */
       };
       console.log(updateData)
-      //updateSubject({ id: position.id, subject: updateData });
+      updateSubject({ id: position.id, subject: updateData });
       handleClose();
     } catch (error) {
       console.error('Failed to update position:', error);
@@ -161,7 +153,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{t('edit_position.title')}</Typography>
+          <Typography variant="h6">{t('admin_panel.teacher_subjects.edit_subject')}</Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -171,9 +163,10 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
         <Box sx={{ p: 4, pt: 0 }}>
           <Form
             onSubmit={onSubmit}
+            
             initialValues={{
               subjectName: position.subjectName,
-              active: false
+              active: position.active
 
 
             }}
@@ -183,21 +176,23 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                   {/* Subtitle */}
                   <Box sx={{ px: 2, mt: 2 }}>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#223b7c' }}>
-                      {t('position.details')}
+                      {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-
-
+                  {t('admin_panel.teacher_subjects.editwarning')}
                   {/* Name */}
                   <Grid2 size={12}>
-                    <Field name="subjectName">
-                      {({ input }) => (
+                    <Field name="subjectName" validate={validateSubjectName}>
+                      {({ input, meta }) => (
                           <TextField
                           {...input}
                           fullWidth
                           margin="normal"
                           placeholder={position.subjectName}
-                          label={t('edit_position.placement_location')}
+                          label={t('admin_panel.teacher_subjects.name')}
+                          error={meta.error && meta.touched}
+                          helperText={meta.touched && meta.error}
+                          
                           slotProps={{
                             inputLabel: {
                               shrink: true,
@@ -215,7 +210,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                     {({input}) => (
                         <FormControlLabel control={
                           <Checkbox {...input} /* checked={Boolean(input.value)} */ />
-                        } label="aktiivinen" />
+                        } label={t('admin_panel.teacher_subjects.active')} />
                       )
                     }
                     </Field>

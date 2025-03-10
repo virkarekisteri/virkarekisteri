@@ -10,9 +10,10 @@ import { RequiresEditRole } from 'components/role-guards';
 
 interface SubjectDetailsProps {
   position: TeacherSubject;
+  allSubjects: TeacherSubject[];
 }
 
-const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position }) => {
+const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }) => {
   const { t } = useTranslation();
 
 
@@ -153,7 +154,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position }) => {
               </Box>
 
               
-      <EditSubjectModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} />
+      <EditSubjectModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} allSubjects={allSubjects}/>
     </Box>
   );
 };
