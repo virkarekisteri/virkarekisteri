@@ -4,6 +4,7 @@ import type { TeacherSubject } from 'models/TeacherSubject';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
+import EditSubjectModal from '../Modal/EditSubjectModal'
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
 
@@ -151,9 +152,8 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position }) => {
               </Accordion>
               </Box>
 
-              {/* 
-      <ModifyVirkaModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} />
-      */}
+              
+      <EditSubjectModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} />
     </Box>
   );
 };
