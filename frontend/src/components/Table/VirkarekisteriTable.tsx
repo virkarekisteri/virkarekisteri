@@ -70,6 +70,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [replacementNameSearch, setReplacementNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
+  const [teacherPositionSearch, setTeacherPositionSearch] = useState(false);
 
   // Näytettävä data ja sivutus
   const [filteredData, setFilteredData] = useState<Position[]>(positions);
@@ -192,6 +193,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
+      const matchesTeacherPosition = teacherPositionSearch
+        ? position.isTeacher === true
+        : true;
+
       const employeeStartDate = position.employeeStartDate;
       const replacementStartDate = position.replacementStartDate;
       let matchesStartDateBegin = true;
@@ -287,7 +292,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesStartDateBegin &&
         matchesStartDateEnding &&
         matchesEmployeeName &&
-        matchesReplacementName
+        matchesReplacementName &&
+        matchesTeacherPosition
       );
     });
     setFilteredData(filtered);
@@ -307,6 +313,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setReplacementNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
+    setTeacherPositionSearch(false);
     setFilteredData(enrichedPositions);
     setPage(0);
   };
@@ -321,6 +328,10 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const handlePositionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setPositionTypeSearch((prev) => (prev.includes(value) ? prev.filter((type) => type !== value) : [...prev, value]));
+  };
+
+  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeacherPositionSearch(event.target.checked);
   };
 
   // Määritellään DataGridin sarakkeet
@@ -623,7 +634,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                   </FormGroup>
                 </FormControl>
               </Grid2>
-              <Grid2 size={2}>
+              <Grid2 size={2.7}>
                 <Typography component="div" fontWeight="bold">
                   {t('table.vacancy_status')}
                 </Typography>
@@ -661,6 +672,20 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     />
                   </FormGroup>
                 </FormControl>
+              </Grid2>
+              <Grid2 size={4}>
+                <Typography component="div" fontWeight="bold">
+                  {t('table.other')}
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={teacherPositionSearch}
+                      onChange={handleTeacherPositionChange}
+                    />
+                  }
+                  label={t('table.teacher')}
+                />
               </Grid2>
               <Box sx={{ display: 'flex', gap: 2, marginLeft: 'auto', alignItems: 'center' }}>
                 <Button variant="contained" onClick={handleSearch} sx={{ fontSize: '0.8rem', padding: '6px 40px' }}>

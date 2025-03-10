@@ -65,12 +65,14 @@
     "rows_per_page": "Rivejä sivulla:",
     "position_name": "Virkanimike",
     "organization_tree": "Kustannuspaikka",
+    "other": "Muuta",
     "placement_location": "Sijoituspaikka",
     "employee_name": "Viranhaltijan nimi",
     "replacement_name": "Sijaisen nimi",
     "replacement_start_date": "Sijaisuuden alkamispäivä",
     "replacement_end_date": "Sijaisuuden päättymispäivä",
-    "start_date": "Virkaan asettamispäivä"
+    "start_date": "Virkaan asettamispäivä",
+    "teacher": "Opettaja"
   },
   "tabs": {
     "positions": "Virkalistaus",
