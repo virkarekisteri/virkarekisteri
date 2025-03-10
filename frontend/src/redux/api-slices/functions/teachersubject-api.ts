@@ -19,6 +19,16 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'TeacherSubjects', id },
       ],
+    }),
+    createTeacherSubject: build.mutation<TeacherSubject, Partial<TeacherSubject>  >({
+      query: (subject) => ({
+        url: `/subjects`,
+        method: 'POST',
+        body: subject
+      }),
+      invalidatesTags: [
+        { type: 'TeacherSubjects', id: 'LIST' },
+      ],
     })
   /*
     getPositionChangeLogs: build.query<TeacherSubject[], string>({
@@ -29,4 +39,4 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { /*useGetPositionChangeLogsQuery,*/ useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation } = TeacherSubjectsApi;
+export const { /*useGetPositionChangeLogsQuery,*/ useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation, useCreateTeacherSubjectMutation } = TeacherSubjectsApi;

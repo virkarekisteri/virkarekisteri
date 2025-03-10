@@ -23,17 +23,19 @@ import { useTranslation } from 'react-i18next';
 
 import type { TeacherSubject } from 'models/TeacherSubject'
 import { useUpdateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
+import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
+
 
 //import type { Position } from 'models/Position';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 //import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+//import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { idID } from '@mui/material/locale';
 
 interface EditSubjectModalProps {
   open: boolean;
   handleClose: () => void;
-  position: TeacherSubject;
+  position: TeacherSubject | undefined;
   allSubjects: TeacherSubject[];
 }
 
@@ -55,15 +57,17 @@ interface FormValues {
   decisionNumber?: string; */
 }
 
+
+
 const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
 
   const { t } = useTranslation();
 
   //const { data: positionNames = [] } = useGetPositionNamesQuery();
-  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
-
-  const [updateSubject] = useUpdateTeacherSubjectMutation();
-
+  //onst { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
+  
+  const [ updateSubject ] = useUpdateTeacherSubjectMutation();
+  const [ createSubject ] = useCreateTeacherSubjectMutation();
 /*   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
     .sort((a, b) => a.number.localeCompare(b.number));
@@ -78,19 +82,31 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
   const validateVacancySize = (value: string) => {
     if (!/^\d+$/.test(value)) {
       return t('error.vacancy_size_integer_error');
-    }
-    const numValue = Number(value);
-    if ((value && numValue < 0) || numValue > 100) {
-      return t('error.vacancy_size_error');
-    }
-    return undefined;
-  }; */
+      }
+      const numValue = Number(value);
+      if ((value && numValue < 0) || numValue > 100) {
+        return t('error.vacancy_size_error');
+        }
+        return undefined;
+        }; */
+
+
+  const initialValues = position !== undefined ? 
+  {
+    subjectName: position.subjectName,
+    active: position.active
+  } 
+  :
+  {
+    subjectName: "", 
+    active: true
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validateSubjectName = (value: string, allValues: Record<string, any>) => {
     console.log(allValues)
     console.log(allSubjects)
-    if (allSubjects.some((subj) => {return (subj.subjectName === value && value != position.subjectName)}))
+    if (allSubjects.some((subj) => {return (subj.subjectName === value && (position && value != position.subjectName))}))
       return t('admin_panel.error.subject_name_exists_error');
     /* if ((value && Number(value) < 0) || Number(value) > 100) {
       return t('error.vacancy_fill_error');
@@ -102,9 +118,22 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (!position.id) {
-      return;
+    if (!position || !position.id) {
+      try {
+
+        const subjectData: Partial<TeacherSubject> = {
+          subjectName: values.subjectName.toLowerCase(), // TODO: no duplicate validation here currently, I trust there's something on the backend
+          active: values.active
+        };
+        console.log("Creating new subject!")
+        createSubject(subjectData)
+        handleClose();
+        return;
+      } catch (error) {
+        console.error('Failed to create subject:', error);
     }
+  }
+  else {
 
     try {
       const updateData = {
@@ -115,9 +144,10 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
       updateSubject({ id: position.id, subject: updateData });
       handleClose();
     } catch (error) {
-      console.error('Failed to update position:', error);
+      console.error('Failed to update subject:', error);
     }
   };
+}
 
 
 
@@ -164,12 +194,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
           <Form
             onSubmit={onSubmit}
             
-            initialValues={{
-              subjectName: position.subjectName,
-              active: position.active
-
-
-            }}
+            initialValues={initialValues}
             render={({ handleSubmit, submitting, pristine }) => (
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
@@ -188,7 +213,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={position.subjectName}
+                          placeholder={initialValues.subjectName}
                           label={t('admin_panel.teacher_subjects.name')}
                           error={meta.error && meta.touched}
                           helperText={meta.touched && meta.error}

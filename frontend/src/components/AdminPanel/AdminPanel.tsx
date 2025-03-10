@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next';
 import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import SubjectDetails from 'components/Details/SubjectDetails';
+import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
+import EditSubjectModal from '../Modal/EditSubjectModal'
 
 const AdminPanel = () => {
   const { t } = useTranslation();
@@ -40,6 +42,20 @@ const AdminPanel = () => {
   useEffect(() => {
     setFilteredTeacherSubjects(teacherSubjects);
   }, [teacherSubjects]);
+
+
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  const handleOpenCreateModal = () => {
+    console.log("open")
+    setCreateModalOpen(true);
+  };
+  
+  const handleCloseCreateModal = () => {
+    console.log("close")
+    setCreateModalOpen(false);
+  };
+
 
   /*
   const getTranslatedField = (field: string) => {
@@ -154,6 +170,37 @@ const AdminPanel = () => {
         <Button variant="outlined" onClick={handleResetSearch}>
           {t('search_filter.reset')}
         </Button>
+
+              <RequiresEditRole>
+                <Button
+                  variant="contained"
+                  onClick={handleOpenCreateModal}
+                  sx={{
+                    backgroundColor: '#223B7C',
+                    color: 'white',
+                    fontSize: '1.0rem',
+                    padding: '20px',
+                    height: '40px',
+                    display: 'flex',
+                    borderRadius: '25px 8px 8px 25px',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                  }}
+                  startIcon={
+                    <Box
+                      component="span"
+                      sx={{
+                        marginRight: '8px',
+                      }}
+                    >
+                      +
+                    </Box>
+                  }
+                >
+                  {t('new_position')}
+                </Button>
+              </RequiresEditRole>
+
       </Box>
 
       <TableContainer>
@@ -239,8 +286,9 @@ const AdminPanel = () => {
           }
           </Grid2>
         </Grid2>
-
-
+        <EditSubjectModal open={createModalOpen} handleClose={handleCloseCreateModal} allSubjects={sortedTeacherSubjects}/>
+        {/* 
+ */}
     </Box>
   );
 };
