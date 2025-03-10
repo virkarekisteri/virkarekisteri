@@ -17,38 +17,40 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import type { ChangeLogEntry } from 'models/ChangeLogEntry';
+import type { PositionChangeLogEntry } from 'models/PositionChangeLogEntry';
 import { useTranslation } from 'react-i18next';
 import { formatTimestamp, getVacancyNumber } from './utils';
 import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
 import { useGetChangeLogsQuery } from 'redux/api-slices/functions/changelogs-api';
 
-const ChangeLogTable = () => {
+const PositionChangeLogTable = () => {
   const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
-  const [filteredChangeLogs, setFilteredChangeLogs] = useState<ChangeLogEntry[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof ChangeLogEntry; direction: 'asc' | 'desc' } | null>(null);
+  const [filteredChangeLogs, setFilteredChangeLogs] = useState<PositionChangeLogEntry[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof PositionChangeLogEntry; direction: 'asc' | 'desc' } | null>(
+    null,
+  );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchVacancyNumber, setSearchVacancyNumber] = useState('');
   const [searchDate, setSearchDate] = useState('');
 
   const { data: positions = [], isLoading: positionsLoading } = useGetPositionsQuery();
-  const { data: changeLogs = [], isLoading: changeLogsLoading } = useGetChangeLogsQuery();
+  const { data: positionchangeLogs = [], isLoading: changeLogsLoading } = useGetChangeLogsQuery();
 
   const isLoading = positionsLoading || changeLogsLoading;
 
   useEffect(() => {
-    setFilteredChangeLogs(changeLogs);
-  }, [changeLogs]);
+    setFilteredChangeLogs(positionchangeLogs);
+  }, [positionchangeLogs]);
 
   const getTranslatedField = (field: string) => {
     return t(`change_logs.fields.${field}`, field);
   };
 
   // Sorting logic
-  const handleSort = (key: keyof ChangeLogEntry) => {
+  const handleSort = (key: keyof PositionChangeLogEntry) => {
     setSortConfig((prevConfig) => {
       if (prevConfig && prevConfig.key === key) {
         return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
@@ -82,7 +84,7 @@ const ChangeLogTable = () => {
 
   // Search logic
   const handleSearch = () => {
-    const filtered = changeLogs.filter((log) => {
+    const filtered = positionchangeLogs.filter((log) => {
       const matchesVacancyNumber = searchVacancyNumber
         ? getVacancyNumber(log.positionId, positions).includes(searchVacancyNumber)
         : true;
@@ -96,7 +98,7 @@ const ChangeLogTable = () => {
   const handleResetSearch = () => {
     setSearchVacancyNumber('');
     setSearchDate('');
-    setFilteredChangeLogs(changeLogs);
+    setFilteredChangeLogs(positionchangeLogs);
     setPage(0);
   };
 
@@ -326,4 +328,4 @@ const ChangeLogTable = () => {
   );
 };
 
-export default ChangeLogTable;
+export default PositionChangeLogTable;
