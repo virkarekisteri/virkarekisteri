@@ -4,7 +4,7 @@ import type { PositionChangeLogEntry } from 'models/PositionChangeLogEntry';
 const ChangeLogsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getChangeLogs: build.query<PositionChangeLogEntry[], void>({
-      query: () => '/changelogs',
+      query: () => '/positionchangelogs',
       providesTags: (result) =>
         result
           ? [...result.map(({ id }) => ({ type: 'ChangeLogs', id }) as const), { type: 'ChangeLogs', id: 'LIST' }]

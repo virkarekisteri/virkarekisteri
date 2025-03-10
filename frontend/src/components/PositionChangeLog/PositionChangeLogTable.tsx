@@ -21,7 +21,7 @@ import type { PositionChangeLogEntry } from 'models/PositionChangeLogEntry';
 import { useTranslation } from 'react-i18next';
 import { formatTimestamp, getVacancyNumber } from './utils';
 import { useGetPositionsQuery } from 'redux/api-slices/functions/positions-api';
-import { useGetChangeLogsQuery } from 'redux/api-slices/functions/changelogs-api';
+import { useGetChangeLogsQuery } from 'redux/api-slices/functions/positionchangelogs-api';
 
 const PositionChangeLogTable = () => {
   const { t } = useTranslation();
