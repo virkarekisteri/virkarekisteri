@@ -14,7 +14,8 @@ public class UpdatePosition(
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
     IPositionChangeLogRepository positionChangeLogRepository,
-    IOrganizationTreeRepository organizationTreeRepository
+    IOrganizationTreeRepository organizationTreeRepository,
+    ISubjectRepository subjectRepository
 )
 {
     /// <summary>
@@ -112,10 +113,21 @@ public class UpdatePosition(
         PositionLogChange("IsTeacher", existingPosition.IsTeacher.ToString(), updateDto.IsTeacher?.ToString());
         existingPosition.IsTeacher = updateDto.IsTeacher ?? existingPosition.IsTeacher;
 
+        // Logging of changes to the positions subjects.
+        // Fetch the names of the subjects from the repository.
+        var existingSubjects = (await subjectRepository.GetSubjectsByIds(existingPosition.SubjectIds))
+            .Select(s => s.SubjectName)
+            .ToList();
+
+        var newSubjects = (await subjectRepository.GetSubjectsByIds(updateDto.SubjectIds))
+            .Select(s => s.SubjectName)
+            .ToList();
+
+        // Log the names of the subjects instead of the IDs
         PositionLogChange(
             "PositionSubjects",
-            existingPosition.SubjectIds.Any() ? string.Join(", ", existingPosition.SubjectIds) : string.Empty,
-            updateDto.SubjectIds.Any() ? string.Join(", ", updateDto.SubjectIds) : string.Empty
+            existingSubjects.Any() ? string.Join(", ", existingSubjects) : string.Empty,
+            newSubjects.Any() ? string.Join(", ", newSubjects) : string.Empty
         );
         existingPosition.SubjectIds = updateDto.SubjectIds ?? existingPosition.SubjectIds;
 
