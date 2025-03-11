@@ -15,7 +15,9 @@
     "work_experience": "",
     "type": "",
     "type_position": "",
-    "type_post": ""
+    "type_post": "",
+    "teacher": "",
+    "subjects": ""
   },
   "create_csv_position": {
     "success": "",
@@ -118,7 +120,9 @@
       "Substitute": "",
       "CreatedPosition": "",
       "CreatedEmployee": "",
-      "VacancyStatus": ""
+      "VacancyStatus": "",
+      "PositionSubjects": "",
+      "IsTeacher": ""
     },
     "DecisionNumber": "",
     "search": {
@@ -164,7 +168,9 @@
     "details": "",
     "eligibility": "",
     "creation_decision_number": "",
-    "creation_description": ""
+    "creation_description": "",
+    "teacher": "",
+    "subjects": ""
   },
   "error": {
     "pricing_id_error": ""

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   TextField,
@@ -12,6 +13,10 @@ import {
   Select,
   MenuItem,
   Autocomplete,
+  FormControlLabel,
+  Checkbox,
+  Chip,
+  ListItemText,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,6 +26,9 @@ import type { Position } from 'models/Position';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useEffect, useState } from 'react';
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 interface ModifyVirkaModalProps {
   open: boolean;
@@ -50,7 +58,41 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
   const { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
 
+  const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
+
   const [updatePosition] = useUpdatePositionMutation();
+
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [isTeacherPosition, setIsTeacherPosition] = useState(false);
+
+  useEffect(() => {
+    if (subjects.length > 0 && position.subjectIds && position.subjectIds.length > 0) {
+      const subjectNames = position.subjectIds
+        .map((subjectId) => {
+          const matchedSubject = subjects.find((s) => s.id === subjectId);
+          return matchedSubject ? matchedSubject.subjectName : null;
+        })
+        .filter((subjectName): subjectName is string => subjectName !== null);
+
+      setSelectedSubjects(subjectNames);
+    }
+    setIsTeacherPosition(position.isTeacher || false);
+  }, [subjects, position.subjectIds, position.isTeacher]);
+
+  const activeSubjectNames = subjects
+    .filter((subject) => subject.active === true)
+    .map((subject) => subject.subjectName);
+
+  const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
+    const { value } = event.target;
+    setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
+  };
+
+  const subjectIds = isTeacherPosition
+    ? selectedSubjects
+        .map((subjectName) => subjects.find((s) => s.subjectName === subjectName)?.id)
+        .filter((id): id is string => id !== undefined)
+    : undefined;
 
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
@@ -104,6 +146,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         details: values.details,
         type: values.type,
         decisionNumber: values.decisionNumber,
+        isTeacher: isTeacherPosition,
+        subjectIds: subjectIds,
       };
       updatePosition({ id: position.id, position: updateData });
       handleClose();
@@ -379,6 +423,66 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       )}
                     </Field>
                   </Grid2>
+
+                  {/* Is teacher checkbox */}
+                  <Grid2 size={6}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isTeacherPosition}
+                          onChange={() => {
+                            if (isTeacherPosition) {
+                              setSelectedSubjects([]);
+                            }
+                            setIsTeacherPosition(!isTeacherPosition);
+                          }}
+                        />
+                      }
+                      label={t('edit_position.teacher')}
+                    />
+                  </Grid2>
+
+                  {/* Subjects if teacher */}
+                  {isTeacherPosition && (
+                    <Grid2 size={6}>
+                      <Field name="subjects">
+                        {({ input }) => (
+                          <FormControl fullWidth margin="normal">
+                            <InputLabel shrink={true} id="subjects">{`${t('edit_position.subjects')}`}</InputLabel>
+                            <Select
+                              {...input}
+                              multiple
+                              value={selectedSubjects}
+                              onChange={handleSubjectChange}
+                              renderValue={(selected) => (
+                                <div>
+                                  {selected.map((subject) => (
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                                  ))}
+                                </div>
+                              )}
+                              label={t('edit_position.subjects')}
+                              displayEmpty
+                              MenuProps={{
+                                PaperProps: {
+                                  style: {
+                                    maxHeight: 400,
+                                  },
+                                },
+                              }}
+                            >
+                              {activeSubjectNames.sort().map((subject) => (
+                                <MenuItem key={subject} value={subject}>
+                                  <Checkbox checked={selectedSubjects.includes(subject)} />
+                                  <ListItemText primary={subject} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </Grid2>
+                  )}
 
                   {/* Divider */}
                   <Box

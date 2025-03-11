@@ -50,4 +50,8 @@ export interface Position {
   replacementStartDate: string;
 
   replacementEndDate: string;
+
+  isTeacher?: boolean;
+
+  subjectIds?: string[];
 }

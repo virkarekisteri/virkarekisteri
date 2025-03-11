@@ -1,3 +1,4 @@
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   TextField,
@@ -15,6 +16,10 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Chip,
+  ListItemText,
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -26,8 +31,11 @@ import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -42,9 +50,39 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   );
   const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
 
+  const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
+
+  const activeSubjectNames = subjects
+    .filter((subject) => subject.active === true)
+    .map((subject) => subject.subjectName);
+
   const [createPosition] = useCreatePositionMutation();
 
   const positionNameOptions = positionNames.map((option) => option.name);
+
+  const [isTeacherPosition, setIsTeacherPosition] = useState(false);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+
+  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsTeacherPosition(event.target.checked);
+    if (!event.target.checked) {
+      setSelectedSubjects([]);
+    }
+  };
+
+  const selectedSubjectIds = isTeacherPosition
+    ? selectedSubjects
+        .map((subjectName) => {
+          const subject = subjects.find((s) => s.subjectName === subjectName);
+          return subject ? subject.id : null;
+        })
+        .filter((id) => id !== null)
+    : [];
+
+  const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
+    const { value } = event.target;
+    setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
+  };
 
   const filteredOrgTrees = organizationTrees
     .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
@@ -71,6 +109,13 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     return undefined;
   };
 
+  useEffect(() => {
+    if (!open) {
+      setIsTeacherPosition(false);
+      setSelectedSubjects([]);
+    }
+  }, [open]);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
     const positionNameObj: PositionName = {
@@ -94,6 +139,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         placementLocation: values.placementLocation ?? '',
         orgTreeId: values.orgTreeId.id ?? '',
         vacancyStatus: 1,
+        isTeacher: isTeacherPosition,
+        subjectIds: isTeacherPosition ? selectedSubjectIds : [],
       };
 
       createPosition(positionData);
@@ -350,6 +397,54 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       )}
                     </Field>
                   </Grid2>
+
+                  {isTeacherPosition && (
+                    <Grid2 size={4}>
+                      <Field name="subjects">
+                        {({ input }) => (
+                          <FormControl fullWidth margin="normal">
+                            <InputLabel shrink={true} id="subjects">{`${t('create_position.subjects')}`}</InputLabel>
+                            <Select
+                              {...input}
+                              multiple
+                              value={selectedSubjects}
+                              onChange={handleSubjectChange}
+                              renderValue={(selected) => (
+                                <div>
+                                  {selected.map((subject) => (
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                                  ))}
+                                </div>
+                              )}
+                              label={t('create_position.subjects')}
+                              displayEmpty
+                              MenuProps={{
+                                PaperProps: {
+                                  style: {
+                                    maxHeight: 400,
+                                  },
+                                },
+                              }}
+                            >
+                              {activeSubjectNames.sort().map((subject) => (
+                                <MenuItem key={subject} value={subject}>
+                                  <Checkbox checked={selectedSubjects.includes(subject)} />
+                                  <ListItemText primary={subject} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        )}
+                      </Field>
+                    </Grid2>
+                  )}
+                </Grid2>
+
+                <Grid2 size={2}>
+                  <FormControlLabel
+                    control={<Checkbox checked={isTeacherPosition} onChange={handleTeacherPositionChange} />}
+                    label={t('create_position.teacher')}
+                  />
                 </Grid2>
 
                 <Accordion sx={{ mt: 2, mb: 2 }} defaultExpanded>

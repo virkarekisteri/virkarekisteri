@@ -1,4 +1,4 @@
-export interface ChangeLogEntry {
+export interface PositionChangeLogEntry {
   id: string;
   positionId: string;
   editedField: string;
