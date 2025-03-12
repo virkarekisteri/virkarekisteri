@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import type {
-  SelectChangeEvent} from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   Accordion,
@@ -70,7 +69,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   // Filteröi aktiiviset aineet
   const activeSubjectNames = subjects
     .filter((subject) => subject.active === true)
-    .map((subject) => subject.subjectName); 
+    .map((subject) => subject.subjectName);
 
   // Suodatuskentät (Hakusuodattimet)
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
@@ -208,16 +207,15 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
-      const matchesTeacherPosition = teacherPositionSearch
-        ? position.isTeacher === true
-        : true;
+      const matchesTeacherPosition = teacherPositionSearch ? position.isTeacher === true : true;
 
-      const matchesTeacherSubject = !teacherSubjectSearch || teacherSubjectSearch.length === 0  
-        ? true
-        : position.subjectIds?.some(subjectId => {
-            const subject = subjects.find(s => s.id === subjectId);
-            return subject && teacherSubjectSearch.includes(subject.subjectName);
-          }) || false;
+      const matchesTeacherSubject =
+        !teacherSubjectSearch || teacherSubjectSearch.length === 0
+          ? true
+          : position.subjectIds?.some((subjectId) => {
+              const subject = subjects.find((s) => s.id === subjectId);
+              return subject && teacherSubjectSearch.includes(subject.subjectName);
+            }) || false;
 
       const employeeStartDate = position.employeeStartDate;
       const replacementStartDate = position.replacementStartDate;
@@ -539,9 +537,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         if (!ids || !subjects) return '';
         const subjectNames = ids
           .map((id) => subjects.find((subject) => subject.id === id))
-          .map((subject) => subject?.subjectName)
+          .map((subject) => subject?.subjectName);
         return subjectNames ? subjectNames.join(', ') : '';
-      }
+      },
     },
   ];
   return (
@@ -574,7 +572,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ padding: '16px', backgroundColor: alpha('#f5f5f5', 1) }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3}}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
               <Grid2 size={4}>
                 <TextField
                   label={t('table.vacancy_number')}
@@ -696,7 +694,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               )}
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-            <Grid2 size={2}>
+              <Grid2 size={2}>
                 <Typography component="div" fontWeight="bold">
                   {t('table.type')}
                 </Typography>
@@ -769,12 +767,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                   {t('table.other')}
                 </Typography>
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={teacherPositionSearch}
-                      onChange={handleTeacherPositionChange}
-                    />
-                  }
+                  control={<Checkbox checked={teacherPositionSearch} onChange={handleTeacherPositionChange} />}
                   label={t('table.teacher')}
                 />
               </Grid2>
