@@ -521,6 +521,27 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
     },
+    {
+      field: 'isTeacher',
+      headerName: t('table.teacher'),
+      flex: 1,
+      sortable: true,
+      valueFormatter: (params: boolean) => (params ? t('table.yes') : t('table.no')),
+    },
+    {
+      field: 'subjectIds',
+      headerName: t('table.subjects'),
+      flex: 1,
+      sortable: true,
+      valueGetter: (params: string[]) => {
+        const ids = params;
+        if (!ids || !subjects) return '';
+        const subjectNames = ids
+          .map((id) => subjects.find((subject) => subject.id === id))
+          .map((subject) => subject?.subjectName)
+        return subjectNames ? subjectNames.join(', ') : '';
+      }
+    },
   ];
   return (
     <>
