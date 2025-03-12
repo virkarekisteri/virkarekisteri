@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import type {
+  SelectChangeEvent} from '@mui/material';
 import {
   Box,
   Accordion,
@@ -14,7 +16,6 @@ import {
   FormGroup,
   Checkbox,
   alpha,
-  SelectChangeEvent,
   InputLabel,
   Select,
   Chip,
