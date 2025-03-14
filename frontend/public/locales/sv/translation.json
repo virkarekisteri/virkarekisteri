@@ -63,6 +63,7 @@
     "rows_per_page": "",
     "vacancy_number": "",
     "organization_tree": "",
+    "other": "",
     "placement_location": "",
     "vacancy_status": "",
     "position_name": "",
@@ -70,7 +71,11 @@
     "replacement_name": "",
     "replacement_start_date": "",
     "replacement_end_date": "",
-    "start_date": ""
+    "start_date": "",
+    "teacher": "",
+    "subjects": "",
+    "yes": "",
+    "no": ""
   },
   "tabs": {
     "positions": "",

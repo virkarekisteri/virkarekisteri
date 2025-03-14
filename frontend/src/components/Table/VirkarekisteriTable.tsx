@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Box,
   Accordion,
@@ -14,6 +15,11 @@ import {
   FormGroup,
   Checkbox,
   alpha,
+  InputLabel,
+  Select,
+  Chip,
+  MenuItem,
+  ListItemText,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import type { GridDensity, GridRenderCellParams } from '@mui/x-data-grid';
@@ -28,6 +34,7 @@ import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/posi
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
@@ -57,6 +64,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const { data: organizationTrees } = useGetOrganizationTreesQuery();
   const [getPosition] = useLazyGetPositionQuery();
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
+  const { data: subjects = [] } = useGetSubjectsQuery();
+
+  // Filteröi aktiiviset aineet
+  const activeSubjectNames = subjects
+    .filter((subject) => subject.active === true)
+    .map((subject) => subject.subjectName);
 
   // Suodatuskentät (Hakusuodattimet)
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
@@ -70,6 +83,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [replacementNameSearch, setReplacementNameSearch] = useState('');
   const [positionTypeSearch, setPositionTypeSearch] = useState<string[]>([]);
   const [vacancyStatusSearch, setVacancyStatusSearch] = useState<string[]>([]);
+  const [teacherPositionSearch, setTeacherPositionSearch] = useState(false);
+  const [teacherSubjectSearch, setTeacherSubjectSearch] = useState<string[]>([]);
 
   // Näytettävä data ja sivutus
   const [filteredData, setFilteredData] = useState<Position[]>(positions);
@@ -192,6 +207,16 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       const matchesVacancyStatus =
         vacancyStatusSearch.length > 0 ? vacancyStatusSearch.includes(position.vacancyStatus.toString()) : true;
 
+      const matchesTeacherPosition = teacherPositionSearch ? position.isTeacher === true : true;
+
+      const matchesTeacherSubject =
+        !teacherSubjectSearch || teacherSubjectSearch.length === 0
+          ? true
+          : position.subjectIds?.some((subjectId) => {
+              const subject = subjects.find((s) => s.id === subjectId);
+              return subject && teacherSubjectSearch.includes(subject.subjectName);
+            }) || false;
+
       const employeeStartDate = position.employeeStartDate;
       const replacementStartDate = position.replacementStartDate;
       let matchesStartDateBegin = true;
@@ -287,7 +312,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesStartDateBegin &&
         matchesStartDateEnding &&
         matchesEmployeeName &&
-        matchesReplacementName
+        matchesReplacementName &&
+        matchesTeacherPosition &&
+        matchesTeacherSubject
       );
     });
     setFilteredData(filtered);
@@ -303,10 +330,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setOrganizationTreeSearch('');
     setStartDateBeginsSearch('');
     setStartDateEndsSearch('');
+    setTeacherSubjectSearch([]);
     setEmployeeNameSearch('');
     setReplacementNameSearch('');
     setPositionTypeSearch([]);
     setVacancyStatusSearch([]);
+    setTeacherPositionSearch(false);
     setFilteredData(enrichedPositions);
     setPage(0);
   };
@@ -321,6 +350,18 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const handlePositionTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setPositionTypeSearch((prev) => (prev.includes(value) ? prev.filter((type) => type !== value) : [...prev, value]));
+  };
+
+  const handleTeacherPositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeacherPositionSearch(event.target.checked);
+    if (!event.target.checked) {
+      setTeacherSubjectSearch([]);
+    }
+  };
+
+  const handleTeacherSubjectChange = (event: SelectChangeEvent<typeof teacherSubjectSearch>) => {
+    const { value } = event.target;
+    setTeacherSubjectSearch(typeof value === 'string' ? value.split(',') : value);
   };
 
   // Määritellään DataGridin sarakkeet
@@ -479,6 +520,27 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       flex: 1,
       sortable: true,
     },
+    {
+      field: 'isTeacher',
+      headerName: t('table.teacher'),
+      flex: 1,
+      sortable: true,
+      valueFormatter: (params: boolean) => (params ? t('table.yes') : t('table.no')),
+    },
+    {
+      field: 'subjectIds',
+      headerName: t('table.subjects'),
+      flex: 1,
+      sortable: true,
+      valueGetter: (params: string[]) => {
+        const ids = params;
+        if (!ids || !subjects) return '';
+        const subjectNames = ids
+          .map((id) => subjects.find((subject) => subject.id === id))
+          .map((subject) => subject?.subjectName);
+        return subjectNames ? subjectNames.join(', ') : '';
+      },
+    },
   ];
   return (
     <>
@@ -510,7 +572,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ padding: '16px', backgroundColor: alpha('#f5f5f5', 1) }}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 3 }}>
               <Grid2 size={4}>
                 <TextField
                   label={t('table.vacancy_number')}
@@ -594,6 +656,44 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                   slotProps={{ inputLabel: { shrink: true } }}
                 />
               </Grid2>
+              {teacherPositionSearch && (
+                <Grid2 size={4}>
+                  <FormControl fullWidth>
+                    <InputLabel shrink={true} id="subjects">{`${t('create_position.subjects')}`}</InputLabel>
+                    <Select
+                      labelId="subjects"
+                      multiple
+                      value={teacherSubjectSearch}
+                      onChange={handleTeacherSubjectChange}
+                      renderValue={(selected) => (
+                        <div>
+                          {selected.map((subject) => (
+                            <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                          ))}
+                        </div>
+                      )}
+                      label={t('create_position.subjects')}
+                      displayEmpty
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: 400,
+                          },
+                        },
+                      }}
+                    >
+                      {activeSubjectNames.sort().map((subject) => (
+                        <MenuItem key={subject} value={subject}>
+                          <Checkbox checked={teacherSubjectSearch.includes(subject)} />
+                          <ListItemText primary={subject} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid2>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
               <Grid2 size={2}>
                 <Typography component="div" fontWeight="bold">
                   {t('table.type')}
@@ -623,7 +723,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                   </FormGroup>
                 </FormControl>
               </Grid2>
-              <Grid2 size={2}>
+              <Grid2 size={2.7}>
                 <Typography component="div" fontWeight="bold">
                   {t('table.vacancy_status')}
                 </Typography>
@@ -661,6 +761,15 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                     />
                   </FormGroup>
                 </FormControl>
+              </Grid2>
+              <Grid2 size={4}>
+                <Typography component="div" fontWeight="bold">
+                  {t('table.other')}
+                </Typography>
+                <FormControlLabel
+                  control={<Checkbox checked={teacherPositionSearch} onChange={handleTeacherPositionChange} />}
+                  label={t('table.teacher')}
+                />
               </Grid2>
               <Box sx={{ display: 'flex', gap: 2, marginLeft: 'auto', alignItems: 'center' }}>
                 <Button variant="contained" onClick={handleSearch} sx={{ fontSize: '0.8rem', padding: '6px 40px' }}>
