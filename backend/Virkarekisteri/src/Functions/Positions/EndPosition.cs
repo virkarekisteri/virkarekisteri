@@ -12,7 +12,7 @@ namespace Virkarekisteri.Functions.Positions;
 public class EndPosition(
     ILogger<EndPosition> logger,
     IPositionRepository positionRepository,
-    IChangeLogRepository changeLogRepository
+    IPositionChangeLogRepository positionChangeLogRepository
 )
 {
     /// <summary>
@@ -51,8 +51,8 @@ public class EndPosition(
         {
             position.VacancyStatus = 0;
 
-            await changeLogRepository.AddChangeLogEntry(
-                new ChangeLog
+            await positionChangeLogRepository.AddPositionChangeLogEntry(
+                new PositionChangeLog
                 {
                     PositionId = positionId,
                     EditedField = "VacancyStatus",

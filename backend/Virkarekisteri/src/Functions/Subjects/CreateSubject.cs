@@ -11,8 +11,8 @@ namespace Virkarekisteri.Functions.Subjects;
 
 public class CreateSubject(
     ILogger<CreateSubject> logger,
-    ISubjectRepository subjectRepository,
-    IChangeLogRepository changeLogRepository
+    ISubjectRepository subjectRepository
+// TODO CRUD: IChangeLogRepository changeLogRepository
 )
 {
     /// <summary>
@@ -50,7 +50,7 @@ public class CreateSubject(
             );
         }
 
-        // TODO: Logitus uuden aineen lisäämisestä. Vaatinee oman taulunsa?
+        // TODO: Logitus uuden aineen lisäämisestä. CRUDChangeLog yms.
         /*
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var changeLog = new ChangeLog

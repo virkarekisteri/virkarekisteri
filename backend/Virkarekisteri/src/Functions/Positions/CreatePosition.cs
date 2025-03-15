@@ -13,7 +13,7 @@ public class CreatePosition(
     ILogger<CreatePosition> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IChangeLogRepository changeLogRepository
+    IPositionChangeLogRepository positionChangeLogRepository
 )
 {
     /// <summary>
@@ -61,7 +61,7 @@ public class CreatePosition(
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
 
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
-        var changeLog = new ChangeLog
+        var positionChangeLog = new PositionChangeLog
         {
             Id = Guid.NewGuid(),
             PositionId = createdPosition.Id,
@@ -72,7 +72,7 @@ public class CreatePosition(
             Timestamp = DateTime.Now,
             DecisionNumber = createdPosition.CreationDecisionNumber,
         };
-        await changeLogRepository.AddChangeLogEntry(changeLog);
+        await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
 
         return new OkObjectResult(createdPosition);
     }

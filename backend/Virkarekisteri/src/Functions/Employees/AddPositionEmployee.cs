@@ -12,7 +12,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class AddPositionEmployee(
     ILogger<AddPositionEmployee> logger,
     IPositionEmployeeRepository repository,
-    IChangeLogRepository changeLogRepository,
+    IPositionChangeLogRepository positionChangeLogRepository,
     IPositionRepository positionRepository
 )
 {
@@ -58,8 +58,8 @@ public class AddPositionEmployee(
         {
             var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
             position.ReplacementEmployeeId = createdPositionEmployee.Id;
-            await changeLogRepository.AddChangeLogEntry(
-                new ChangeLog
+            await positionChangeLogRepository.AddPositionChangeLogEntry(
+                new PositionChangeLog
                 {
                     PositionId = createdPositionEmployee.PositionId,
                     EditedField = "Substitute",
@@ -84,8 +84,8 @@ public class AddPositionEmployee(
             )
                 position.VacancyStatus = 2;
 
-            await changeLogRepository.AddChangeLogEntry(
-                new ChangeLog
+            await positionChangeLogRepository.AddPositionChangeLogEntry(
+                new PositionChangeLog
                 {
                     PositionId = createdPositionEmployee.PositionId,
                     EditedField = "CreatedEmployee",

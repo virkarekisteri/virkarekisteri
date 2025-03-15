@@ -125,7 +125,9 @@
       "Substitute": "",
       "CreatedPosition": "",
       "CreatedEmployee": "",
-      "VacancyStatus": ""
+      "VacancyStatus": "",
+      "PositionSubjects": "",
+      "IsTeacher": ""
     },
     "DecisionNumber": "",
     "search": {

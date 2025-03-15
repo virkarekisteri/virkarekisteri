@@ -126,7 +126,9 @@
       "CreatedPosition": "Created new position",
       "CreatedEmployee": "Added new employee",
       "VacancyStatus": "Vacancy status",
-      "EndedPosition": "Ended position"
+      "EndedPosition": "Ended position",
+      "PositionSubjects": "Subjects",
+      "IsTeacher": "Teacher"
     },
     "DecisionNumber": "Decision number",
     "search": {
