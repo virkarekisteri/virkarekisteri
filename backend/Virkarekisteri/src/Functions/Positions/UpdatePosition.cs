@@ -13,8 +13,9 @@ public class UpdatePosition(
     ILogger<UpdatePosition> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IChangeLogRepository changeLogRepository,
-    IOrganizationTreeRepository organizationTreeRepository
+    IPositionChangeLogRepository positionChangeLogRepository,
+    IOrganizationTreeRepository organizationTreeRepository,
+    ISubjectRepository subjectRepository
 )
 {
     /// <summary>
@@ -60,55 +61,74 @@ public class UpdatePosition(
         if (existingPosition == null)
             return new NotFoundResult();
 
-        var changeLogs = new List<ChangeLog>();
+        var positionChangeLogs = new List<PositionChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
         logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
 
         // Map only provided fields from UpdatePositionDto to the existing Position
-        LogChange("EndedAt", existingPosition.EndedAt?.ToString(), updateDto.EndedAt?.ToString());
+        PositionLogChange("EndedAt", existingPosition.EndedAt?.ToString(), updateDto.EndedAt?.ToString());
         existingPosition.EndedAt = updateDto.EndedAt ?? existingPosition.EndedAt;
 
-        LogChange("EndingDecisionNumber", existingPosition.EndingDecisionNumber, updateDto.EndingDecisionNumber);
+        PositionLogChange(
+            "EndingDecisionNumber",
+            existingPosition.EndingDecisionNumber,
+            updateDto.EndingDecisionNumber
+        );
         existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber ?? existingPosition.EndingDecisionNumber;
 
-        LogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
+        PositionLogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
         existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
 
-        LogChange(
+        PositionLogChange(
             "VacancyFill",
             existingPosition.VacancyFill?.ToString("0.##"),
             updateDto.VacancyFill?.ToString("0.##")
         );
         existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
 
-        LogChange(
+        PositionLogChange(
             "VacancySize",
             existingPosition.VacancySize?.ToString("0.##"),
             updateDto.VacancySize?.ToString("0.##")
         );
         existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
 
-        LogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);
+        PositionLogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);
         existingPosition.PricingId = updateDto.PricingId ?? existingPosition.PricingId;
 
-        LogChange("EducationLevel", existingPosition.EducationLevel, updateDto.EducationLevel);
+        PositionLogChange("EducationLevel", existingPosition.EducationLevel, updateDto.EducationLevel);
         existingPosition.EducationLevel = updateDto.EducationLevel ?? existingPosition.EducationLevel;
 
-        LogChange("WorkExperience", existingPosition.WorkExperience, updateDto.WorkExperience);
+        PositionLogChange("WorkExperience", existingPosition.WorkExperience, updateDto.WorkExperience);
         existingPosition.WorkExperience = updateDto.WorkExperience ?? existingPosition.WorkExperience;
 
-        LogChange("Details", existingPosition.Details, updateDto.Details);
+        PositionLogChange("Details", existingPosition.Details, updateDto.Details);
         existingPosition.Details = updateDto.Details ?? existingPosition.Details;
 
-        LogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
+        PositionLogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
         existingPosition.Type = updateDto.Type ?? existingPosition.Type;
 
-        LogChange("IsTeacher", existingPosition.IsTeacher.ToString(), updateDto.IsTeacher?.ToString());
+        PositionLogChange("IsTeacher", existingPosition.IsTeacher.ToString(), updateDto.IsTeacher?.ToString());
         existingPosition.IsTeacher = updateDto.IsTeacher ?? existingPosition.IsTeacher;
 
-        // TODO: PositionSubject liitoksen logitus
+        // Logging of changes to the positions subjects.
+        // Fetch the names of the subjects from the repository.
+        var existingSubjects = (await subjectRepository.GetSubjectsByIds(existingPosition.SubjectIds))
+            .Select(s => s.SubjectName)
+            .ToList();
+
+        var newSubjects = (await subjectRepository.GetSubjectsByIds(updateDto.SubjectIds))
+            .Select(s => s.SubjectName)
+            .ToList();
+
+        // Log the names of the subjects instead of the IDs
+        PositionLogChange(
+            "PositionSubjects",
+            existingSubjects.Any() ? string.Join(", ", existingSubjects) : string.Empty,
+            newSubjects.Any() ? string.Join(", ", newSubjects) : string.Empty
+        );
         existingPosition.SubjectIds = updateDto.SubjectIds ?? existingPosition.SubjectIds;
 
         if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
@@ -120,7 +140,7 @@ public class UpdatePosition(
                 updateDto.OrgTreeId.Value
             );
 
-            LogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
+            PositionLogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
 
             existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
         }
@@ -135,28 +155,28 @@ public class UpdatePosition(
             var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
             var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
 
-            LogChange("PositionName", oldPositionName, newPositionName);
+            PositionLogChange("PositionName", oldPositionName, newPositionName);
             existingPosition.PositionNameId = positionNameId.Value;
         }
 
         await positionRepository.UpdatePosition(existingPosition);
 
-        foreach (var changeLog in changeLogs)
+        foreach (var positionChangeLog in positionChangeLogs)
         {
-            await changeLogRepository.AddChangeLogEntry(changeLog);
+            await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
         }
 
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
 
-        void LogChange(string field, string? oldValue, string? newValue)
+        void PositionLogChange(string field, string? oldValue, string? newValue)
         {
             // No need to log changes if there are none and the values are the same
             if (AreValuesEquivalent(oldValue, newValue))
                 return;
 
-            changeLogs.Add(
-                new ChangeLog
+            positionChangeLogs.Add(
+                new PositionChangeLog
                 {
                     PositionId = positionId,
                     EditedField = field,

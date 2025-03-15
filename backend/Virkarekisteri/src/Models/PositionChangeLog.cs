@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Virkarekisteri.Models;
 
-[Table("ChangeLog")]
-public class ChangeLog
+[Table("PositionChangeLog")]
+public class PositionChangeLog
 {
     public Guid Id { get; set; }
 

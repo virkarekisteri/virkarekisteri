@@ -65,12 +65,17 @@
     "vacancy_status": "Vacancy status",
     "rows_per_page": "Rows per page",
     "organization_tree": "Organization tree",
+    "other": "Other",
     "position_name": "Position name",
     "employee_name": "Employee name",
     "replacement_name": "Name of replacement",
     "replacement_start_date": "Replacement start date",
     "replacement_end_date": "Replacement end date",
-    "start_date": "Start date"
+    "start_date": "Start date",
+    "teacher": "Teacher",
+    "subjects": "Subjects",
+    "yes": "Yes",
+    "no": "No"
   },
   "tabs": {
     "positions": "Positions list",
@@ -121,7 +126,9 @@
       "CreatedPosition": "Created new position",
       "CreatedEmployee": "Added new employee",
       "VacancyStatus": "Vacancy status",
-      "EndedPosition": "Ended position"
+      "EndedPosition": "Ended position",
+      "PositionSubjects": "Subjects",
+      "IsTeacher": "Teacher"
     },
     "DecisionNumber": "Decision number",
     "search": {

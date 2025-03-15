@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[ChangeLog] (
+CREATE TABLE [dbo].[PositionChangeLog] (
     [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
     [VirkaId] UNIQUEIDENTIFIER NOT NULL,
     [MuokattuKentta] NVARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[ChangeLog] (
     [Muokkaaja] NVARCHAR(255) NOT NULL,
     [Timestamp] DATETIME DEFAULT GETDATE() NOT NULL,
     [PaatosNumero] NVARCHAR(255) NOT NULL,
-    CONSTRAINT FK_ChangeLog_Position FOREIGN KEY (VirkaId) REFERENCES Positions (Id)
+    CONSTRAINT FK_PositionChangeLog_Position FOREIGN KEY (VirkaId) REFERENCES Positions (Id)
 );
 
 GO
