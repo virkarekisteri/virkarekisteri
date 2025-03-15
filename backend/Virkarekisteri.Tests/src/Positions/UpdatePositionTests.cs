@@ -15,8 +15,9 @@ public class UpdatePositionTests
 {
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly Mock<IPositionNameRepository> _positionNameRepositoryMock;
-    private readonly Mock<IChangeLogRepository> _changeLogRepositoryMock;
+    private readonly Mock<IPositionChangeLogRepository> _positionChangeLogRepositoryMock;
     private readonly Mock<IOrganizationTreeRepository> _organizationTreeRepositoryMock;
+    private readonly Mock<ISubjectRepository> _subjectRepositoryMock;
     private readonly ILogger<UpdatePosition> _logger;
     private readonly UpdatePosition _updatePosition;
 
@@ -25,15 +26,17 @@ public class UpdatePositionTests
         _logger = Mock.Of<ILogger<UpdatePosition>>();
         _positionRepositoryMock = new Mock<IPositionRepository>();
         _positionNameRepositoryMock = new Mock<IPositionNameRepository>();
-        _changeLogRepositoryMock = new Mock<IChangeLogRepository>();
+        _positionChangeLogRepositoryMock = new Mock<IPositionChangeLogRepository>();
         _organizationTreeRepositoryMock = new Mock<IOrganizationTreeRepository>();
+        _subjectRepositoryMock = new Mock<ISubjectRepository>();
 
         _updatePosition = new UpdatePosition(
             _logger,
             _positionRepositoryMock.Object,
             _positionNameRepositoryMock.Object,
-            _changeLogRepositoryMock.Object,
-            _organizationTreeRepositoryMock.Object
+            _positionChangeLogRepositoryMock.Object,
+            _organizationTreeRepositoryMock.Object,
+            _subjectRepositoryMock.Object
         );
     }
 
