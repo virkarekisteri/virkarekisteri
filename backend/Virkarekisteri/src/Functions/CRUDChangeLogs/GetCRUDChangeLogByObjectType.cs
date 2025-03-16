@@ -15,7 +15,8 @@ public class GetCRUDChangeLogByObjectType(
     [Function("GetCRUDChangeLogByObjectType")]
     [RequiresReadRole]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "crudchangelogs/{objecttype}")] HttpRequest req
+        [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "crudchangelogs/objecttype/{objecttype}")]
+            HttpRequest req
     )
     {
         var sanitizedType = (req.RouteValues["objecttype"] as string)
