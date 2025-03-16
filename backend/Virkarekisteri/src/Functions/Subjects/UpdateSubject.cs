@@ -12,8 +12,8 @@ namespace Virkarekisteri.Functions.Subjects;
 
 public class UpdateSubject(
     ILogger<UpdateSubject> logger,
-    ISubjectRepository subjectRepository
-// TODO CRUD: IChangeLogRepository changeLogRepository
+    ISubjectRepository subjectRepository,
+    ICRUDChangeLogRepository CRUDChangeLogRepository
 )
 {
     /// <summary>
@@ -47,90 +47,69 @@ public class UpdateSubject(
         if (existingSubject == null)
             return new NotFoundResult();
 
-        // TODO: ChangeLogit aineen muokkauksesta, oma CRUDChangeLog yms.
-        /*
-        var changeLogs = new List<ChangeLog>();
+        var CRUDChangeLogs = new List<CRUDChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
-        var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
-        logger.LogInformation("2/3 : Updated Position Details: {@Position}", existingPosition);
+        logger.LogInformation("2/3 : Updated Subject Details: {@Subject}", existingSubject);
 
-        // Map only provided fields from UpdatePositionDto to the existing Position
-        PositionLogChange("EndedAt", existingPosition.EndedAt?.ToString(), updateDto.EndedAt?.ToString());
-        existingPosition.EndedAt = updateDto.EndedAt ?? existingPosition.EndedAt;
-
-        PositionLogChange("EndingDecisionNumber", existingPosition.EndingDecisionNumber, updateDto.EndingDecisionNumber);
-        existingPosition.EndingDecisionNumber = updateDto.EndingDecisionNumber ?? existingPosition.EndingDecisionNumber;
-
-        PositionLogChange("PlacementLocation", existingPosition.PlacementLocation, updateDto.PlacementLocation);
-        existingPosition.PlacementLocation = updateDto.PlacementLocation ?? existingPosition.PlacementLocation;
-
-        PositionLogChange(
-            "VacancyFill",
-            existingPosition.VacancyFill?.ToString("0.##"),
-            updateDto.VacancyFill?.ToString("0.##")
-        );
-        existingPosition.VacancyFill = updateDto.VacancyFill ?? existingPosition.VacancyFill;
-
-        PositionLogChange(
-            "VacancySize",
-            existingPosition.VacancySize?.ToString("0.##"),
-            updateDto.VacancySize?.ToString("0.##")
-        );
-        existingPosition.VacancySize = updateDto.VacancySize ?? existingPosition.VacancySize;
-
-        PositionLogChange("PricingId", existingPosition.PricingId, updateDto.PricingId);
-        existingPosition.PricingId = updateDto.PricingId ?? existingPosition.PricingId;
-
-        PositionLogChange("EducationLevel", existingPosition.EducationLevel, updateDto.EducationLevel);
-        existingPosition.EducationLevel = updateDto.EducationLevel ?? existingPosition.EducationLevel;
-
-        PositionLogChange("WorkExperience", existingPosition.WorkExperience, updateDto.WorkExperience);
-        existingPosition.WorkExperience = updateDto.WorkExperience ?? existingPosition.WorkExperience;
-
-        PositionLogChange("Details", existingPosition.Details, updateDto.Details);
-        existingPosition.Details = updateDto.Details ?? existingPosition.Details;
-
-        PositionLogChange("Type", existingPosition.Type.ToString(), updateDto.Type?.ToString());
-        existingPosition.Type = updateDto.Type ?? existingPosition.Type;
-        */
-
-        // Update the values of the existing subject
+        // Map only provided fields from UpdateSubjectDto to the existing Subject
+        CRUDLogChange("SubjectName", existingSubject.SubjectName, updateDto.SubjectName);
         existingSubject.SubjectName = updateDto.SubjectName ?? existingSubject.SubjectName;
+
+        CRUDLogChange("Active", existingSubject.Active.ToString(), updateDto.Active?.ToString());
         existingSubject.Active = updateDto.Active ?? existingSubject.Active;
 
         await subjectRepository.UpdateSubject(existingSubject);
-        return new NoContentResult(); // TODO: kommentoi pois kun logitus on valmis
 
-        // TODO: More logging... CRUDChangeLog yms.
-        /*
-        foreach (var changeLog in changeLogs)
+        foreach (var crudChangeLog in CRUDChangeLogs)
         {
-            await changeLogRepository.AddChangeLogEntry(changeLog);
+            await CRUDChangeLogRepository.AddCRUDChangeLogEntry(crudChangeLog);
         }
 
         logger.LogInformation("3/3 : Successfully updated position with ID: {Id}", id);
         return new NoContentResult();
 
-        void PositionLogChange(string field, string? oldValue, string? newValue)
+        void CRUDLogChange(string field, string? oldValue, string? newValue)
         {
             // No need to log changes if there are none and the values are the same
             if (AreValuesEquivalent(oldValue, newValue))
                 return;
 
-            changeLogs.Add(
-                new ChangeLog
+            CRUDChangeLogs.Add(
+                new CRUDChangeLog
                 {
-                    PositionId = positionId,
+                    ObjectType = "Subject",
+                    ObjectId = subjectId,
                     EditedField = field,
                     OldValue = oldValue ?? string.Empty,
                     NewValue = newValue ?? string.Empty,
                     Editor = editor,
                     Timestamp = DateTime.Now,
-                    DecisionNumber = decisionNumber,
                 }
             );
         }
-        */
+    }
+
+    private static bool AreValuesEquivalent(string? oldValue, string? newValue)
+    {
+        // Normalize null/empty values
+        oldValue = string.IsNullOrWhiteSpace(oldValue) ? null : oldValue.Trim();
+        newValue = string.IsNullOrWhiteSpace(newValue) ? null : newValue.Trim();
+
+        // Skip if both are null/empty
+        if (oldValue == null && newValue == null)
+            return true;
+
+        // Skip if both values are identical
+        if (oldValue == newValue)
+            return true;
+
+        // Treat "0,00" or "0" as equivalent to null/empty
+        var isZeroOrEmpty = (string? value) => value == null || value == "0,00" || value == "0";
+
+        if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
+            return true;
+
+        return false;
     }
 }
