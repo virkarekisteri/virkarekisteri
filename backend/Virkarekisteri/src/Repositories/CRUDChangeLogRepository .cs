@@ -6,7 +6,8 @@ namespace Virkarekisteri.Repositories;
 public interface ICRUDChangeLogRepository
 {
     Task<CRUDChangeLog> AddCRUDChangeLogEntry(CRUDChangeLog CRUDChangeLogEntry);
-    Task<CRUDChangeLog?> GetCRUDChangeLogById(Guid id);
+    Task<CRUDChangeLog?> GetCRUDChangeLogByObjectId(Guid objectId);
+    Task<CRUDChangeLog?> GetCRUDChangeLogByObjectType(string objectType);
     Task<List<CRUDChangeLog>> GetAllCRUDChangeLogs();
 }
 
@@ -20,9 +21,14 @@ public class CRUDChangeLogRepository(VirkarekisteriDb db) : ICRUDChangeLogReposi
         return CRUDChangeLogEntry;
     }
 
-    public async Task<CRUDChangeLog?> GetCRUDChangeLogById(Guid id)
+    public async Task<CRUDChangeLog?> GetCRUDChangeLogByObjectId(Guid objectId)
     {
-        return await db.CRUDChangeLogs.FirstOrDefaultAsync(ccl => ccl.Id == id);
+        return await db.CRUDChangeLogs.FirstOrDefaultAsync(ccl => ccl.ObjectId == objectId);
+    }
+
+    public async Task<CRUDChangeLog?> GetCRUDChangeLogByObjectType(string objectType)
+    {
+        return await db.CRUDChangeLogs.FirstOrDefaultAsync(ccl => ccl.ObjectType == objectType);
     }
 
     public async Task<List<CRUDChangeLog>> GetAllCRUDChangeLogs()
