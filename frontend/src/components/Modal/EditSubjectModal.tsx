@@ -170,7 +170,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  <RenderReadonlyTextField value={isCreateDialog || t('admin_panel.teacher_subjects.editwarning')} />
+                  <RenderReadonlyTextField value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')} />
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>

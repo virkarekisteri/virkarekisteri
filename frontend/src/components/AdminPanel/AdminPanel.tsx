@@ -25,6 +25,8 @@ import SubjectDetails from 'components/Details/SubjectDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
 import EditSubjectModal from '../Modal/EditSubjectModal'
 
+import ActivityLight from 'components/Components/ActivityLight';
+
 const AdminPanel = () => {
   const { t } = useTranslation();
 
@@ -257,7 +259,10 @@ const AdminPanel = () => {
                 >
 
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                    <ActivityLight value={row.active} labeltrue={t('admin_panel.teacher_subjects.active')} labelfalse={t('admin_panel.teacher_subjects.inactive')} /> 
+                  {/* {row.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')} */}
+                  </TableCell>
                 </TableRow>
 
               </React.Fragment>
