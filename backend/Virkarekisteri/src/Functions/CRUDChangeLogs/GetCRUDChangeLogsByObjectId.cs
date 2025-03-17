@@ -3,16 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Virkarekisteri.Middleware.Attributes;
+using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.CRUDChangeLogs;
 
-public class GetCRUDChangeLogByObjectId(
-    ILogger<GetCRUDChangeLogByObjectId> logger,
+public class GetCRUDChangeLogsByObjectId(
+    ILogger<GetCRUDChangeLogsByObjectId> logger,
     ICRUDChangeLogRepository CRUDChangeLogRepository
 )
 {
-    [Function("GetCRUDChangeLogByObjectId")]
+    [Function("GetCRUDChangeLogsByObjectId")]
     [RequiresReadRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "crudchangelogs/object/{objectid}")] HttpRequest req
@@ -29,10 +30,10 @@ public class GetCRUDChangeLogByObjectId(
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["objectid"]} as a Guid");
         }
 
-        var CRUDChangeLog = await CRUDChangeLogRepository.GetCRUDChangeLogByObjectId(objectId);
+        var CRUDChangeLogs = await CRUDChangeLogRepository.GetCRUDChangeLogsByObjectId(objectId);
 
-        if (CRUDChangeLog != null)
-            return new OkObjectResult(CRUDChangeLog);
+        if (CRUDChangeLogs.Count != 0)
+            return new OkObjectResult(CRUDChangeLogs);
 
         logger.LogInformation("No CRUD change logs found for orbject ID: {objectid}", objectId);
         return new OkObjectResult(new List<object>());

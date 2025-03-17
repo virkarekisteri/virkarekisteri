@@ -7,12 +7,12 @@ using Virkarekisteri.Repositories;
 
 namespace Virkarekisteri.Functions.CRUDChangeLogs;
 
-public class GetCRUDChangeLogByObjectType(
-    ILogger<GetCRUDChangeLogByObjectType> logger,
+public class GetCRUDChangeLogsByObjectType(
+    ILogger<GetCRUDChangeLogsByObjectType> logger,
     ICRUDChangeLogRepository CRUDChangeLogRepository
 )
 {
-    [Function("GetCRUDChangeLogByObjectType")]
+    [Function("GetCRUDChangeLogsByObjectType")]
     [RequiresReadRole]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "crudchangelogs/objecttype/{objecttype}")]
@@ -25,10 +25,10 @@ public class GetCRUDChangeLogByObjectType(
             .Replace("\r", "");
         logger.LogInformation("Getting CRUD change logs for object type: {objecttype}", sanitizedType);
 
-        var CRUDChangeLog = await CRUDChangeLogRepository.GetCRUDChangeLogByObjectType(sanitizedType);
+        var CRUDChangeLogs = await CRUDChangeLogRepository.GetCRUDChangeLogsByObjectType(sanitizedType);
 
-        if (CRUDChangeLog != null)
-            return new OkObjectResult(CRUDChangeLog);
+        if (CRUDChangeLogs.Count != 0)
+            return new OkObjectResult(CRUDChangeLogs);
 
         logger.LogInformation("No CRUD change logs found for object type: {objecttype}", sanitizedType);
         return new OkObjectResult(new List<object>());
