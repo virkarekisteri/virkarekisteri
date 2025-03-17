@@ -27,10 +27,10 @@ import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teac
 
 
 //import type { Position } from 'models/Position';
-import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
+//import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 //import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
 //import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
-import { idID } from '@mui/material/locale';
+//import { idID } from '@mui/material/locale';
 
 interface EditSubjectModalProps {
   open: boolean;
@@ -42,53 +42,21 @@ interface EditSubjectModalProps {
 interface FormValues {
   subjectName: string;
   active: boolean;
-  /*   endedAt?: Date;
-  endingDecisionNumber?: string;
-  placementLocation?: string;
-  vacancyFill?: number;
-  positionName?: { name: string };
-  orgTree?: string;
-  pricingId?: string;
-  vacancySize?: number;
-  educationLevel?: string;
-  workExperience?: string;
-  details?: string;
-  type?: number;
-  decisionNumber?: string; */
 }
 
 
 
 const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
 
+  const isCreateDialog: boolean = position === undefined ? true : false;
+
   const { t } = useTranslation();
 
-  //const { data: positionNames = [] } = useGetPositionNamesQuery();
-  //onst { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
   
   const [ updateSubject ] = useUpdateTeacherSubjectMutation();
   const [ createSubject ] = useCreateTeacherSubjectMutation();
-/*   const filteredOrgTrees = organizationTrees
-    .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
-    .sort((a, b) => a.number.localeCompare(b.number));
 
-  const validatePricingId = (value: string) => {
-    if (value && value.length > 20) {
-      return t('error.pricing_id_error');
-    }
-    return undefined;
-  };
 
-  const validateVacancySize = (value: string) => {
-    if (!/^\d+$/.test(value)) {
-      return t('error.vacancy_size_integer_error');
-      }
-      const numValue = Number(value);
-      if ((value && numValue < 0) || numValue > 100) {
-        return t('error.vacancy_size_error');
-        }
-        return undefined;
-        }; */
 
 
   const initialValues = position !== undefined ? 
@@ -104,16 +72,11 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validateSubjectName = (value: string, allValues: Record<string, any>) => {
-    console.log(allValues)
-    console.log(allSubjects)
-    if (allSubjects.some((subj) => {return (subj.subjectName === value && (position && value != position.subjectName))}))
+    if (value && allSubjects.some(
+        (subj) => {return (subj.subjectName === value.toLowerCase() && (isCreateDialog || (position && value != position.subjectName)))}
+      ))
       return t('admin_panel.error.subject_name_exists_error');
-    /* if ((value && Number(value) < 0) || Number(value) > 100) {
-      return t('error.vacancy_fill_error');
-    } else if (Number(value) > Number(allValues.vacancySize)) {
-      return t('error.vacancy_fill_greater_than_size');
-    }
-     */
+
     return undefined;
   };
 
@@ -208,7 +171,10 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>
-                      {({ input, meta }) => (
+                      {({ input, meta }) => {
+                        
+                        //console.log(input)
+                        return (
                           <TextField
                           {...input}
                           fullWidth
@@ -224,7 +190,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                             },
                           }}
                           />
-                        )
+                        )}
                       }
                     </Field>
                   {/* //</Grid2> */}

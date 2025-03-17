@@ -286,7 +286,7 @@ const AdminPanel = () => {
           }
           </Grid2>
         </Grid2>
-        <EditSubjectModal open={createModalOpen} handleClose={handleCloseCreateModal} allSubjects={sortedTeacherSubjects}/>
+        <EditSubjectModal open={createModalOpen} handleClose={handleCloseCreateModal} position={undefined} allSubjects={sortedTeacherSubjects}/>
         {/* 
  */}
     </Box>
