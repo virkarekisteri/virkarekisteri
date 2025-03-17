@@ -130,7 +130,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
                 }}
           >
             <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
-              {t('additional_details')}
+              {t('admin_panel.teacher_subjects.edit_history')}
             </Typography>
 
           </AccordionSummary>
@@ -146,7 +146,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
               {t('additional_details')}
               </Typography>
                 */}
-              <RenderReadonlyTextField value={"HELLOW ORLD!"} />
+              <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.no_edits')} />
               </Grid2>
               </AccordionDetails>
 

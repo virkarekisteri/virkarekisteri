@@ -194,9 +194,11 @@
       "details": "Aineen tiedot",
       "active": "Aktiivinen",
       "inactive": "Ei aktiivinen",
+      "create_subject": "Luo uusi aine",
       "edit_subject": "Muokkaa aineen tietoja",
       "edit_history": "Muutoshistoria",
-      "editwarning": "Tässä tehdyt muokkaukset vaikuttava kaikkien opettajien-tyyppisten virkojen tietoihin!"
+      "editwarning": "Tässä tehdyt muokkaukset vaikuttava kaikkien opettajien-tyyppisten virkojen tietoihin!",
+      "no_edits": "Ei muokkauksia"
     },
     "search": {
       "bySubjectName": "Etsi aineen nimellä"

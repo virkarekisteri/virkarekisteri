@@ -197,7 +197,7 @@ const AdminPanel = () => {
                     </Box>
                   }
                 >
-                  {t('new_position')}
+                  {t('admin_panel.teacher_subjects.create_subject')}
                 </Button>
               </RequiresEditRole>
 

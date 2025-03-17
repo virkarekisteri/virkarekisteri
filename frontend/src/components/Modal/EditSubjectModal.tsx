@@ -16,6 +16,9 @@ import {
   Autocomplete,
   FormControlLabel,
 } from '@mui/material';
+
+import RenderReadonlyTextField from '../Details/RenderReadonlyTextField';
+
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
@@ -85,7 +88,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
       try {
 
         const subjectData: Partial<TeacherSubject> = {
-          subjectName: values.subjectName.toLowerCase(), // TODO: no duplicate validation here currently, I trust there's something on the backend
+          subjectName: values.subjectName.toLowerCase(),
           active: values.active
         };
         console.log("Creating new subject!")
@@ -100,7 +103,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
 
     try {
       const updateData = {
-        subjectName: values.subjectName.toLowerCase(), // TODO: no duplicate validation here currently, I trust there's something on the backend
+        subjectName: values.subjectName.toLowerCase(),
         active: values.active
       };
       console.log(updateData)
@@ -146,7 +149,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{t('admin_panel.teacher_subjects.edit_subject')}</Typography>
+          <Typography variant="h6">{isCreateDialog ? t('admin_panel.teacher_subjects.create_subject') : t('admin_panel.teacher_subjects.edit_subject')}</Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -167,7 +170,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  {t('admin_panel.teacher_subjects.editwarning')}
+                  <RenderReadonlyTextField value={isCreateDialog || t('admin_panel.teacher_subjects.editwarning')} />
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>

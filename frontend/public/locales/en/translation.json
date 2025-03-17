@@ -194,9 +194,11 @@
       "details":"Subject details",
       "active": "Active",
       "inactive": "Inactive",
+      "create_subject": "Create new subject",
       "edit_subject": "Edit subject",
       "edit_history": "Editing history",
-      "editwarning": "Changes made here will affect all positions of type teacher!"
+      "editwarning": "Changes made here will affect all positions of type teacher!",
+      "no_edits": "No edits"
     },
     "search": {
       "bySubjectName": "Search by subject name"
