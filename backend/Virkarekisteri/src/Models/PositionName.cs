@@ -16,5 +16,5 @@ public class PositionName
     public DateTime? ValidFrom { get; set; }
 
     [Column("ValidTo")]
-    public DateTime? ValidTo { get; set; }  
+    public DateTime? ValidTo { get; set; }
 }
