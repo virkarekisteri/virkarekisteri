@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[Costcentres] (
+  [Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+  [Number] INT NOT NULL,
+  [Name] NVARCHAR(255) NOT NULL,
+  [ValidFrom] DATETIME,
+  [ValidUntil] DATETIME
+)
