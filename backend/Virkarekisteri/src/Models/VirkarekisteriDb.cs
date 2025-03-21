@@ -11,6 +11,7 @@ public class VirkarekisteriDb(DbContextOptions<VirkarekisteriDb> options) : DbCo
     public DbSet<PositionChangeLog> PositionChangeLogs { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<PositionSubject> PositionSubjects { get; set; }
+    public DbSet<CRUDChangeLog> CRUDChangeLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
