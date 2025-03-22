@@ -8,6 +8,7 @@ public interface ICostcentreRepository
     Task<List<Costcentre>> GetAllCostcentres();
     Task<string?> GetCostcentreNameById(Guid id);
     Task<Costcentre> GetCostcentreById(Guid id);
+    Task UpdateCostcentre(Costcentre existingCostcentre);
 }
 
 public class CostcentreRepository(VirkarekisteriDb db) : ICostcentreRepository
@@ -26,5 +27,11 @@ public class CostcentreRepository(VirkarekisteriDb db) : ICostcentreRepository
     {
         var costcentre = await db.Costcentres.FirstOrDefaultAsync(c => c.Id == id);
         return costcentre?.Name;
+    }
+
+    public async Task UpdateCostcentre(Costcentre existingCostcentre)
+    {
+        db.Costcentres.Update(existingCostcentre);
+        await db.SaveChangesAsync();
     }
 }

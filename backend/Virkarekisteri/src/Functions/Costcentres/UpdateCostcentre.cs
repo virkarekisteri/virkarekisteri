@@ -13,8 +13,8 @@ namespace Virkarekisteri.Functions.Costcentres;
 // PUT /costcentres/{id}
 public class UpdateCostcentre(
     ILogger<UpdateCostcentre> logger,
-    ICostcentreRepository costcentreRepository
-// TODO CRUD: IChangeLogRepository changeLogRepository
+    ICostcentreRepository costcentreRepository,
+    ICRUDChangeLogRepository CRUDChangeLogRepository
 )
 {
     /// <summary>
@@ -48,6 +48,75 @@ public class UpdateCostcentre(
         if (existingCostcentre == null)
             return new NotFoundResult();
 
-        // TODO: Update values and handle the logging
+        var CRUDChangeLogs = new List<CRUDChangeLog>();
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+
+        logger.LogInformation("2/3 : Updated Costcentre Details: {@Costcentre}", existingCostcentre);
+
+        // Map only provided fields from UpdateCostcentreDto to the existing Costcentre
+        CRUDLogChange("Number", existingCostcentre.Number.ToString(), updateDto.Number.ToString());
+        existingCostcentre.Number = updateDto.Number ?? existingCostcentre.Number;
+
+        CRUDLogChange("Name", existingCostcentre.Name, updateDto.Name);
+        existingCostcentre.Name = updateDto.Name ?? existingCostcentre.Name;
+
+        CRUDLogChange("ValidFrom", existingCostcentre.ValidFrom.ToString(), updateDto.ValidFrom.ToString());
+        existingCostcentre.ValidFrom = updateDto.ValidFrom ?? existingCostcentre.ValidFrom;
+
+        CRUDLogChange("ValidUntil", existingCostcentre.ValidUntil.ToString(), updateDto.ValidUntil.ToString());
+        existingCostcentre.ValidUntil = updateDto.ValidUntil ?? existingCostcentre.ValidUntil;
+
+        await costcentreRepository.UpdateCostcentre(existingCostcentre);
+
+        foreach (var crudChangeLog in CRUDChangeLogs)
+        {
+            await CRUDChangeLogRepository.AddCRUDChangeLogEntry(crudChangeLog);
+        }
+
+        logger.LogInformation("3/3 : Costcentre updated successfully");
+        return new NoContentResult();
+
+        void CRUDLogChange(string field, string? oldValue, string? newValue)
+        {
+            // No need to log changes if there are none and the values are the same
+            if (AreValuesEquivalent(oldValue, newValue))
+                return;
+
+            CRUDChangeLogs.Add(
+                new CRUDChangeLog
+                {
+                    ObjectType = "Costcentre",
+                    ObjectId = costcentreId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.Now,
+                }
+            );
+        }
+    }
+
+    private static bool AreValuesEquivalent(string? oldValue, string? newValue)
+    {
+        // Normalize null/empty values
+        oldValue = string.IsNullOrWhiteSpace(oldValue) ? null : oldValue.Trim();
+        newValue = string.IsNullOrWhiteSpace(newValue) ? null : newValue.Trim();
+
+        // Skip if both are null/empty
+        if (oldValue == null && newValue == null)
+            return true;
+
+        // Skip if both values are identical
+        if (oldValue == newValue)
+            return true;
+
+        // Treat "0,00" or "0" as equivalent to null/empty
+        var isZeroOrEmpty = (string? value) => value == null || value == "0,00" || value == "0";
+
+        if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
+            return true;
+
+        return false;
     }
 }
