@@ -139,10 +139,10 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     }
 
     /// <summary>
-    /// Gets the organization number (prefix) for the given OrgTreeId.
+    /// Gets the costcentre number (prefix) for the given CostcentreId.
     /// </summary>
-    /// <param name="orgTreeId">The organization tree node ID.</param>
-    /// <returns>The organization number, or null if not found.</returns>
+    /// <param name="CostcentreId">The ID of the costcentre.</param>
+    /// <returns>The costcentre number, or null if not found.</returns>
     public async Task<string?> GetCostcentreNumberById(Guid costcentreId)
     {
         var number = await db.Costcentres.Where(c => c.Id == costcentreId).Select(c => c.Number).FirstOrDefaultAsync();
@@ -164,9 +164,9 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     }
 
     /// <summary>
-    /// Generates a unique vacancy number based on the OrgTreeId and the next sequence number.
+    /// Generates a unique vacancy number based on the CostcentreId and the next sequence number.
     /// </summary>
-    /// <param name="orgTreeId">The organization tree node ID.</param>
+    /// <param name="costcentreId">The ID of the costcentre.</param>
     /// <returns>A new vacancy number in the format "PREFIXXXXX".</returns>
     public async Task<string> GenerateVacancyNumber(Guid costcentreId)
     {

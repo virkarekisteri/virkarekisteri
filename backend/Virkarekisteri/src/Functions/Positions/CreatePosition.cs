@@ -39,7 +39,7 @@ public class CreatePosition(
 
         if (requestPosition.CostcentreId == Guid.Empty)
         {
-            return new BadRequestObjectResult("OrgTreeId must be provided.");
+            return new BadRequestObjectResult("CostcentreId must be provided.");
         }
 
         if (requestPosition.PositionNameId == Guid.Empty)
