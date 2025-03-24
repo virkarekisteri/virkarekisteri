@@ -27,7 +27,7 @@ import EditSubjectModal from '../Modal/EditSubjectModal'
 
 import ActivityLight from 'components/Components/ActivityLight';
 
-const AdminPanel = () => {
+const SubjectAdmin = () => {
   const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
@@ -298,4 +298,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default SubjectAdmin;

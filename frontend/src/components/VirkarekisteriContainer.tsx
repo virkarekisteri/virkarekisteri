@@ -16,7 +16,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
 import { RequiresAdminRole, RequiresEditRole } from './role-guards';
 import ChangeLogTable from './ChangeLog/ChangeLogTable';
-import AdminPanel from './AdminPanel/AdminPanel';
+import AdminPanelContainer from './AdminPanel/AdminPanelContainer';
 import type { Position } from 'models/Position';
 
 const VirkarekisterContainer = () => {
@@ -247,7 +247,7 @@ const VirkarekisterContainer = () => {
               </>
             )}
             {activeTab === 1 && <ChangeLogTable />}
-            {activeTab === 2 && <AdminPanel />}
+            {activeTab === 2 && <AdminPanelContainer />}
           </Grid2>
           <Grid2 size={12}>
             {singlePositionLoading ? (
