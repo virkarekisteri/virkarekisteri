@@ -222,6 +222,13 @@
     },
     "error": {
       "subject_name_exists_error": "Aineen nimi on jo olemassa"
+    },
+    "change_logs": {
+      "edited_field": "Muokattu kenttä",
+      "old_value": "Vanha arvo",
+      "new_value": "Uusi arvo",
+      "editor": "Muokkaaja",
+      "timestamp": "Aika"
     }
   }
 }

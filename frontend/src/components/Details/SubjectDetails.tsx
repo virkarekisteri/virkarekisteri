@@ -8,7 +8,7 @@ import EditSubjectModal from '../Modal/EditSubjectModal'
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
-
+import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
 interface SubjectDetailsProps {
   position: TeacherSubject;
   allSubjects: TeacherSubject[];
@@ -145,23 +145,67 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
             }}
             >
             <Grid2 size={12}>
-              {/* 
-              <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('additional_details')}
-              </Typography>
-                */}
-              {subjectChangelogs.map((changelog) => (
-                <RenderReadonlyTextField value={`${changelog.editedField} ${changelog.oldValue} -> ${changelog.newValue}`} />
-              ))}
+              {subjectChangelogs.length > 0 ? (
+
+            <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
+              <Grid2 size={2} sx={{ width: '20%' }}>
+                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                  {t('admin_panel.change_logs.edited_field')}
+                </Typography>
               </Grid2>
-              </AccordionDetails>
+              <Grid2 size={3} sx={{ width: '20%' }}>
+                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                  {t('admin_panel.change_logs.old_value')}
+                </Typography>
+              </Grid2>
+              <Grid2 size={3} sx={{ width: '20%' }}>
+                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                  {t('admin_panel.change_logs.new_value')}
+                </Typography>
+              </Grid2>
+              <Grid2 size={2} sx={{ width: '20%' }}>
+                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                  {t('admin_panel.change_logs.editor')}
+                </Typography>
+              </Grid2>
+              <Grid2 size={2} sx={{ width: '20%' }}>
+                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                  {t('admin_panel.change_logs.timestamp')}
+                </Typography>
+              </Grid2>
 
-              </Accordion>
-              </Box>
+              {subjectChangelogs.map((changelog: AdminChangeLogEntry) => (
+                <React.Fragment key={changelog.id}>
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <RenderReadonlyTextField value={changelog.editedField} />
+                  </Grid2>
+                  <Grid2 size={3} sx={{ width: '20%' }}>
+                    <RenderReadonlyTextField value={changelog.oldValue} />
+                  </Grid2>
+                  <Grid2 size={3} sx={{ width: '20%' }}>
+                    <RenderReadonlyTextField value={changelog.newValue} />
+                  </Grid2>
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <RenderReadonlyTextField value={changelog.editor} />
+                  </Grid2>
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <RenderReadonlyTextField value={changelog.timestamp} />
+                  </Grid2>
+                </React.Fragment>
+              ))}
+            </Grid2>
+              ) : (
+                <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.no_edits')} />
+              )}
+            </Grid2>
+            </AccordionDetails>
 
-              
-      <EditSubjectModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} allSubjects={allSubjects}/>
-    </Box>
-  );
+            </Accordion>
+            </Box>
+
+            
+    <EditSubjectModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} allSubjects={allSubjects}/>
+  </Box>
+);
 };
 export default SubjectDetails;

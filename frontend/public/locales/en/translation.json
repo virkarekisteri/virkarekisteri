@@ -222,6 +222,13 @@
     },
     "error": {
       "subject_name_exists_error": "Subject name exists"
+    },
+    "change_logs": {
+      "edited_field": "Edited field",
+      "old_value": "Old value",
+      "new_value": "New value",
+      "editor": "Editor",
+      "timestamp": "Timestamp"
     }
   }
 }
