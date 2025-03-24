@@ -7,6 +7,7 @@ public interface ISubjectRepository
 {
     Task<List<Subject>> GetSubjects();
     Task<Subject?> GetSubject(Guid id);
+    Task<List<Subject>> GetSubjectsByIds(List<Guid> ids);
     Task<(bool Exists, Subject? Subject)> CreateSubject(Subject subject);
     Task UpdateSubject(Subject existingSubject);
 }
@@ -21,6 +22,11 @@ public class SubjectRepository(VirkarekisteriDb db) : ISubjectRepository
     public async Task<Subject?> GetSubject(Guid id)
     {
         return await db.Subjects.FirstOrDefaultAsync(s => s.Id == id);
+    }
+
+    public async Task<List<Subject>> GetSubjectsByIds(List<Guid> ids)
+    {
+        return await db.Subjects.Where(s => ids.Contains(s.Id)).ToListAsync();
     }
 
     public async Task<(bool Exists, Subject? Subject)> CreateSubject(Subject subject)

@@ -15,6 +15,9 @@ public class UpdatePositionTests
 {
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly Mock<IPositionNameRepository> _positionNameRepositoryMock;
+    private readonly Mock<IPositionChangeLogRepository> _positionChangeLogRepositoryMock;
+    private readonly Mock<IOrganizationTreeRepository> _organizationTreeRepositoryMock;
+    private readonly Mock<ISubjectRepository> _subjectRepositoryMock;
     private readonly ILogger<UpdatePosition> _logger;
     private readonly UpdatePosition _updatePosition;
 
@@ -23,10 +26,17 @@ public class UpdatePositionTests
         _logger = Mock.Of<ILogger<UpdatePosition>>();
         _positionRepositoryMock = new Mock<IPositionRepository>();
         _positionNameRepositoryMock = new Mock<IPositionNameRepository>();
+        _positionChangeLogRepositoryMock = new Mock<IPositionChangeLogRepository>();
+        _organizationTreeRepositoryMock = new Mock<IOrganizationTreeRepository>();
+        _subjectRepositoryMock = new Mock<ISubjectRepository>();
+
         _updatePosition = new UpdatePosition(
             _logger,
             _positionRepositoryMock.Object,
-            _positionNameRepositoryMock.Object
+            _positionNameRepositoryMock.Object,
+            _positionChangeLogRepositoryMock.Object,
+            _organizationTreeRepositoryMock.Object,
+            _subjectRepositoryMock.Object
         );
     }
 
@@ -138,17 +148,17 @@ public class UpdatePositionTests
             VacancySize = .50M,
             VacancyFill = .40M,
         };
-        var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
+        var updateDto = new UpdatePositionDto { PositionName = new PositionNameDto { Name = "New Position Name" } };
 
         var requestJson = JsonSerializer.Serialize(updateDto);
         var requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
         _positionRepositoryMock.Setup(repo => repo.GetPosition(positionId)).ReturnsAsync(existingPosition);
         _positionNameRepositoryMock
-            .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName))
+            .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName.Name))
             .ReturnsAsync(mockPositionNameId);
         _positionNameRepositoryMock
-            .Setup(repo => repo.CreatePositionName(updateDto.PositionName))
+            .Setup(repo => repo.CreatePositionName(updateDto.PositionName.Name))
             .ReturnsAsync(Guid.NewGuid());
 
         request.Body = new MemoryStream(requestBytes);
@@ -176,17 +186,17 @@ public class UpdatePositionTests
             VacancySize = .50M,
             VacancyFill = .40M,
         };
-        var updateDto = new UpdatePositionDto { PositionName = "New Position Name" };
+        var updateDto = new UpdatePositionDto { PositionName = new PositionNameDto { Name = "New Position Name" } };
 
         var requestJson = JsonSerializer.Serialize(updateDto);
         var requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
         _positionRepositoryMock.Setup(repo => repo.GetPosition(positionId)).ReturnsAsync(existingPosition);
         _positionNameRepositoryMock
-            .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName))
+            .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName.Name))
             .ReturnsAsync((Guid?)null);
         _positionNameRepositoryMock
-            .Setup(repo => repo.CreatePositionName(updateDto.PositionName))
+            .Setup(repo => repo.CreatePositionName(updateDto.PositionName.Name))
             .ReturnsAsync(Guid.NewGuid());
 
         request.Body = new MemoryStream(requestBytes);
@@ -194,7 +204,7 @@ public class UpdatePositionTests
 
         var result = await _updatePosition.Run(request, positionId.ToString());
 
-        _positionNameRepositoryMock.Verify(repo => repo.CreatePositionName(updateDto.PositionName), Times.Once);
+        _positionNameRepositoryMock.Verify(repo => repo.CreatePositionName(updateDto.PositionName.Name), Times.Once);
 
         result.Should().BeOfType<NoContentResult>();
     }

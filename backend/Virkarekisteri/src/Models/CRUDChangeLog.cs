@@ -3,14 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Virkarekisteri.Models;
 
-[Table("ChangeLog")]
-public class ChangeLog
+[Table("CRUDChangeLog")]
+public class CRUDChangeLog
 {
     public Guid Id { get; set; }
 
     [Required]
-    [Column("VirkaId")]
-    public Guid PositionId { get; set; }
+    [Column("ObjektiTyyppi")]
+    public required string ObjectType { get; set; }
+
+    [Required]
+    [Column("ObjektiId")]
+    public Guid ObjectId { get; set; }
 
     [Required]
     [MaxLength(255)]
@@ -35,9 +39,4 @@ public class ChangeLog
     [Required]
     [Column("Timestamp")]
     public DateTime Timestamp { get; set; }
-
-    [Required]
-    [MaxLength(255)]
-    [Column("PaatosNumero")]
-    public required string DecisionNumber { get; set; }
 }

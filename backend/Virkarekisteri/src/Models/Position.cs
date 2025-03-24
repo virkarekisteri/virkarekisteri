@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Virkarekisteri.Models;
 
@@ -82,4 +83,7 @@ public class Position
     [Required]
     [Column("OnOpettaja")]
     public bool IsTeacher { get; set; } = false;
+
+    [NotMapped]
+    public List<Guid> SubjectIds { get; set; } = new List<Guid>();
 }

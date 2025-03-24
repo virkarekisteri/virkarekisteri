@@ -13,7 +13,7 @@ namespace Virkarekisteri.Functions.Employees;
 public class UpdatePositionEmployee(
     ILogger<UpdatePositionEmployee> logger,
     IPositionEmployeeRepository positionEmployeeRepository,
-    IChangeLogRepository changeLogRepository,
+    IPositionChangeLogRepository positionChangeLogRepository,
     IPositionRepository positionRepository
 )
 {
@@ -49,16 +49,16 @@ public class UpdatePositionEmployee(
         if (existingPositionEmployee == null)
             return new NotFoundResult();
 
-        var changeLogs = new List<ChangeLog>();
+        var positionChangeLogs = new List<PositionChangeLog>();
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
         var decisionNumber = updateDto.DecisionNumber ?? "Unknown";
 
-        void LogChange(string field, string? oldValue, string? newValue)
+        void PositionLogChange(string field, string? oldValue, string? newValue)
         {
             if (oldValue != newValue)
             {
-                changeLogs.Add(
-                    new ChangeLog
+                positionChangeLogs.Add(
+                    new PositionChangeLog
                     {
                         PositionId = existingPositionEmployee.PositionId,
                         EditedField = field,
@@ -71,18 +71,22 @@ public class UpdatePositionEmployee(
             }
         }
 
-        LogChange(
+        PositionLogChange(
             "StartDate",
             existingPositionEmployee.StartDate.ToString("yyyy-MM-dd"),
             updateDto.StartDate?.ToString("yyyy-MM-dd")
         );
-        LogChange(
+        PositionLogChange(
             "EndingDate",
             existingPositionEmployee.EndingDate?.ToString("yyyy-MM-dd"),
             updateDto.EndingDate?.ToString("yyyy-MM-dd")
         );
-        LogChange("PositionId", existingPositionEmployee.PositionId.ToString(), updateDto.PositionId?.ToString());
-        LogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
+        PositionLogChange(
+            "PositionId",
+            existingPositionEmployee.PositionId.ToString(),
+            updateDto.PositionId?.ToString()
+        );
+        PositionLogChange("EmployeeName", existingPositionEmployee.EmployeeName, updateDto.EmployeeName);
 
         if (updateDto.InLeave.HasValue && !updateDto.InLeave.Value && existingPositionEmployee.InLeave)
         {
@@ -106,7 +110,7 @@ public class UpdatePositionEmployee(
                     position.ReplacementEmployeeId = null;
 
                     // Substitute is removed
-                    LogChange("Substitute", currentSubstituteName, existingPositionEmployee.EmployeeName);
+                    PositionLogChange("Substitute", currentSubstituteName, existingPositionEmployee.EmployeeName);
                     await positionRepository.UpdatePosition(position);
                 }
             }
@@ -124,9 +128,9 @@ public class UpdatePositionEmployee(
 
         await positionEmployeeRepository.UpdatePositionEmployee(existingPositionEmployee);
 
-        foreach (var changeLog in changeLogs)
+        foreach (var positionChangeLog in positionChangeLogs)
         {
-            await changeLogRepository.AddChangeLogEntry(changeLog);
+            await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
         }
 
         return new OkObjectResult(existingPositionEmployee);

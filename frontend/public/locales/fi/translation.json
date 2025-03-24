@@ -15,7 +15,9 @@
     "work_experience": "Työkokemus",
     "type": "Laji",
     "type_position": "Virka",
-    "type_post": "Toimi"
+    "type_post": "Toimi",
+    "teacher": "Opettaja",
+    "subjects": "Opetettavat aineet"
   },
   "create_csv_position": {
     "success": " virkaa luotu onnistuneesti.",
@@ -41,6 +43,8 @@
     "employee_name": "Viranhaltijan nimi",
     "details": "Viranhaltijan tiedot",
     "start_date": "Virkaan asettamispäivä",
+    "start_date_begins": "Virkaan asettamispäivä alkaen",
+    "start_date_ends": "Virkaan asettamispäivä päättyen",
     "ending_date": "Virkasopimuksen päättämispäivä",
     "no_end_date": "Ei määräaikaa",
     "save": "Tallenna",
@@ -61,8 +65,17 @@
     "rows_per_page": "Rivejä sivulla:",
     "position_name": "Virkanimike",
     "organization_tree": "Kustannuspaikka",
+    "other": "Muuta",
     "placement_location": "Sijoituspaikka",
-    "employee_name": "Viranhaltijan nimi"
+    "employee_name": "Viranhaltijan nimi",
+    "replacement_name": "Sijaisen nimi",
+    "replacement_start_date": "Sijaisuuden alkamispäivä",
+    "replacement_end_date": "Sijaisuuden päättymispäivä",
+    "start_date": "Virkaan asettamispäivä",
+    "teacher": "Opettaja",
+    "subjects": "Opetettavat aineet",
+    "yes": "Kyllä",
+    "no": "Ei"
   },
   "tabs": {
     "positions": "Virkalistaus",
@@ -114,7 +127,9 @@
       "CreatedPosition": "Luotu uusi virka",
       "CreatedEmployee": "Lisätty uusi viranhaltija",
       "VacancyStatus": "Vakanssin tila",
-      "EndedPosition": "Lakkautettu virka"
+      "EndedPosition": "Lakkautettu virka",
+      "PositionSubjects": "Aineet",
+      "IsTeacher": "Opettaja"
     },
     "DecisionNumber": "Päätösnumero",
     "search": {
@@ -160,7 +175,9 @@
     "details": "Viran tiedot",
     "eligibility": "Kelpoisuusehdot",
     "creation_decision_number": "Päätösnumero",
-    "creation_description": "Päätöksen selite"
+    "creation_description": "Päätöksen selite",
+    "teacher": "Opettaja",
+    "subjects": "Opetettavat aineet"
   },
   "error": {
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kaksikymmentä (20) merkkiä pitkä.",
