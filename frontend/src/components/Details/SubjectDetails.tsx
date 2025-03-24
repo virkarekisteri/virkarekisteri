@@ -7,6 +7,7 @@ import Grid2 from '@mui/material/Grid2';
 import EditSubjectModal from '../Modal/EditSubjectModal'
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
+import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 
 interface SubjectDetailsProps {
   position: TeacherSubject;
@@ -26,6 +27,9 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
   };
+
+  const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(position.id);
+  console.log("subjectChangelogs: ", subjectChangelogs)
 
   return (
     <Box
@@ -146,7 +150,9 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
               {t('additional_details')}
               </Typography>
                 */}
-              <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.no_edits')} />
+              {subjectChangelogs.map((changelog) => (
+                <RenderReadonlyTextField value={`${changelog.editedField} ${changelog.oldValue} -> ${changelog.newValue}`} />
+              ))}
               </Grid2>
               </AccordionDetails>
 
