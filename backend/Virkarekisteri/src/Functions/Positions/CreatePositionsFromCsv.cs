@@ -39,10 +39,7 @@ public class CreatePositionsFromCsv(
 
         // preload all subjects once
         var allSubjects = await subjectRepository.GetSubjects();
-        var subjectDictionary = allSubjects.ToDictionary(
-            s => s.SubjectName.ToLowerInvariant(),
-            s => s.Id
-        );
+        var subjectDictionary = allSubjects.ToDictionary(s => s.SubjectName.ToLowerInvariant(), s => s.Id);
 
         var positions = new List<Position>();
         var errors = new List<string>();
