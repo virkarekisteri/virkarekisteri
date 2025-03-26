@@ -22,7 +22,11 @@ public class GetPosition(ILogger<GetPosition> logger, IPositionRepository positi
         [HttpTrigger(AuthorizationLevel.Function, "GET", Route = "positions/{id}")] HttpRequest req
     )
     {
-        logger.LogInformation("Getting position by id: {Id}", req.RouteValues["id"]);
+        var sanitizedId = (req.RouteValues["objectid"] as string)
+            ?.Replace(Environment.NewLine, "")
+            .Replace("\n", "")
+            .Replace("\r", "");
+        logger.LogInformation("Getting position by id: {Id}", sanitizedId);
 
         if (!Guid.TryParse(req.RouteValues["id"] as string, out var positionId))
             return new BadRequestObjectResult($"Failed to parse {req.RouteValues["id"]} as a Guid");
