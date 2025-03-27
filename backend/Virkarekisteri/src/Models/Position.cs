@@ -67,8 +67,8 @@ public class Position
     public string? PlacementLocation { get; set; }
 
     [Required]
-    [Column("OrgTreeId")]
-    public Guid OrgTreeId { get; set; }
+    [Column("CostcentreId")]
+    public Guid CostcentreId { get; set; }
 
     [Column("PositionEmployeeId")]
     public Guid? PositionEmployeeId { get; set; }
