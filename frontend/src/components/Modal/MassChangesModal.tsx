@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
-import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { Position } from 'models/Position';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
@@ -24,7 +24,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { t } = useTranslation();
 
   const options = [
-    { label: t('create_position.organization_tree'), value: 'costcentreId' },
+    { label: t('create_position.costcentre'), value: 'costcentreId' },
     { label: t('create_position.position_name'), value: 'positionName' },
     { label: t('create_position.pricing_id'), value: 'pricingId' },
     { label: t('create_position.education_level'), value: 'educationLevel' },
@@ -34,9 +34,8 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
     open ? undefined : skipToken,
   );
-  const { data: organizationTrees = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
+  const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
   const positionNameOptions = positionNames.map((option) => option.name);
-  const filteredOrgTrees = organizationTrees;
 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -172,7 +171,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                             options={
                               selectedOption === 'positionName'
                                 ? positionNameOptions
-                                : filteredOrgTrees.map((tree) => ({
+                                : costcentres.map((tree) => ({
                                     id: tree.id,
                                     label: `${tree.number} ${tree.name}`,
                                   }))
@@ -190,7 +189,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                 label={t(
                                   selectedOption === 'positionName'
                                     ? 'create_position.position_name'
-                                    : 'create_position.organization_tree',
+                                    : 'create_position.costcentre',
                                 )}
                               />
                             )}

@@ -29,11 +29,11 @@ import type { PositionEmployee } from 'models/PositionEmployee';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/hooks';
 import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/functions/positions-api';
-import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 import { format } from 'date-fns';
-import type { OrganizationTree } from 'models/OrganizationTree';
+import type { Costcentre } from 'models/Costcentre';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface DataTableProps {
@@ -61,7 +61,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
 
   // Hae data API-kutsuilla
   const { data: positions = [] } = useGetPositionsQuery();
-  const { data: organizationTrees } = useGetCostCentersQuery();
+  const { data: costcentres } = useGetCostCentersQuery();
   const [getPosition] = useLazyGetPositionQuery();
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
   const { data: subjects = [] } = useGetSubjectsQuery();
@@ -76,7 +76,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
-  const [organizationTreeSearch, setOrganizationTreeSearch] = useState('');
+  const [costcentreSearch, setCostCentreSearch] = useState('');
   const [startDateBeginsSearch, setStartDateBeginsSearch] = useState('');
   const [startDateEndsSearch, setStartDateEndsSearch] = useState('');
   const [employeeNameSearch, setEmployeeNameSearch] = useState('');
@@ -195,11 +195,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         ? position.creationDecisionNumber?.toLowerCase().includes(decisionNumberSearch.toLowerCase())
         : true;
 
-      const orgTreeElement = organizationTrees?.find((tree) => tree.id === position.costcentreId);
+      const orgTreeElement = costcentres?.find((tree) => tree.id === position.costcentreId);
       const fullTreeWord = orgTreeElement ? (orgTreeElement.number + ' ' + orgTreeElement.name).toLowerCase() : '';
-      const matchesOrganizationTree = organizationTreeSearch
-        ? fullTreeWord.includes(organizationTreeSearch.toLowerCase())
-        : true;
+      const matchesCostcentre = costcentreSearch ? fullTreeWord.includes(costcentreSearch.toLowerCase()) : true;
 
       const matchesPositionType =
         positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
@@ -312,7 +310,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesPlacementLocation &&
         matchesPositionName &&
         matchesDecisionNumber &&
-        matchesOrganizationTree &&
+        matchesCostcentre &&
         matchesPositionType &&
         matchesVacancyStatus &&
         matchesStartDateBegin &&
@@ -333,7 +331,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setPlacementLocationStateSearch('');
     setPositionNameSearch('');
     setDecisionNumberSearch('');
-    setOrganizationTreeSearch('');
+    setCostCentreSearch('');
     setStartDateBeginsSearch('');
     setStartDateEndsSearch('');
     setTeacherSubjectSearch([]);
@@ -387,13 +385,13 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     },
     {
       field: 'costcentreId',
-      headerName: t('table.organization_tree'),
+      headerName: t('table.costcentre'),
       flex: 1,
       sortable: true,
       valueGetter: (params: any) => {
         const id = params;
-        if (!id || !organizationTrees) return id;
-        const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
+        if (!id || !costcentres) return id;
+        const orgTree = costcentres.find((tree: Costcentre) => tree.id === id);
         return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
       },
     },
@@ -637,9 +635,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </Grid2>
               <Grid2 size={4}>
                 <TextField
-                  label={t('table.organization_tree')}
-                  value={organizationTreeSearch}
-                  onChange={(e) => setOrganizationTreeSearch(e.target.value)}
+                  label={t('table.costcentre')}
+                  value={costcentreSearch}
+                  onChange={(e) => setCostCentreSearch(e.target.value)}
                   fullWidth
                   slotProps={{ inputLabel: { shrink: true } }}
                 />

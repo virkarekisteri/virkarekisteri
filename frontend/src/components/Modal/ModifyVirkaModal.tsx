@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { useEffect, useState } from 'react';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -56,7 +56,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
   const { t } = useTranslation();
 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
-  const { data: organizationTrees = [] } = useGetCostCentersQuery();
+  const { data: costcentres = [] } = useGetCostCentersQuery();
 
   const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
 
@@ -93,8 +93,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         .map((subjectName) => subjects.find((s) => s.subjectName === subjectName)?.id)
         .filter((id): id is string => id !== undefined)
     : undefined;
-
-  const filteredOrgTrees = organizationTrees;
 
   const validatePricingId = (value: string) => {
     if (value && value.length > 20) {
@@ -267,14 +265,14 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                     </Grid2>
                   </Grid2>
 
-                  {/* Organization Tree */}
+                  {/* Costcenter */}
                   <Grid2 size={6}>
                     <Field name="orgTree">
                       {({ input }) => (
                         <Autocomplete
-                          options={filteredOrgTrees}
+                          options={costcentres}
                           getOptionLabel={(option) => `${option.number} ${option.name}`}
-                          value={filteredOrgTrees.find((tree) => tree.id === input.value) || null}
+                          value={costcentres.find((tree) => tree.id === input.value) || null}
                           onChange={(_event, value) => {
                             input.onChange(value ? value.id : null);
                           }}
@@ -284,11 +282,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               fullWidth
                               margin="normal"
                               required
-                              label={t('edit_position.organization_tree')}
+                              label={t('edit_position.costcentre')}
                               placeholder={
-                                filteredOrgTrees.find((tree) => tree.id === position.costcentreId)
-                                  ? `${filteredOrgTrees.find((tree) => tree.id === position.costcentreId)?.number} ${filteredOrgTrees.find((tree) => tree.id === position.costcentreId)?.name}`
-                                  : t('edit_position.organization_tree')
+                                costcentres.find((tree) => tree.id === position.costcentreId)
+                                  ? `${costcentres.find((tree) => tree.id === position.costcentreId)?.number} ${costcentres.find((tree) => tree.id === position.costcentreId)?.name}`
+                                  : t('edit_position.costcentre')
                               }
                               slotProps={{
                                 inputLabel: {

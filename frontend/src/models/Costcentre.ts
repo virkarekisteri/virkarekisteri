@@ -1,4 +1,4 @@
-export interface OrganizationTree {
+export interface Costcentre {
   id: string;
   number: string;
   name: string;

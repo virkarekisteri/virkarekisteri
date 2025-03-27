@@ -1,9 +1,9 @@
 import { baseApi } from './base-api';
-import type { OrganizationTree } from 'models/OrganizationTree';
+import type { Costcentre } from 'models/Costcentre';
 
-const organizationTreesApi = baseApi.injectEndpoints({
+const costcentreTreesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getCostCenters: build.query<OrganizationTree[], void>({
+    getCostCenters: build.query<Costcentre[], void>({
       query: () => '/costcentres',
       providesTags: (result) =>
         result
@@ -13,4 +13,4 @@ const organizationTreesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetCostCentersQuery } = organizationTreesApi;
+export const { useGetCostCentersQuery } = costcentreTreesApi;
