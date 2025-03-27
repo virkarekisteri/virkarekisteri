@@ -410,7 +410,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               renderValue={(selected) => (
                                 <div>
                                   {selected.map((subject) => (
-                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 20 }} />
                                   ))}
                                 </div>
                               )}
