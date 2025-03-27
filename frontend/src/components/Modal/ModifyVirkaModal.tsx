@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { useEffect, useState } from 'react';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -56,7 +56,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
   const { t } = useTranslation();
 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
-  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery();
+  const { data: organizationTrees = [] } = useGetCostCentersQuery();
 
   const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
 
@@ -94,9 +94,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         .filter((id): id is string => id !== undefined)
     : undefined;
 
-  const filteredOrgTrees = organizationTrees
-    .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
-    .sort((a, b) => a.number.localeCompare(b.number));
+  const filteredOrgTrees = organizationTrees;
 
   const validatePricingId = (value: string) => {
     if (value && value.length > 20) {
@@ -138,7 +136,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         placementLocation: values.placementLocation,
         vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
         positionName: values.positionName ? { name: values.positionName.name } : undefined,
-        orgTreeId: values.orgTree,
+        costcentreId: values.orgTree,
         pricingId: values.pricingId,
         vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
         educationLevel: values.educationLevel,
@@ -203,7 +201,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
               vacancySize: (Number(position.vacancySize) * 100).toFixed(),
               vacancyFill: (Number(position.vacancyFill) * 100).toFixed(),
               positionName: position.positionName,
-              orgTree: position.orgTreeId,
+              orgTree: position.costcentreId,
               placementLocation: position.placementLocation,
               pricingId: position.pricingId,
               educationLevel: position.educationLevel,
@@ -288,8 +286,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               required
                               label={t('edit_position.organization_tree')}
                               placeholder={
-                                filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)
-                                  ? `${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.number} ${filteredOrgTrees.find((tree) => tree.id === position.orgTreeId)?.name}`
+                                filteredOrgTrees.find((tree) => tree.id === position.costcentreId)
+                                  ? `${filteredOrgTrees.find((tree) => tree.id === position.costcentreId)?.number} ${filteredOrgTrees.find((tree) => tree.id === position.costcentreId)?.name}`
                                   : t('edit_position.organization_tree')
                               }
                               slotProps={{

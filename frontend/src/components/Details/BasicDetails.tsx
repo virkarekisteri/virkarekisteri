@@ -6,7 +6,7 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import ModifyVirkaModal from 'components/Modal/ModifyVirkaModal';
 import { useTranslation } from 'react-i18next';
 import type { Position } from 'models/Position';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
@@ -18,7 +18,7 @@ interface BasicDetailsProps {
 const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
 
-  const { data: orgTrees = [] } = useGetOrganizationTreesQuery();
+  const { data: orgTrees = [] } = useGetCostCentersQuery();
 
   const { data: subjects = [] } = useGetSubjectsQuery();
 
@@ -37,7 +37,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const handleOpenEndModal = () => setOpenEndModal(true);
   const handleCloseEndModal = () => setOpenEndModal(false);
 
-  const positionOrganization = orgTrees.find((x) => x.id === position.orgTreeId);
+  const positionOrganization = orgTrees.find((x) => x.id === position.costcentreId);
 
   const getTeacherSubjects = () => {
     if (position.isTeacher && position.subjectIds && subjects.length > 0) {

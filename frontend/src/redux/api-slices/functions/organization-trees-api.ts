@@ -3,17 +3,14 @@ import type { OrganizationTree } from 'models/OrganizationTree';
 
 const organizationTreesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getOrganizationTrees: build.query<OrganizationTree[], void>({
-      query: () => '/organizationtrees',
+    getCostCenters: build.query<OrganizationTree[], void>({
+      query: () => '/costcentres',
       providesTags: (result) =>
         result
-          ? [
-              ...result.map(({ id }) => ({ type: 'OrganizationTrees', id }) as const),
-              { type: 'OrganizationTrees', id: 'LIST' },
-            ]
-          : [{ type: 'OrganizationTrees', id: 'LIST' }],
+          ? [...result.map(({ id }) => ({ type: 'CostCenters', id }) as const), { type: 'CostCenters', id: 'LIST' }]
+          : [{ type: 'CostCenters', id: 'LIST' }],
     }),
   }),
 });
 
-export const { useGetOrganizationTreesQuery } = organizationTreesApi;
+export const { useGetCostCentersQuery } = organizationTreesApi;

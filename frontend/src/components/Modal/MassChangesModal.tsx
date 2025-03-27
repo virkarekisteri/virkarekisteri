@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Field, Form } from 'react-final-form';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { Position } from 'models/Position';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
@@ -16,7 +16,7 @@ interface MassChangesModalProps {
 }
 
 interface FormValues {
-  newValue?: { id: string; label: string } | string; // For orgTreeId or positionName
+  newValue?: { id: string; label: string } | string; // For costcentreId or positionName
   decisionNumber?: string;
 }
 
@@ -24,7 +24,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { t } = useTranslation();
 
   const options = [
-    { label: t('create_position.organization_tree'), value: 'orgTreeId' },
+    { label: t('create_position.organization_tree'), value: 'costcentreId' },
     { label: t('create_position.position_name'), value: 'positionName' },
     { label: t('create_position.pricing_id'), value: 'pricingId' },
     { label: t('create_position.education_level'), value: 'educationLevel' },
@@ -34,11 +34,9 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
     open ? undefined : skipToken,
   );
-  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
+  const { data: organizationTrees = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
   const positionNameOptions = positionNames.map((option) => option.name);
-  const filteredOrgTrees = organizationTrees
-    .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
-    .sort((a, b) => a.number.localeCompare(b.number));
+  const filteredOrgTrees = organizationTrees;
 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -59,7 +57,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           placementLocation: position.placementLocation,
           vacancyFill: position.vacancyFill || undefined,
           positionName: position.positionName?.name ? { name: position.positionName.name } : undefined,
-          orgTreeId: position.orgTreeId,
+          costcentreId: position.costcentreId,
           pricingId: position.pricingId,
           vacancySize: position.vacancySize || undefined,
           educationLevel: position.educationLevel,
@@ -70,8 +68,8 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
         };
 
         // Override the specific field with the new value
-        if (selectedOption === 'orgTreeId' && typeof values.newValue === 'object' && values.newValue !== null) {
-          updateData.orgTreeId = values.newValue.id;
+        if (selectedOption === 'costcentreId' && typeof values.newValue === 'object' && values.newValue !== null) {
+          updateData.costcentreId = values.newValue.id;
         } else if (selectedOption === 'positionName' && typeof values.newValue === 'string') {
           updateData.positionName = { name: values.newValue };
         } else if (selectedOption === 'pricingId' && typeof values.newValue === 'string') {
@@ -167,7 +165,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                     </Typography>
                     <Field name="newValue">
                       {({ input }) =>
-                        selectedOption === 'positionName' || selectedOption === 'orgTreeId' ? (
+                        selectedOption === 'positionName' || selectedOption === 'costcentreId' ? (
                           <Autocomplete
                             {...input}
                             loading={positionNamesLoading}

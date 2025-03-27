@@ -120,7 +120,7 @@
       "WorkExperience": "Työkokemus",
       "Details": "Lisätiedot",
       "Type": "Tyyppi",
-      "OrgTreeId": "Kustannuspaikka",
+      "CostcentreId": "Kustannuspaikka",
       "PositionName": "Virkanimike",
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka",

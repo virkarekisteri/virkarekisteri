@@ -120,7 +120,7 @@
       "WorkExperience": "Work experience",
       "Details": "Additional details",
       "Type": "Type",
-      "OrgTreeId": "Organization tree",
+      "CostcentreId": "Organization tree",
       "PositionName": "Position name",
       "Substitute": "Substitute",
       "CreatedPosition": "Created new position",
