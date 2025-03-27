@@ -388,7 +388,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       headerName: t('table.costcentre'),
       flex: 1,
       sortable: true,
-      valueGetter: (params: any) => {
+      valueGetter: (params: string) => {
         const id = params;
         if (!id || !costcentres) return id;
         const orgTree = costcentres.find((tree: Costcentre) => tree.id === id);
