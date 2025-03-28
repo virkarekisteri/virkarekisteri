@@ -1,0 +1,7 @@
+export interface Costcentre {
+  id: string;
+  number: string;
+  name: string;
+  validFrom?: string;
+  validUntil?: string;
+}

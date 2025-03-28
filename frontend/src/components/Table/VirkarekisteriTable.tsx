@@ -29,11 +29,11 @@ import type { PositionEmployee } from 'models/PositionEmployee';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'redux/hooks';
 import { useGetPositionsQuery, useLazyGetPositionQuery } from 'redux/api-slices/functions/positions-api';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 import { format } from 'date-fns';
-import type { OrganizationTree } from 'models/OrganizationTree';
+import type { Costcentre } from 'models/Costcentre';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface DataTableProps {
@@ -61,7 +61,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
 
   // Hae data API-kutsuilla
   const { data: positions = [] } = useGetPositionsQuery();
-  const { data: organizationTrees } = useGetOrganizationTreesQuery();
+  const { data: costcentres } = useGetCostCentersQuery();
   const [getPosition] = useLazyGetPositionQuery();
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
   const { data: subjects = [] } = useGetSubjectsQuery();
@@ -76,7 +76,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
   const [positionNameSearch, setPositionNameSearch] = useState('');
   const [decisionNumberSearch, setDecisionNumberSearch] = useState('');
-  const [organizationTreeSearch, setOrganizationTreeSearch] = useState('');
+  const [costcentreSearch, setCostCentreSearch] = useState('');
   const [startDateBeginsSearch, setStartDateBeginsSearch] = useState('');
   const [startDateEndsSearch, setStartDateEndsSearch] = useState('');
   const [employeeNameSearch, setEmployeeNameSearch] = useState('');
@@ -195,11 +195,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         ? position.creationDecisionNumber?.toLowerCase().includes(decisionNumberSearch.toLowerCase())
         : true;
 
-      const orgTreeElement = organizationTrees?.find((tree) => tree.id === position.orgTreeId);
+      const orgTreeElement = costcentres?.find((tree) => tree.id === position.costcentreId);
       const fullTreeWord = orgTreeElement ? (orgTreeElement.number + ' ' + orgTreeElement.name).toLowerCase() : '';
-      const matchesOrganizationTree = organizationTreeSearch
-        ? fullTreeWord.includes(organizationTreeSearch.toLowerCase())
-        : true;
+      const matchesCostcentre = costcentreSearch ? fullTreeWord.includes(costcentreSearch.toLowerCase()) : true;
 
       const matchesPositionType =
         positionTypeSearch.length > 0 ? positionTypeSearch.includes(position.type.toString()) : true;
@@ -217,8 +215,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               return subject && teacherSubjectSearch.includes(subject.subjectName);
             }) || false;
 
-      const employeeStartDate = position.employeeStartDate;
-      const replacementStartDate = position.replacementStartDate;
       let matchesStartDateBegin = true;
 
       // Tarkistetaan onko virkaan asettamisen alkamispäivällä haettu
@@ -230,33 +226,35 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         else if (employeeNameSearch && position.employeeName && replacementNameSearch && position.replacementName) {
           // Jos viranhaltijan ja sijaisen alkamisaika on pienempi kuin haku, niin ei oteta mukaan eli false...
           if (
-            parseDate(employeeStartDate) < parseDate(startDateBeginsSearch) &&
-            parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)
+            position.employeeStartDate &&
+            position.replacementStartDate &&
+            parseDate(position.employeeStartDate) < parseDate(startDateBeginsSearch) &&
+            parseDate(position.replacementStartDate) < parseDate(startDateBeginsSearch)
           ) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain viranhaltijalla, jos pienempi alkamisaika kuin haku, annetaan false
-        else if (employeeNameSearch && position.employeeName) {
-          if (parseDate(employeeStartDate) < parseDate(startDateBeginsSearch)) {
+        else if (employeeNameSearch && position.employeeName && position.employeeStartDate) {
+          if (parseDate(position.employeeStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain sijaisella, jos pienempi alkamisaika kuin haku, annetaan false
-        else if (replacementNameSearch && position.replacementName) {
-          if (parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)) {
+        else if (replacementNameSearch && position.replacementName && position.replacementStartDate) {
+          if (parseDate(position.replacementStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on viranhaltija
-        else if (position.employeeName) {
-          if (parseDate(employeeStartDate) < parseDate(startDateBeginsSearch)) {
+        else if (position.employeeName && position.employeeStartDate) {
+          if (parseDate(position.employeeStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
         // Haetaan vain alkamisajalla ja tarkistettava item on sijainen
-        else if (position.replacementName) {
-          if (parseDate(replacementStartDate) < parseDate(startDateBeginsSearch)) {
+        else if (position.replacementName && position.replacementStartDate) {
+          if (parseDate(position.replacementStartDate) < parseDate(startDateBeginsSearch)) {
             matchesStartDateBegin = false;
           }
         }
@@ -269,36 +267,42 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           matchesStartDateEnding = false;
         } else if (employeeNameSearch && position.employeeName && replacementNameSearch && position.replacementName) {
           if (
-            parseDate(employeeStartDate) > parseDate(startDateEndsSearch) &&
-            parseDate(replacementStartDate) > parseDate(startDateEndsSearch)
+            position.employeeEndDate &&
+            position.replacementEndDate &&
+            parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch) &&
+            parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)
           ) {
             matchesStartDateEnding = false;
           }
-        } else if (employeeNameSearch && position.employeeName) {
-          if (parseDate(employeeStartDate) > parseDate(startDateEndsSearch)) {
+        } else if (employeeNameSearch && position.employeeName && position.employeeEndDate) {
+          if (parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (replacementNameSearch && position.replacementName) {
-          if (parseDate(replacementStartDate) > parseDate(startDateEndsSearch)) {
+        } else if (replacementNameSearch && position.replacementName && position.replacementEndDate) {
+          if (parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (position.employeeName) {
-          if (parseDate(employeeStartDate) > parseDate(startDateEndsSearch)) {
+        } else if (position.employeeName && position.employeeEndDate) {
+          if (parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (position.replacementName) {
-          if (parseDate(replacementStartDate) > parseDate(startDateEndsSearch)) {
+        } else if (position.replacementName && position.replacementEndDate) {
+          if (parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
         }
       }
 
       const matchesEmployeeName = employeeNameSearch
-        ? position.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+        ? position.employeeName
+          ? position.employeeName.toLowerCase().includes(employeeNameSearch.toLowerCase())
+          : false
         : true;
 
       const matchesReplacementName = replacementNameSearch
-        ? position.replacementName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+        ? position.replacementName
+          ? position.replacementName.toLowerCase().includes(replacementNameSearch.toLowerCase())
+          : false
         : true;
 
       return (
@@ -306,7 +310,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         matchesPlacementLocation &&
         matchesPositionName &&
         matchesDecisionNumber &&
-        matchesOrganizationTree &&
+        matchesCostcentre &&
         matchesPositionType &&
         matchesVacancyStatus &&
         matchesStartDateBegin &&
@@ -327,7 +331,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
     setPlacementLocationStateSearch('');
     setPositionNameSearch('');
     setDecisionNumberSearch('');
-    setOrganizationTreeSearch('');
+    setCostCentreSearch('');
     setStartDateBeginsSearch('');
     setStartDateEndsSearch('');
     setTeacherSubjectSearch([]);
@@ -380,14 +384,14 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       valueGetter: (params: { name: string }) => params.name || 'Error',
     },
     {
-      field: 'orgTreeId',
-      headerName: t('table.organization_tree'),
+      field: 'costcentreId',
+      headerName: t('table.costcentre'),
       flex: 1,
       sortable: true,
       valueGetter: (params: string) => {
         const id = params;
-        if (!id || !organizationTrees) return '';
-        const orgTree = organizationTrees.find((tree: OrganizationTree) => tree.id === id);
+        if (!id || !costcentres) return id;
+        const orgTree = costcentres.find((tree: Costcentre) => tree.id === id);
         return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
       },
     },
@@ -631,9 +635,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
               </Grid2>
               <Grid2 size={4}>
                 <TextField
-                  label={t('table.organization_tree')}
-                  value={organizationTreeSearch}
-                  onChange={(e) => setOrganizationTreeSearch(e.target.value)}
+                  label={t('table.costcentre')}
+                  value={costcentreSearch}
+                  onChange={(e) => setCostCentreSearch(e.target.value)}
                   fullWidth
                   slotProps={{ inputLabel: { shrink: true } }}
                 />
@@ -668,7 +672,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                       renderValue={(selected) => (
                         <div>
                           {selected.map((subject) => (
-                            <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                            <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 20 }} />
                           ))}
                         </div>
                       )}
@@ -792,7 +796,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           columns={columns}
           density={density}
           onDensityChange={(newDensity) => setDensity(newDensity)}
-          getRowId={(row: Position) => row.id ?? row.orgTreeId ?? 'unknown'}
+          getRowId={(row: Position) => row.id ?? row.costcentreId ?? 'unknown'}
           pagination
           paginationModel={{ page, pageSize: rowsPerPage }}
           onPaginationModelChange={(model) => {
@@ -803,13 +807,13 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           checkboxSelection
           onRowSelectionModelChange={(newSelection) => {
             const selection = newSelection as string[];
-            const newSelectedRows = filteredData.filter((row) => selection.includes(row.id ?? row.orgTreeId!));
+            const newSelectedRows = filteredData.filter((row) => selection.includes(row.id ?? row.costcentreId!));
             setSelectedRows(newSelectedRows);
             onRowSelectionChange(newSelectedRows);
 
             if (newSelectedRows.length > 0) {
               const lastSelectedRow = newSelectedRows[newSelectedRows.length - 1];
-              const rowId = lastSelectedRow.id ?? lastSelectedRow.orgTreeId;
+              const rowId = lastSelectedRow.id ?? lastSelectedRow.costcentreId;
               if (rowId) {
                 getPosition(rowId, true);
                 dispatch(selectPosition(rowId));
