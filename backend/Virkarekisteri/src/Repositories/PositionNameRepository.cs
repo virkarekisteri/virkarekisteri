@@ -7,7 +7,7 @@ public interface IPositionNameRepository
 {
     Task<Guid?> GetPositionNameIdByName(string name);
     Task<string?> GetPositionNameById(Guid id);
-    Task<Guid> CreatePositionName(string name, DateTime validFrom, DateTime validTo);
+    Task<Guid> CreatePositionName(string name, DateTime validFrom, DateTime validUntil);
     Task<List<PositionName>> GetAllPositionNames();
     Task UpdatePositionName(PositionName existingPositionName);
 }
@@ -26,13 +26,13 @@ public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameReposito
         return positionName?.Name;
     }
 
-    public async Task<Guid> CreatePositionName(string name, DateTime validFrom, DateTime validTo)
+    public async Task<Guid> CreatePositionName(string name, DateTime validFrom, DateTime validUntil)
     {
         var newPositionName = new PositionName
         {
             Name = name,
             ValidFrom = validFrom,
-            ValidTo = validTo,
+            ValidUntil = validUntil,
         };
         await db.PositionNames.AddAsync(newPositionName);
         await db.SaveChangesAsync();
