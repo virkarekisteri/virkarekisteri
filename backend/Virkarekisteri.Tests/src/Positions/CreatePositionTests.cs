@@ -43,7 +43,7 @@ public class CreatePositionTests
         {
             Id = Guid.NewGuid(),
             CreationDecisionNumber = "123",
-            OrgTreeId = Guid.NewGuid(),
+            CostcentreId = Guid.NewGuid(),
         };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
 
@@ -71,7 +71,7 @@ public class CreatePositionTests
             CreationDecisionNumber = "123",
             Type = 0,
             PositionNameId = Guid.NewGuid(),
-            OrgTreeId = Guid.NewGuid(),
+            CostcentreId = Guid.NewGuid(),
         };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
 
@@ -101,7 +101,7 @@ public class CreatePositionTests
             Type = 0,
             PositionNameId = mockPositionNameId,
             PositionName = new PositionName { Id = mockPositionNameId, Name = "Test" },
-            OrgTreeId = Guid.NewGuid(),
+            CostcentreId = Guid.NewGuid(),
         };
 
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
@@ -134,7 +134,7 @@ public class CreatePositionTests
             CreationDecisionNumber = "123",
             Type = 0,
             PositionNameId = mockPositionNameId,
-            OrgTreeId = Guid.NewGuid(),
+            CostcentreId = Guid.NewGuid(),
         };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
         _positionNameRepositoryMock
