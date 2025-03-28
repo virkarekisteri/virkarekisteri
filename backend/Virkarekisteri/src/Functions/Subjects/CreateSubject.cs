@@ -56,7 +56,7 @@ public class CreateSubject(
             Id = Guid.NewGuid(),
             ObjectType = "Subject",
             ObjectId = requestSubject.Id,
-            EditedField = "CreatedPosition",
+            EditedField = "CreatedSubject",
             OldValue = string.Empty,
             NewValue = requestSubject.SubjectName,
             Editor = editor,

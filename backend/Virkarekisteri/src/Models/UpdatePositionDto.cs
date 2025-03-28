@@ -12,7 +12,7 @@ public class UpdatePositionDto
     public string? WorkExperience { get; set; }
     public string? Details { get; set; }
     public int? Type { get; set; }
-    public Guid? OrgTreeId { get; set; }
+    public Guid? CostcentreId { get; set; }
     public PositionNameDto? PositionName { get; set; }
     public string? DecisionNumber { get; set; }
     public int? VacancyStatus { get; set; }

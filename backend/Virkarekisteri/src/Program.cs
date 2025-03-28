@@ -16,7 +16,7 @@ var host = new HostBuilder()
             services.ConfigureFunctionsApplicationInsights();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IPositionNameRepository, PositionNameRepository>();
-            services.AddScoped<IOrganizationTreeRepository, OrganizationTreeRepository>();
+            services.AddScoped<ICostcentreRepository, CostcentreRepository>();
             services.AddScoped<IPositionEmployeeRepository, PositionEmployeeRepository>();
             services.AddScoped<IPositionChangeLogRepository, PositionChangeLogRepository>();
             services.AddScoped<ISubjectRepository, SubjectRepository>();

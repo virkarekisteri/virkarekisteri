@@ -30,7 +30,7 @@ import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
-import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
+import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
@@ -48,7 +48,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
     open ? undefined : skipToken,
   );
-  const { data: organizationTrees = [] } = useGetOrganizationTreesQuery(open ? undefined : skipToken);
+  const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
 
   const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
 
@@ -83,10 +83,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     const { value } = event.target;
     setSelectedSubjects(typeof value === 'string' ? value.split(',') : value);
   };
-
-  const filteredOrgTrees = organizationTrees
-    .filter((tree) => tree.alue === 'KUSTANNUSPAIKKA')
-    .sort((a, b) => a.number.localeCompare(b.number));
 
   const validatePricingId = (value: string) => {
     if (value && value.length > 20) {
@@ -137,7 +133,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
         placementLocation: values.placementLocation ?? '',
-        orgTreeId: values.orgTreeId.id ?? '',
+        costcentreId: values.costcentreId.id ?? '',
         vacancyStatus: 1,
         isTeacher: isTeacherPosition,
         subjectIds: isTeacherPosition ? selectedSubjectIds : [],
@@ -320,11 +316,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
 
                   <Grid2 size={4}>
-                    <Field name="orgTreeId">
+                    <Field name="costcentreId">
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={filteredOrgTrees}
+                          options={costcentres}
                           getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
                           onChange={(_event, value) => {
                             input.onChange(value);
@@ -335,8 +331,8 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               margin="normal"
                               required
                               fullWidth
-                              id="orgTreeId"
-                              label={t('create_position.organization_tree')}
+                              id="costcentreId"
+                              label={t('create_position.costcentre')}
                               sx={{
                                 '& input[type="search"]::-webkit-search-cancel-button': {
                                   WebkitAppearance: 'none',
@@ -412,7 +408,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               renderValue={(selected) => (
                                 <div>
                                   {selected.map((subject) => (
-                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 25 }} />
+                                    <Chip key={subject} label={subject} sx={{ marginRight: 1, maxHeight: 20 }} />
                                   ))}
                                 </div>
                               )}

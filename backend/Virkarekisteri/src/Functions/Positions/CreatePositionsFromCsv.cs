@@ -92,11 +92,11 @@ public class CreatePositionsFromCsv(
                     }
                     position.Type = type;
 
-                    var orgTreeNumber = values[0];
-                    position.OrgTreeId = await positionRepository.GetOrgTreeIdByNumber(orgTreeNumber);
-                    if (position.OrgTreeId == Guid.Empty)
+                    var costcentreNumber = values[0];
+                    position.CostcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
+                    if (position.CostcentreId == Guid.Empty)
                     {
-                        throw new Exception($"Invalid OrgTree number '{orgTreeNumber}'");
+                        throw new Exception($"Invalid Costcentre number '{costcentreNumber}'");
                     }
 
                     var positionName = values[1];
@@ -184,7 +184,7 @@ public class CreatePositionsFromCsv(
             }
             catch (Exception ex)
             {
-                var error = $"Failed to save position with OrgTreeId {position.OrgTreeId}: {ex.Message}";
+                var error = $"Failed to save position with CostcentreId {position.CostcentreId}: {ex.Message}";
                 errors.Add(error);
                 logger.LogError(error);
             }
