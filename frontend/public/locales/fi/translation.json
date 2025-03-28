@@ -74,6 +74,7 @@
     "start_date": "Virkaan asettamispäivä",
     "teacher": "Opettaja",
     "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen",
     "yes": "Kyllä",
     "no": "Ei"
   },

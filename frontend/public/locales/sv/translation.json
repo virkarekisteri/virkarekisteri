@@ -74,6 +74,7 @@
     "start_date": "",
     "teacher": "",
     "subjects": "",
+    "not_active_suffix": "",
     "yes": "",
     "no": ""
   },
