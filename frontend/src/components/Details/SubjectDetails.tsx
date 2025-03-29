@@ -9,6 +9,8 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
+import { format } from 'date-fns';
+
 interface SubjectDetailsProps {
   position: TeacherSubject;
   allSubjects: TeacherSubject[];
@@ -177,19 +179,19 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
               {subjectChangelogs.map((changelog: AdminChangeLogEntry) => (
                 <React.Fragment key={changelog.id}>
                   <Grid2 size={2} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.editedField} />
+                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? t('admin_panel.teacher_subjects.status') : t('admin_panel.teacher_subjects.name')} />
                   </Grid2>
                   <Grid2 size={3} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.oldValue} />
+                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? (changelog.oldValue == "True" ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')) : changelog.oldValue} />
                   </Grid2>
                   <Grid2 size={3} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.newValue} />
+                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? (changelog.newValue == "True" ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')) : changelog.newValue} />
                   </Grid2>
                   <Grid2 size={2} sx={{ width: '20%' }}>
                     <RenderReadonlyTextField value={changelog.editor} />
                   </Grid2>
                   <Grid2 size={2} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.timestamp} />
+                    <RenderReadonlyTextField value={format(new Date(changelog.timestamp), 'dd.MM.yyyy HH:mm:ss')} />
                   </Grid2>
                 </React.Fragment>
               ))}

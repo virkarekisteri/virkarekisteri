@@ -36,8 +36,9 @@ const SubjectAdmin = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchSubjectName, setSearchSubjectName] = useState('');
-
+  
   const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
+
 
   const isLoading = /* positionsLoading || */ teacherSubjectsLoading;
 
@@ -173,35 +174,38 @@ const SubjectAdmin = () => {
           {t('search_filter.reset')}
         </Button>
 
-              <RequiresEditRole>
-                <Button
-                  variant="contained"
-                  onClick={handleOpenCreateModal}
+        <RequiresEditRole>
+          
+          <Box display="flex" justifyContent="right" width="100%" alignItems="center">
+            <Button
+              variant="contained"
+              onClick={handleOpenCreateModal}
+              sx={{
+                backgroundColor: '#223B7C',
+                color: 'white',
+                fontSize: '1.0rem',
+                padding: '20px',
+                height: '40px',
+                display: 'flex',
+                borderRadius: '25px 8px 8px 25px',
+                fontWeight: 'bold',
+                textTransform: 'none',
+              }}
+              startIcon={
+                <Box
+                  component="span"
                   sx={{
-                    backgroundColor: '#223B7C',
-                    color: 'white',
-                    fontSize: '1.0rem',
-                    padding: '20px',
-                    height: '40px',
-                    display: 'flex',
-                    borderRadius: '25px 8px 8px 25px',
-                    fontWeight: 'bold',
-                    textTransform: 'none',
+                    marginRight: '8px',
                   }}
-                  startIcon={
-                    <Box
-                      component="span"
-                      sx={{
-                        marginRight: '8px',
-                      }}
-                    >
-                      +
-                    </Box>
-                  }
                 >
-                  {t('admin_panel.teacher_subjects.create_subject')}
-                </Button>
-              </RequiresEditRole>
+                  +
+                </Box>
+              }
+            >
+              {t('admin_panel.teacher_subjects.create_subject')}
+            </Button>
+          </Box>
+        </RequiresEditRole>
 
       </Box>
 
@@ -261,7 +265,7 @@ const SubjectAdmin = () => {
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     <ActivityLight value={row.active} labeltrue={t('admin_panel.teacher_subjects.active')} labelfalse={t('admin_panel.teacher_subjects.inactive')} /> 
-                  {/* {row.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')} */}
+
                   </TableCell>
                 </TableRow>
 
