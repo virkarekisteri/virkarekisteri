@@ -161,7 +161,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
             onSubmit={onSubmit}
             
             initialValues={initialValues}
-            render={({ handleSubmit, submitting, pristine }) => (
+            render={({ handleSubmit, submitting, pristine, hasValidationErrors }) => (
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
                   {/* Subtitle */}
@@ -221,7 +221,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                     type="submit"
                     variant="contained"
                     sx={{ backgroundColor: '#223B7C', color: 'white', ml: 2 }}
-                    disabled={submitting || pristine}
+                    disabled={submitting || pristine || hasValidationErrors}
                   >
                     {t('edit_position.save')}
                   </Button>
