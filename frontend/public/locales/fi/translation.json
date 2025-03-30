@@ -79,7 +79,8 @@
   },
   "tabs": {
     "positions": "Virkalistaus",
-    "history": "Historiatiedot"
+    "history": "Historiatiedot",
+    "admin": "Hallinta"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos",
@@ -202,5 +203,22 @@
     "new_value": "Uusi haluttu arvo",
     "changes_executed": "Muutokset suoritettu onnistuneesti.",
     "update_value_message": "Kentän arvo päivitetään jokaiselle valitulle viralle"
+  },
+  "admin_panel": {
+    "titles": {
+      "subjects": "Aineet",
+      "job_titles": "Virkanimikkeet",
+      "cost_centres": "Kustannuspaikat"
+    },
+    "search": {
+      "byName": "Hae nimellä"
+    },
+    "costcentre": {
+      "create_new": "Luo uusi kustannuspaikka",
+      "name": "Nimi",
+      "number": "Numero",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen"
+    }
   }
 }

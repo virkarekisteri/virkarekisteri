@@ -79,7 +79,8 @@
   },
   "tabs": {
     "positions": "Positions list",
-    "history": "History information"
+    "history": "History information",
+    "admin": "Control"
   },
   "user_menu": {
     "logout": "Log Out",
@@ -202,5 +203,22 @@
     "new_value": "New value",
     "changes_executed": "Changes successfully executed.",
     "update_value_message": "The value of the field will be updated for every position"
+  },
+  "admin_panel": {
+    "titles": {
+      "subjects": "Subjects",
+      "job_titles": "Job titles",
+      "cost_centres": "Cost centres"
+    },
+    "search": {
+      "byName": "Search by name"
+    },
+    "costcentre": {
+      "create_new": "Create new costcentre",
+      "name": "Name",
+      "number": "Number",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until"
+    }
   }
 }

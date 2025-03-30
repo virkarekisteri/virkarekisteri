@@ -79,7 +79,8 @@
   },
   "tabs": {
     "positions": "",
-    "history": ""
+    "history": "",
+    "admin": ""
   },
   "user_menu": {
     "logout": "",
@@ -188,5 +189,22 @@
     "new_value": "",
     "changes_executed": "",
     "update_value_message": ""
+  },
+  "admin_panel": {
+    "titles": {
+      "subjects": "",
+      "job_titles": "",
+      "cost_centres": ""
+    },
+    "search": {
+      "byName": ""
+    },
+    "costcentre": {
+      "create_new": "",
+      "name": "",
+      "number": "",
+      "valid_from": "",
+      "valid_until": ""
+    }
   }
 }

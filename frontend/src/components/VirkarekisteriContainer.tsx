@@ -16,6 +16,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
 import { RequiresAdminRole, RequiresEditRole } from './role-guards';
 import PositionChangeLogTable from './PositionChangeLog/PositionChangeLogTable';
+import AdminPanelContainer from './AdminPanel/AdminPanelContainer';
 import type { Position } from 'models/Position';
 
 const VirkarekisterContainer = () => {
@@ -103,7 +104,9 @@ const VirkarekisterContainer = () => {
                     textTransform: 'none',
                     padding: '10px 20px',
                     borderRadius: '4px 4px 0 0',
-                    marginRight: '8px',
+                    '&:not(:last-child)': {
+                      marginRight: '8px',
+                    },
                     fontSize: '1.0rem',
                     '&.Mui-selected': {
                       color: '#FFFFFF',
@@ -114,12 +117,13 @@ const VirkarekisterContainer = () => {
               >
                 <Tab label={t('tabs.positions')} />
                 <Tab label={t('tabs.history')} />
+                <Tab label={t('tabs.admin')} />
               </Tabs>
               <Box
                 sx={{
                   height: '2px',
                   backgroundColor: '#223b7c',
-                  width: '97.3%',
+                  width: '100%',
                   my: 0,
                 }}
               />
@@ -245,6 +249,7 @@ const VirkarekisterContainer = () => {
               </>
             )}
             {activeTab === 1 && <PositionChangeLogTable />}
+            {activeTab === 2 && <AdminPanelContainer />}
           </Grid2>
           <Grid2 size={12}>
             {singlePositionLoading ? (
