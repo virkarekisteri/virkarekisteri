@@ -23,4 +23,6 @@ public class UpdatePositionDto
 public class PositionNameDto
 {
     public string? Name { get; set; }
+    public DateTime? ValidFrom { get; set; }
+    public DateTime? ValidUntil { get; set; }
 }
