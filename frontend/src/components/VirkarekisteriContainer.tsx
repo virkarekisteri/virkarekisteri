@@ -104,7 +104,9 @@ const VirkarekisterContainer = () => {
                     textTransform: 'none',
                     padding: '10px 20px',
                     borderRadius: '4px 4px 0 0',
-                    marginRight: '8px',
+                    '&:not(:last-child)': {
+                      marginRight: '8px',
+                    },
                     fontSize: '1.0rem',
                     '&.Mui-selected': {
                       color: '#FFFFFF',
@@ -121,7 +123,7 @@ const VirkarekisterContainer = () => {
                 sx={{
                   height: '2px',
                   backgroundColor: '#223b7c',
-                  width: '97.3%',
+                  width: '100%',
                   my: 0,
                 }}
               />

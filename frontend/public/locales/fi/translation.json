@@ -253,7 +253,9 @@
       "old_value": "Vanha arvo",
       "new_value": "Uusi arvo",
       "editor": "Muokkaaja",
-      "timestamp": "Aika"
+      "timestamp": "Aika",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen"
     }
   }
 }

@@ -253,7 +253,9 @@
       "old_value": "Old value",
       "new_value": "New value",
       "editor": "Editor",
-      "timestamp": "Timestamp"
+      "timestamp": "Timestamp",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until"
     }
   }
 }
