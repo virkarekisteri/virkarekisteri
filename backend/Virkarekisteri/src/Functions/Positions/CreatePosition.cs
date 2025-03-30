@@ -49,9 +49,14 @@ public class CreatePosition(
                 return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
             }
 
+            // Pass null for validFrom and validUntil if not provided
+            var name = requestPosition.PositionName.Name;
+            var validFrom = requestPosition.PositionName?.ValidFrom;
+            var validUntil = requestPosition.PositionName?.ValidUntil;
+
             var positionNameId =
-                await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name)
-                ?? await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
+                await positionNameRepository.GetPositionNameIdByName(name)
+                ?? await positionNameRepository.CreatePositionName(name, validFrom, validUntil);
 
             requestPosition.PositionNameId = positionNameId;
         }
