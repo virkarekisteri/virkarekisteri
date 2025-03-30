@@ -205,7 +205,8 @@
       "name": "",
       "number": "",
       "valid_from": "",
-      "valid_until": ""
+      "valid_until": "",
+      "valid": ""
     }
   }
 }

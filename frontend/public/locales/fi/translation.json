@@ -255,7 +255,8 @@
       "editor": "Muokkaaja",
       "timestamp": "Aika",
       "valid_from": "Voimassa alkaen",
-      "valid_until": "Voimassa päättyen"
+      "valid_until": "Voimassa päättyen",
+      "valid": "Voimassa"
     }
   }
 }

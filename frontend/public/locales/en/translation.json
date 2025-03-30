@@ -255,7 +255,8 @@
       "editor": "Editor",
       "timestamp": "Timestamp",
       "valid_from": "Valid from",
-      "valid_until": "Valid until"
+      "valid_until": "Valid until",
+      "valid": "Valid"
     }
   }
 }
