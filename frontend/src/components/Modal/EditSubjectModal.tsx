@@ -17,7 +17,7 @@ import {
   FormControlLabel,
 } from '@mui/material';
 
-import RenderReadonlyTextField from '../Details/RenderReadonlyTextField';
+import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';

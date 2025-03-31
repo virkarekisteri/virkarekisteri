@@ -25,7 +25,7 @@ import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import SubjectDetails from 'components/Details/SubjectDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
-import EditSubjectModal from '../Modal/EditSubjectModal'
+import EditSubjectModal from 'components/Modal/EditSubjectModal'
 
 import ActivityLight from 'components/Components/ActivityLight';
 
