@@ -9,10 +9,10 @@ public interface IPositionRepository
     Task<Position?> GetPosition(Guid id);
     Task<Position> CreatePosition(Position position);
     Task UpdatePosition(Position existingPosition);
-    Task<Guid> GetOrgTreeIdByNumber(string number);
-    Task<string?> GetOrgNumberById(Guid orgTreeId);
+    Task<Guid> GetCostcentreIdByNumber(string number);
+    Task<string?> GetCostcentreNumberById(Guid costcentreId);
     Task<string?> GetLatestVacancyNumberByPrefix(string prefix);
-    Task<string> GenerateVacancyNumber(Guid orgTreeId);
+    Task<string> GenerateVacancyNumber(Guid costcentreId);
 }
 
 public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
@@ -29,7 +29,7 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
         {
             if (string.IsNullOrWhiteSpace(position.VacancyNumber))
             {
-                position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
+                position.VacancyNumber = await GenerateVacancyNumber(position.CostcentreId);
                 db.Positions.Update(position);
             }
 
@@ -74,7 +74,7 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     {
         if (string.IsNullOrWhiteSpace(position.VacancyNumber))
         {
-            position.VacancyNumber = await GenerateVacancyNumber(position.OrgTreeId);
+            position.VacancyNumber = await GenerateVacancyNumber(position.CostcentreId);
         }
 
         // Save the position first to get the ID
@@ -132,21 +132,21 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
         }
     }
 
-    public async Task<Guid> GetOrgTreeIdByNumber(string number)
+    public async Task<Guid> GetCostcentreIdByNumber(string number)
     {
-        var orgTree = await db.OrganizationTrees.FirstOrDefaultAsync(o => o.Number == number);
-
-        return orgTree?.Id ?? Guid.Empty;
+        var costcentre = await db.Costcentres.FirstOrDefaultAsync(c => c.Number == int.Parse(number));
+        return costcentre?.Id ?? Guid.Empty;
     }
 
     /// <summary>
-    /// Gets the organization number (prefix) for the given OrgTreeId.
+    /// Gets the costcentre number (prefix) for the given CostcentreId.
     /// </summary>
-    /// <param name="orgTreeId">The organization tree node ID.</param>
-    /// <returns>The organization number, or null if not found.</returns>
-    public async Task<string?> GetOrgNumberById(Guid orgTreeId)
+    /// <param name="CostcentreId">The ID of the costcentre.</param>
+    /// <returns>The costcentre number, or null if not found.</returns>
+    public async Task<string?> GetCostcentreNumberById(Guid costcentreId)
     {
-        return await db.OrganizationTrees.Where(o => o.Id == orgTreeId).Select(o => o.Number).FirstOrDefaultAsync();
+        var number = await db.Costcentres.Where(c => c.Id == costcentreId).Select(c => c.Number).FirstOrDefaultAsync();
+        return number.ToString();
     }
 
     /// <summary>
@@ -164,14 +164,14 @@ public class PositionRepository(VirkarekisteriDb db) : IPositionRepository
     }
 
     /// <summary>
-    /// Generates a unique vacancy number based on the OrgTreeId and the next sequence number.
+    /// Generates a unique vacancy number based on the CostcentreId and the next sequence number.
     /// </summary>
-    /// <param name="orgTreeId">The organization tree node ID.</param>
+    /// <param name="costcentreId">The ID of the costcentre.</param>
     /// <returns>A new vacancy number in the format "PREFIXXXXX".</returns>
-    public async Task<string> GenerateVacancyNumber(Guid orgTreeId)
+    public async Task<string> GenerateVacancyNumber(Guid costcentreId)
     {
-        var orgNumber = await GetOrgNumberById(orgTreeId);
-        string vacancyPrefix = orgNumber ?? "";
+        var costcentreNumber = await GetCostcentreNumberById(costcentreId);
+        string vacancyPrefix = costcentreNumber ?? "";
 
         var latestVacancyNumber = await GetLatestVacancyNumberByPrefix(vacancyPrefix);
 

@@ -13,7 +13,8 @@ public class CreatePositionsFromCsv(
     ILogger<CreatePositionsFromCsv> logger,
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
-    IPositionChangeLogRepository positionChangeLogRepository
+    IPositionChangeLogRepository positionChangeLogRepository,
+    ISubjectRepository subjectRepository
 )
 {
     [Function("CreatePositionsFromCsv")]
@@ -35,6 +36,10 @@ public class CreatePositionsFromCsv(
         {
             return new BadRequestObjectResult("Uploaded file is empty.");
         }
+
+        // preload all subjects once
+        var allSubjects = await subjectRepository.GetSubjects();
+        var subjectDictionary = allSubjects.ToDictionary(s => s.SubjectName.ToLowerInvariant(), s => s.Id);
 
         var positions = new List<Position>();
         var errors = new List<string>();
@@ -87,11 +92,11 @@ public class CreatePositionsFromCsv(
                     }
                     position.Type = type;
 
-                    var orgTreeNumber = values[0];
-                    position.OrgTreeId = await positionRepository.GetOrgTreeIdByNumber(orgTreeNumber);
-                    if (position.OrgTreeId == Guid.Empty)
+                    var costcentreNumber = values[0];
+                    position.CostcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
+                    if (position.CostcentreId == Guid.Empty)
                     {
-                        throw new Exception($"Invalid OrgTree number '{orgTreeNumber}'");
+                        throw new Exception($"Invalid Costcentre number '{costcentreNumber}'");
                     }
 
                     var positionName = values[1];
@@ -118,6 +123,27 @@ public class CreatePositionsFromCsv(
                     position.WorkExperience = string.IsNullOrWhiteSpace(values[11]) ? null : values[11];
                     position.Details = string.IsNullOrWhiteSpace(values[12]) ? null : values[12];
                     position.PlacementLocation = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
+
+                    var teacherSubjectsRaw = values[14];
+                    if (!string.IsNullOrWhiteSpace(teacherSubjectsRaw))
+                    {
+                        var splittedSubjects = teacherSubjectsRaw.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var subjectString in splittedSubjects)
+                        {
+                            var lowerSubject = subjectString.Trim().ToLowerInvariant();
+                            if (!subjectDictionary.TryGetValue(lowerSubject, out var subjectId))
+                            {
+                                // if the subject is not found throw an exception to skip the entire position
+                                throw new Exception($"Subject '{subjectString}' not found in the system.");
+                            }
+                            position.SubjectIds.Add(subjectId);
+                        }
+                        if (position.SubjectIds.Count > 0)
+                        {
+                            position.IsTeacher = true;
+                        }
+                    }
+
                     position.PositionEmployeeId = null; // can't be set from CSV
                     position.VacancyNumber = null; // auto-generated
 
@@ -158,7 +184,7 @@ public class CreatePositionsFromCsv(
             }
             catch (Exception ex)
             {
-                var error = $"Failed to save position with OrgTreeId {position.OrgTreeId}: {ex.Message}";
+                var error = $"Failed to save position with CostcentreId {position.CostcentreId}: {ex.Message}";
                 errors.Add(error);
                 logger.LogError(error);
             }
