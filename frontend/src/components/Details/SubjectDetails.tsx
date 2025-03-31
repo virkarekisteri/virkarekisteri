@@ -32,7 +32,6 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
   const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(
     position.id,
   );
-  console.log('subjectChangelogs: ', subjectChangelogs);
 
   return (
     <Box

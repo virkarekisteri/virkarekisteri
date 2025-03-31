@@ -28,12 +28,6 @@ import type { TeacherSubject } from 'models/TeacherSubject';
 import { useUpdateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
 import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
 
-//import type { Position } from 'models/Position';
-//import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
-//import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-//import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
-//import { idID } from '@mui/material/locale';
-
 interface EditSubjectModalProps {
   open: boolean;
   handleClose: () => void;
@@ -87,7 +81,6 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
           subjectName: values.subjectName.toLowerCase(),
           active: values.active,
         };
-        console.log('Creating new subject!');
         createSubject(subjectData);
         handleClose();
         return;
@@ -100,7 +93,6 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
           subjectName: values.subjectName.toLowerCase(),
           active: values.active,
         };
-        console.log(updateData);
         updateSubject({ id: position.id, subject: updateData });
         handleClose();
       } catch (error) {
@@ -172,7 +164,6 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>
                       {({ input, meta }) => {
-                        //console.log(input)
                         return (
                           <TextField
                             {...input}

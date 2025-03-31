@@ -54,18 +54,15 @@ const SubjectAdmin = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const handleOpenCreateModal = () => {
-    console.log('open');
     setCreateModalOpen(true);
   };
 
   const handleCloseCreateModal = () => {
-    console.log('close');
     setCreateModalOpen(false);
   };
 
   const handleToggleOnlyActiveSubjects = () => {
     setShowOnlyActiveSubjects(!showOnlyActiveSubjects);
-    console.log('Showing', showOnlyActiveSubjects === true ? 'only active' : 'all');
   };
 
   const handleSort = (key: keyof TeacherSubject) => {
@@ -80,7 +77,6 @@ const SubjectAdmin = () => {
   /* Sorting logic */
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
-    //console.log(sortConfig.direction)
 
     // sorting by active/inactive
     if (sortConfig.key == 'active') {
@@ -162,8 +158,9 @@ const SubjectAdmin = () => {
   return (
     <Box>
       {/* Search Controls */}
-
-      <Box display="flex" gap={2} mb={2}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2}>
+      
+      <Box display="flex" gap={2}>
         <TextField
           label={t('admin_panel.search.bySubjectName')}
           value={searchSubjectName}
@@ -181,9 +178,10 @@ const SubjectAdmin = () => {
             <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
           }
           label={t('admin_panel.teacher_subjects.show_only_active')}
-        />
+        /> </Box>
+        
         <RequiresEditRole>
-          <Box display="flex" justifyContent="right" width="100%" alignItems="center">
+
             <Button
               variant="contained"
               onClick={handleOpenCreateModal}
@@ -211,7 +209,7 @@ const SubjectAdmin = () => {
             >
               {t('admin_panel.teacher_subjects.create_subject')}
             </Button>
-          </Box>
+
         </RequiresEditRole>
       </Box>
 
@@ -222,6 +220,7 @@ const SubjectAdmin = () => {
             <TableRow>
               <TableCell
                 sx={{
+                  width: '60%',
                   color: 'white',
                   fontSize: '1.2rem',
                   cursor: 'pointer',
