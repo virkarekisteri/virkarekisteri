@@ -14,7 +14,9 @@ import {
   TablePagination,
   TextField,
   Button,
-  Grid2
+  Grid2,
+  Checkbox,
+  FormControlLabel
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -32,15 +34,19 @@ const SubjectAdmin = () => {
 
   const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null); // TODO: this should default to asc
+  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>({
+    key: 'subjectName',
+    direction: 'asc'
+  });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchSubjectName, setSearchSubjectName] = useState('');
-  
+  const [showOnlyActiveSubjects, setShowOnlyActiveSubjects] = useState<boolean>(false); 
+
   const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
 
 
-  const isLoading = /* positionsLoading || */ teacherSubjectsLoading;
+  const isLoading = teacherSubjectsLoading;
 
   useEffect(() => {
     setFilteredTeacherSubjects(teacherSubjects);
@@ -59,14 +65,11 @@ const SubjectAdmin = () => {
     setCreateModalOpen(false);
   };
 
+  const handleToggleOnlyActiveSubjects = () => {
+    setShowOnlyActiveSubjects(!showOnlyActiveSubjects);
+    console.log("Showing", showOnlyActiveSubjects === true ? "only active" : "all"); 
+  }
 
-  /*
-  const getTranslatedField = (field: string) => {
-    return t(`change_logs.fields.${field}`, field);
-  };
-  */
-
-  // Sorting logic
   const handleSort = (key: keyof TeacherSubject) => {
     setSortConfig((prevConfig) => {
       if (prevConfig && prevConfig.key === key) {
@@ -76,6 +79,7 @@ const SubjectAdmin = () => {
     });
   };
 
+  /* Sorting logic */
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
     //console.log(sortConfig.direction)
@@ -110,11 +114,14 @@ const SubjectAdmin = () => {
     });
   }, [filteredSubjects, sortConfig]);
 
-
-
+  /* Show-only-active -filtering logic */
+  const activityFilteredTeacherSubjects = React.useMemo(() => {
+    if (!showOnlyActiveSubjects) return sortedTeacherSubjects;
+    else return sortedTeacherSubjects.filter(s => s.active === true);
+  }, [sortedTeacherSubjects, showOnlyActiveSubjects]) 
 
   // Pagination logic
-  const paginatedTeacherSubjects = sortedTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedTeacherSubjects = activityFilteredTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -131,8 +138,7 @@ const SubjectAdmin = () => {
       const matchesVacancyNumber = searchSubjectName
         ? s['subjectName'].includes(searchSubjectName)
         : true;
-      //const matchesDate = searchDate ? formatTimestamp(log.timestamp).includes(searchDate) : true;
-      return matchesVacancyNumber;// && matchesDate;
+      return matchesVacancyNumber;
     });
     setFilteredTeacherSubjects(filtered);
     setPage(0);
@@ -173,9 +179,8 @@ const SubjectAdmin = () => {
         <Button variant="outlined" onClick={handleResetSearch}>
           {t('search_filter.reset')}
         </Button>
-
+        <FormControlLabel sx={{whiteSpace: 'nowrap'}} control={<Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />} label={t('admin_panel.teacher_subjects.show_only_active')}/>
         <RequiresEditRole>
-          
           <Box display="flex" justifyContent="right" width="100%" alignItems="center">
             <Button
               variant="contained"

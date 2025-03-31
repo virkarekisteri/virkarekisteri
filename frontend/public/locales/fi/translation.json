@@ -211,6 +211,7 @@
       "details": "Aineen tiedot",
       "active": "Aktiivinen",
       "inactive": "Ei aktiivinen",
+      "show_only_active": "Näytä vain aktiiviset",
       "create_subject": "Luo uusi aine",
       "edit_subject": "Muokkaa aineen tietoja",
       "edit_history": "Muutoshistoria",

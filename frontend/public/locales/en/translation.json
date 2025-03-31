@@ -211,6 +211,7 @@
       "details":"Subject details",
       "active": "Active",
       "inactive": "Inactive",
+      "show_only_active": "Show only active",
       "create_subject": "Create new subject",
       "edit_subject": "Edit subject",
       "edit_history": "Editing history",
