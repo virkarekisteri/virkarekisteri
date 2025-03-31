@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { Costcentre } from 'models/Costcentre';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { RequiresEditRole } from 'components/role-guards';
+import { format } from 'date-fns';
 
 
 const CostcentreAdmin = () => {
@@ -52,14 +53,21 @@ const CostcentreAdmin = () => {
     };
 
     const handleSearch = () => {
+        const currentDate = new Date();
+
         const filtered = costcentres.filter((c) => {
             const matchesName = searchCostcentreName
                 ? c['name'].toLowerCase().includes(searchCostcentreName.toLowerCase())
                 : true;
-            return matchesName;
+
+                const matchesValid = !searchValid || (
+                    (c.validFrom ? new Date(c.validFrom) <= currentDate : true) &&
+                    (c.validUntil ? currentDate <= new Date(c.validUntil) : true)
+                );
+
+            return matchesName && matchesValid;
         });
 
-        console.log("Filtered costcentres:", filtered);
         setFilteredCostcentres(filtered);
         setPage(0);
     };
@@ -229,8 +237,8 @@ const CostcentreAdmin = () => {
                                 >
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.number}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
-                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validFrom}</TableCell>
-                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validUntil}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}</TableCell>
+                                    <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validUntil ? format(new Date(row.validUntil), 'd.M.yyyy') : ''}</TableCell>
 
                                 </TableRow>
                             </React.Fragment>

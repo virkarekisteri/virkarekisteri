@@ -51,8 +51,8 @@ const AdminPanelContainer = () => {
                     }}
                 >
                     <Tab label= {t('admin_panel.titles.subjects')} />
-                    <Tab label= {t('admin_panel.titles.job_titles')} />
                     <Tab label= {t('admin_panel.titles.cost_centres')} />
+                    <Tab label= {t('admin_panel.titles.job_titles')} />
                 </Tabs>
                 
                 <Box sx={{ height: '2px', backgroundColor: '#223b7c', width: '100%', my: 0 }} />
