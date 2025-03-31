@@ -159,57 +159,55 @@ const SubjectAdmin = () => {
     <Box>
       {/* Search Controls */}
       <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2}>
-      
-      <Box display="flex" gap={2}>
-        <TextField
-          label={t('admin_panel.search.bySubjectName')}
-          value={searchSubjectName}
-          onChange={(e) => setSearchSubjectName(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleSearch}>
-          {t('search_filter.search')}
-        </Button>
-        <Button variant="outlined" onClick={handleResetSearch}>
-          {t('search_filter.reset')}
-        </Button>
-        <FormControlLabel
-          sx={{ whiteSpace: 'nowrap' }}
-          control={
-            <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
-          }
-          label={t('admin_panel.teacher_subjects.show_only_active')}
-        /> </Box>
-        
+        <Box display="flex" gap={2}>
+          <TextField
+            label={t('admin_panel.search.bySubjectName')}
+            value={searchSubjectName}
+            onChange={(e) => setSearchSubjectName(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleSearch}>
+            {t('search_filter.search')}
+          </Button>
+          <Button variant="outlined" onClick={handleResetSearch}>
+            {t('search_filter.reset')}
+          </Button>
+          <FormControlLabel
+            sx={{ whiteSpace: 'nowrap' }}
+            control={
+              <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
+            }
+            label={t('admin_panel.teacher_subjects.show_only_active')}
+          />{' '}
+        </Box>
+
         <RequiresEditRole>
-
-            <Button
-              variant="contained"
-              onClick={handleOpenCreateModal}
-              sx={{
-                backgroundColor: '#223B7C',
-                color: 'white',
-                fontSize: '1.0rem',
-                padding: '20px',
-                height: '40px',
-                display: 'flex',
-                borderRadius: '25px 8px 8px 25px',
-                fontWeight: 'bold',
-                textTransform: 'none',
-              }}
-              startIcon={
-                <Box
-                  component="span"
-                  sx={{
-                    marginRight: '8px',
-                  }}
-                >
-                  +
-                </Box>
-              }
-            >
-              {t('admin_panel.teacher_subjects.create_subject')}
-            </Button>
-
+          <Button
+            variant="contained"
+            onClick={handleOpenCreateModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1.0rem',
+              padding: '20px',
+              height: '40px',
+              display: 'flex',
+              borderRadius: '25px 8px 8px 25px',
+              fontWeight: 'bold',
+              textTransform: 'none',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '8px',
+                }}
+              >
+                +
+              </Box>
+            }
+          >
+            {t('admin_panel.teacher_subjects.create_subject')}
+          </Button>
         </RequiresEditRole>
       </Box>
 
