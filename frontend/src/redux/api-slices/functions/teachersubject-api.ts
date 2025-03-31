@@ -30,13 +30,7 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
         { type: 'TeacherSubjects', id: 'LIST' },
       ],
     })
-  /*
-    getPositionChangeLogs: build.query<TeacherSubject[], string>({
-      query: (id) => `/positions/${id}/changelog`,
-      providesTags: (_result, _error, id) => [{ type: 'ChangeLogs', id }],
-    }),
-  */
   }),
 });
 
-export const { /*useGetPositionChangeLogsQuery,*/ useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation, useCreateTeacherSubjectMutation } = TeacherSubjectsApi;
+export const { useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation, useCreateTeacherSubjectMutation } = TeacherSubjectsApi;

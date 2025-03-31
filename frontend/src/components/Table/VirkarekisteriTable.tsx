@@ -34,7 +34,8 @@ import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/posi
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 import { format } from 'date-fns';
 import type { OrganizationTree } from 'models/OrganizationTree';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+//import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
@@ -64,7 +65,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const { data: organizationTrees } = useGetOrganizationTreesQuery();
   const [getPosition] = useLazyGetPositionQuery();
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
-  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery();
+//  const { data: subjects = [] } = useGetSubjectsQuery();
 
   // Filteröi aktiiviset aineet
   const activeSubjectNames = subjects

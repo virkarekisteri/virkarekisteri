@@ -9,7 +9,8 @@ import type { Position } from 'models/Position';
 import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+//import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
 interface BasicDetailsProps {
   position: Position;
@@ -20,7 +21,8 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
 
   const { data: orgTrees = [] } = useGetOrganizationTreesQuery();
 
-  const { data: subjects = [] } = useGetSubjectsQuery();
+//  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
