@@ -7,7 +7,7 @@ public interface IPositionNameRepository
 {
     Task<Guid?> GetPositionNameIdByName(string name);
     Task<string?> GetPositionNameById(Guid id);
-    Task<Guid> CreatePositionName(string name, DateTime? validFrom, DateTime? validUntil);
+    Task<(bool Exists, PositionName? PositionName)> CreatePositionName(PositionName positionName);
     Task<List<PositionName>> GetAllPositionNames();
     Task UpdatePositionName(PositionName existingPositionName);
 }
@@ -26,17 +26,20 @@ public class PositionNameRepository(VirkarekisteriDb db) : IPositionNameReposito
         return positionName?.Name;
     }
 
-    public async Task<Guid> CreatePositionName(string name, DateTime? validFrom, DateTime? validUntil)
+    public async Task<(bool Exists, PositionName? PositionName)> CreatePositionName(PositionName positionName)
     {
-        var newPositionName = new PositionName
+        // Check if a position name with the same name exists
+        var existingPositionName = await db.PositionNames.FirstOrDefaultAsync(pn => pn.Name == positionName.Name);
+
+        if (existingPositionName != null)
         {
-            Name = name,
-            ValidFrom = validFrom,
-            ValidUntil = validUntil,
-        };
-        await db.PositionNames.AddAsync(newPositionName);
+            return (true, existingPositionName); // Return that it already exists
+        }
+
+        // Add the new position name if it does not exist
+        db.PositionNames.Add(positionName);
         await db.SaveChangesAsync();
-        return newPositionName.Id;
+        return (false, positionName);
     }
 
     public async Task<List<PositionName>> GetAllPositionNames()

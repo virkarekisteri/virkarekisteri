@@ -147,12 +147,14 @@ public class UpdatePosition(
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName.Name);
             if (positionNameId == null)
             {
-                // Provide default values for validFrom and validUntil if not available
-                var name = updateDto.PositionName.Name;
-                var validFrom = updateDto.PositionName.ValidFrom;
-                var validUntil = updateDto.PositionName.ValidUntil;
-
-                positionNameId = await positionNameRepository.CreatePositionName(name, validFrom, validUntil);
+                var positionName = new PositionName
+                {
+                    Name = updateDto.PositionName.Name,
+                    ValidFrom = updateDto.PositionName.ValidFrom,
+                    ValidUntil = updateDto.PositionName.ValidUntil,
+                };
+                var createdPositionName = await positionNameRepository.CreatePositionName(positionName);
+                positionNameId = createdPositionName.PositionName?.Id;
             }
             var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
             var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);

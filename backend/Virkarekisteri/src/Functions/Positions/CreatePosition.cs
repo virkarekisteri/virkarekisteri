@@ -51,14 +51,21 @@ public class CreatePosition(
 
             // Pass null for validFrom and validUntil if not provided
             var name = requestPosition.PositionName.Name;
-            var validFrom = requestPosition.PositionName?.ValidFrom;
-            var validUntil = requestPosition.PositionName?.ValidUntil;
+            var positionNameId = await positionNameRepository.GetPositionNameIdByName(name);
+            if (positionNameId == null)
+            {
+                if (requestPosition.PositionName == null)
+                {
+                    throw new ArgumentNullException(
+                        nameof(requestPosition.PositionName),
+                        "PositionName cannot be null."
+                    );
+                }
+                var createdPositionName = await positionNameRepository.CreatePositionName(requestPosition.PositionName);
+                positionNameId = createdPositionName.PositionName?.Id ?? Guid.Empty;
+            }
 
-            var positionNameId =
-                await positionNameRepository.GetPositionNameIdByName(name)
-                ?? await positionNameRepository.CreatePositionName(name, validFrom, validUntil);
-
-            requestPosition.PositionNameId = positionNameId;
+            requestPosition.PositionNameId = positionNameId ?? Guid.Empty;
         }
 
         requestPosition.PositionName = null; // Nullify to avoid conflicts
