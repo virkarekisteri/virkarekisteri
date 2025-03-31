@@ -4,8 +4,8 @@ import {
     Tabs,
     Tab
   } from '@mui/material';
-import SubjectAdmin from './SubjectAdmin';
-import JobtitleAdmin from './JobtitleAdmin';
+// import SubjectAdmin from './SubjectAdmin';
+// import JobtitleAdmin from './PositionNameAdmin';
 import CostcentreAdmin from './CostcentreAdmin';
 import { useTranslation } from 'react-i18next';
 
@@ -51,8 +51,8 @@ const AdminPanelContainer = () => {
                     }}
                 >
                     <Tab label= {t('admin_panel.titles.subjects')} />
-                    <Tab label= {t('admin_panel.titles.job_titles')} />
                     <Tab label= {t('admin_panel.titles.cost_centres')} />
+                    <Tab label= {t('admin_panel.titles.job_titles')} />
                 </Tabs>
                 
                 <Box sx={{ height: '2px', backgroundColor: '#223b7c', width: '100%', my: 0 }} />
@@ -61,9 +61,9 @@ const AdminPanelContainer = () => {
                 
             </Box>
                 <Box sx={{ p: 2 }}>
-                    {selectedTab === 0 && <SubjectAdmin />}
-                    {selectedTab === 1 && <JobtitleAdmin />}
-                    {selectedTab === 2 && <CostcentreAdmin />}
+                    {/* {selectedTab === 0 && <SubjectAdmin />} */}
+                    {selectedTab === 1 && <CostcentreAdmin />}
+                    {/* {selectedTab === 2 && <PositionNameAdmin />} */}
                 </Box>
         </Box>
     );
