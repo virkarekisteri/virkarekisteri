@@ -23,9 +23,9 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
 import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
-import SubjectDetails from 'components/Details/SubjectDetails';
+import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
-import EditSubjectModal from '../Modal/EditSubjectModal'
+import EditPositionNameModal from '../Modal/EditPositionNameModal'
 
 import ActivityLight from 'components/Components/ActivityLight';
 
@@ -296,11 +296,11 @@ const PositionNameAdmin = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <SubjectDetails position={expandedRow} allSubjects={sortedTeacherSubjects}/> : null
+            expandedRow ? <PositionNameDetails position={expandedRow} allSubjects={sortedTeacherSubjects}/> : null
           }
           </Grid2>
         </Grid2>
-        <EditSubjectModal open={createModalOpen} handleClose={handleCloseCreateModal} position={undefined} allSubjects={sortedTeacherSubjects}/>
+        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} position={undefined} allSubjects={sortedTeacherSubjects}/>
         {/* 
  */}
     </Box>
