@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TeacherSubject } from 'models/TeacherSubject';
+import type { PositionName } from 'models/PositionName';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
@@ -11,12 +11,12 @@ import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
 import { format } from 'date-fns';
 
-interface SubjectDetailsProps {
-  position: TeacherSubject;
-  allSubjects: TeacherSubject[];
+interface PositionNameDetailsProps {
+  positionName: PositionName;
+  allPositionNames: PositionName[];
 }
 
-const PositionNameDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }) => {
+const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName, allPositionNames }) => {
   const { t } = useTranslation();
 
 
@@ -30,8 +30,8 @@ const PositionNameDetails: React.FC<SubjectDetailsProps> = ({ position, allSubje
     setEditModalOpen(false);
   };
 
-  const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(position.id);
-  console.log("subjectChangelogs: ", subjectChangelogs)
+  //const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
+
 
   return (
     <Box
@@ -107,13 +107,13 @@ const PositionNameDetails: React.FC<SubjectDetailsProps> = ({ position, allSubje
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.teacher_subjects.name')}
             </Typography>
-            <RenderReadonlyTextField value={position.subjectName} />
+            <RenderReadonlyTextField value={positionName.name} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.teacher_subjects.status')}
             </Typography>
-            <RenderReadonlyTextField value={position.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')} />
+            <RenderReadonlyTextField value={positionName.validFrom ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')} />
           </Grid2>
         </Grid2>
 
@@ -206,7 +206,7 @@ const PositionNameDetails: React.FC<SubjectDetailsProps> = ({ position, allSubje
             </Box>
 
             
-    <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} position={position} allSubjects={allSubjects}/>
+    <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} positionName={positionName} allPositionNames={allPositionNames}/>
   </Box>
 );
 };

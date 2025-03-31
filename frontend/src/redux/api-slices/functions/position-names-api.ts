@@ -10,19 +10,23 @@ const PositionNamesApi = baseApi.injectEndpoints({
           ? [...result.map(({ id }) => ({ type: 'PositionNames', id }) as const), { type: 'PositionNames', id: 'LIST' }]
           : [{ type: 'PositionNames', id: 'LIST' }],
     }),
-    updatePositionName: build.mutation<PositionName, PositionName>({
-      query: (positionName) => ({
-        url: `/positionnames/${positionName.id}`,
+    updatePositionName: build.mutation<PositionName, {id: string, data: Partial<PositionName> }>({
+      query: ({id, data}) => ({
+        url: `/positionnames/${id}`,
         method: 'PUT',
-        body: positionName,
+        body: data,
       }),
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'PositionNames', id },
+      ],
     }),
-    createPositionName: build.mutation<PositionName, PositionName>({
+    createPositionName: build.mutation<PositionName, Partial<PositionName>>({
       query: (positionName) => ({
         url: '/positionnames',
         method: 'POST',
         body: positionName,
       }),
+      invalidatesTags: [ {type: 'PositionNames', id: 'LIST'} ]
     }),
   }),
 });

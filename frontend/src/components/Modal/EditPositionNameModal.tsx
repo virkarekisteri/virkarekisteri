@@ -24,9 +24,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 
-import type { TeacherSubject } from 'models/TeacherSubject'
-import { useUpdateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
-import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
+import type { PositionName } from 'models/PositionName'
+import { useUpdatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
+import { useCreatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 
 
 //import type { Position } from 'models/Position';
@@ -35,11 +35,11 @@ import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teac
 //import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
 //import { idID } from '@mui/material/locale';
 
-interface EditSubjectModalProps {
+interface EditPositionNameModalProps {
   open: boolean;
   handleClose: () => void;
-  position: TeacherSubject | undefined;
-  allSubjects: TeacherSubject[];
+  positionName: PositionName | undefined;
+  allPositionNames: PositionName[];
 }
 
 interface FormValues {
@@ -49,34 +49,36 @@ interface FormValues {
 
 
 
-const EditPositionNameModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
+const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, handleClose, positionName, allPositionNames }) => {
 
-  const isCreateDialog: boolean = position === undefined ? true : false;
+  const isCreateDialog: boolean = positionName === undefined ? true : false;
 
   const { t } = useTranslation();
 
   
-  const [ updateSubject ] = useUpdateTeacherSubjectMutation();
-  const [ createSubject ] = useCreateTeacherSubjectMutation();
+  const [ updateSubject ] = useUpdatePositionNameMutation();
+  const [ createSubject ] = useCreatePositionNameMutation();
 
 
 
 
-  const initialValues = position !== undefined ? 
+  const initialValues = positionName !== undefined ? 
   {
-    subjectName: position.subjectName,
-    active: position.active
+    name: positionName.name,
+    validFrom: positionName.validFrom,
+    validTo: positionName.validTo
   } 
   :
   {
-    subjectName: "", 
-    active: true
+    name: "", 
+    validFrom: "",
+    validTo: ""
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validateSubjectName = (value: string, allValues: Record<string, any>) => {
-    if (value && allSubjects.some(
-        (subj) => {return (subj.subjectName === value.toLowerCase() && (isCreateDialog || (position && value != position.subjectName)))}
+    if (value && allPositionNames.some(
+        (posName) => {return (posName.name === value.toLowerCase() && (isCreateDialog || (positionName && value != positionName.name)))}
       ))
       return t('admin_panel.error.subject_name_exists_error');
 
@@ -84,12 +86,13 @@ const EditPositionNameModal: React.FC<EditSubjectModalProps> = ({ open, handleCl
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (!position || !position.id) {
+    if (!positionName || !positionName.id) {
       try {
 
-        const subjectData: Partial<TeacherSubject> = {
-          subjectName: values.subjectName.toLowerCase(),
-          active: values.active
+        const subjectData: Partial<PositionName> = {
+          name: values.subjectName.toLowerCase(),
+          validFrom: new Date(),
+          validTo: new Date()
         };
         console.log("Creating new subject!")
         createSubject(subjectData)
@@ -103,11 +106,12 @@ const EditPositionNameModal: React.FC<EditSubjectModalProps> = ({ open, handleCl
 
     try {
       const updateData = {
-        subjectName: values.subjectName.toLowerCase(),
-        active: values.active
+        name: values.subjectName.toLowerCase(),
+        validFrom: new Date(),
+        validTo: new Date()
       };
       console.log(updateData)
-      updateSubject({ id: position.id, subject: updateData });
+      updateSubject({ id: positionName.id, data: updateData });
       handleClose();
     } catch (error) {
       console.error('Failed to update subject:', error);
@@ -182,7 +186,7 @@ const EditPositionNameModal: React.FC<EditSubjectModalProps> = ({ open, handleCl
                           {...input}
                           fullWidth
                           margin="normal"
-                          placeholder={initialValues.subjectName}
+                          placeholder={initialValues.name}
                           label={t('admin_panel.teacher_subjects.name')}
                           error={meta.error && meta.touched}
                           helperText={meta.touched && meta.error}

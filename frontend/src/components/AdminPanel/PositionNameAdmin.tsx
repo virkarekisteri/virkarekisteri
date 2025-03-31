@@ -21,8 +21,10 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
-import type { TeacherSubject } from 'models/TeacherSubject';
-import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+//import type { TeacherSubject } from 'models/TeacherSubject';
+import type { PositionName } from 'models/PositionName';
+//import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
 import EditPositionNameModal from '../Modal/EditPositionNameModal'
@@ -32,10 +34,10 @@ import ActivityLight from 'components/Components/ActivityLight';
 const PositionNameAdmin = () => {
   const { t } = useTranslation();
 
-  const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
-  const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>({
-    key: 'subjectName',
+  const [expandedRow, setExpandedRow] = useState<PositionName | null>(null);
+  const [filteredSubjects, setFilteredTeacherSubjects] = useState<PositionName[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof PositionName; direction: 'asc' | 'desc' } | null>({
+    key: 'name',
     direction: 'asc'
   });
   const [page, setPage] = useState(0);
@@ -43,7 +45,7 @@ const PositionNameAdmin = () => {
   const [searchSubjectName, setSearchSubjectName] = useState('');
   const [showOnlyActiveSubjects, setShowOnlyActiveSubjects] = useState<boolean>(false); 
 
-  const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
+  const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetPositionNamesQuery();
 
 
   const isLoading = teacherSubjectsLoading;
@@ -56,21 +58,21 @@ const PositionNameAdmin = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const handleOpenCreateModal = () => {
-    console.log("open")
+
     setCreateModalOpen(true);
   };
   
   const handleCloseCreateModal = () => {
-    console.log("close")
+
     setCreateModalOpen(false);
   };
 
   const handleToggleOnlyActiveSubjects = () => {
     setShowOnlyActiveSubjects(!showOnlyActiveSubjects);
-    console.log("Showing", showOnlyActiveSubjects === true ? "only active" : "all"); 
+
   }
 
-  const handleSort = (key: keyof TeacherSubject) => {
+  const handleSort = (key: keyof PositionName) => {
     setSortConfig((prevConfig) => {
       if (prevConfig && prevConfig.key === key) {
         return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
@@ -81,8 +83,10 @@ const PositionNameAdmin = () => {
 
   /* Sorting logic */
   const sortedTeacherSubjects = React.useMemo(() => {
+    return filteredSubjects;
+    /* 
     if (!sortConfig) return filteredSubjects;
-    //console.log(sortConfig.direction)
+
     
     // sorting by active/inactive
     if (sortConfig.key == 'active') {
@@ -92,7 +96,7 @@ const PositionNameAdmin = () => {
 
         if (aActive === bActive) {
           // secondary sort by name, ascending
-          const aName = a['subjectName'] as string;
+          const aName = a['subjecName'] as string;
           const bName = b['subjectName'] as string;
 
           return aName.localeCompare(bName);
@@ -112,16 +116,19 @@ const PositionNameAdmin = () => {
 
       return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
+    */
   }, [filteredSubjects, sortConfig]);
 
+
   /* Show-only-active -filtering logic */
-  const activityFilteredTeacherSubjects = React.useMemo(() => {
+/*   const activityFilteredTeacherSubjects = React.useMemo(() => {
     if (!showOnlyActiveSubjects) return sortedTeacherSubjects;
     else return sortedTeacherSubjects.filter(s => s.active === true);
   }, [sortedTeacherSubjects, showOnlyActiveSubjects]) 
+ */
 
   // Pagination logic
-  const paginatedTeacherSubjects = activityFilteredTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedTeacherSubjects = filteredSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -136,7 +143,7 @@ const PositionNameAdmin = () => {
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
       const matchesVacancyNumber = searchSubjectName
-        ? s['subjectName'].includes(searchSubjectName)
+        ? s['name'].includes(searchSubjectName)
         : true;
       return matchesVacancyNumber;
     });
@@ -150,7 +157,7 @@ const PositionNameAdmin = () => {
     setPage(0);
   };
 
-  const handleRowToggle = (subject: TeacherSubject) => {
+  const handleRowToggle = (subject: PositionName) => {
     setExpandedRow(expandedRow && expandedRow.id === subject.id ? null : subject);
   };
 
@@ -227,12 +234,12 @@ const PositionNameAdmin = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('subjectName')}
+                onClick={() => handleSort('name')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.name')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'subjectName' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -243,12 +250,12 @@ const PositionNameAdmin = () => {
                   cursor: 'pointer',
                   padding: '8px 16px',
                 }}
-                onClick={() => handleSort('active')}
+                onClick={() => handleSort('name')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
                   {t('admin_panel.teacher_subjects.status')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'active' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -267,9 +274,9 @@ const PositionNameAdmin = () => {
                   onClick={() => handleRowToggle(row)}
                 >
 
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                    <ActivityLight value={row.active} labeltrue={t('admin_panel.teacher_subjects.active')} labelfalse={t('admin_panel.teacher_subjects.inactive')} /> 
+                    asdf
 
                   </TableCell>
                 </TableRow>
@@ -296,11 +303,11 @@ const PositionNameAdmin = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <PositionNameDetails position={expandedRow} allSubjects={sortedTeacherSubjects}/> : null
+            expandedRow ? <PositionNameDetails positionName={expandedRow} allPositionNames={sortedTeacherSubjects}/> : null
           }
           </Grid2>
         </Grid2>
-        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} position={undefined} allSubjects={sortedTeacherSubjects}/>
+        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} positionName={undefined} allPositionNames={sortedTeacherSubjects}/>
         {/* 
  */}
     </Box>

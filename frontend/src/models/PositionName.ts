@@ -1,6 +1,6 @@
 export interface PositionName {
   id?: string;
-  validFrom: Date;
-  validTo: Date;
+  validFrom: Date | undefined;
+  validTo: Date | undefined;
   name: string;
 }
