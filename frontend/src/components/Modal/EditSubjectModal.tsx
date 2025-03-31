@@ -24,10 +24,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 
-import type { TeacherSubject } from 'models/TeacherSubject'
+import type { TeacherSubject } from 'models/TeacherSubject';
 import { useUpdateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
 import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teachersubject-api';
-
 
 //import type { Position } from 'models/Position';
 //import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
@@ -47,37 +46,35 @@ interface FormValues {
   active: boolean;
 }
 
-
-
 const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
-
   const isCreateDialog: boolean = position === undefined ? true : false;
 
   const { t } = useTranslation();
 
-  
-  const [ updateSubject ] = useUpdateTeacherSubjectMutation();
-  const [ createSubject ] = useCreateTeacherSubjectMutation();
+  const [updateSubject] = useUpdateTeacherSubjectMutation();
+  const [createSubject] = useCreateTeacherSubjectMutation();
 
-
-
-
-  const initialValues = position !== undefined ? 
-  {
-    subjectName: position.subjectName,
-    active: position.active
-  } 
-  :
-  {
-    subjectName: "", 
-    active: true
-  };
+  const initialValues =
+    position !== undefined
+      ? {
+          subjectName: position.subjectName,
+          active: position.active,
+        }
+      : {
+          subjectName: '',
+          active: true,
+        };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validateSubjectName = (value: string, allValues: Record<string, any>) => {
-    if (value && allSubjects.some(
-        (subj) => {return (subj.subjectName === value.toLowerCase() && (isCreateDialog || (position && value != position.subjectName)))}
-      ))
+    if (
+      value &&
+      allSubjects.some((subj) => {
+        return (
+          subj.subjectName === value.toLowerCase() && (isCreateDialog || (position && value != position.subjectName))
+        );
+      })
+    )
       return t('admin_panel.error.subject_name_exists_error');
 
     return undefined;
@@ -86,36 +83,31 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
   const onSubmit = async (values: FormValues) => {
     if (!position || !position.id) {
       try {
-
         const subjectData: Partial<TeacherSubject> = {
           subjectName: values.subjectName.toLowerCase(),
-          active: values.active
+          active: values.active,
         };
-        console.log("Creating new subject!")
-        createSubject(subjectData)
+        console.log('Creating new subject!');
+        createSubject(subjectData);
         handleClose();
         return;
       } catch (error) {
         console.error('Failed to create subject:', error);
-    }
-  }
-  else {
-
-    try {
-      const updateData = {
-        subjectName: values.subjectName.toLowerCase(),
-        active: values.active
-      };
-      console.log(updateData)
-      updateSubject({ id: position.id, subject: updateData });
-      handleClose();
-    } catch (error) {
-      console.error('Failed to update subject:', error);
+      }
+    } else {
+      try {
+        const updateData = {
+          subjectName: values.subjectName.toLowerCase(),
+          active: values.active,
+        };
+        console.log(updateData);
+        updateSubject({ id: position.id, subject: updateData });
+        handleClose();
+      } catch (error) {
+        console.error('Failed to update subject:', error);
+      }
     }
   };
-}
-
-
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -149,7 +141,11 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{isCreateDialog ? t('admin_panel.teacher_subjects.create_subject') : t('admin_panel.teacher_subjects.edit_subject')}</Typography>
+          <Typography variant="h6">
+            {isCreateDialog
+              ? t('admin_panel.teacher_subjects.create_subject')
+              : t('admin_panel.teacher_subjects.edit_subject')}
+          </Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -159,7 +155,6 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
         <Box sx={{ p: 4, pt: 0 }}>
           <Form
             onSubmit={onSubmit}
-            
             initialValues={initialValues}
             render={({ handleSubmit, submitting, pristine, hasValidationErrors }) => (
               <form onSubmit={handleSubmit}>
@@ -170,46 +165,45 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  <RenderReadonlyTextField value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')} />
+                  <RenderReadonlyTextField
+                    value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')}
+                  />
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>
                       {({ input, meta }) => {
-                        
                         //console.log(input)
                         return (
                           <TextField
-                          {...input}
-                          fullWidth
-                          margin="normal"
-                          placeholder={initialValues.subjectName}
-                          label={t('admin_panel.teacher_subjects.name')}
-                          error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error}
-                          
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
+                            {...input}
+                            fullWidth
+                            margin="normal"
+                            placeholder={initialValues.subjectName}
+                            label={t('admin_panel.teacher_subjects.name')}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
+                            slotProps={{
+                              inputLabel: {
+                                shrink: true,
+                              },
+                            }}
                           />
-                        )}
-                      }
+                        );
+                      }}
                     </Field>
-                  {/* //</Grid2> */}
+                    {/* //</Grid2> */}
 
-                  {/* Active checkbox */}
-                  {/* <Grid2 size={12}> */}
+                    {/* Active checkbox */}
+                    {/* <Grid2 size={12}> */}
                     <Field name="active" type="checkbox">
-                    {({input}) => (
-                        <FormControlLabel control={
-                          <Checkbox {...input} /* checked={Boolean(input.value)} */ />
-                        } label={t('admin_panel.teacher_subjects.active')} />
-                      )
-                    }
+                      {({ input }) => (
+                        <FormControlLabel
+                          control={<Checkbox {...input} /* checked={Boolean(input.value)} */ />}
+                          label={t('admin_panel.teacher_subjects.active')}
+                        />
+                      )}
                     </Field>
                   </Grid2>
-
                 </Grid2>
 
                 {/* Buttons */}

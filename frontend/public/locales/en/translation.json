@@ -208,7 +208,7 @@
     "teacher_subjects": {
       "name": "Name",
       "status": "Status",
-      "details":"Subject details",
+      "details": "Subject details",
       "active": "Active",
       "inactive": "Inactive",
       "show_only_active": "Show only active",

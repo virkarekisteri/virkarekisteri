@@ -16,7 +16,7 @@ import {
   Button,
   Grid2,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -25,7 +25,7 @@ import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import SubjectDetails from 'components/Details/SubjectDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
-import EditSubjectModal from 'components/Modal/EditSubjectModal'
+import EditSubjectModal from 'components/Modal/EditSubjectModal';
 
 import ActivityLight from 'components/Components/ActivityLight';
 
@@ -36,15 +36,14 @@ const SubjectAdmin = () => {
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
   const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>({
     key: 'subjectName',
-    direction: 'asc'
+    direction: 'asc',
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchSubjectName, setSearchSubjectName] = useState('');
-  const [showOnlyActiveSubjects, setShowOnlyActiveSubjects] = useState<boolean>(false); 
+  const [showOnlyActiveSubjects, setShowOnlyActiveSubjects] = useState<boolean>(false);
 
   const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetTeacherSubjectsQuery();
-
 
   const isLoading = teacherSubjectsLoading;
 
@@ -52,23 +51,22 @@ const SubjectAdmin = () => {
     setFilteredTeacherSubjects(teacherSubjects);
   }, [teacherSubjects]);
 
-
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const handleOpenCreateModal = () => {
-    console.log("open")
+    console.log('open');
     setCreateModalOpen(true);
   };
-  
+
   const handleCloseCreateModal = () => {
-    console.log("close")
+    console.log('close');
     setCreateModalOpen(false);
   };
 
   const handleToggleOnlyActiveSubjects = () => {
     setShowOnlyActiveSubjects(!showOnlyActiveSubjects);
-    console.log("Showing", showOnlyActiveSubjects === true ? "only active" : "all"); 
-  }
+    console.log('Showing', showOnlyActiveSubjects === true ? 'only active' : 'all');
+  };
 
   const handleSort = (key: keyof TeacherSubject) => {
     setSortConfig((prevConfig) => {
@@ -83,7 +81,7 @@ const SubjectAdmin = () => {
   const sortedTeacherSubjects = React.useMemo(() => {
     if (!sortConfig) return filteredSubjects;
     //console.log(sortConfig.direction)
-    
+
     // sorting by active/inactive
     if (sortConfig.key == 'active') {
       return [...filteredSubjects].sort((a, b) => {
@@ -96,14 +94,12 @@ const SubjectAdmin = () => {
           const bName = b['subjectName'] as string;
 
           return aName.localeCompare(bName);
-
         } else {
           // primary sort by active/inactive
           if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
           else return aActive ? -1 : 1;
         }
-
-      })
+      });
     }
 
     return [...filteredSubjects].sort((a, b) => {
@@ -117,11 +113,14 @@ const SubjectAdmin = () => {
   /* Show-only-active -filtering logic */
   const activityFilteredTeacherSubjects = React.useMemo(() => {
     if (!showOnlyActiveSubjects) return sortedTeacherSubjects;
-    else return sortedTeacherSubjects.filter(s => s.active === true);
-  }, [sortedTeacherSubjects, showOnlyActiveSubjects]) 
+    else return sortedTeacherSubjects.filter((s) => s.active === true);
+  }, [sortedTeacherSubjects, showOnlyActiveSubjects]);
 
   // Pagination logic
-  const paginatedTeacherSubjects = activityFilteredTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedTeacherSubjects = activityFilteredTeacherSubjects.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage,
+  );
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -135,9 +134,7 @@ const SubjectAdmin = () => {
   // Search logic
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
-      const matchesVacancyNumber = searchSubjectName
-        ? s['subjectName'].includes(searchSubjectName)
-        : true;
+      const matchesVacancyNumber = searchSubjectName ? s['subjectName'].includes(searchSubjectName) : true;
       return matchesVacancyNumber;
     });
     setFilteredTeacherSubjects(filtered);
@@ -161,8 +158,7 @@ const SubjectAdmin = () => {
       </Box>
     );
   }
-  
-  
+
   return (
     <Box>
       {/* Search Controls */}
@@ -179,7 +175,13 @@ const SubjectAdmin = () => {
         <Button variant="outlined" onClick={handleResetSearch}>
           {t('search_filter.reset')}
         </Button>
-        <FormControlLabel sx={{whiteSpace: 'nowrap'}} control={<Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />} label={t('admin_panel.teacher_subjects.show_only_active')}/>
+        <FormControlLabel
+          sx={{ whiteSpace: 'nowrap' }}
+          control={
+            <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
+          }
+          label={t('admin_panel.teacher_subjects.show_only_active')}
+        />
         <RequiresEditRole>
           <Box display="flex" justifyContent="right" width="100%" alignItems="center">
             <Button
@@ -211,7 +213,6 @@ const SubjectAdmin = () => {
             </Button>
           </Box>
         </RequiresEditRole>
-
       </Box>
 
       <TableContainer>
@@ -219,7 +220,6 @@ const SubjectAdmin = () => {
           {/* Table Header */}
           <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
             <TableRow>
-
               <TableCell
                 sx={{
                   color: 'white',
@@ -261,19 +261,25 @@ const SubjectAdmin = () => {
               <React.Fragment key={row.id}>
                 <TableRow
                   sx={{
-                    backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
+                    backgroundColor:
+                      row === expandedRow
+                        ? alpha('#223B7C', 0.5)
+                        : paginatedTeacherSubjects.indexOf(row) % 2 === 0
+                          ? '#F9F9F9'
+                          : alpha('#223B7C', 0.2),
                     cursor: 'pointer',
                   }}
                   onClick={() => handleRowToggle(row)}
                 >
-
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.subjectName}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                    <ActivityLight value={row.active} labeltrue={t('admin_panel.teacher_subjects.active')} labelfalse={t('admin_panel.teacher_subjects.inactive')} /> 
-
+                    <ActivityLight
+                      value={row.active}
+                      labeltrue={t('admin_panel.teacher_subjects.active')}
+                      labelfalse={t('admin_panel.teacher_subjects.inactive')}
+                    />
                   </TableCell>
                 </TableRow>
-
               </React.Fragment>
             ))}
           </TableBody>
@@ -294,15 +300,18 @@ const SubjectAdmin = () => {
       </Box>
 
       <Grid2>
-          <Grid2 size={12}>
-          {
-            expandedRow ? <SubjectDetails position={expandedRow} allSubjects={sortedTeacherSubjects}/> : null
-          }
-          </Grid2>
+        <Grid2 size={12}>
+          {expandedRow ? <SubjectDetails position={expandedRow} allSubjects={sortedTeacherSubjects} /> : null}
         </Grid2>
-        <EditSubjectModal open={createModalOpen} handleClose={handleCloseCreateModal} position={undefined} allSubjects={sortedTeacherSubjects}/>
-        {/* 
- */}
+      </Grid2>
+      <EditSubjectModal
+        open={createModalOpen}
+        handleClose={handleCloseCreateModal}
+        position={undefined}
+        allSubjects={sortedTeacherSubjects}
+      />
+      {/*
+       */}
     </Box>
   );
 };

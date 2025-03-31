@@ -7,30 +7,30 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
       query: () => '/subjects',
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'TeacherSubjects', id }) as const), { type: 'TeacherSubjects', id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'TeacherSubjects', id }) as const),
+              { type: 'TeacherSubjects', id: 'LIST' },
+            ]
           : [{ type: 'TeacherSubjects', id: 'LIST' }],
     }),
-    updateTeacherSubject: build.mutation<TeacherSubject, {id: string, subject: Partial<TeacherSubject> } >({
-      query: ({id, subject}) => ({
+    updateTeacherSubject: build.mutation<TeacherSubject, { id: string; subject: Partial<TeacherSubject> }>({
+      query: ({ id, subject }) => ({
         url: `/subjects/${id}`,
         method: 'PUT',
-        body: subject
+        body: subject,
       }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: 'TeacherSubjects', id },
-      ],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'TeacherSubjects', id }],
     }),
-    createTeacherSubject: build.mutation<TeacherSubject, Partial<TeacherSubject>  >({
+    createTeacherSubject: build.mutation<TeacherSubject, Partial<TeacherSubject>>({
       query: (subject) => ({
         url: `/subjects`,
         method: 'POST',
-        body: subject
+        body: subject,
       }),
-      invalidatesTags: [
-        { type: 'TeacherSubjects', id: 'LIST' },
-      ],
-    })
+      invalidatesTags: [{ type: 'TeacherSubjects', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation, useCreateTeacherSubjectMutation } = TeacherSubjectsApi;
+export const { useGetTeacherSubjectsQuery, useUpdateTeacherSubjectMutation, useCreateTeacherSubjectMutation } =
+  TeacherSubjectsApi;
