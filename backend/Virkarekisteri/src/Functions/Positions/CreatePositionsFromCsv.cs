@@ -14,7 +14,8 @@ public class CreatePositionsFromCsv(
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
     IPositionChangeLogRepository positionChangeLogRepository,
-    ISubjectRepository subjectRepository
+    ISubjectRepository subjectRepository,
+    ICostcentreRepository costcentreRepository
 )
 {
     [Function("CreatePositionsFromCsv")]
@@ -92,12 +93,23 @@ public class CreatePositionsFromCsv(
                     }
                     position.Type = type;
 
+                    // Handle costcentre from CSV
                     var costcentreNumber = values[0];
-                    position.CostcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
-                    if (position.CostcentreId == Guid.Empty)
+                    var costcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
+                    if (costcentreId == Guid.Empty)
                     {
-                        throw new Exception($"Invalid Costcentre number '{costcentreNumber}'");
+                        throw new Exception($"Virheellinen kustannuskeskuksen numero '{costcentreNumber}'. Lisää kustannuskeskus järjestelmään tai korjaa CSV-tietue.");
                     }
+
+                    var costcentre = await costcentreRepository.GetCostcentreById(costcentreId);
+                    var now = DateTime.Now;
+                    if ((costcentre.ValidFrom.HasValue && costcentre.ValidFrom.Value > now) ||
+                        (costcentre.ValidUntil.HasValue && costcentre.ValidUntil.Value < now))
+                    {
+                        throw new Exception($"Kustannuskeskus '{costcentreNumber}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot.");
+                    }
+                    position.CostcentreId = costcentre.Id;
+
 
                     var positionName = values[1];
                     position.PositionNameId = (
@@ -152,7 +164,7 @@ public class CreatePositionsFromCsv(
                 catch (Exception ex)
                 {
                     // Log the error and continue with the next line
-                    var error = $"Error on line {lineNumber}: {ex.Message}";
+                    var error = $"Virhe rivillä {lineNumber}: {ex.Message}";
                     errors.Add(error);
                     logger.LogError(error);
                 }
@@ -161,39 +173,42 @@ public class CreatePositionsFromCsv(
             }
         }
 
-        // Save valid positions
-        foreach (var position in positions)
+        // Only save positions if no errors occurred
+        if (!errors.Any())
         {
-            try
+            foreach (var position in positions)
             {
-                var createdPosition = await positionRepository.CreatePosition(position);
-
-                var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
-                var positionChangeLog = new PositionChangeLog
+                try
                 {
-                    Id = Guid.NewGuid(),
-                    PositionId = createdPosition.Id,
-                    EditedField = "CreatedPosition",
-                    OldValue = string.Empty,
-                    NewValue = createdPosition.VacancyNumber ?? string.Empty,
-                    Editor = editor,
-                    Timestamp = DateTime.Now,
-                    DecisionNumber = createdPosition.CreationDecisionNumber,
-                };
-                await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
-            }
-            catch (Exception ex)
-            {
-                var error = $"Failed to save position with CostcentreId {position.CostcentreId}: {ex.Message}";
-                errors.Add(error);
-                logger.LogError(error);
+                    var createdPosition = await positionRepository.CreatePosition(position);
+
+                    var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+                    var positionChangeLog = new PositionChangeLog
+                    {
+                        Id = Guid.NewGuid(),
+                        PositionId = createdPosition.Id,
+                        EditedField = "CreatedPosition",
+                        OldValue = string.Empty,
+                        NewValue = createdPosition.VacancyNumber ?? string.Empty,
+                        Editor = editor,
+                        Timestamp = DateTime.Now,
+                        DecisionNumber = createdPosition.CreationDecisionNumber,
+                    };
+                    await positionChangeLogRepository.AddPositionChangeLogEntry(positionChangeLog);
+                }
+                catch (Exception ex)
+                {
+                    var error = $"Failed to save position with CostcentreId {position.CostcentreId}: {ex.Message}";
+                    errors.Add(error);
+                    logger.LogError(error);
+                }
             }
         }
 
         // Return response with success message and errors
         var response = new
         {
-            Message = errors.Any() ? "Positions imported with some errors." : "Positions imported successfully.",
+            Message = errors.Any() ? "Positions not imported due to errors." : "Positions imported successfully.",
             SuccessCount = totalLines - errors.Count,
             Errors = errors,
         };

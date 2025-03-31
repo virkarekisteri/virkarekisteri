@@ -20,9 +20,9 @@
     "subjects": "Opetettavat aineet"
   },
   "create_csv_position": {
-    "success": " virkaa luotu onnistuneesti.",
+    "success": " onnistunutta virkaa.",
     "error1": "CSV-tiedostossa oli ",
-    "error2": " virheellistä riviä.",
+    "error2": " virheellistä riviä. Virkoja ei luotu.",
     "upload": "Lataa",
     "title": "Luo virkoja CSV-tiedostosta",
     "upload_csv": "Tuo CSV",
