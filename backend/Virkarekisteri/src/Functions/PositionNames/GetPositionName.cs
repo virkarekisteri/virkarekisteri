@@ -30,7 +30,7 @@ public class GetPositionName(ILogger<GetPositionName> logger, IPositionNameRepos
         if (!Guid.TryParse(sanitizedId, out var positionNameId))
             return new BadRequestObjectResult($"Failed to parse {sanitizedId} as a Guid");
 
-        var positionName = await positionNameRepository.GetPositionNameById(positionNameId);
+        var positionName = await positionNameRepository.GetPositionNameNameById(positionNameId);
 
         if (positionName == null)
             return new NotFoundResult();
