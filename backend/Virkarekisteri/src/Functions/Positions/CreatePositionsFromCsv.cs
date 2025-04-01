@@ -83,7 +83,9 @@ public class CreatePositionsFromCsv(
                         )
                     )
                     {
-                        throw new Exception("Perustamisajankohta on pakollinen ja sen on oltava kelvollinen päivämäärä.");
+                        throw new Exception(
+                            "Perustamisajankohta on pakollinen ja sen on oltava kelvollinen päivämäärä."
+                        );
                     }
                     position.CreatedAt = createdAt;
 
@@ -98,18 +100,23 @@ public class CreatePositionsFromCsv(
                     var costcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
                     if (costcentreId == Guid.Empty)
                     {
-                        throw new Exception($"Virheellinen kustannuspaikan numero '{costcentreNumber}'. Lisää kustannuspaikka järjestelmään tai käytä löytyvää numeroa.");
+                        throw new Exception(
+                            $"Virheellinen kustannuspaikan numero '{costcentreNumber}'. Lisää kustannuspaikka järjestelmään tai käytä löytyvää numeroa."
+                        );
                     }
 
                     var costcentre = await costcentreRepository.GetCostcentreById(costcentreId);
                     var now = DateTime.Now;
-                    if ((costcentre.ValidFrom.HasValue && costcentre.ValidFrom.Value > now) ||
-                        (costcentre.ValidUntil.HasValue && costcentre.ValidUntil.Value < now))
+                    if (
+                        (costcentre.ValidFrom.HasValue && costcentre.ValidFrom.Value > now)
+                        || (costcentre.ValidUntil.HasValue && costcentre.ValidUntil.Value < now)
+                    )
                     {
-                        throw new Exception($"Kustannuspaikka '{costcentreNumber}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot.");
+                        throw new Exception(
+                            $"Kustannuspaikka '{costcentreNumber}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot."
+                        );
                     }
                     position.CostcentreId = costcentre.Id;
-
 
                     var positionName = values[1];
                     position.PositionNameId = (
