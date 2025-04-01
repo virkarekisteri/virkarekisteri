@@ -28,14 +28,14 @@ public class CreatePositionsFromCsv(
 
         if (!req.Form.Files.Any())
         {
-            return new BadRequestObjectResult("No CSV file uploaded.");
+            return new BadRequestObjectResult("CSV-tiedostoa ei ole ladattu.");
         }
 
         var file = req.Form.Files[0];
 
         if (file.Length == 0)
         {
-            return new BadRequestObjectResult("Uploaded file is empty.");
+            return new BadRequestObjectResult("Ladattu tiedosto on tyhjä.");
         }
 
         // preload all subjects once
@@ -70,7 +70,7 @@ public class CreatePositionsFromCsv(
 
                     if (string.IsNullOrWhiteSpace(position.CreationDecisionNumber))
                     {
-                        throw new Exception("CreationDecisionNumber is required and cannot be null or empty.");
+                        throw new Exception("Päätösnumero on pakollinen eikä se voi olla tyhjä.");
                     }
 
                     if (
@@ -83,13 +83,13 @@ public class CreatePositionsFromCsv(
                         )
                     )
                     {
-                        throw new Exception("CreatedAt is required and must be a valid date.");
+                        throw new Exception("Perustamisajankohta on pakollinen ja sen on oltava kelvollinen päivämäärä.");
                     }
                     position.CreatedAt = createdAt;
 
                     if (string.IsNullOrWhiteSpace(values[4]) || !int.TryParse(values[4], out var type))
                     {
-                        throw new Exception("Type is required and must be a valid integer.");
+                        throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku.");
                     }
                     position.Type = type;
 
@@ -98,7 +98,7 @@ public class CreatePositionsFromCsv(
                     var costcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
                     if (costcentreId == Guid.Empty)
                     {
-                        throw new Exception($"Virheellinen kustannuskeskuksen numero '{costcentreNumber}'. Lisää kustannuskeskus järjestelmään tai korjaa CSV-tietue.");
+                        throw new Exception($"Virheellinen kustannuspaikan numero '{costcentreNumber}'. Lisää kustannuspaikka järjestelmään tai käytä löytyvää numeroa.");
                     }
 
                     var costcentre = await costcentreRepository.GetCostcentreById(costcentreId);
@@ -106,7 +106,7 @@ public class CreatePositionsFromCsv(
                     if ((costcentre.ValidFrom.HasValue && costcentre.ValidFrom.Value > now) ||
                         (costcentre.ValidUntil.HasValue && costcentre.ValidUntil.Value < now))
                     {
-                        throw new Exception($"Kustannuskeskus '{costcentreNumber}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot.");
+                        throw new Exception($"Kustannuspaikka '{costcentreNumber}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot.");
                     }
                     position.CostcentreId = costcentre.Id;
 
@@ -117,7 +117,7 @@ public class CreatePositionsFromCsv(
                     ).GetValueOrDefault();
                     if (position.PositionNameId == Guid.Empty)
                     {
-                        throw new Exception($"Invalid Position name '{positionName}'");
+                        throw new Exception($"Virheellinen viran nimi '{positionName}'.");
                     }
 
                     position.EndedAt = string.IsNullOrWhiteSpace(values[5])
@@ -146,7 +146,7 @@ public class CreatePositionsFromCsv(
                             if (!subjectDictionary.TryGetValue(lowerSubject, out var subjectId))
                             {
                                 // if the subject is not found throw an exception to skip the entire position
-                                throw new Exception($"Subject '{subjectString}' not found in the system.");
+                                throw new Exception($"Aine '{subjectString}' ei löytynyt järjestelmästä.");
                             }
                             position.SubjectIds.Add(subjectId);
                         }
@@ -164,7 +164,7 @@ public class CreatePositionsFromCsv(
                 catch (Exception ex)
                 {
                     // Log the error and continue with the next line
-                    var error = $"Virhe rivillä {lineNumber}: {ex.Message}";
+                    var error = $"Virhe CSV:n rivillä {lineNumber}: {ex.Message}";
                     errors.Add(error);
                     logger.LogError(error);
                 }
@@ -198,7 +198,7 @@ public class CreatePositionsFromCsv(
                 }
                 catch (Exception ex)
                 {
-                    var error = $"Failed to save position with CostcentreId {position.CostcentreId}: {ex.Message}";
+                    var error = $"Viran tallennus epäonnistui kustannuspaikalla {position.CostcentreId}: {ex.Message}";
                     errors.Add(error);
                     logger.LogError(error);
                 }
@@ -208,7 +208,7 @@ public class CreatePositionsFromCsv(
         // Return response with success message and errors
         var response = new
         {
-            Message = errors.Any() ? "Positions not imported due to errors." : "Positions imported successfully.",
+            Message = errors.Any() ? "Virkoja ei tuotu, virheitä esiintyi." : "Virat tuotu onnistuneesti.",
             SuccessCount = totalLines - errors.Count,
             Errors = errors,
         };
