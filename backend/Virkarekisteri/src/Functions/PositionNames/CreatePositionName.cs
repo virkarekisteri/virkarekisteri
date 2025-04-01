@@ -54,6 +54,20 @@ public class CreatePositionName(
             );
         }
 
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+        var CRUDChangeLog = new CRUDChangeLog
+        {
+            Id = Guid.NewGuid(),
+            ObjectType = "PositionName",
+            ObjectId = requestPositionName.Id,
+            EditedField = "CreatedPositionName",
+            OldValue = string.Empty,
+            NewValue = requestPositionName.Name,
+            Editor = editor,
+            Timestamp = DateTime.Now,
+        };
+        await CRUDChangeLogRepository.AddCRUDChangeLogEntry(CRUDChangeLog);
+
         return new OkObjectResult(requestPositionName);
     }
 }
