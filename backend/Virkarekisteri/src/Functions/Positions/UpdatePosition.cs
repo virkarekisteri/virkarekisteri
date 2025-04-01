@@ -147,10 +147,17 @@ public class UpdatePosition(
             var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName.Name);
             if (positionNameId == null)
             {
-                positionNameId = await positionNameRepository.CreatePositionName(updateDto.PositionName.Name);
+                var positionName = new PositionName
+                {
+                    Name = updateDto.PositionName.Name,
+                    ValidFrom = updateDto.PositionName.ValidFrom,
+                    ValidUntil = updateDto.PositionName.ValidUntil,
+                };
+                var createdPositionName = await positionNameRepository.CreatePositionName(positionName);
+                positionNameId = createdPositionName.PositionName?.Id;
             }
-            var oldPositionName = await positionNameRepository.GetPositionNameById(existingPosition.PositionNameId);
-            var newPositionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
+            var oldPositionName = await positionNameRepository.GetPositionNameNameById(existingPosition.PositionNameId);
+            var newPositionName = await positionNameRepository.GetPositionNameNameById(positionNameId.Value);
 
             PositionLogChange("PositionName", oldPositionName, newPositionName);
             existingPosition.PositionNameId = positionNameId.Value;
