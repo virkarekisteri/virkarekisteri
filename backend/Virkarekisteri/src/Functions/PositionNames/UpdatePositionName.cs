@@ -48,7 +48,20 @@ public class UpdatePositionName(
         if (existingPositionName == null)
             return new NotFoundResult();
 
+        var CRUDChangeLogs = new List<CRUDChangeLog>();
+        var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
+
         logger.LogInformation("2/3 : Updated PositionName Details: {@PositionName}", existingPositionName);
+
+        // Map only provided fields from UpdatePositionNameDto to the existing PositionName
+        CRUDLogChange("Name", existingPositionName.Name, updateDto.Name);
+        existingPositionName.Name = updateDto.Name ?? existingPositionName.Name;
+
+        CRUDLogChange("ValidFrom", existingPositionName.ValidFrom?.ToString(), updateDto.ValidFrom?.ToString());
+        existingPositionName.ValidFrom = updateDto.ValidFrom ?? existingPositionName.ValidFrom;
+
+        CRUDLogChange("ValidUntil", existingPositionName.ValidUntil?.ToString(), updateDto.ValidUntil?.ToString());
+        existingPositionName.ValidUntil = updateDto.ValidUntil ?? existingPositionName.ValidUntil;
 
         // Apply updates from updateDto
         existingPositionName.Name = updateDto.Name;
@@ -59,6 +72,12 @@ public class UpdatePositionName(
         try
         {
             await positionNameRepository.UpdatePositionName(existingPositionName);
+
+            foreach (var crudChangeLog in CRUDChangeLogs)
+            {
+                await CRUDChangeLogRepository.AddCRUDChangeLogEntry(crudChangeLog);
+            }
+
             logger.LogInformation("3/3 : PositionName updated successfully");
             return new NoContentResult();
         }
@@ -67,5 +86,47 @@ public class UpdatePositionName(
             logger.LogError(ex, "An error occurred while updating the position name.");
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
+
+        void CRUDLogChange(string field, string? oldValue, string? newValue)
+        {
+            if (AreValuesEquivalent(oldValue, newValue))
+                return;
+
+            CRUDChangeLogs.Add(
+                new CRUDChangeLog
+                {
+                    ObjectType = "PositionName",
+                    ObjectId = positionNameId,
+                    EditedField = field,
+                    OldValue = oldValue ?? string.Empty,
+                    NewValue = newValue ?? string.Empty,
+                    Editor = editor,
+                    Timestamp = DateTime.Now,
+                }
+            );
+        }
+    }
+
+    private static bool AreValuesEquivalent(string? oldValue, string? newValue)
+    {
+        // Normalize null/empty values
+        oldValue = string.IsNullOrWhiteSpace(oldValue) ? null : oldValue.Trim();
+        newValue = string.IsNullOrWhiteSpace(newValue) ? null : newValue.Trim();
+
+        // Skip if both are null/empty
+        if (oldValue == null && newValue == null)
+            return true;
+
+        // Skip if both values are identical
+        if (oldValue == newValue)
+            return true;
+
+        // Treat "0,00" or "0" as equivalent to null/empty
+        var isZeroOrEmpty = (string? value) => value == null || value == "0,00" || value == "0";
+
+        if (isZeroOrEmpty(oldValue) && isZeroOrEmpty(newValue))
+            return true;
+
+        return false;
     }
 }
