@@ -9,7 +9,7 @@ using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Tests.src.Positions;
+namespace Virkarekisteri.Tests.Positions;
 
 public class CreatePositionTests
 {
@@ -39,7 +39,12 @@ public class CreatePositionTests
         var context = new DefaultHttpContext();
         var request = context.Request;
 
-        var mockPosition = new Position { Id = Guid.NewGuid(), CreationDecisionNumber = "123" };
+        var mockPosition = new Position
+        {
+            Id = Guid.NewGuid(),
+            CreationDecisionNumber = "123",
+            CostcentreId = Guid.NewGuid(),
+        };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
 
         var json = JsonSerializer.Serialize(mockPosition);
@@ -66,6 +71,7 @@ public class CreatePositionTests
             CreationDecisionNumber = "123",
             Type = 0,
             PositionNameId = Guid.NewGuid(),
+            CostcentreId = Guid.NewGuid(),
         };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
 
@@ -95,6 +101,7 @@ public class CreatePositionTests
             Type = 0,
             PositionNameId = mockPositionNameId,
             PositionName = new PositionName { Id = mockPositionNameId, Name = "Test" },
+            CostcentreId = Guid.NewGuid(),
         };
 
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
@@ -127,6 +134,7 @@ public class CreatePositionTests
             CreationDecisionNumber = "123",
             Type = 0,
             PositionNameId = mockPositionNameId,
+            CostcentreId = Guid.NewGuid(),
         };
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
         _positionNameRepositoryMock
