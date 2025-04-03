@@ -10,7 +10,7 @@ INSERT INTO
         Laji,
         Sijoituspaikka,
         PositionNameId,
-        OrgTreeId,
+        CostcentreId,
         OnOpettaja
     )
 VALUES
@@ -36,10 +36,9 @@ VALUES
             SELECT
                 Id
             FROM
-                [dbo].[OrganizationTree]
+                [dbo].[Costcentres]
             WHERE
-                [Number] = '1000'
-                AND [Alue] = 'KUSTANNUSPAIKKA'
+                [Number] = '4101'                
         ),
         0
     ),
@@ -65,10 +64,9 @@ VALUES
             SELECT
                 Id
             FROM
-                [dbo].[OrganizationTree]
+                [dbo].[Costcentres]
             WHERE
-                [Number] = '1412'
-                AND [Alue] = 'KUSTANNUSPAIKKA'
+                [Number] = '4102'                
         ),
         1
     ),
@@ -94,10 +92,9 @@ VALUES
             SELECT
                 Id
             FROM
-                [dbo].[OrganizationTree]
+                [dbo].[Costcentres]
             WHERE
-                [Number] = '4124'
-                AND [Alue] = 'KUSTANNUSPAIKKA'
+                [Number] = '4103'                
         ),
         0
     );

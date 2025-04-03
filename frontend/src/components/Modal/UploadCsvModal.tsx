@@ -129,13 +129,15 @@ const UploadCsvModal: React.FC<UploadCsvModalProps> = ({ open, handleClose }) =>
               {`${t('create_csv_position.error1')}${errors.length}${t('create_csv_position.error2')}`}
             </Alert>
           )}
-          <List>
-            {errors.map((error, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={error} />
-              </ListItem>
-            ))}
-          </List>
+          <Box sx={{ maxHeight: 200, overflowY: 'auto' }}>
+            <List>
+              {errors.map((error, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={error} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </Box>
       </Box>
     </Modal>

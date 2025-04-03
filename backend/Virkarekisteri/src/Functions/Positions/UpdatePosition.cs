@@ -14,7 +14,7 @@ public class UpdatePosition(
     IPositionRepository positionRepository,
     IPositionNameRepository positionNameRepository,
     IPositionChangeLogRepository positionChangeLogRepository,
-    IOrganizationTreeRepository organizationTreeRepository,
+    ICostcentreRepository costcentreRepository,
     ISubjectRepository subjectRepository
 )
 {
@@ -131,18 +131,15 @@ public class UpdatePosition(
         );
         existingPosition.SubjectIds = updateDto.SubjectIds ?? existingPosition.SubjectIds;
 
-        if (updateDto.OrgTreeId != null && updateDto.OrgTreeId != existingPosition.OrgTreeId)
+        if (updateDto.CostcentreId != null && updateDto.CostcentreId != existingPosition.CostcentreId)
         {
-            var oldOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
-                existingPosition.OrgTreeId
-            );
-            var newOrganizationName = await organizationTreeRepository.GetOrganizationNameById(
-                updateDto.OrgTreeId.Value
-            );
+            var oldCostcentreName = await costcentreRepository.GetCostcentreNameById(existingPosition.CostcentreId);
 
-            PositionLogChange("OrgTreeId", oldOrganizationName, newOrganizationName);
+            var newCostcentreName = await costcentreRepository.GetCostcentreNameById(updateDto.CostcentreId.Value);
 
-            existingPosition.OrgTreeId = updateDto.OrgTreeId.Value;
+            PositionLogChange("CostcentreId", oldCostcentreName, newCostcentreName);
+
+            existingPosition.CostcentreId = updateDto.CostcentreId.Value;
         }
 
         if (updateDto.PositionName?.Name is not null)

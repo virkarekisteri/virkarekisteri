@@ -35,21 +35,21 @@ export interface Position {
 
   replacementEmployeeId?: string;
 
-  orgTreeId: string;
+  costcentreId: string;
 
   vacancyStatus: number;
 
-  employeeName: string;
+  employeeName?: string;
 
-  employeeStartDate: string;
+  employeeStartDate?: string;
 
-  employeeEndDate: string;
+  employeeEndDate?: string;
 
-  replacementName: string;
+  replacementName?: string;
 
-  replacementStartDate: string;
+  replacementStartDate?: string;
 
-  replacementEndDate: string;
+  replacementEndDate?: string;
 
   isTeacher?: boolean;
 

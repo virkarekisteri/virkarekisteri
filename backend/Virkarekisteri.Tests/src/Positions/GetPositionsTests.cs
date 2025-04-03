@@ -7,7 +7,7 @@ using Virkarekisteri.Functions.Positions;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Tests.src.Positions;
+namespace Virkarekisteri.Tests.Positions;
 
 public class GetPositionsTests
 {

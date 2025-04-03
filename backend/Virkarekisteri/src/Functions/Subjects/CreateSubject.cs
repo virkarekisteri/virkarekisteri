@@ -11,8 +11,8 @@ namespace Virkarekisteri.Functions.Subjects;
 
 public class CreateSubject(
     ILogger<CreateSubject> logger,
-    ISubjectRepository subjectRepository
-// TODO CRUD: IChangeLogRepository changeLogRepository
+    ISubjectRepository subjectRepository,
+    ICRUDChangeLogRepository CRUDChangeLogRepository
 )
 {
     /// <summary>
@@ -50,22 +50,19 @@ public class CreateSubject(
             );
         }
 
-        // TODO: Logitus uuden aineen lisäämisestä. CRUDChangeLog yms.
-        /*
         var editor = req.HttpContext.Items["Editor"] as string ?? "Unknown";
-        var changeLog = new ChangeLog
+        var CRUDChangeLog = new CRUDChangeLog
         {
             Id = Guid.NewGuid(),
-            PositionId = createdPosition.Id,
-            EditedField = "CreatedPosition",
+            ObjectType = "Subject",
+            ObjectId = requestSubject.Id,
+            EditedField = "CreatedSubject",
             OldValue = string.Empty,
-            NewValue = createdPosition.VacancyNumber ?? string.Empty,
+            NewValue = requestSubject.SubjectName,
             Editor = editor,
             Timestamp = DateTime.Now,
-            DecisionNumber = createdPosition.CreationDecisionNumber,
         };
-        await changeLogRepository.AddChangeLogEntry(changeLog);
-        */
+        await CRUDChangeLogRepository.AddCRUDChangeLogEntry(CRUDChangeLog);
 
         return new OkObjectResult(requestSubject);
     }
