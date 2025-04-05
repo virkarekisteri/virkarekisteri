@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
-import { checkActiveStatus } from 'utils/checkActiveStatus';
+import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 import {
   Box,
   Accordion,
@@ -544,7 +544,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           .map((id) => subjects.find((subject) => subject.id === id))
           .filter((subject) => subject?.subjectName)
           .map((subject) => {
-            return checkActiveStatus(subject, t('table.not_active_suffix'))
+            return checkSubjectActiveStatus(subject, t('table.not_active_suffix'))
           }
         );
 
