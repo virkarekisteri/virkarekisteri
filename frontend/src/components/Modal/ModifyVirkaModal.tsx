@@ -65,12 +65,14 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   //Keep in memory the current subjects of the position. Temporary selection changes doesn't affect this. Will be
   //changed only after the "save" button press. Will be used for keeping up with a correct list of subjects for the position.
-  const currentSubjectsOfPosition = position?.subjectIds && position.subjectIds
-        .map((subjectId) => {
-          const matchedSubject = subjects.find((s) => s.id === subjectId);
-          return matchedSubject ? checkSubjectActiveStatus(matchedSubject, t('table.not_active_suffix')) : null;
-        })
-        .filter((subjectName): subjectName is string => subjectName !== null);
+  const currentSubjectsOfPosition =
+    position?.subjectIds &&
+    position.subjectIds
+      .map((subjectId) => {
+        const matchedSubject = subjects.find((s) => s.id === subjectId);
+        return matchedSubject ? checkSubjectActiveStatus(matchedSubject, t('table.not_active_suffix')) : null;
+      })
+      .filter((subjectName): subjectName is string => subjectName !== null);
 
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [isTeacherPosition, setIsTeacherPosition] = useState(false);
@@ -89,10 +91,13 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     setIsTeacherPosition(position.isTeacher || false);
   }, [subjects, position.subjectIds, position.isTeacher]);
 
-
   //Filter only active and current (initially fetched) subject names to be seen
   const subjectNames = subjects
-    .filter((subject) => subject.active === true || currentSubjectsOfPosition?.includes(checkSubjectActiveStatus(subject, t('table.not_active_suffix'))))
+    .filter(
+      (subject) =>
+        subject.active === true ||
+        currentSubjectsOfPosition?.includes(checkSubjectActiveStatus(subject, t('table.not_active_suffix'))),
+    )
     .map((subject) => checkSubjectActiveStatus(subject, t('table.not_active_suffix')));
 
   const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
@@ -102,7 +107,10 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   const subjectIds = isTeacherPosition
     ? selectedSubjects
-        .map((subjectName) => subjects.find((s) => checkSubjectActiveStatus(s, t('table.not_active_suffix')) === subjectName)?.id)
+        .map(
+          (subjectName) =>
+            subjects.find((s) => checkSubjectActiveStatus(s, t('table.not_active_suffix')) === subjectName)?.id,
+        )
         .filter((id): id is string => id !== undefined)
     : undefined;
 
