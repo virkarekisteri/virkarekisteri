@@ -544,9 +544,8 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           .map((id) => subjects.find((subject) => subject.id === id))
           .filter((subject) => subject?.subjectName)
           .map((subject) => {
-            return checkSubjectActiveStatus(subject, t('table.not_active_suffix'))
-          }
-        );
+            return checkSubjectActiveStatus(subject, t('table.not_active_suffix'));
+          });
 
         return subjectNames ? subjectNames.join(', ') : '';
       },
