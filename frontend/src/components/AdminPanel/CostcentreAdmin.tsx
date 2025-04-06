@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { 
     Box, 
     Button, 
+    Grid2,
     Table, 
     TableBody, 
     TableCell, 
@@ -19,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { Costcentre } from 'models/Costcentre';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { RequiresEditRole } from 'components/role-guards';
+import CostcentreDetails from 'components/Details/CostcentreDetails';
 import { format } from 'date-fns';
 import CreateCostcentreModal from 'components/Modal/CreateCostcentreModal';
 
@@ -273,6 +275,12 @@ const CostcentreAdmin = () => {
                 labelRowsPerPage={t('table.rows_per_page')}
                 />
             </Box>
+
+            <Grid2>
+                <Grid2 size={12}>
+                    {expandedRow ? <CostcentreDetails costcentre={expandedRow} allCostcentres={costcentres} /> : null}
+                </Grid2>
+            </Grid2>
             
         </Box>
     )
