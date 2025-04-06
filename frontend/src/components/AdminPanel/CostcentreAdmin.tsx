@@ -20,7 +20,7 @@ import { Costcentre } from 'models/Costcentre';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { RequiresEditRole } from 'components/role-guards';
 import { format } from 'date-fns';
-
+import CreateCostcentreModal from 'components/Modal/CreateCostcentreModal';
 
 const CostcentreAdmin = () => {
     const { t } = useTranslation();
@@ -31,7 +31,8 @@ const CostcentreAdmin = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [searchCostcentreName, setSearchCostcentreName] = useState('');
-    const [searchValid, setSearchValid] = useState(false);
+    const [searchActive, setSearchActive] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const { data: costcentres = [], isLoading: costcentresLoading } = useGetCostCentersQuery();
 
@@ -42,6 +43,14 @@ const CostcentreAdmin = () => {
     }, [costcentres]);
 
     const paginatedCostcentres = filteredCostcentres.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+    const handleOpenModal = () => {
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
 
     const handleChangePage = (_: unknown, newPage: number) => {
         setPage(newPage);
@@ -60,7 +69,7 @@ const CostcentreAdmin = () => {
                 ? c['name'].toLowerCase().includes(searchCostcentreName.toLowerCase())
                 : true;
 
-                const matchesValid = !searchValid || (
+                const matchesValid = !searchActive || (
                     (c.validFrom ? new Date(c.validFrom) <= currentDate : true) &&
                     (c.validUntil ? currentDate <= new Date(c.validUntil) : true)
                 );
@@ -74,6 +83,7 @@ const CostcentreAdmin = () => {
 
     const handleSearchReset = () => {
         setSearchCostcentreName('');
+        setSearchActive(false);
         setFilteredCostcentres(costcentres);
         setPage(0);
     }
@@ -125,31 +135,33 @@ const CostcentreAdmin = () => {
                         onChange={(e) => setSearchCostcentreName(e.target.value)}
                     />
 
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={searchActive}
+                                onChange={(event) => setSearchActive(event.target.checked)}
+                                color="primary"
+                            />
+                        }
+                        label={t('admin_panel.costcentre.show_active')}    
+                    />
+
                     <Button variant="contained" onClick={handleSearch}>
                         {t('search_filter.search')}
                     </Button>
 
-                    <Button variant="contained" onClick={handleSearchReset}>
+                    <Button variant="outlined" onClick={handleSearchReset}>
                         {t('search_filter.reset')}
                     </Button>
 
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={searchValid}
-                                onChange={(event) => setSearchValid(event.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label={t('admin_panel.costcentre.valid')}    
-                    />
+                    
                     
                 </Box>
 
                 <RequiresEditRole>
                     <Button 
                         variant="contained"
-                        // onclick={}
+                        onClick={handleOpenModal}
                         sx={{
                             backgroundColor: '#223B7C',
                             color: 'white',
@@ -175,6 +187,7 @@ const CostcentreAdmin = () => {
                         {t('admin_panel.costcentre.create_new')}
                     </Button>
                 </RequiresEditRole>
+                <CreateCostcentreModal open={modalOpen} onClose={handleCloseModal} />
             </Box>
 
             <TableContainer>

@@ -206,7 +206,13 @@
       "number": "",
       "valid_from": "",
       "valid_until": "",
-      "valid": ""
+      "show_active": "",
+      "details": "",
+      "validation": {
+        "required": "",
+        "duplicate_number": "",
+        "duplicate_name": ""
+      }
     }
   }
 }
