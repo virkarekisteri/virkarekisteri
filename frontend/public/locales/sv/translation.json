@@ -204,10 +204,12 @@
       "create_new": "",
       "name": "",
       "number": "",
+      "time_frame": "",
       "valid_from": "",
       "valid_until": "",
       "show_active": "",
       "details": "",
+      "edit": "",
       "validation": {
         "required": "",
         "duplicate_number": "",

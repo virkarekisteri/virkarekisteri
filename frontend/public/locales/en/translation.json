@@ -258,6 +258,7 @@
       "valid_until": "Valid until",
       "show_active": "Show only active",
       "details": "Costcentre details",
+      "edit": "Edit costcentre",
       "validation": {
         "required": "Field is required",
         "duplicate_number": "Costcentre number already exists",

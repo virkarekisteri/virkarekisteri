@@ -258,6 +258,7 @@
       "valid_until": "Voimassa päättyen",
       "show_active": "Näytä vain aktiiviset",
       "details": "Kustannuspaikan tiedot",
+      "edit": "Muokkaa kustannuspaikan tietoja",
       "validation": {
         "required": "Kenttä on pakollinen",
         "duplicate_number": "Kustannuspaikan numero on jo käytössä",
