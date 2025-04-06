@@ -13,16 +13,9 @@ public class UpdatePositionDto
     public string? Details { get; set; }
     public int? Type { get; set; }
     public Guid? CostcentreId { get; set; }
-    public PositionNameDto? PositionName { get; set; }
+    public Guid? PositionNameId { get; set; }
     public string? DecisionNumber { get; set; }
     public int? VacancyStatus { get; set; }
     public bool? IsTeacher { get; set; }
     public List<Guid>? SubjectIds { get; set; } = new List<Guid>();
-}
-
-public class PositionNameDto
-{
-    public string? Name { get; set; }
-    public DateTime? ValidFrom { get; set; }
-    public DateTime? ValidUntil { get; set; }
 }

@@ -53,31 +53,8 @@ public class CreatePosition(
 
         if (requestPosition.PositionNameId == Guid.Empty)
         {
-            if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
-            {
-                return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
-            }
-
-            // Pass null for validFrom and validUntil if not provided
-            var name = requestPosition.PositionName.Name;
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(name);
-            if (positionNameId == null)
-            {
-                if (requestPosition.PositionName == null)
-                {
-                    throw new ArgumentNullException(
-                        nameof(requestPosition.PositionName),
-                        "PositionName cannot be null."
-                    );
-                }
-                var createdPositionName = await positionNameRepository.CreatePositionName(requestPosition.PositionName);
-                positionNameId = createdPositionName.PositionName?.Id ?? Guid.Empty;
-            }
-
-            requestPosition.PositionNameId = positionNameId ?? Guid.Empty;
+            return new BadRequestObjectResult("PositionNameId must be provided.");
         }
-
-        requestPosition.PositionName = null; // Nullify to avoid conflicts
 
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
 

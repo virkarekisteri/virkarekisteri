@@ -142,25 +142,15 @@ public class UpdatePosition(
             existingPosition.CostcentreId = updateDto.CostcentreId.Value;
         }
 
-        if (updateDto.PositionName?.Name is not null)
+        if (updateDto.PositionNameId != null && updateDto.PositionNameId != existingPosition.PositionNameId)
         {
-            var positionNameId = await positionNameRepository.GetPositionNameIdByName(updateDto.PositionName.Name);
-            if (positionNameId == null)
-            {
-                var positionName = new PositionName
-                {
-                    Name = updateDto.PositionName.Name,
-                    ValidFrom = updateDto.PositionName.ValidFrom,
-                    ValidUntil = updateDto.PositionName.ValidUntil,
-                };
-                var createdPositionName = await positionNameRepository.CreatePositionName(positionName);
-                positionNameId = createdPositionName.PositionName?.Id;
-            }
             var oldPositionName = await positionNameRepository.GetPositionNameNameById(existingPosition.PositionNameId);
-            var newPositionName = await positionNameRepository.GetPositionNameNameById(positionNameId.Value);
 
-            PositionLogChange("PositionName", oldPositionName, newPositionName);
-            existingPosition.PositionNameId = positionNameId.Value;
+            var newPositionName = await positionNameRepository.GetPositionNameNameById(updateDto.PositionNameId.Value);
+
+            PositionLogChange("PositionNameId", oldPositionName, newPositionName);
+
+            existingPosition.PositionNameId = updateDto.PositionNameId.Value;
         }
 
         await positionRepository.UpdatePosition(existingPosition);
