@@ -20,9 +20,9 @@
     "subjects": "Subjects"
   },
   "create_csv_position": {
-    "success": " positions imported successfully.",
+    "success": "positions imported successfully.",
     "error1": "There were ",
-    "error2": " errors in the CSV file.",
+    "error2": " erroneous rows in the CSV file. No positions were created.",
     "upload": "Upload",
     "title": "Create positions from CSV",
     "upload_csv": "Import CSV",
@@ -74,6 +74,7 @@
     "start_date": "Start date",
     "teacher": "Teacher",
     "subjects": "Subjects",
+    "not_active_suffix": "not active",
     "yes": "Yes",
     "no": "No"
   },

@@ -11,6 +11,9 @@ import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
+import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
+
 interface BasicDetailsProps {
   position: Position;
 }
@@ -44,7 +47,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
       return position.subjectIds
         .map((subjectId) => {
           const subject = subjects.find((s) => s.id === subjectId);
-          return subject ? subject.subjectName : null;
+          return subject ? checkSubjectActiveStatus(subject, t('table.not_active_suffix')) : null;
         })
         .filter((subjectName): subjectName is string => subjectName !== null);
     }

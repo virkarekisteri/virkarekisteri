@@ -3,6 +3,6 @@ INSERT INTO
 VALUES
     (4101, 'Alakylän koulu', NULL, NULL),
     (4102, 'Joupin koulu', '1920-01-01', NULL),
-    (4103, 'Kivistön koulu', '1960-01-01', '2030-12-31');
-
+    (4103, 'Kivistön koulu', '1960-01-01', '2030-12-31'),
+    (4104, 'Niemistön koulu', '1960-01-01', '2025-3-31');
 GO
