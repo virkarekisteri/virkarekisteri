@@ -1,6 +1,6 @@
-import type { Subject } from 'models/Subject';
+import type { TeacherSubject } from 'models/TeacherSubject';
 
-export const checkSubjectActiveStatus = (subject: Subject | undefined, notActiveSuffix: string): string => {
+export const checkSubjectActiveStatus = (subject: TeacherSubject | undefined, notActiveSuffix: string): string => {
   return subject && subject?.subjectName
     ? subject.active
       ? subject.subjectName

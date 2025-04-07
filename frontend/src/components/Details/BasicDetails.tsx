@@ -11,7 +11,7 @@ import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+/* import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects'; */
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 
 interface BasicDetailsProps {
