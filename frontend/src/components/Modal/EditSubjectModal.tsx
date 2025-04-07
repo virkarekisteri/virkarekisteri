@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Checkbox,
-  TextField,
-  Button,
-  Grid2,
-  IconButton,
-  Typography,
-  FormControlLabel,
-} from '@mui/material';
+import { Box, Checkbox, TextField, Button, Grid2, IconButton, Typography, FormControlLabel } from '@mui/material';
 
 import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 
@@ -59,8 +50,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
           active: true,
         };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validateSubjectName = (value: string, /* allValues: Record<string, any> */) => {
+  const validateSubjectName = (value: string /* allValues: Record<string, any> */) => {
     if (
       value &&
       allSubjects.some((subj) => {
