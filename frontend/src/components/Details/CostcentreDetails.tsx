@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
+import ModifyCostcentreModal from 'components/Modal/ModifyCostcentreModal';
 
 interface CostcentreDetailsProps {
   costcentre: Costcentre;
@@ -131,6 +132,12 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre }) => 
 
                 </Grid2>
             </Box>
+
+            <ModifyCostcentreModal 
+                open={editModalOpen}
+                onClose={handleCloseEditModal}
+                costcentre={costcentre}
+            />
         </Box>
     );
 

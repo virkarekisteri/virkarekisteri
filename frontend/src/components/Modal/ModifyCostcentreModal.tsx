@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Box,
     Grid2,
@@ -7,34 +6,55 @@ import {
     Typography,
     TextField,
     Button
-  } from '@mui/material';
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import { Form, Field } from 'react-final-form';
-import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
-import { useCreateCostCentreMutation } from 'redux/api-slices/functions/costcentre-api';
+import { useGetCostCentersQuery, useUpdateCostCentreMutation } from 'redux/api-slices/functions/costcentre-api';
+import { Costcentre } from 'models/Costcentre';
+import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 
-interface CreateCostcentreModalProps {
+interface EditCostcentreModalProps {
     open: boolean;
     onClose: () => void;
+    costcentre: Costcentre;
 }
 
-interface formValues {
+interface FormValues {
     number: string;
     name: string;
     validFrom?: string;
     validUntil?: string;
 }
 
-const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onClose }) => {
+const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose, costcentre }) => {
     const { t } = useTranslation();
-    const [createCostCentre] = useCreateCostCentreMutation();
-
+    const [updateCostcentre] = useUpdateCostCentreMutation();
     const { data: costcentres } = useGetCostCentersQuery();
 
-    const onSubmit = async (values: formValues) => {
+    const formatDateForInput = (dateString?: string): string => {
+        if (!dateString) return '';
+        
+        const date = new Date(dateString);
+          if (isNaN(date.getTime())) return '';
+          
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          
+          return `${year}-${month}-${day}`;
+      };
+
+    const initialValues: FormValues = {
+        number: costcentre.number.toString(),
+        name: costcentre.name,
+        validFrom: formatDateForInput(costcentre.validFrom),
+        validUntil: formatDateForInput(costcentre.validUntil),
+    };
+
+    const onSubmit = async (values: any) => {
         try {
-            const costcentreData = {
+            const updatedData = {
                 number: parseInt(values.number),
                 name: values.name,
                 validFrom: values.validFrom
@@ -44,38 +64,49 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                     ? new Date(values.validUntil).toISOString().split('T')[0]
                     : undefined,
             };
-            createCostCentre(costcentreData);
+
+            await updateCostcentre({
+                id: costcentre.id,
+                costcentre: updatedData,
+            });
+              
             onClose();
         } catch (error) {
-            console.error('Failed to create costcentre:', error);
+            console.error('Failed to update costcentre:', error);
         }
-    }
+    };
 
     const validateCostcentreNumber = (value: string) => {
+        if (value === costcentre.number.toString()) {
+            return undefined;
+        }
         if (!value) {
             return t('admin_panel.costcentre.validation.required');
         }
         if (isNaN(Number(value))) {
             return t('admin_panel.costcentre.validation.invalid_number');
         }
-        if (costcentres?.some((costcentre) => costcentre.number.toString() === value)) {
+        if (costcentres?.some((c) => c.number.toString() === value)) {
             return t('admin_panel.costcentre.validation.duplicate_number');
         }
         if (value.length > 4) {
             return t('admin_panel.costcentre.validation.invalid_number');
         }
         return undefined;
-    }
+    };
 
     const validateCostcentreName = (value: string) => {
+        if (value === costcentre.name) {
+            return undefined;
+        }
         if (!value) {
             return t('admin_panel.costcentre.validation.required');
         }
-        if (costcentres?.some((costcentre) => costcentre.name === value)) {
+        if (costcentres?.some((c) => c.name === value)) {
             return t('admin_panel.costcentre.validation.duplicate_name');
         }
         return undefined;
-    }
+    };
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -94,7 +125,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                     p: 0,
                     borderRadius: 1,
                 }}
-                >
+            >
                 
                 {/* Header */}
                 <Box
@@ -109,19 +140,20 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                         borderTopLeftRadius: 1,
                         borderTopRightRadius: 1,
                     }}
-                    >
-                        <Typography variant="h6">
-                            {t('admin_panel.costcentre.create_new')}
-                        </Typography>
-                        <IconButton onClick={onClose} sx={{ color: 'white' }}>
-                            <CloseIcon />
-                        </IconButton>
+                >
+                    <Typography variant="h6">
+                        {t('admin_panel.costcentre.edit')}
+                    </Typography>
+                    <IconButton onClick={onClose} sx={{ color: 'white' }}>
+                        <CloseIcon />
+                    </IconButton>
                 </Box>
 
                 {/* Content */}
-                <Box sx={{ p: 4, pt: 0}}>
+                <Box sx={{ p: 4, pt: 0 }}>
                     <Form
                         onSubmit={onSubmit}
+                        initialValues={initialValues}
                         render={({ handleSubmit, submitting, pristine, hasValidationErrors }) => (
                             <form onSubmit={handleSubmit}>
                                 <Grid2 container spacing={2} size={12}>
@@ -132,55 +164,51 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                                             {t('admin_panel.costcentre.details')}
                                         </Typography>
                                     </Box>
+                                    <RenderReadonlyTextField value={t('admin_panel.costcentre.edit_warning')}/>
 
                                     <Grid2 size={12} sx={{ display: 'flex', gap: 2 }}>
-                                        
+
                                         {/* Number */}
                                         <Grid2 size={1}>
                                             <Field name="number" validate={validateCostcentreNumber}>
-                                                {({ input, meta }) => {
-                                                    return (
-                                                        <TextField
-                                                            {...input}
-                                                            required
-                                                            margin="normal"
-                                                            label={t('admin_panel.costcentre.number')}
-                                                            error={meta.error && meta.touched}
-                                                            helperText={meta.touched && meta.error}
-                                                            slotProps={{
+                                                {({ input, meta }) => (
+                                                    <TextField
+                                                        {...input}
+                                                        required
+                                                        margin="normal"
+                                                        label={t('admin_panel.costcentre.number')}
+                                                        error={meta.error && meta.touched}
+                                                        helperText={meta.touched && meta.error}
+                                                        slotProps={{
                                                             inputLabel: {
                                                                 shrink: true,
                                                             },
-                                                            }}
-                                                            sx={{ width: '360px' }}
-                                                        />
-                                                    );
-                                                }}
+                                                        }}
+                                                        sx={{ width: '360px' }}
+                                                    />
+                                                )}
                                             </Field>
                                         </Grid2>
-                                        
 
                                         {/* Name */}
                                         <Grid2 size={2}>
                                             <Field name="name" validate={validateCostcentreName}>
-                                            {({ input, meta }) => {
-                                                    return (
-                                                        <TextField
-                                                            {...input}
-                                                            required
-                                                            margin="normal"
-                                                            label={t('admin_panel.costcentre.name')}
-                                                            error={meta.error && meta.touched}
-                                                            helperText={meta.touched && meta.error}
-                                                            slotProps={{
+                                                {({ input, meta }) => (
+                                                    <TextField
+                                                        {...input}
+                                                        required
+                                                        margin="normal"
+                                                        label={t('admin_panel.costcentre.name')}
+                                                        error={meta.error && meta.touched}
+                                                        helperText={meta.touched && meta.error}
+                                                        slotProps={{
                                                             inputLabel: {
                                                                 shrink: true,
                                                             },
-                                                            }}
-                                                            sx={{ width: '360px' }}
-                                                        />
-                                                    );
-                                                }}
+                                                        }}
+                                                        sx={{ width: '360px' }}
+                                                    />
+                                                )}
                                             </Field>
                                         </Grid2>
                                     </Grid2>
@@ -218,25 +246,20 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                                                 )}
                                             </Field>
                                         </Grid2>
-
                                     </Grid2>
-
-                                        
-
-
                                 </Grid2>
 
                                 {/* Buttons */}
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3}}>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <Button variant="outlined" onClick={onClose}>
                                         {t('edit_position.cancel')}
                                     </Button>
-                                    <Button 
+                                    <Button
                                         type="submit"
                                         variant="contained"
-                                        sx={{ ml: 2, backgroundColor: '#223B7C', color: 'white'}}
+                                        sx={{ ml: 2, backgroundColor: '#223B7C', color: 'white' }}
                                         disabled={submitting || pristine || hasValidationErrors}
-                                        >
+                                    >
                                         {t('edit_position.save')}
                                     </Button>
                                 </Box>
@@ -244,10 +267,9 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                         )}
                     />
                 </Box>
-
             </Box>
         </Modal>
     );
-}
+};
 
-export default CreateCostcentreModal;
+export default EditCostcentreModal;
