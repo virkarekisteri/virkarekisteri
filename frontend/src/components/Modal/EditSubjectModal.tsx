@@ -31,6 +31,7 @@ import { useCreateTeacherSubjectMutation } from 'redux/api-slices/functions/teac
 interface EditSubjectModalProps {
   open: boolean;
   handleClose: () => void;
+  submitCallback: () => void;
   position: TeacherSubject | undefined;
   allSubjects: TeacherSubject[];
 }
@@ -40,7 +41,7 @@ interface FormValues {
   active: boolean;
 }
 
-const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, position, allSubjects }) => {
+const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, submitCallback, position, allSubjects }) => {
   const isCreateDialog: boolean = position === undefined ? true : false;
 
   const { t } = useTranslation();
@@ -82,7 +83,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
           active: values.active,
         };
         createSubject(subjectData);
-        handleClose();
+        submitCallback();
         return;
       } catch (error) {
         console.error('Failed to create subject:', error);
@@ -94,7 +95,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
           active: values.active,
         };
         updateSubject({ id: position.id, subject: updateData });
-        handleClose();
+        submitCallback();
       } catch (error) {
         console.error('Failed to update subject:', error);
       }

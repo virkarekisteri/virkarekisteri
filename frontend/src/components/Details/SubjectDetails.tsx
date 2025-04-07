@@ -14,9 +14,10 @@ import { format } from 'date-fns';
 interface SubjectDetailsProps {
   position: TeacherSubject;
   allSubjects: TeacherSubject[];
+  doneEditingCallback: () => void;
 }
 
-const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }) => {
+const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, doneEditingCallback }) => {
   const { t } = useTranslation();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -27,6 +28,11 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
+  };
+
+  const handleSubmitEditModal = () => {
+    setEditModalOpen(false);
+    doneEditingCallback();
   };
 
   const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(
@@ -228,6 +234,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects }
       <EditSubjectModal
         open={editModalOpen}
         handleClose={handleCloseEditModal}
+        submitCallback={handleSubmitEditModal}
         position={position}
         allSubjects={allSubjects}
       />
