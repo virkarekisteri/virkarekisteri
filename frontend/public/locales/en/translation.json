@@ -216,7 +216,7 @@
       "create_subject": "Create new subject",
       "edit_subject": "Edit subject",
       "edit_history": "Editing history",
-      "editwarning": "Changes made here will affect all positions of type teacher!",
+      "editwarning": "Changes made here will affect all teacher positions with this subject!",
       "no_edits": "No edits"
     },
     "search": {
