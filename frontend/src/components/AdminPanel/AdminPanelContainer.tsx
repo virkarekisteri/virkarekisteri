@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  alpha,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import { Box, alpha, Tabs, Tab } from '@mui/material';
 import SubjectAdmin from './SubjectAdmin';
 
 const AdminPanelContainer = () => {
