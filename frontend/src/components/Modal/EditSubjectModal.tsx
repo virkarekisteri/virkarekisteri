@@ -59,7 +59,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
           active: true,
         };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const validateSubjectName = (value: string, /* allValues: Record<string, any> */) => {
     if (
       value &&
