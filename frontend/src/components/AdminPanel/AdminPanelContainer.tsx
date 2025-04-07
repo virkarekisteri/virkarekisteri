@@ -1,20 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Box,
-  IconButton,
-  CircularProgress,
   alpha,
-  Typography,
-  TablePagination,
-  TextField,
-  Button,
-  Grid2,
   Tabs,
   Tab,
 } from '@mui/material';

@@ -35,7 +35,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
     doneEditingCallback();
   };
 
-  const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(
+  const { data: subjectChangelogs = []/* , isLoading: subjectChangeLogsLoading */ } = useGetAdminChangelogsByObjectIdQuery(
     position.id,
   );
 
@@ -106,14 +106,14 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
       </Box>
 
       <Box padding={2}>
-        <Grid2 container spacing={2} size={16}>
-          <Grid2 size={4} px={2}>
+        <Grid2 container spacing={2}>
+          <Grid2 size={6} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.teacher_subjects.name')}
             </Typography>
             <RenderReadonlyTextField value={position.subjectName} />
           </Grid2>
-          <Grid2 size={4} px={2}>
+          <Grid2 size={6} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.teacher_subjects.status')}
             </Typography>

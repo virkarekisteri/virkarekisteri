@@ -7,10 +7,8 @@ import {
   TableHead,
   TableRow,
   Box,
-  IconButton,
   CircularProgress,
   alpha,
-  Typography,
   TablePagination,
   TextField,
   Button,
@@ -18,13 +16,11 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
 import type { TeacherSubject } from 'models/TeacherSubject';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import SubjectDetails from 'components/Details/SubjectDetails';
-import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
+import { RequiresEditRole } from 'components/role-guards';
 import EditSubjectModal from 'components/Modal/EditSubjectModal';
 
 import ActivityLight from 'components/Components/ActivityLight';

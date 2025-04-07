@@ -2,18 +2,11 @@ import React from 'react';
 import {
   Box,
   Checkbox,
-  FormGroup,
   TextField,
   Button,
   Grid2,
   IconButton,
   Typography,
-  InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Autocomplete,
   FormControlLabel,
 } from '@mui/material';
 
@@ -61,7 +54,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, 
         };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validateSubjectName = (value: string, allValues: Record<string, any>) => {
+  const validateSubjectName = (value: string, /* allValues: Record<string, any> */) => {
     if (
       value &&
       allSubjects.some((subj) => {
