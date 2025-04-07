@@ -56,6 +56,7 @@ const CostcentreAdmin = () => {
 
     const handleChangePage = (_: unknown, newPage: number) => {
         setPage(newPage);
+        setExpandedRow(null);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,23 +93,38 @@ const CostcentreAdmin = () => {
 
     const handleSort = (key: keyof Costcentre) => {
         setSortConfig((prevConfig) => {
-            const direction = prevConfig && prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc';
+            if (!prevConfig || prevConfig.key !== key) {
+                const sortedData = [...filteredCostcentres].sort((a, b) => {
+                    const valA = a[key] ?? '';
+                    const valB = b[key] ?? '';
     
-            const sortedData = [...filteredCostcentres].sort((a, b) => {
-                const valA = a[key] ?? '';
-                const valB = b[key] ?? '';
+                    if (key === 'validFrom' || key === 'validUntil') {
+                        return (new Date(valA).getTime() || 0) - (new Date(valB).getTime() || 0);
+                    }
     
-                if (key === 'validFrom' || key === 'validUntil') {
-                    return (new Date(valA).getTime() || 0) - (new Date(valB).getTime() || 0) * (direction === 'asc' ? 1 : -1);
-                }
+                    return valA < valB ? -1 : valA > valB ? 1 : 0;
+                });
     
-                if (valA < valB) return direction === 'asc' ? -1 : 1;
-                if (valA > valB) return direction === 'asc' ? 1 : -1;
-                return 0;
-            });
+                setFilteredCostcentres(sortedData);
+                return { key, direction: 'asc' };
+            } else if (prevConfig.direction === 'asc') {
+                const sortedData = [...filteredCostcentres].sort((a, b) => {
+                    const valA = a[key] ?? '';
+                    const valB = b[key] ?? '';
     
-            setFilteredCostcentres(sortedData);
-            return { key, direction };
+                    if (key === 'validFrom' || key === 'validUntil') {
+                        return (new Date(valB).getTime() || 0) - (new Date(valA).getTime() || 0);
+                    }
+    
+                    return valA > valB ? -1 : valA < valB ? 1 : 0;
+                });
+    
+                setFilteredCostcentres(sortedData);
+                return { key, direction: 'desc' };
+            } else {
+                setFilteredCostcentres(costcentres);
+                return null;
+            }
         });
     };
 
@@ -267,7 +283,7 @@ const CostcentreAdmin = () => {
             <Box display="flex" justifyContent="center" mt={2}>
                 <TablePagination
                 component="div"
-                count={costcentres.length}
+                count={filteredCostcentres.length}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
@@ -278,7 +294,7 @@ const CostcentreAdmin = () => {
 
             <Grid2>
                 <Grid2 size={12}>
-                    {expandedRow ? <CostcentreDetails costcentre={expandedRow} allCostcentres={costcentres} /> : null}
+                    {expandedRow ? <CostcentreDetails costcentre={expandedRow} /> : null}
                 </Grid2>
             </Grid2>
             
