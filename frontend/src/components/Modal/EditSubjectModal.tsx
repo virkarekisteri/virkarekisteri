@@ -41,7 +41,13 @@ interface FormValues {
   active: boolean;
 }
 
-const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ open, handleClose, submitCallback, position, allSubjects }) => {
+const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
+  open,
+  handleClose,
+  submitCallback,
+  position,
+  allSubjects,
+}) => {
   const isCreateDialog: boolean = position === undefined ? true : false;
 
   const { t } = useTranslation();

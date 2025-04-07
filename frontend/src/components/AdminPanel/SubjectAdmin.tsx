@@ -149,7 +149,7 @@ const SubjectAdmin = () => {
 
   const handleCloseDetails = () => {
     setExpandedRow(null);
-  }
+  };
 
   if (isLoading) {
     return (
@@ -302,13 +302,22 @@ const SubjectAdmin = () => {
 
       <Grid2>
         <Grid2 size={12}>
-          {expandedRow ? <SubjectDetails position={expandedRow} doneEditingCallback={handleCloseDetails} allSubjects={sortedTeacherSubjects} /> : null}
+          {expandedRow ? (
+            <SubjectDetails
+              position={expandedRow}
+              doneEditingCallback={handleCloseDetails}
+              allSubjects={sortedTeacherSubjects}
+            />
+          ) : null}
         </Grid2>
       </Grid2>
       <EditSubjectModal
         open={createModalOpen}
         handleClose={handleCloseCreateModal}
-        submitCallback={() => {handleCloseDetails(); handleCloseCreateModal(); }}
+        submitCallback={() => {
+          handleCloseDetails();
+          handleCloseCreateModal();
+        }}
         position={undefined}
         allSubjects={sortedTeacherSubjects}
       />
