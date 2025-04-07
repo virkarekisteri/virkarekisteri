@@ -21,13 +21,18 @@ const costcentreTreesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'CostCenters', id: 'LIST' }],
     }),
-    updateCostCentre: build.mutation<Costcentre, Partial<Costcentre>>({
-      query: (body) => ({
-        url: `/costcentres/${body.id}`,
+    updateCostCentre: build.mutation<Costcentre, { id: string; costcentre: Partial<Costcentre> }>({
+      query: ({ id, costcentre }) => ({
+        url: `/costcentres/${id}`,
         method: 'PUT',
-        body,
+        body: costcentre,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'CostCenters', id }],
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'CostCenters', id }
+      ],
     }),
   }),
 });

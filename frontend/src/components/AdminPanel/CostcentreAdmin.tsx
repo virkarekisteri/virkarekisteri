@@ -65,19 +65,17 @@ const CostcentreAdmin = () => {
     };
 
     const handleSearch = () => {
-        const currentDate = new Date();
-
         const filtered = costcentres.filter((c) => {
             const matchesName = searchCostcentreName
                 ? c['name'].toLowerCase().includes(searchCostcentreName.toLowerCase())
                 : true;
 
-                const matchesValid = !searchActive || (
-                    (c.validFrom ? new Date(c.validFrom) <= currentDate : true) &&
-                    (c.validUntil ? currentDate <= new Date(c.validUntil) : true)
-                );
+                const matchesActive = !searchActive || (
+                    (c.validFrom ? new Date(new Date(c.validFrom).setHours(0, 0, 0, 0)) <= new Date(new Date().setHours(0, 0, 0, 0)) : true) &&
+                    (c.validUntil ? new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(new Date(c.validUntil).setHours(0, 0, 0, 0)) : true)
+                  );
 
-            return matchesName && matchesValid;
+            return matchesName && matchesActive;
         });
 
         setFilteredCostcentres(filtered);
@@ -261,7 +259,7 @@ const CostcentreAdmin = () => {
                             <React.Fragment key={row.id}>
                                 <TableRow
                                     sx={{
-                                        backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedCostcentres.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
+                                        backgroundColor: row.id === expandedRow?.id ? alpha('#223B7C', 0.5) : (paginatedCostcentres.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
                                         cursor: 'pointer',
                                     }}
                                     onClick={() => handleRowToggle(row)}

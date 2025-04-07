@@ -210,10 +210,12 @@
       "show_active": "",
       "details": "",
       "edit": "",
+      "edit_warning": "",
       "validation": {
         "required": "",
         "duplicate_number": "",
-        "duplicate_name": ""
+        "duplicate_name": "",
+        "invalid_number": ""
       }
     }
   }
