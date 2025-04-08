@@ -126,6 +126,7 @@
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka",
       "CreatedEmployee": "Lisätty uusi viranhaltija",
+      "CreatedCostcentre": "Luotu uusi kustannuspaikka",
       "VacancyStatus": "Vakanssin tila",
       "EndedPosition": "Lakkautettu virka",
       "PositionSubjects": "Aineet",
@@ -224,6 +225,7 @@
       "details": "Kustannuspaikan tiedot",
       "edit": "Muokkaa kustannuspaikan tietoja",
       "edit_warning": "Tässä tehdyt muutokset vaikuttavat kaikkiin tämän kustannuspaikan virkoihin.",
+      "edit_history": "Muutoshistoria",
       "validation": {
         "required": "Kenttä on pakollinen",
         "duplicate_number": "Kustannuspaikan numero on jo käytössä",
