@@ -127,6 +127,7 @@
       "Substitute": "",
       "CreatedPosition": "",
       "CreatedEmployee": "",
+      "CreatedCostcentre": "",
       "VacancyStatus": "",
       "PositionSubjects": "",
       "IsTeacher": ""
@@ -211,6 +212,7 @@
       "details": "",
       "edit": "",
       "edit_warning": "",
+      "edit_history": "",
       "validation": {
         "required": "",
         "duplicate_number": "",

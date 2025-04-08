@@ -140,38 +140,46 @@ const CostcentreAdmin = () => {
 
     return (
         <Box>
-            {/* Search Controls */}
-            
-            <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
 
-                <Box display="flex" gap={2}>
-                    <TextField
-                        label={t('admin_panel.search.byName')}
-                        value={searchCostcentreName}
-                        onChange={(e) => setSearchCostcentreName(e.target.value)}
-                    />
+                {/* Search Controls */}
+                <Box display="flex" flexWrap="wrap" gap={2}>
+                    <Box display="flex" gap={2}>
 
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={searchActive}
-                                onChange={(event) => setSearchActive(event.target.checked)}
-                                color="primary"
-                            />
-                        }
-                        label={t('admin_panel.costcentre.show_active')}    
-                    />
+                        {/* Search by name */}
+                        <TextField
+                            label={t('admin_panel.search.byName')}
+                            value={searchCostcentreName}
+                            onChange={(e) => setSearchCostcentreName(e.target.value)}
+                            sx={{ minWidth: '300px' }}
+                        />
 
-                    <Button variant="contained" onClick={handleSearch}>
-                        {t('search_filter.search')}
-                    </Button>
-
-                    <Button variant="outlined" onClick={handleSearchReset}>
-                        {t('search_filter.reset')}
-                    </Button>
-
+                        {/* Search only active */}
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={searchActive}
+                                    onChange={(event) => setSearchActive(event.target.checked)}
+                                    color="primary"
+                                />
+                            }
+                            label={t('admin_panel.costcentre.show_active')}  
+                            sx={{ minWidth: '250px' }}  
+                        />
+                    </Box>
                     
+                    {/* Search and clear buttons */}
+                    <Box display="flex" gap={2} flexWrap="wrap">
+                        <Button variant="contained" onClick={handleSearch}>
+                            {t('search_filter.search')}
+                        </Button>
+
+                        <Button variant="outlined" onClick={handleSearchReset}>
+                            {t('search_filter.reset')}
+                        </Button>
+                    </Box>
                     
+
                 </Box>
 
                 <RequiresEditRole>

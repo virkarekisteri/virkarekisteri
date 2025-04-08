@@ -126,6 +126,7 @@
       "Substitute": "Substitute",
       "CreatedPosition": "Created new position",
       "CreatedEmployee": "Added new employee",
+      "CreatedCostcentre": "Added new costcentre",
       "VacancyStatus": "Vacancy status",
       "EndedPosition": "Ended position",
       "PositionSubjects": "Subjects",
@@ -241,6 +242,7 @@
       "details": "Costcentre details",
       "edit": "Edit costcentre",
       "edit_warning": "Any changes made here will affect all positions using this costcenre.",
+      "edit_history": "Editing history",
       "validation": {
         "required": "Field is required",
         "duplicate_number": "Costcentre number already exists",
