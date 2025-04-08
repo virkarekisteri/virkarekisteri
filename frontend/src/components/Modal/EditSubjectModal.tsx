@@ -59,7 +59,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
         );
       })
     )
-      return t('admin_panel.error.subject_name_exists_error');
+      return t('admin_panel.teacher_subjects.validation.subject_name_exists_error');
 
     return undefined;
   };

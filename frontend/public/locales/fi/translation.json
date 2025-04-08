@@ -20,9 +20,9 @@
     "subjects": "Opetettavat aineet"
   },
   "create_csv_position": {
-    "success": " onnistunutta virkaa.",
+    "success": " virkaa luotu onnistuneesti.",
     "error1": "CSV-tiedostossa oli ",
-    "error2": " virheellistä riviä. Virkoja ei luotu.",
+    "error2": " virheellistä riviä.",
     "upload": "Lataa",
     "title": "Luo virkoja CSV-tiedostosta",
     "upload_csv": "Tuo CSV",
@@ -74,14 +74,13 @@
     "start_date": "Virkaan asettamispäivä",
     "teacher": "Opettaja",
     "subjects": "Opetettavat aineet",
-    "not_active_suffix": "ei aktiivinen",
     "yes": "Kyllä",
     "no": "Ei"
   },
   "tabs": {
     "positions": "Virkalistaus",
     "history": "Historiatiedot",
-    "admin": "Hallintapaneli"
+    "admin": "Hallinta"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos",
@@ -206,6 +205,15 @@
     "update_value_message": "Kentän arvo päivitetään jokaiselle valitulle viralle"
   },
   "admin_panel": {
+    "titles": {
+      "subjects": "Aineet",
+      "job_titles": "Virkanimikkeet",
+      "cost_centres": "Kustannuspaikat"
+    },
+    "search": {
+      "bySubjectName": "Etsi aineen nimellä",
+      "byName": "Hae nimellä"
+    },
     "teacher_subjects": {
       "name": "Nimi",
       "status": "Tila",
@@ -217,13 +225,28 @@
       "edit_subject": "Muokkaa aineen tietoja",
       "edit_history": "Muutoshistoria",
       "editwarning": "Tässä tehdyt muokkaukset vaikuttavat kaikkiin opettajan virkoihin joilla tämä aine.",
-      "no_edits": "Ei muokkauksia"
+      "no_edits": "Ei muokkauksia",
+      "validation": {
+        "subject_name_exists_error": "Aineen nimi on jo olemassa"
+      }
     },
-    "search": {
-      "bySubjectName": "Etsi aineen nimellä"
-    },
-    "error": {
-      "subject_name_exists_error": "Aineen nimi on jo olemassa"
+    "costcentre": {
+      "create_new": "Luo uusi kustannuspaikka",
+      "name": "Nimi",
+      "number": "Numero",
+      "time_frame": "Aikaväli",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen",
+      "show_active": "Näytä vain aktiiviset",
+      "details": "Kustannuspaikan tiedot",
+      "edit": "Muokkaa kustannuspaikan tietoja",
+      "edit_warning": "Tässä tehdyt muutokset vaikuttavat kaikkiin tämän kustannuspaikan virkoihin.",
+      "validation": {
+        "required": "Kenttä on pakollinen",
+        "duplicate_number": "Kustannuspaikan numero on jo käytössä",
+        "duplicate_name": "Kustannuspaikan nimi on jo käytössä",
+        "invalid_number": "Virheellinen kustannuspaikan numero"
+      }
     },
     "change_logs": {
       "edited_field": "Muokattu kenttä",
