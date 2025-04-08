@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 import {
   Box,
   Accordion,
@@ -393,7 +394,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         const id = params;
         if (!id || !costcentres) return id;
         const orgTree = costcentres.find((tree: Costcentre) => tree.id === id);
-        return orgTree ? `${orgTree.number} ${orgTree.name}` : '';
+        return orgTree ? `${orgTree.number} ${checkCostCentreActiveStatus(orgTree, t('table.not_active_suffix'))}` : '';
       },
     },
     {
