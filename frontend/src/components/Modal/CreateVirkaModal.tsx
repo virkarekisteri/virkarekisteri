@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useState } from 'react';
@@ -50,7 +50,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   );
   const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
 
-  const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
 
   const activeSubjectNames = subjects
     .filter((subject) => subject.active === true)

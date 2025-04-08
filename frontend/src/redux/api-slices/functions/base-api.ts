@@ -3,7 +3,7 @@ import { acquireAccessToken } from 'auth/msal-instance';
 
 export const baseApi = createApi({
   reducerPath: 'functionsApi',
-  tagTypes: ['CostCenters', 'PositionEmployees', 'PositionNames', 'Positions', 'ChangeLogs', 'Subjects'],
+  tagTypes: ['CostCenters', 'PositionEmployees', 'PositionNames', 'Positions', 'ChangeLogs', 'TeacherSubjects', 'AdminChangeLogs'],
   invalidationBehavior: 'delayed',
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_BASE_URL,

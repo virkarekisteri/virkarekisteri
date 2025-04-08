@@ -27,7 +27,7 @@ import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-na
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { useEffect, useState } from 'react';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface ModifyVirkaModalProps {
@@ -58,7 +58,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
   const { data: costcentres = [] } = useGetCostCentersQuery();
 
-  const { data: subjects = [] } = useGetSubjectsQuery(open ? undefined : skipToken);
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
 
   const [updatePosition] = useUpdatePositionMutation();
 
