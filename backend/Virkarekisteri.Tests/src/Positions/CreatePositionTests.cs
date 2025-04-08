@@ -33,6 +33,12 @@ public class CreatePositionTests
         );
     }
 
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
+
     [Fact]
     public async Task ReturnsBadRequest_WhenPositionNameIsNullorWhiteSpace()
     {
@@ -58,6 +64,7 @@ public class CreatePositionTests
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
         badRequestResult.Value.Should().Be("Either PositionNameId or a valid PositionName must be provided.");
     }
+    */
 
     [Fact]
     public async Task ReturnsOkObjectResult_WhenPositionIsCreated()
@@ -120,6 +127,11 @@ public class CreatePositionTests
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.Value.Should().Be(mockPosition);
     }
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
 
     [Fact]
     public async Task ReturnsOkObjectResult_WhenPositionNameIsNotProvided()
@@ -155,4 +167,5 @@ public class CreatePositionTests
         var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
         okResult.Value.Should().Be(mockPosition);
     }
+    */
 }
