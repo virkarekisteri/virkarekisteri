@@ -64,11 +64,11 @@ const SubjectAdmin = () => {
       if (!prevConfig || prevConfig.key !== key) {
         return { key, direction: 'asc' };
       }
-  
+
       if (prevConfig.direction === 'asc') {
         return { key, direction: 'desc' };
       }
-  
+
       return null;
     });
   };
@@ -106,10 +106,7 @@ const SubjectAdmin = () => {
   }, [filteredSubjects, sortConfig]);
 
   // Pagination logic
-  const paginatedTeacherSubjects = sortedTeacherSubjects.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage,
-  );
+  const paginatedTeacherSubjects = sortedTeacherSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -157,11 +154,9 @@ const SubjectAdmin = () => {
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
-        
         {/* Search Controls */}
         <Box display="flex" flexWrap="wrap" gap={2}>
           <Box display="flex" gap={2}>
-
             {/* Search by  name */}
             <TextField
               label={t('admin_panel.search.byName')}
@@ -176,10 +171,10 @@ const SubjectAdmin = () => {
                 <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
               }
               label={t('admin_panel.teacher_subjects.show_only_active')}
-              sx={{ minWidth: '250px' }}  
+              sx={{ minWidth: '250px' }}
             />
           </Box>
-          
+
           {/* Search and clear buttons */}
           <Box display="flex" gap={2} flexWrap="wrap">
             <Button variant="contained" onClick={handleSearch}>
@@ -190,7 +185,6 @@ const SubjectAdmin = () => {
               {t('search_filter.reset')}
             </Button>
           </Box>
-          
         </Box>
 
         <RequiresEditRole>

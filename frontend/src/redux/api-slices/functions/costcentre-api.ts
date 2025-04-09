@@ -17,7 +17,7 @@ const costcentreTreesApi = baseApi.injectEndpoints({
         body,
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
       }),
       invalidatesTags: [{ type: 'CostCenters', id: 'LIST' }],
     }),
@@ -30,9 +30,7 @@ const costcentreTreesApi = baseApi.injectEndpoints({
           'Content-Type': 'application/json',
         },
       }),
-      invalidatesTags: (_result, _error, { id }) => [
-        { type: 'CostCenters', id }
-      ],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'CostCenters', id }],
     }),
   }),
 });
