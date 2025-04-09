@@ -105,14 +105,8 @@ const SubjectAdmin = () => {
     });
   }, [filteredSubjects, sortConfig]);
 
-  /* Show-only-active -filtering logic */
-  const activityFilteredTeacherSubjects = React.useMemo(() => {
-    if (!showOnlyActiveSubjects) return sortedTeacherSubjects;
-    else return sortedTeacherSubjects.filter((s) => s.active === true);
-  }, [sortedTeacherSubjects, showOnlyActiveSubjects]);
-
   // Pagination logic
-  const paginatedTeacherSubjects = activityFilteredTeacherSubjects.slice(
+  const paginatedTeacherSubjects = sortedTeacherSubjects.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage,
   );
@@ -129,8 +123,9 @@ const SubjectAdmin = () => {
   // Search logic
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
-      const matchesVacancyNumber = searchSubjectName ? s['subjectName'].includes(searchSubjectName) : true;
-      return matchesVacancyNumber;
+      const matchesName = searchSubjectName ? s['subjectName'].includes(searchSubjectName) : true;
+      const matchesActive = showOnlyActiveSubjects ? s.active === true : true;
+      return matchesName && matchesActive;
     });
     setFilteredTeacherSubjects(filtered);
     setPage(0);
@@ -138,6 +133,7 @@ const SubjectAdmin = () => {
 
   const handleResetSearch = () => {
     setSearchSubjectName('');
+    setShowOnlyActiveSubjects(false);
     setFilteredTeacherSubjects(teacherSubjects);
     setPage(0);
   };

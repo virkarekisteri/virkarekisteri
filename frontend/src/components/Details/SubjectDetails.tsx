@@ -185,7 +185,9 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
                       <Grid2 size={2} sx={{ width: '20%' }}>
                         <RenderReadonlyTextField
                           value={
-                            changelog.editedField == 'Active'
+                            changelog.editedField === 'CreatedSubject'
+                              ? t('change_logs.fields.CreatedSubject')
+                              : changelog.editedField === 'Active'
                               ? t('admin_panel.teacher_subjects.status')
                               : t('admin_panel.teacher_subjects.name')
                           }
@@ -194,8 +196,10 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
                       <Grid2 size={3} sx={{ width: '20%' }}>
                         <RenderReadonlyTextField
                           value={
-                            changelog.editedField == 'Active'
-                              ? changelog.oldValue == 'True'
+                            changelog.editedField === 'CreatedSubject'
+                              ? '-'
+                              : changelog.editedField === 'Active'
+                              ? changelog.oldValue === 'True'
                                 ? t('admin_panel.teacher_subjects.active')
                                 : t('admin_panel.teacher_subjects.inactive')
                               : changelog.oldValue
