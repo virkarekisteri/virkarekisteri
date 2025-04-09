@@ -39,6 +39,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
         setEditModalOpen(false);
     }
 
+    // Formats the changelog entries if needed
     const formatIfNeeded = (value: string, field: string) => {
         if (field === 'CreatedCostcentre' && !value) {
             return '-';
@@ -50,7 +51,8 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
         return value;
     };
 
-    const getFieldLabel = (field: string) => {
+    // Returns the correct edited field label
+    const getEditedFieldLabel = (field: string) => {
         switch (field) {
             case 'CreatedCostcentre':
                 return t('change_logs.fields.CreatedCostcentre');
@@ -248,7 +250,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
                                         <React.Fragment key={changelog.id}>
                                             <Grid2 size={2} sx={{ width: '20%' }}>
                                                 <RenderReadonlyTextField
-                                                    value={getFieldLabel(changelog.editedField)}
+                                                    value={getEditedFieldLabel(changelog.editedField)}
                                                 />
                                             </Grid2>
                                             <Grid2 size={3} sx={{ width: '20%' }}>

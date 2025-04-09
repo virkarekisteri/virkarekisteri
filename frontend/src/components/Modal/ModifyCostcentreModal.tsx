@@ -33,6 +33,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
     const [updateCostcentre] = useUpdateCostCentreMutation();
     const { data: costcentres } = useGetCostCentersQuery();
 
+    // Formats the date for the input field
     const formatDateForInput = (dateString?: string): string => {
         if (!dateString) return '';
         
@@ -44,8 +45,9 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
           const day = String(date.getDate()).padStart(2, '0');
           
           return `${year}-${month}-${day}`;
-      };
+    };
 
+    // Initial values for the form
     const initialValues: FormValues = {
         number: costcentre.number.toString(),
         name: costcentre.name,
@@ -80,6 +82,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
         }
     };
 
+    // Checks whether the costcentre number is valid and not already in use
     const validateCostcentreNumber = (value: string) => {
         if (value === costcentre.number.toString()) {
             return undefined;
@@ -99,6 +102,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
         return undefined;
     };
 
+    // Checks whether the costcentre name is valid and not already in use
     const validateCostcentreName = (value: string) => {
         if (value === costcentre.name) {
             return undefined;

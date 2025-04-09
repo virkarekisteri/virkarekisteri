@@ -51,6 +51,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
         }
     }
 
+    // Checks whether the costcentre number is valid and not already in use
     const validateCostcentreNumber = (value: string) => {
         if (!value) {
             return t('admin_panel.costcentre.validation.required');
@@ -67,6 +68,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
         return undefined;
     }
 
+    // Checks whether the costcentre name is valid and not already in use
     const validateCostcentreName = (value: string) => {
         if (!value) {
             return t('admin_panel.costcentre.validation.required');
