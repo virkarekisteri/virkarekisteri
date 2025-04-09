@@ -177,7 +177,8 @@
     "creation_decision_number": "Päätösnumero",
     "creation_description": "Päätöksen selite",
     "teacher": "Opettaja",
-    "subjects": "Opetettavat aineet"
+    "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen"
   },
   "error": {
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kaksikymmentä (20) merkkiä pitkä.",
