@@ -74,6 +74,7 @@
     "start_date": "Start date",
     "teacher": "Teacher",
     "subjects": "Subjects",
+    "not_active_suffix": "not active",
     "yes": "Yes",
     "no": "No"
   },
