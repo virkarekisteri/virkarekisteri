@@ -18,6 +18,7 @@ interface EditCostcentreModalProps {
     open: boolean;
     onClose: () => void;
     costcentre: Costcentre;
+    onSubmitSuccess?: () => void;
 }
 
 interface FormValues {
@@ -27,7 +28,7 @@ interface FormValues {
     validUntil?: string;
 }
 
-const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose, costcentre }) => {
+const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose, costcentre, onSubmitSuccess }) => {
     const { t } = useTranslation();
     const [updateCostcentre] = useUpdateCostCentreMutation();
     const { data: costcentres } = useGetCostCentersQuery();
@@ -71,6 +72,9 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
             });
               
             onClose();
+            if (onSubmitSuccess) {
+                onSubmitSuccess();
+            }
         } catch (error) {
             console.error('Failed to update costcentre:', error);
         }

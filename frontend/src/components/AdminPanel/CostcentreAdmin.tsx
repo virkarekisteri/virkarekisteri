@@ -54,6 +54,10 @@ const CostcentreAdmin = () => {
         setModalOpen(false);
     };
 
+    const handleDeselectRow = () => {
+        setExpandedRow(null);
+    };
+    
     const handleChangePage = (_: unknown, newPage: number) => {
         setPage(newPage);
         setExpandedRow(null);
@@ -91,6 +95,7 @@ const CostcentreAdmin = () => {
 
     const handleSort = (key: keyof Costcentre) => {
         setSortConfig((prevConfig) => {
+            setPage(0);
             if (!prevConfig || prevConfig.key !== key) {
                 const sortedData = [...filteredCostcentres].sort((a, b) => {
                     const valA = a[key] ?? '';
@@ -300,7 +305,12 @@ const CostcentreAdmin = () => {
 
             <Grid2>
                 <Grid2 size={12}>
-                    {expandedRow ? <CostcentreDetails costcentre={expandedRow} /> : null}
+                    {expandedRow ? (
+                    <CostcentreDetails 
+                        costcentre={expandedRow} 
+                        onEditSubmit={handleDeselectRow}
+                    />
+                    ) : null}
                 </Grid2>
             </Grid2>
             

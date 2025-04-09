@@ -62,8 +62,8 @@ const AdminPanelContainer = () => {
             </Box>
                 <Box sx={{ p: 2 }}>
                     {selectedTab === 0 && <SubjectAdmin />}
-                    {/* {selectedTab === 1 && <JobtitleAdmin />} */}
-                    {selectedTab === 2 && <CostcentreAdmin />}
+                    {selectedTab === 1 && <CostcentreAdmin />}
+                    {/* {selectedTab === 2 && <JobtitleAdmin />} */}
                 </Box>
         </Box>
     );

@@ -21,9 +21,10 @@ import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
 
 interface CostcentreDetailsProps {
     costcentre: Costcentre;
+    onEditSubmit?: () => void;
 }
 
-const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre }) => {
+const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEditSubmit }) => {
     const { t } = useTranslation();
 
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -266,6 +267,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre }) => 
                 open={editModalOpen}
                 onClose={handleCloseEditModal}
                 costcentre={costcentre}
+                onSubmitSuccess={onEditSubmit}
             />
         </Box>
     );

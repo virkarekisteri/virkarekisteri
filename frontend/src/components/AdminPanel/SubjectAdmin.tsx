@@ -30,10 +30,7 @@ const SubjectAdmin = () => {
 
   const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>({
-    key: 'subjectName',
-    direction: 'asc',
-  });
+  const [sortConfig, setSortConfig] = useState<{ key: keyof TeacherSubject; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchSubjectName, setSearchSubjectName] = useState('');
@@ -63,10 +60,16 @@ const SubjectAdmin = () => {
 
   const handleSort = (key: keyof TeacherSubject) => {
     setSortConfig((prevConfig) => {
-      if (prevConfig && prevConfig.key === key) {
-        return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
+      setPage(0);
+      if (!prevConfig || prevConfig.key !== key) {
+        return { key, direction: 'asc' };
       }
-      return { key, direction: 'asc' };
+  
+      if (prevConfig.direction === 'asc') {
+        return { key, direction: 'desc' };
+      }
+  
+      return null;
     });
   };
 
@@ -157,27 +160,41 @@ const SubjectAdmin = () => {
 
   return (
     <Box>
-      {/* Search Controls */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" gap={2} mb={2}>
-        <Box display="flex" gap={2}>
-          <TextField
-            label={t('admin_panel.search.bySubjectName')}
-            value={searchSubjectName}
-            onChange={(e) => setSearchSubjectName(e.target.value)}
-          />
-          <Button variant="contained" onClick={handleSearch}>
-            {t('search_filter.search')}
-          </Button>
-          <Button variant="outlined" onClick={handleResetSearch}>
-            {t('search_filter.reset')}
-          </Button>
-          <FormControlLabel
-            sx={{ whiteSpace: 'nowrap' }}
-            control={
-              <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
-            }
-            label={t('admin_panel.teacher_subjects.show_only_active')}
-          />{' '}
+      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
+        
+        {/* Search Controls */}
+        <Box display="flex" flexWrap="wrap" gap={2}>
+          <Box display="flex" gap={2}>
+
+            {/* Search by  name */}
+            <TextField
+              label={t('admin_panel.search.byName')}
+              value={searchSubjectName}
+              onChange={(e) => setSearchSubjectName(e.target.value)}
+              sx={{ minWidth: '300px' }}
+            />
+
+            {/* Search only active */}
+            <FormControlLabel
+              control={
+                <Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />
+              }
+              label={t('admin_panel.teacher_subjects.show_only_active')}
+              sx={{ minWidth: '250px' }}  
+            />
+          </Box>
+          
+          {/* Search and clear buttons */}
+          <Box display="flex" gap={2} flexWrap="wrap">
+            <Button variant="contained" onClick={handleSearch}>
+              {t('search_filter.search')}
+            </Button>
+
+            <Button variant="outlined" onClick={handleResetSearch}>
+              {t('search_filter.reset')}
+            </Button>
+          </Box>
+          
         </Box>
 
         <RequiresEditRole>
