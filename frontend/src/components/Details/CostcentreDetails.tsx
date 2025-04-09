@@ -78,6 +78,8 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
             {
                 <Box sx={{ padding: 2, display: 'flex', justifyContent: 'right' }}>
                     <RequiresEditRole>
+
+                        {/* Edit costcentre button */}
                         <Button
                             variant="contained"
                             onClick={handleOpenEditModal}
@@ -135,6 +137,8 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
 
             <Box padding={2}>
                 <Grid2 container spacing={2} size={12}>
+
+                    {/* Costcentre number */}
                     <Grid2 size={3} px={2}>
                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                             {t('admin_panel.costcentre.number')}
@@ -142,6 +146,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
                         <RenderReadonlyTextField value={costcentre.number.toString()} />
                     </Grid2>
 
+                    {/* Costcentre name */}
                     <Grid2 size={5} px={2}>
                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                             {t('admin_panel.costcentre.name')}
@@ -149,6 +154,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
                         <RenderReadonlyTextField value={costcentre.name} />
                     </Grid2>
 
+                    {/* Costcentre timeframe */}
                     <Grid2 size={4} px={2}>
                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                             {t('admin_panel.costcentre.time_frame')}
@@ -167,6 +173,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
                     </Grid2>
                 </Grid2>
 
+                {/* Costcentre changelogs */}
                 <Accordion sx={{ mt: 2, mb: 0 }}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
@@ -199,32 +206,44 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
                         <Grid2 size={12}>
                             {costcentreChangelogs.length > 0 ? (
                                 <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
+                                    
+                                    {/* Edited field */}
                                     <Grid2 size={2} sx={{ width: '20%' }}>
                                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                                             {t('change_logs.edited_field')}
                                         </Typography>
                                     </Grid2>
+
+                                    {/* Old value */}
                                     <Grid2 size={3} sx={{ width: '20%' }}>
                                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                                             {t('change_logs.old_value')}
                                         </Typography>
                                     </Grid2>
+
+                                    {/* New value */}
                                     <Grid2 size={3} sx={{ width: '20%' }}>
                                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                                             {t('change_logs.new_value')}
                                         </Typography>
                                     </Grid2>
+
+                                    {/* Editor */}
                                     <Grid2 size={2} sx={{ width: '20%' }}>
                                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                                             {t('change_logs.editor')}
                                         </Typography>
                                     </Grid2>
+
+                                    {/* Timestamp */}
                                     <Grid2 size={2} sx={{ width: '20%' }}>
                                         <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                                             {t('change_logs.timestamp')}
                                         </Typography>
                                     </Grid2>
 
+                                    
+                                    {/* Changelog entries */}   
                                     {costcentreChangelogs.map((changelog: AdminChangeLogEntry) => (
                                         <React.Fragment key={changelog.id}>
                                             <Grid2 size={2} sx={{ width: '20%' }}>
@@ -263,6 +282,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
 
             </Box>
 
+            {/* Edit costcentre modal */}
             <ModifyCostcentreModal
                 open={editModalOpen}
                 onClose={handleCloseEditModal}

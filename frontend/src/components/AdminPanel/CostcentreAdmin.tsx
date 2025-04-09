@@ -188,6 +188,8 @@ const CostcentreAdmin = () => {
                 </Box>
 
                 <RequiresEditRole>
+
+                    {/* Create new cost centre button */}
                     <Button 
                         variant="contained"
                         onClick={handleOpenModal}
@@ -223,9 +225,10 @@ const CostcentreAdmin = () => {
                 <Table sx={{ minWidth: 650 }}>
 
                     {/* Table Header */}
-
                     <TableHead sx={{ backgroundColor: '#223B7C', height: '30px'}}>
                         <TableRow>
+
+                            {/* Costcentre number */}
                             <TableCell sx={{ width: '15%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px',}} onClick={() => handleSort('number')} >
                                 <Box display="flex" alignItems="center" gap={2}>
                                     {t('admin_panel.costcentre.number')}
@@ -235,6 +238,7 @@ const CostcentreAdmin = () => {
                                 </Box>
                             </TableCell>
 
+                            {/* Costcentre name */}
                             <TableCell sx={{ width: '40%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px',}} onClick={() => handleSort('name') } >
                                 <Box display="flex" alignItems="center" gap={2}>
                                     {t('admin_panel.costcentre.name')}
@@ -244,6 +248,7 @@ const CostcentreAdmin = () => {
                                 </Box>
                             </TableCell>
 
+                            {/* Costcentre valid from */}
                             <TableCell sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px',}} onClick={() => handleSort('validFrom') }>
                                 <Box display="flex" alignItems="center" gap={2}>
                                     {t('admin_panel.costcentre.valid_from')}
@@ -253,6 +258,7 @@ const CostcentreAdmin = () => {
                                 </Box>
                             </TableCell>
 
+                            {/* Costcentre valid until */}
                             <TableCell sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px',}} onClick={() => handleSort('validUntil') }>
                                 <Box display="flex" alignItems="center" gap={2}>
                                     {t('admin_panel.costcentre.valid_until')}
@@ -281,7 +287,6 @@ const CostcentreAdmin = () => {
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}</TableCell>
                                     <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.validUntil ? format(new Date(row.validUntil), 'd.M.yyyy') : ''}</TableCell>
-
                                 </TableRow>
                             </React.Fragment>
                         ))}
@@ -290,7 +295,6 @@ const CostcentreAdmin = () => {
             </TableContainer>
 
             {/* Pagination */}
-
             <Box display="flex" justifyContent="center" mt={2}>
                 <TablePagination
                 component="div"
@@ -303,6 +307,7 @@ const CostcentreAdmin = () => {
                 />
             </Box>
 
+            {/* Costcentre details */}
             <Grid2>
                 <Grid2 size={12}>
                     {expandedRow ? (
