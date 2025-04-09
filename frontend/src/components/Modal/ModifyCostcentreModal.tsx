@@ -55,7 +55,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
         validUntil: formatDateForInput(costcentre.validUntil),
     };
 
-    const onSubmit = async (values: any) => {
+    const onSubmit = async (values: FormValues) => {
         try {
             const updatedData = {
                 number: parseInt(values.number),
