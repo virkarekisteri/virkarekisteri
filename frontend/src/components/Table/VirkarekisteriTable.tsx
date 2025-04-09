@@ -34,8 +34,9 @@ import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-ap
 import { useLazyGetPositionEmployeeQuery } from 'redux/api-slices/functions/position-employees-api';
 import { clearSelectedPosition, selectPosition } from 'redux/slices/position-slice';
 import { format } from 'date-fns';
+/* import type { OrganizationTree } from 'models/OrganizationTree'; */
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import type { Costcentre } from 'models/Costcentre';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
 
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
@@ -65,7 +66,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const { data: costcentres } = useGetCostCentersQuery();
   const [getPosition] = useLazyGetPositionQuery();
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
-  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery();
 
   // Filteröi aktiiviset aineet
   const activeSubjectNames = subjects

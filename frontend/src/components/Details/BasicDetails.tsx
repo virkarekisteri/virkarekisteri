@@ -9,7 +9,9 @@ import type { Position } from 'models/Position';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
-import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects';
+import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+
+/* import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects'; */
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 
 interface BasicDetailsProps {
@@ -21,7 +23,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
 
   const { data: costcentres = [] } = useGetCostCentersQuery();
 
-  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: subjects = [] } = useGetTeacherSubjectsQuery();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 

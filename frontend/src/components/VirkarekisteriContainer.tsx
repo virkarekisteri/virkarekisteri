@@ -16,6 +16,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { clearSelectedPosition, selectSelectedPosition } from 'redux/slices/position-slice';
 import { RequiresAdminRole, RequiresEditRole } from './role-guards';
 import PositionChangeLogTable from './PositionChangeLog/PositionChangeLogTable';
+import AdminPanelContainer from './AdminPanel/AdminPanelContainer';
 import type { Position } from 'models/Position';
 
 const VirkarekisterContainer = () => {
@@ -114,6 +115,7 @@ const VirkarekisterContainer = () => {
               >
                 <Tab label={t('tabs.positions')} />
                 <Tab label={t('tabs.history')} />
+                <Tab label={t('tabs.admin')} />
               </Tabs>
               <Box
                 sx={{
@@ -245,6 +247,7 @@ const VirkarekisterContainer = () => {
               </>
             )}
             {activeTab === 1 && <PositionChangeLogTable />}
+            {activeTab === 2 && <AdminPanelContainer />}
           </Grid2>
           <Grid2 size={12}>
             {singlePositionLoading ? (

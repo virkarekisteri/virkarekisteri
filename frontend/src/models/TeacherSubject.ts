@@ -1,4 +1,4 @@
-export interface Subject {
+export interface TeacherSubject {
   id: string;
   subjectName: string;
   active: boolean;
