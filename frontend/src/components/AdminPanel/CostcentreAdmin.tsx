@@ -17,7 +17,7 @@ import {
     alpha
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Costcentre } from 'models/Costcentre';
+import type { Costcentre } from 'models/Costcentre';
 import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-api';
 import { RequiresEditRole } from 'components/role-guards';
 import CostcentreDetails from 'components/Details/CostcentreDetails';

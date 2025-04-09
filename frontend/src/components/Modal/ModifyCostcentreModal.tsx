@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import { Form, Field } from 'react-final-form';
 import { useGetCostCentersQuery, useUpdateCostCentreMutation } from 'redux/api-slices/functions/costcentre-api';
-import { Costcentre } from 'models/Costcentre';
+import type { Costcentre } from 'models/Costcentre';
 import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 
 interface EditCostcentreModalProps {
