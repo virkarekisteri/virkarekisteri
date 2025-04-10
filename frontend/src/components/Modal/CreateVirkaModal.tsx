@@ -322,7 +322,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                         <Autocomplete
                           {...input}
                           options={costcentres}
-                          getOptionLabel={(option) => (option ? `${option.number} ${checkCostCentreActiveStatus(option, t('create_position.not_active_suffix'))}` : '')}
+                          getOptionLabel={(option) =>
+                            option
+                              ? `${option.number} ${checkCostCentreActiveStatus(option, t('create_position.not_active_suffix'))}`
+                              : ''
+                          }
                           onChange={(_event, value) => {
                             input.onChange(value);
                           }}
