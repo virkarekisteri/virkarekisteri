@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Box, Grid2, IconButton, Modal, Typography, TextField, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
