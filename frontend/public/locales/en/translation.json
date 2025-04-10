@@ -17,7 +17,8 @@
     "type_position": "Position",
     "type_post": "Post",
     "teacher": "Teacher",
-    "subjects": "Subjects"
+    "subjects": "Subjects",
+    "not_active_suffix": "not active"
   },
   "create_csv_position": {
     "success": "positions imported successfully.",

@@ -17,7 +17,8 @@
     "type_position": "",
     "type_post": "",
     "teacher": "",
-    "subjects": ""
+    "subjects": "",
+    "not_active_suffix": ""
   },
   "create_csv_position": {
     "success": "",

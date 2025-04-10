@@ -17,7 +17,8 @@
     "type_position": "Virka",
     "type_post": "Toimi",
     "teacher": "Opettaja",
-    "subjects": "Opetettavat aineet"
+    "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen"
   },
   "create_csv_position": {
     "success": " onnistunutta virkaa.",
