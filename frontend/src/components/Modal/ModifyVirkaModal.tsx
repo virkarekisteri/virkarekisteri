@@ -292,7 +292,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       {({ input }) => (
                         <Autocomplete
                           options={costcentres}
-                          getOptionLabel={(option) => `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`}
+                          getOptionLabel={(option) =>
+                            `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`
+                          }
                           value={costcentres.find((tree) => tree.id === input.value) || null}
                           onChange={(_event, value) => {
                             input.onChange(value ? value.id : null);
@@ -306,7 +308,10 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               label={t('edit_position.costcentre')}
                               placeholder={
                                 costcentres.find((tree) => tree.id === position.costcentreId)
-                                  ? `${costcentres.find((tree) => tree.id === position.costcentreId)?.number} ${checkCostCentreActiveStatus(costcentres.find((tree) => tree.id === position.costcentreId), t('edit_position.not_active_suffix'))}`
+                                  ? `${costcentres.find((tree) => tree.id === position.costcentreId)?.number} ${checkCostCentreActiveStatus(
+                                      costcentres.find((tree) => tree.id === position.costcentreId),
+                                      t('edit_position.not_active_suffix'),
+                                    )}`
                                   : t('edit_position.costcentre')
                               }
                               slotProps={{
