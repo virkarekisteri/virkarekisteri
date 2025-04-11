@@ -42,6 +42,15 @@ public class CreatePosition(
             return new BadRequestObjectResult("CostcentreId must be provided.");
         }
 
+        // Check that the costcentre's number is no more than 4 characters long.
+        // This is because when creating the position, the costcentre number is used as a prefix for the position's vacancy number.
+        // Longer costcentre number will result in a longer vacancy number, whose maximun length is 8 characters.
+        var costcentreNumber = await positionRepository.GetCostcentreNumberById(requestPosition.CostcentreId);
+        if (costcentreNumber.Length > 4)
+        {
+            return new BadRequestObjectResult("Costcentre number cannot be more than 4 characters long.");
+        }
+
         if (requestPosition.PositionNameId == Guid.Empty)
         {
             if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
