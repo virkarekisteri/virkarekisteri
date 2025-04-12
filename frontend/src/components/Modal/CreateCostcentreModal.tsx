@@ -201,7 +201,10 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
 
                     {/* Valid until */}
                     <Grid2 size={2}>
-                      <Field name="validUntil" validate={(value, allValues) => validateValidUntil(value, allValues as formValues)}>
+                      <Field
+                        name="validUntil"
+                        validate={(value, allValues) => validateValidUntil(value, allValues as formValues)}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             {...input}
