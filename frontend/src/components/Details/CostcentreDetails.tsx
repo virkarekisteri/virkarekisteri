@@ -4,7 +4,7 @@ import type { Costcentre } from 'models/Costcentre';
 import { RequiresEditRole } from 'components/role-guards';
 import { Box, Grid2, Button, Typography, Accordion, AccordionSummary, AccordionDetails, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { format, parse } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import ModifyCostcentreModal from 'components/Modal/ModifyCostcentreModal';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
@@ -37,6 +37,9 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
     }
     if ((field === 'ValidFrom' || field === 'ValidUntil') && value) {
       const parsed = parse(value, 'dd/MM/yyyy H.mm.ss', new Date());
+      if (!isValid(parsed)) {
+        return value;
+      }
       return format(parsed, 'd.M.yyyy');
     }
     return value;

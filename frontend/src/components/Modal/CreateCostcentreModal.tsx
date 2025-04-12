@@ -72,7 +72,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
     if (allValues.validFrom && value) {
       const validFromDate = new Date(allValues.validFrom);
       const validUntilDate = new Date(value);
-      if (validUntilDate < validFromDate) {
+      if (validUntilDate <= validFromDate) {
         return t('admin_panel.costcentre.validation.invalid_date');
       }
     }
