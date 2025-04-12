@@ -82,7 +82,7 @@ public class Position
 
     [Required]
     [Column("OnOpettaja")]
-    public bool IsTeacher { get; set; } = false;
+    public bool IsTeacher { get; set; }
 
     [NotMapped]
     public List<Guid> SubjectIds { get; set; } = new List<Guid>();
