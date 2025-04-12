@@ -50,7 +50,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
     if (costcentres?.some((costcentre) => costcentre.number.toString() === value)) {
       return t('admin_panel.costcentre.validation.duplicate_number');
     }
-    if (value.length > 4) {
+    if (value.length != 4) {
       return t('admin_panel.costcentre.validation.invalid_number');
     }
     return undefined;
@@ -63,6 +63,17 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
     }
     if (costcentres?.some((costcentre) => costcentre.name === value)) {
       return t('admin_panel.costcentre.validation.duplicate_name');
+    }
+    return undefined;
+  };
+
+  const validateValidUntil = (value: string, allValues: formValues) => {
+    if (allValues.validFrom && value) {
+      const validFromDate = new Date(allValues.validFrom);
+      const validUntilDate = new Date(value);
+      if (validUntilDate < validFromDate) {
+        return t('admin_panel.costcentre.validation.invalid_date');
+      }
     }
     return undefined;
   };
@@ -173,7 +184,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                     {/* Valid from */}
                     <Grid2 size={2}>
                       <Field name="validFrom">
-                        {({ input }) => (
+                        {({ input, meta }) => (
                           <TextField
                             {...input}
                             margin="normal"
@@ -181,6 +192,8 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                             type="date"
                             slotProps={{ inputLabel: { shrink: true } }}
                             sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
                           />
                         )}
                       </Field>
@@ -188,8 +201,8 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
 
                     {/* Valid until */}
                     <Grid2 size={2}>
-                      <Field name="validUntil">
-                        {({ input }) => (
+                      <Field name="validUntil" validate={(value, allValues) => validateValidUntil(value, allValues as formValues)}>
+                        {({ input, meta }) => (
                           <TextField
                             {...input}
                             margin="normal"
@@ -197,6 +210,8 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
                             type="date"
                             slotProps={{ inputLabel: { shrink: true } }}
                             sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
                           />
                         )}
                       </Field>
