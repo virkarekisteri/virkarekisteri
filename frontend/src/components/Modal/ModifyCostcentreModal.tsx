@@ -105,6 +105,18 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
     return undefined;
   };
 
+  // Checks whether the valid from date is before the valid until date
+  const validateValidUntil = (value: string, allValues: FormValues) => {
+    if (allValues.validFrom && value) {
+      const validFromDate = new Date(allValues.validFrom);
+      const validUntilDate = new Date(value);
+      if (validUntilDate < validFromDate) {
+        return t('admin_panel.costcentre.validation.invalid_date');
+      }
+    }
+    return undefined;
+  }
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -209,7 +221,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
                     {/* Valid from */}
                     <Grid2 size={2}>
                       <Field name="validFrom">
-                        {({ input }) => (
+                        {({ input, meta }) => (
                           <TextField
                             {...input}
                             margin="normal"
@@ -217,6 +229,8 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
                             type="date"
                             slotProps={{ inputLabel: { shrink: true } }}
                             sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
                           />
                         )}
                       </Field>
@@ -224,8 +238,8 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
 
                     {/* Valid until */}
                     <Grid2 size={2}>
-                      <Field name="validUntil">
-                        {({ input }) => (
+                      <Field name="validUntil" validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}>
+                        {({ input, meta }) => (
                           <TextField
                             {...input}
                             margin="normal"
@@ -233,6 +247,8 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
                             type="date"
                             slotProps={{ inputLabel: { shrink: true } }}
                             sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
                           />
                         )}
                       </Field>

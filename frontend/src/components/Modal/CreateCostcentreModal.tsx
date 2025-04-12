@@ -67,6 +67,7 @@ const CreateCostcentreModal: React.FC<CreateCostcentreModalProps> = ({ open, onC
     return undefined;
   };
 
+  // Checks whether the valid from date is before the valid until date
   const validateValidUntil = (value: string, allValues: formValues) => {
     if (allValues.validFrom && value) {
       const validFromDate = new Date(allValues.validFrom);
