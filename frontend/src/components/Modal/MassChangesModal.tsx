@@ -31,8 +31,12 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
     { label: t('create_position.work_experience'), value: 'workExperience' },
   ];
 
-  const { data: positionNames = [] } = useGetPositionNamesQuery(open ? undefined : skipToken);
-  const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
+  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
+    open ? undefined : skipToken,
+  );
+  const { data: costcentres = [], isLoading: costcentresLoading } = useGetCostCentersQuery(
+    open ? undefined : skipToken,
+  );
 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -179,6 +183,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                   }))
                             }
                             getOptionLabel={(option) => (typeof option === 'string' ? option : option.label || '')}
+                            loading={selectedOption === 'positionNameId' ? positionNamesLoading : costcentresLoading}
                             onChange={(_event, value) => {
                               input.onChange(value);
                             }}

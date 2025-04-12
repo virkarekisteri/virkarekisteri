@@ -46,10 +46,13 @@ interface CreateVirkaModalProps {
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
 
-  const { data: positionNames = [] } = useGetPositionNamesQuery(open ? undefined : skipToken);
-  const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
-
-  const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
+  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
+    open ? undefined : skipToken,
+  );
+  const { data: costcentres = [], isLoading: costcentresLoading } = useGetCostCentersQuery(
+    open ? undefined : skipToken,
+  );
+  const { data: subjects = [], isLoading: subjectsLoading } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
 
   const activeSubjectNames = subjects
     .filter((subject) => subject.active === true)
@@ -186,6 +189,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           options={positionNames}
+                          loading={positionNamesLoading}
                           getOptionLabel={(option) => option.name}
                           value={input.value || null}
                           onChange={(_, value) => input.onChange(value)}
@@ -294,6 +298,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                         <Autocomplete
                           {...input}
                           options={costcentres}
+                          loading={costcentresLoading}
                           getOptionLabel={(option) =>
                             option
                               ? `${option.number} ${checkCostCentreActiveStatus(option, t('create_position.not_active_suffix'))}`
@@ -391,6 +396,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                               )}
                               label={t('create_position.subjects')}
                               displayEmpty
+                              disabled={subjectsLoading}
                               MenuProps={{
                                 PaperProps: {
                                   style: {
