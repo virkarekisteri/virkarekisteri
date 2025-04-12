@@ -59,7 +59,6 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
   const { data: costcentres = [] } = useGetCostCentersQuery();
-
   const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
 
   const [updatePosition] = useUpdatePositionMutation();
