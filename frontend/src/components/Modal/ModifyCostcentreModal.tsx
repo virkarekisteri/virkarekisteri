@@ -115,7 +115,7 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
       }
     }
     return undefined;
-  }
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -238,7 +238,10 @@ const EditCostcentreModal: React.FC<EditCostcentreModalProps> = ({ open, onClose
 
                     {/* Valid until */}
                     <Grid2 size={2}>
-                      <Field name="validUntil" validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}>
+                      <Field
+                        name="validUntil"
+                        validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}
+                      >
                         {({ input, meta }) => (
                           <TextField
                             {...input}
