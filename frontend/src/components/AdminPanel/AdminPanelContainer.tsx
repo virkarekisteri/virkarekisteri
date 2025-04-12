@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 import SubjectAdmin from './SubjectAdmin';
-// import JobtitleAdmin from './PositionNameAdmin';
-//import CostcentreAdmin from './CostcentreAdmin';
+// import JobtitleAdmin from './JobtitleAdmin';
+import CostcentreAdmin from './CostcentreAdmin';
 import { useTranslation } from 'react-i18next';
 
 const AdminPanelContainer = () => {
@@ -56,8 +56,8 @@ const AdminPanelContainer = () => {
       </Box>
       <Box sx={{ p: 2 }}>
         {selectedTab === 0 && <SubjectAdmin />}
-        {/* {selectedTab === 1 && <CostcentreAdmin />} */}
-        {/* {selectedTab === 2 && <PositionNameAdmin />} */}
+        {selectedTab === 1 && <CostcentreAdmin />}
+        {/* {selectedTab === 2 && <JobtitleAdmin />} */}
       </Box>
     </Box>
   );

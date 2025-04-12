@@ -58,14 +58,14 @@
   "table": {
     "created_at": "",
     "creation_decision_number": "",
+    "placement_location": "",
     "type": "",
-    "vacancy_size": "",
-    "rows_per_page": "",
     "vacancy_number": "",
+    "vacancy_size": "",
+    "vacancy_status": "",
+    "rows_per_page": "",
     "costcentre": "",
     "other": "",
-    "placement_location": "",
-    "vacancy_status": "",
     "position_name": "",
     "employee_name": "",
     "replacement_name": "",
@@ -80,7 +80,8 @@
   },
   "tabs": {
     "positions": "",
-    "history": ""
+    "history": "",
+    "admin": ""
   },
   "user_menu": {
     "logout": "",
@@ -121,12 +122,15 @@
       "WorkExperience": "",
       "Details": "",
       "Type": "",
-      "CostcentreId": "",
+      "Costcentre": "",
       "PositionName": "",
       "Substitute": "",
       "CreatedPosition": "",
       "CreatedEmployee": "",
+      "CreatedCostcentre": "",
+      "CreatedSubject": "",
       "VacancyStatus": "",
+      "EndedPosition": "",
       "PositionSubjects": "",
       "IsTeacher": ""
     },
@@ -179,7 +183,20 @@
     "subjects": ""
   },
   "error": {
-    "pricing_id_error": ""
+    "pricing_id_error": "",
+    "vacancy_fill_error": "",
+    "vacancy_size_error": "",
+    "vacancy_fill_greater_than_size": "",
+    "vacancy_size_integer_error": ""
+  },
+  "end_position": {
+    "title": "",
+    "end_date": "",
+    "vacancy_number": "",
+    "position_name": "",
+    "decision_number": "",
+    "cancel": "",
+    "confirm": ""
   },
   "mass_changes": {
     "make_changes": "",
@@ -189,5 +206,70 @@
     "new_value": "",
     "changes_executed": "",
     "update_value_message": ""
+  },
+  "admin_panel": {
+    "titles": {
+      "subjects": "",
+      "job_titles": "",
+      "cost_centres": ""
+    },
+    "search": {
+      "bySubjectName": "",
+      "byName": ""
+    },
+    "teacher_subjects": {
+      "name": "",
+      "status": "",
+      "details": "",
+      "active": "",
+      "inactive": "",
+      "show_only_active": "",
+      "create_subject": "",
+      "edit_subject": "",
+      "edit_history": "",
+      "editwarning": "",
+      "no_edits": "",
+      "validation": {
+        "subject_name_exists_error": ""
+      }
+    },
+    "costcentre": {
+      "create_new": "",
+      "name": "",
+      "number": "",
+      "time_frame": "",
+      "valid_from": "",
+      "valid_until": "",
+      "show_active": "",
+      "details": "",
+      "edit": "",
+      "edit_warning": "",
+      "edit_history": "",
+      "validation": {
+        "required": "",
+        "duplicate_number": "",
+        "duplicate_name": "",
+        "invalid_number": "",
+        "invalid_date": ""
+      }
+    },
+    "change_logs": {
+      "edited_field": "",
+      "old_value": "",
+      "new_value": "",
+      "editor": "",
+      "timestamp": "",
+      "valid_from": "",
+      "valid_until": "",
+      "show_active": "",
+      "details": "",
+      "edit": "",
+      "validation": {
+        "required": "",
+        "duplicate_number": "",
+        "duplicate_name": "",
+        "invalid_number": ""
+      }
+    }
   }
 }

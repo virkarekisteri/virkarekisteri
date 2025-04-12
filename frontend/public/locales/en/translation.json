@@ -74,6 +74,7 @@
     "start_date": "Start date",
     "teacher": "Teacher",
     "subjects": "Subjects",
+    "not_active_suffix": "not active",
     "yes": "Yes",
     "no": "No"
   },
@@ -126,6 +127,8 @@
       "Substitute": "Substitute",
       "CreatedPosition": "Created new position",
       "CreatedEmployee": "Added new employee",
+      "CreatedCostcentre": "Added new costcentre",
+      "CreatedSubject": "Added new subject",
       "VacancyStatus": "Vacancy status",
       "EndedPosition": "Ended position",
       "PositionSubjects": "Subjects",
@@ -241,11 +244,13 @@
       "details": "Costcentre details",
       "edit": "Edit costcentre",
       "edit_warning": "Any changes made here will affect all positions using this costcenre.",
+      "edit_history": "Editing history",
       "validation": {
         "required": "Field is required",
         "duplicate_number": "Costcentre number already exists",
         "duplicate_name": "Costcentre name already exists",
-        "invalid_number": "Invalid costcentre number"
+        "invalid_number": "Invalid costcentre number",
+        "invalid_date": "Invalid time period"
       }
     },
     "change_logs": {
@@ -253,7 +258,18 @@
       "old_value": "Old value",
       "new_value": "New value",
       "editor": "Editor",
-      "timestamp": "Timestamp"
+      "timestamp": "Timestamp",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until",
+      "show_active": "Show only active",
+      "details": "Costcentre details",
+      "edit": "Edit costcentre",
+      "validation": {
+        "required": "Field is required",
+        "duplicate_number": "Costcentre number already exists",
+        "duplicate_name": "Costcentre name already exists",
+        "invalid_number": "Invalid costcentre number"
+      }
     }
   }
 }

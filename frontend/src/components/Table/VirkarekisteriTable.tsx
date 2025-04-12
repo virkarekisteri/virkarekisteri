@@ -37,7 +37,6 @@ import { format } from 'date-fns';
 /* import type { OrganizationTree } from 'models/OrganizationTree'; */
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import type { Costcentre } from 'models/Costcentre';
-
 interface DataTableProps {
   onRowSelectionChange: (selectedRows: Position[]) => void;
 }
