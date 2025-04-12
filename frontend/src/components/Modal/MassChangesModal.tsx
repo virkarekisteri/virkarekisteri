@@ -16,7 +16,7 @@ interface MassChangesModalProps {
 }
 
 interface FormValues {
-  newValue?: { id: string; label: string } | string; // For costcentreId or positionName
+  newValue?: { id: string; label: string } | string; // For costcentreId or positionNameId
   decisionNumber?: string;
 }
 
@@ -25,17 +25,14 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
 
   const options = [
     { label: t('create_position.costcentre'), value: 'costcentreId' },
-    { label: t('create_position.position_name'), value: 'positionName' },
+    { label: t('create_position.position_name'), value: 'positionNameId' },
     { label: t('create_position.pricing_id'), value: 'pricingId' },
     { label: t('create_position.education_level'), value: 'educationLevel' },
     { label: t('create_position.work_experience'), value: 'workExperience' },
   ];
 
-  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
-    open ? undefined : skipToken,
-  );
+  const { data: positionNames = [] } = useGetPositionNamesQuery(open ? undefined : skipToken);
   const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
-  const positionNameOptions = positionNames.map((option) => option.name);
 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -55,7 +52,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           endingDecisionNumber: position.endingDecisionNumber,
           placementLocation: position.placementLocation,
           vacancyFill: position.vacancyFill || undefined,
-          positionName: position.positionName?.name ? { name: position.positionName.name } : undefined,
+          positionNameId: position.positionNameId,
           costcentreId: position.costcentreId,
           pricingId: position.pricingId,
           vacancySize: position.vacancySize || undefined,
@@ -69,8 +66,12 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
         // Override the specific field with the new value
         if (selectedOption === 'costcentreId' && typeof values.newValue === 'object' && values.newValue !== null) {
           updateData.costcentreId = values.newValue.id;
-        } else if (selectedOption === 'positionName' && typeof values.newValue === 'string') {
-          updateData.positionName = { name: values.newValue };
+        } else if (
+          selectedOption === 'positionNameId' &&
+          typeof values.newValue === 'object' &&
+          values.newValue !== null
+        ) {
+          updateData.positionNameId = values.newValue.id;
         } else if (selectedOption === 'pricingId' && typeof values.newValue === 'string') {
           updateData.pricingId = values.newValue;
         } else if (selectedOption === 'educationLevel' && typeof values.newValue === 'string') {
@@ -86,7 +87,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           throw error;
         }
       });
-
       await Promise.all(updatePromises);
       handleClose();
     } catch (error) {
@@ -164,13 +164,15 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                     </Typography>
                     <Field name="newValue">
                       {({ input }) =>
-                        selectedOption === 'positionName' || selectedOption === 'costcentreId' ? (
+                        selectedOption === 'positionNameId' || selectedOption === 'costcentreId' ? (
                           <Autocomplete
                             {...input}
-                            loading={positionNamesLoading}
                             options={
-                              selectedOption === 'positionName'
-                                ? positionNameOptions
+                              selectedOption === 'positionNameId'
+                                ? positionNames.map((tree) => ({
+                                    id: tree.id,
+                                    label: `${tree.name}`,
+                                  }))
                                 : costcentres.map((tree) => ({
                                     id: tree.id,
                                     label: `${tree.number} ${tree.name}`,
@@ -187,7 +189,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                 required
                                 fullWidth
                                 label={t(
-                                  selectedOption === 'positionName'
+                                  selectedOption === 'positionNameId'
                                     ? 'create_position.position_name'
                                     : 'create_position.costcentre',
                                 )}

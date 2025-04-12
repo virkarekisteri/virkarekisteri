@@ -28,7 +28,6 @@ import { Form, Field } from 'react-final-form';
 import CloseIcon from '@mui/icons-material/Close';
 import type { Position } from 'models/Position';
 import { useTranslation } from 'react-i18next';
-import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 /* import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api'; */
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
@@ -47,9 +46,7 @@ interface CreateVirkaModalProps {
 const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }) => {
   const { t } = useTranslation();
 
-  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery(
-    open ? undefined : skipToken,
-  );
+  const { data: positionNames = [] } = useGetPositionNamesQuery(open ? undefined : skipToken);
   const { data: costcentres = [] } = useGetCostCentersQuery(open ? undefined : skipToken);
 
   const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
@@ -59,8 +56,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     .map((subject) => subject.subjectName);
 
   const [createPosition] = useCreatePositionMutation();
-
-  const positionNameOptions = positionNames.map((option) => option.name);
 
   const [isTeacherPosition, setIsTeacherPosition] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -116,10 +111,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (values: any) => {
-    const positionNameObj: PositionName = {
-      name: values.positionName?.toString() || '',
-    };
-
     try {
       const positionData: Position = {
         createdAt: new Date(values.createdAt || ''),
@@ -130,7 +121,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
         endingDecisionNumber: values.endingDecisionNumber,
         type: values.type ?? 99,
         pricingId: values.pricingId ?? '',
-        positionName: positionNameObj,
+        positionNameId: values.positionNameId.id ?? '',
         educationLevel: values.educationLevel ?? '',
         workExperience: values.workExperience ?? '',
         details: values.details ?? '',
@@ -191,48 +182,28 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
               <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2} size={12}>
                   <Grid2 size={4}>
-                    <Field name="positionName">
+                    <Field name="positionNameId">
                       {({ input }) => (
                         <Autocomplete
-                          {...input}
-                          freeSolo
-                          options={positionNameOptions}
-                          loading={positionNamesLoading}
-                          getOptionLabel={(option) => option}
-                          onInputChange={(_event, value) => {
-                            input.onChange(value);
-                          }}
-                          onChange={(_event, value) => {
-                            input.onChange(value);
-                          }}
+                          options={positionNames}
+                          getOptionLabel={(option) => option.name}
+                          value={input.value || null}
+                          onChange={(_, value) => input.onChange(value)}
                           renderInput={(params) => (
                             <TextField
                               {...params}
                               margin="normal"
                               required
                               fullWidth
-                              id="positionName"
                               label={t('create_position.position_name')}
-                              sx={{
-                                '& input[type="search"]::-webkit-search-cancel-button': {
-                                  WebkitAppearance: 'none',
-                                },
-                              }}
-                              slotProps={{
-                                input: {
-                                  ...params.InputProps,
-                                  type: 'search',
-                                },
-                                inputLabel: {
-                                  shrink: true,
-                                },
-                              }}
+                              slotProps={{ inputLabel: { shrink: true } }}
                             />
                           )}
                         />
                       )}
                     </Field>
                   </Grid2>
+
                   <Grid2 size={4}>
                     <Field name="createdAt">
                       {({ input }) => (
