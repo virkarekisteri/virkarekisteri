@@ -17,7 +17,8 @@
     "type_position": "",
     "type_post": "",
     "teacher": "",
-    "subjects": ""
+    "subjects": "",
+    "not_active_suffix": ""
   },
   "create_csv_position": {
     "success": "",
@@ -180,7 +181,8 @@
     "creation_decision_number": "",
     "creation_description": "",
     "teacher": "",
-    "subjects": ""
+    "subjects": "",
+    "not_active_suffix": ""
   },
   "error": {
     "pricing_id_error": "",

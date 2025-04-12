@@ -13,6 +13,7 @@ import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersu
 
 /* import { useGetSubjectsQuery } from 'redux/api-slices/functions/subjects'; */
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 
 interface BasicDetailsProps {
   position: Position;
@@ -207,7 +208,9 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.costcentre')}
             </Typography>
-            <RenderReadonlyTextField value={`${positionCostcentre?.number} ${positionCostcentre?.name}`} />
+            <RenderReadonlyTextField
+              value={`${positionCostcentre?.number} ${checkCostCentreActiveStatus(positionCostcentre, t('table.not_active_suffix'))}`}
+            />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>

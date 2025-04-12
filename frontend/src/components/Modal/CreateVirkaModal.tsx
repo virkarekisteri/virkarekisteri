@@ -37,6 +37,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-api';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -322,7 +323,11 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                         <Autocomplete
                           {...input}
                           options={costcentres}
-                          getOptionLabel={(option) => (option ? `${option.number} ${option.name}` : '')}
+                          getOptionLabel={(option) =>
+                            option
+                              ? `${option.number} ${checkCostCentreActiveStatus(option, t('create_position.not_active_suffix'))}`
+                              : ''
+                          }
                           onChange={(_event, value) => {
                             input.onChange(value);
                           }}

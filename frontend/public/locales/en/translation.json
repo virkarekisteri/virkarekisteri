@@ -17,7 +17,8 @@
     "type_position": "Position",
     "type_post": "Post",
     "teacher": "Teacher",
-    "subjects": "Subjects"
+    "subjects": "Subjects",
+    "not_active_suffix": "not active"
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
@@ -180,7 +181,8 @@
     "creation_decision_number": "Creation decision number",
     "creation_description": "Decision description",
     "teacher": "Teacher",
-    "subjects": "Subjects"
+    "subjects": "Subjects",
+    "not_active_suffix": "not active"
   },
   "error": {
     "pricing_id_error": "Pricing ID can only be upto 20 characters long",
