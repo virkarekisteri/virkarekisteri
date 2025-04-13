@@ -469,6 +469,16 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       },
     },
     {
+      field: 'endedAt',
+      headerName: t('table.ended_at'),
+      flex: 1,
+      sortable: true,
+      valueFormatter: (params: string) => {
+        if (!params) return '';
+        return format(new Date(params), 'dd.MM.yyyy');
+      },
+    },
+    {
       field: 'employeeName',
       headerName: t('table.employee_name'),
       flex: 1,

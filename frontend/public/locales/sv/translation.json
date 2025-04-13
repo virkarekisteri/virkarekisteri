@@ -58,6 +58,7 @@
   },
   "table": {
     "created_at": "",
+    "ended_at": "",
     "creation_decision_number": "",
     "placement_location": "",
     "type": "",
