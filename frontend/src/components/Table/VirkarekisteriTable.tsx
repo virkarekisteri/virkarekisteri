@@ -814,7 +814,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             setPage(model.page);
             setRowsPerPage(model.pageSize);
           }}
-          pageSizeOptions={[10, 30, 50, 100, 300, 500, 1000]}
+          pageSizeOptions={[10, 30, 50, 100]}
           checkboxSelection
           onRowSelectionModelChange={(newSelection) => {
             const selection = newSelection as string[];
