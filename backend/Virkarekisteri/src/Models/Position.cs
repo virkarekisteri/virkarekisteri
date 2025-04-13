@@ -86,4 +86,22 @@ public class Position
 
     [NotMapped]
     public List<Guid> SubjectIds { get; set; } = new List<Guid>();
+
+    [NotMapped]
+    public string? EmployeeName { get; set; }
+
+    [NotMapped]
+    public string? EmployeeStartDate { get; set; }
+
+    [NotMapped]
+    public string? EmployeeEndDate { get; set; }
+
+    [NotMapped]
+    public string? ReplacementName { get; set; }
+
+    [NotMapped]
+    public string? ReplacementStartDate { get; set; }
+
+    [NotMapped]
+    public string? ReplacementEndDate { get; set; }
 }
