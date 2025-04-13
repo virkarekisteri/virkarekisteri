@@ -124,7 +124,7 @@
       "Details": "Lisätiedot",
       "Type": "Tyyppi",
       "CostcentreId": "Kustannuspaikka",
-      "PositionName": "Virkanimike",
+      "PositionNameId": "Virkanimike",
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka",
       "CreatedEmployee": "Lisätty uusi viranhaltija",

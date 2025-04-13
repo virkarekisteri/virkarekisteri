@@ -141,6 +141,12 @@ public class UpdatePositionTests
         badRequestResult.Value.Should().Be("VacancyFill must be between 0% and 100%.");
     }
 
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
+
     [Fact]
     public async Task UpdatesPositionName_WhenPositionNameIsProvided()
     {
@@ -187,6 +193,13 @@ public class UpdatePositionTests
         result.Should().BeOfType<NoContentResult>();
         existingPosition.PositionNameId.Should().NotBe(Guid.Empty);
     }
+    */
+
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
 
     [Fact]
     public async Task CreatesPositionName_WhenPositionNameDoesNotExist()
@@ -235,4 +248,5 @@ public class UpdatePositionTests
 
         result.Should().BeOfType<NoContentResult>();
     }
+    */
 }

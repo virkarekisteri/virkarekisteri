@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Repositories;
 
-namespace Virkarekisteri.Functions.PositionName
+namespace Virkarekisteri.Functions.PositionNames
 {
     public class GetPositionNames(ILogger<GetPositionNames> logger, IPositionNameRepository positionNameRepository)
     {

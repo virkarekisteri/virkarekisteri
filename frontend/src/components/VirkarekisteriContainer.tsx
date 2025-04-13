@@ -52,7 +52,10 @@ const VirkarekisterContainer = () => {
   const [selectedPosition, setSelectedPosition] = useState<Position | undefined>(undefined);
 
   const handleOpenMassModal = () => setOpenMassModal(true);
-  const handleCloseMassModal = () => setOpenMassModal(false);
+  const handleCloseMassModal = () => {
+    setOpenMassModal(false);
+    setSelectedRows([]);
+  };
 
   const { isLoading } = useGetPositionsQuery(isAuthenticated ? undefined : skipToken);
   const { data: fetchedPosition, isLoading: singlePositionLoading } = useGetPositionQuery(

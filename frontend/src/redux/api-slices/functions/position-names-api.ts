@@ -10,7 +10,12 @@ const PositionNamesApi = baseApi.injectEndpoints({
           ? [...result.map(({ id }) => ({ type: 'PositionNames', id }) as const), { type: 'PositionNames', id: 'LIST' }]
           : [{ type: 'PositionNames', id: 'LIST' }],
     }),
+
+    getPositionNameById: build.query<PositionName, string>({
+      query: (id) => `/positionnames/${id}`,
+      providesTags: (_result, _error, id) => [{ type: 'PositionNames', id }],
+    }),
   }),
 });
 
-export const { useGetPositionNamesQuery } = PositionNamesApi;
+export const { useGetPositionNamesQuery, useGetPositionNameByIdQuery } = PositionNamesApi;
