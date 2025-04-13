@@ -479,6 +479,12 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       },
     },
     {
+      field: 'endingDecisionNumber',
+      headerName: t('table.ending_decision_number'),
+      flex: 1,
+      sortable: true,
+    },
+    {
       field: 'employeeName',
       headerName: t('table.employee_name'),
       flex: 1,

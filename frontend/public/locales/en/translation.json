@@ -60,6 +60,7 @@
     "created_at": "Created at",
     "ended_at": "Position abolition date",
     "creation_decision_number": "Creation decision number",
+    "ending_decision_number": "End position decision number",
     "placement_location": "Placement location",
     "type": "Type",
     "vacancy_number": "Vacancy number",

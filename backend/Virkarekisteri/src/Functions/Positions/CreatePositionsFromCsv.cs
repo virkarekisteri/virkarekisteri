@@ -130,6 +130,16 @@ public class CreatePositionsFromCsv(
                     position.EndedAt = string.IsNullOrWhiteSpace(values[5])
                         ? (DateTime?)null
                         : DateTime.Parse(values[5], CultureInfo.InvariantCulture);
+                    // Set VacancyStatus = 1 if no end date or end date is in the future
+                    if (!position.EndedAt.HasValue || position.EndedAt.Value.Date > DateTime.Now.Date)
+                    {
+                        position.VacancyStatus = 1; // 1 = Established
+                    }
+                    else
+                    {
+                        position.VacancyStatus = 0; // 0 = Abolished
+                    }
+
                     position.EndingDecisionNumber = string.IsNullOrWhiteSpace(values[6]) ? null : values[6];
                     position.VacancySize = string.IsNullOrWhiteSpace(values[7])
                         ? (decimal?)null

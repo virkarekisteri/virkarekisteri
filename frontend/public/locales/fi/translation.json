@@ -60,6 +60,7 @@
     "created_at": "Perustamisajankohta",
     "ended_at": "Viran lakkautus päivämäärä",
     "creation_decision_number": "Päätösnumero",
+    "ending_decision_number": "Lakkautus päätösnumero",
     "type": "Laji",
     "vacancy_number": "Vakanssinumero",
     "vacancy_size": "Vakanssikoko",
