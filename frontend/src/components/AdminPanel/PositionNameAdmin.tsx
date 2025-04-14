@@ -298,7 +298,7 @@ const PositionNameAdmin = () => {
                   color="primary"
                 />
               }
-              label={t('admin_panel.costcentre.show_active')}
+              label={t('admin_panel.position_name.show_only_active')}
               sx={{ minWidth: '250px' }}
             />
           </Box>
@@ -330,7 +330,7 @@ const PositionNameAdmin = () => {
               </Box>
             }
           >
-            {t('admin_panel.costcentre.create_new')}
+            {t('admin_panel.position_name.create_new')}
           </Button>
         </RequiresEditRole>
       </Box>

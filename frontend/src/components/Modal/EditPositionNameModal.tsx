@@ -36,8 +36,9 @@ interface EditPositionNameModalProps {
 }
 
 interface FormValues {
-  subjectName: string;
-  active: boolean;
+  name: string;
+  validFrom?: string;
+  validUntil?: string;
 }
 
 
@@ -69,45 +70,59 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validateSubjectName = (value: string, allValues: Record<string, any>) => {
+  const validatePositionName = (value: string, allValues: Record<string, any>) => {
     if (value && allPositionNames.some(
         (posName) => {return (posName.name === value.toLowerCase() && (isCreateDialog || (positionName && value != positionName.name)))}
       ))
-      return t('admin_panel.error.subject_name_exists_error');
+      return t('admin_panel.position_name.validation.duplicate_name');
 
     return undefined;
   };
 
+  // Checks whether the valid from date is before the valid until date
+  const validateValidUntil = (value: string, allValues: FormValues) => {
+    if (allValues.validFrom && value) {
+      const validFromDate = new Date(allValues.validFrom);
+      const validUntilDate = new Date(value);
+      if (validUntilDate <= validFromDate) {
+        return t('admin_panel.costcentre.validation.invalid_date');
+      }
+    }
+    return undefined;
+  };
+
   const onSubmit = async (values: FormValues) => {
+    console.log(values);
     if (!positionName || !positionName.id) {
+      // create new position name
       try {
 
         const subjectData: Partial<PositionName> = {
-          name: values.subjectName.toLowerCase(),
-          validFrom: new Date(),
-          validUntil: new Date()
+          name: values.name.toLowerCase(),
+          validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
+          validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
         };
-        console.log("Creating new subject!")
+        console.log("Creating new position name!")
         createSubject(subjectData)
         handleClose();
         return;
       } catch (error) {
-        console.error('Failed to create subject:', error);
+        console.error('Failed to create position name:', error);
     }
   }
   else {
-
+    // edit existing position name
     try {
       const updateData = {
-        name: values.subjectName.toLowerCase(),
-        validFrom: new Date(),
-        validTo: new Date()
+        name: values.name.toLowerCase(),
+        validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
+        validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
       };
       console.log(updateData)
       updateSubject({ id: positionName.id, data: updateData });
       handleClose();
     } catch (error) {
-      console.error('Failed to update subject:', error);
+      console.error('Failed to update position name:', error);
     }
   };
 }
@@ -170,7 +185,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
                   <RenderReadonlyTextField value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')} />
                   {/* Name */}
                   <Grid2 size={12}>
-                    <Field name="subjectName" validate={validateSubjectName}>
+                    <Field name="name" validate={validatePositionName}>
                       {({ input, meta }) => {
                         
                         //console.log(input)
@@ -193,21 +208,47 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
                         )}
                       }
                     </Field>
-                  {/* //</Grid2> */}
-
-                  {/* Active checkbox */}
-                  {/* <Grid2 size={12}> */}
-                    <Field name="active" type="checkbox">
-                    {({input}) => (
-                        <FormControlLabel control={
-                          <Checkbox {...input} /* checked={Boolean(input.value)} */ />
-                        } label={t('admin_panel.teacher_subjects.active')} />
-                      )
-                    }
-                    </Field>
                   </Grid2>
-
                 </Grid2>
+
+                    {/* Valid from */}
+                    <Grid2 size={2} sx={{ display: 'flex', gap: 2 }}>
+                      <Field name="validFrom">
+                        {({ input, meta }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            label={t('admin_panel.position_name.valid_from')}
+                            type="date"
+                            slotProps={{ inputLabel: { shrink: true } }}
+                            sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
+                          />
+                        )}
+                      </Field>
+
+
+                    {/* Valid until */}
+
+                      <Field
+                        name="validUntil"
+                        validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}
+                      >
+                        {({ input, meta }) => (
+                          <TextField
+                            {...input}
+                            margin="normal"
+                            label={t('admin_panel.position_name.valid_until')}
+                            type="date"
+                            slotProps={{ inputLabel: { shrink: true } }}
+                            sx={{ width: '360px' }}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
+                          />
+                        )}
+                      </Field>
+                    </Grid2>
 
                 {/* Buttons */}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>

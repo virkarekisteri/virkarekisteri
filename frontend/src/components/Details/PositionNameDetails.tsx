@@ -9,7 +9,7 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
-import { format } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 
 interface PositionNameDetailsProps {
   positionName: PositionName;
@@ -28,6 +28,37 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
+  };
+
+  // Formats the changelog entries if needed
+  const formatIfNeeded = (value: string, field: string) => {
+    if (field === 'CreatedPositionName' && !value) {
+      return '-';
+    }
+    if ((field === 'ValidFrom' || field === 'ValidUntil') && value) {
+      const parsed = parse(value, 'dd/MM/yyyy H.mm.ss', new Date());
+      if (!isValid(parsed)) {
+        return value;
+      }
+      return format(parsed, 'd.M.yyyy');
+    }
+    return value;
+  };
+
+  // Returns the correct edited field label
+  const getEditedFieldLabel = (field: string) => {
+    switch (field) {
+      case 'CreatedPositionName':
+        return t('change_logs.fields.CreatedPositionName');
+      case 'Name':
+        return t('admin_panel.position_name.name');
+      case 'ValidFrom':
+        return t('admin_panel.position_name.valid_from');
+      case 'ValidUntil':
+        return t('admin_panel.position_name.valid_until');
+      default:
+        return field;
+    }
   };
 
   const { data: positionNameChangelogs = [], isLoading: positionNameChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
@@ -71,7 +102,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
                 </Box>
               }
             >
-              {t('admin_panel.teacher_subjects.edit_subject')}
+              {t('admin_panel.position_name.edit')}
             </Button>
           </RequiresEditRole>
         </Box>
@@ -149,7 +180,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
                 }}
           >
             <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
-              {t('admin_panel.teacher_subjects.edit_history')}
+              {t('admin_panel.position_name.edit_history')}
             </Typography>
 
           </AccordionSummary>
@@ -161,56 +192,65 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             >
             <Grid2 size={12}>
               {positionNameChangelogs.length > 0 ? (
+                <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
+                  {/* Edited field */}
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.edited_field')}
+                    </Typography>
+                  </Grid2>
 
-            <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
-              <Grid2 size={2} sx={{ width: '20%' }}>
-                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                  {t('admin_panel.change_logs.edited_field')}
-                </Typography>
-              </Grid2>
-              <Grid2 size={3} sx={{ width: '20%' }}>
-                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                  {t('admin_panel.change_logs.old_value')}
-                </Typography>
-              </Grid2>
-              <Grid2 size={3} sx={{ width: '20%' }}>
-                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                  {t('admin_panel.change_logs.new_value')}
-                </Typography>
-              </Grid2>
-              <Grid2 size={2} sx={{ width: '20%' }}>
-                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                  {t('admin_panel.change_logs.editor')}
-                </Typography>
-              </Grid2>
-              <Grid2 size={2} sx={{ width: '20%' }}>
-                <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                  {t('admin_panel.change_logs.timestamp')}
-                </Typography>
-              </Grid2>
+                  {/* Old value */}
+                  <Grid2 size={3} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.old_value')}
+                    </Typography>
+                  </Grid2>
 
-              {positionNameChangelogs.map((changelog: AdminChangeLogEntry) => (
-                <React.Fragment key={changelog.id}>
-                  <Grid2 size={2} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? t('admin_panel.teacher_subjects.status') : t('admin_panel.teacher_subjects.name')} />
-                  </Grid2>
+                  {/* New value */}
                   <Grid2 size={3} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? (changelog.oldValue == "True" ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')) : changelog.oldValue} />
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.new_value')}
+                    </Typography>
                   </Grid2>
-                  <Grid2 size={3} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.editedField == "Active" ? (changelog.newValue == "True" ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')) : changelog.newValue} />
-                  </Grid2>
+
+                  {/* Editor */}
                   <Grid2 size={2} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={changelog.editor} />
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.editor')}
+                    </Typography>
                   </Grid2>
+
+                  {/* Timestamp */}
                   <Grid2 size={2} sx={{ width: '20%' }}>
-                    <RenderReadonlyTextField value={format(new Date(changelog.timestamp), 'dd.MM.yyyy HH:mm:ss')} />
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.timestamp')}
+                    </Typography>
                   </Grid2>
-                </React.Fragment>
-              ))}
-            </Grid2>
+
+                  {/* Changelog entries */}
+                  {positionNameChangelogs.map((changelog: AdminChangeLogEntry) => (
+                    <React.Fragment key={changelog.id}>
+                      <Grid2 size={2} sx={{ width: '20%' }}>
+                        <RenderReadonlyTextField value={getEditedFieldLabel(changelog.editedField)} />
+                      </Grid2>
+                      <Grid2 size={3} sx={{ width: '20%' }}>
+                        <RenderReadonlyTextField value={formatIfNeeded(changelog.oldValue, changelog.editedField)} />
+                      </Grid2>
+                      <Grid2 size={3} sx={{ width: '20%' }}>
+                        <RenderReadonlyTextField value={formatIfNeeded(changelog.newValue, changelog.editedField)} />
+                      </Grid2>
+                      <Grid2 size={2} sx={{ width: '20%' }}>
+                        <RenderReadonlyTextField value={changelog.editor} />
+                      </Grid2>
+                      <Grid2 size={2} sx={{ width: '20%' }}>
+                        <RenderReadonlyTextField value={format(new Date(changelog.timestamp), 'dd.MM.yyyy HH:mm:ss')} />
+                      </Grid2>
+                    </React.Fragment>
+                  ))}
+                </Grid2>
               ) : (
-                <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.no_edits')} />
+                <RenderReadonlyTextField value={t('change_logs.no_logs_found')} />
               )}
             </Grid2>
             </AccordionDetails>
