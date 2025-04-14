@@ -42,21 +42,19 @@ public class CreatePosition(
             return new BadRequestObjectResult("CostcentreId must be provided.");
         }
 
-        if (requestPosition.PositionNameId == Guid.Empty)
+        // Check that the costcentre's number is no more than 4 characters long.
+        // This is because when creating the position, the costcentre number is used as a prefix for the position's vacancy number.
+        // Longer costcentre number will result in a longer vacancy number, whose maximun length is 8 characters.
+        var costcentreNumber = await positionRepository.GetCostcentreNumberById(requestPosition.CostcentreId);
+        if (costcentreNumber.Length > 4)
         {
-            if (string.IsNullOrWhiteSpace(requestPosition.PositionName?.Name))
-            {
-                return new BadRequestObjectResult("Either PositionNameId or a valid PositionName must be provided.");
-            }
-
-            var positionNameId =
-                await positionNameRepository.GetPositionNameIdByName(requestPosition.PositionName.Name)
-                ?? await positionNameRepository.CreatePositionName(requestPosition.PositionName.Name);
-
-            requestPosition.PositionNameId = positionNameId;
+            return new BadRequestObjectResult("Costcentre number cannot be more than 4 characters long.");
         }
 
-        requestPosition.PositionName = null; // Nullify to avoid conflicts
+        if (requestPosition.PositionNameId == Guid.Empty)
+        {
+            return new BadRequestObjectResult("PositionNameId must be provided.");
+        }
 
         var createdPosition = await positionRepository.CreatePosition(requestPosition);
 

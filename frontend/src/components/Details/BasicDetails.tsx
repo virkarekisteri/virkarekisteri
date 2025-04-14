@@ -10,6 +10,9 @@ import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-ap
 import { RequiresEditRole } from 'components/role-guards';
 import EndPositionModal from 'components/Modal/EndPositionModal';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
+import { useGetPositionNameByIdQuery } from 'redux/api-slices/functions/position-names-api';
 
 interface BasicDetailsProps {
   position: Position;
@@ -19,6 +22,12 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
   const { t } = useTranslation();
 
   const { data: costcentres = [] } = useGetCostCentersQuery();
+  const { data: positionName, isLoading: isPositionNameLoading } = useGetPositionNameByIdQuery(
+    position.positionNameId,
+    {
+      skip: !position.positionNameId,
+    },
+  );
 
   const { data: subjects = [] } = useGetTeacherSubjectsQuery();
 
@@ -44,7 +53,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
       return position.subjectIds
         .map((subjectId) => {
           const subject = subjects.find((s) => s.id === subjectId);
-          return subject ? subject.subjectName : null;
+          return subject ? checkSubjectActiveStatus(subject, t('table.not_active_suffix')) : null;
         })
         .filter((subjectName): subjectName is string => subjectName !== null);
     }
@@ -168,7 +177,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.position_name')}
             </Typography>
-            <RenderReadonlyTextField value={position.positionName.name} />
+            <RenderReadonlyTextField value={isPositionNameLoading ? '...' : positionName?.name || ''} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -204,7 +213,9 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.costcentre')}
             </Typography>
-            <RenderReadonlyTextField value={`${positionCostcentre?.number} ${positionCostcentre?.name}`} />
+            <RenderReadonlyTextField
+              value={`${positionCostcentre?.number} ${checkCostCentreActiveStatus(positionCostcentre, t('table.not_active_suffix'))}`}
+            />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>

@@ -1,5 +1,3 @@
-import type { PositionName } from './PositionName';
-
 export interface Position {
   id?: string;
 
@@ -25,7 +23,7 @@ export interface Position {
 
   workExperience?: string;
 
-  positionName: PositionName;
+  positionNameId: string;
 
   details?: string;
 

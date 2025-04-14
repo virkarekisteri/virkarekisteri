@@ -1,5 +1,7 @@
 import React from 'react';
 import type { SelectChangeEvent } from '@mui/material';
+import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 import {
   Box,
   TextField,
@@ -41,8 +43,8 @@ interface FormValues {
   endingDecisionNumber?: string;
   placementLocation?: string;
   vacancyFill?: number;
-  positionName?: { name: string };
-  orgTree?: string;
+  positionName?: string;
+  costcentre?: string;
   pricingId?: string;
   vacancySize?: number;
   educationLevel?: string;
@@ -57,10 +59,20 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   const { data: positionNames = [] } = useGetPositionNamesQuery();
   const { data: costcentres = [] } = useGetCostCentersQuery();
-
   const { data: subjects = [] } = useGetTeacherSubjectsQuery(open ? undefined : skipToken);
 
   const [updatePosition] = useUpdatePositionMutation();
+
+  //Keep in memory the current subjects of the position. Temporary selection changes doesn't affect this. Will be
+  //changed only after the "save" button press. Will be used for keeping up with a correct list of subjects for the position.
+  const currentSubjectsOfPosition =
+    position?.subjectIds &&
+    position.subjectIds
+      .map((subjectId) => {
+        const matchedSubject = subjects.find((s) => s.id === subjectId);
+        return matchedSubject ? checkSubjectActiveStatus(matchedSubject, t('table.not_active_suffix')) : null;
+      })
+      .filter((subjectName): subjectName is string => subjectName !== null);
 
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [isTeacherPosition, setIsTeacherPosition] = useState(false);
@@ -70,18 +82,23 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
       const subjectNames = position.subjectIds
         .map((subjectId) => {
           const matchedSubject = subjects.find((s) => s.id === subjectId);
-          return matchedSubject ? matchedSubject.subjectName : null;
+          return matchedSubject ? checkSubjectActiveStatus(matchedSubject, t('edit_position.not_active_suffix')) : null;
         })
         .filter((subjectName): subjectName is string => subjectName !== null);
 
       setSelectedSubjects(subjectNames);
     }
     setIsTeacherPosition(position.isTeacher || false);
-  }, [subjects, position.subjectIds, position.isTeacher]);
+  }, [subjects, position.subjectIds, position.isTeacher, t]);
 
-  const activeSubjectNames = subjects
-    .filter((subject) => subject.active === true)
-    .map((subject) => subject.subjectName);
+  //Filter only active and current (initially fetched) subject names to be shown
+  const subjectNames = subjects
+    .filter(
+      (subject) =>
+        subject.active === true ||
+        currentSubjectsOfPosition?.includes(checkSubjectActiveStatus(subject, t('edit_position.not_active_suffix'))),
+    )
+    .map((subject) => checkSubjectActiveStatus(subject, t('edit_position.not_active_suffix')));
 
   const handleSubjectChange = (event: SelectChangeEvent<typeof selectedSubjects>) => {
     const { value } = event.target;
@@ -90,7 +107,10 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
   const subjectIds = isTeacherPosition
     ? selectedSubjects
-        .map((subjectName) => subjects.find((s) => s.subjectName === subjectName)?.id)
+        .map(
+          (subjectName) =>
+            subjects.find((s) => checkSubjectActiveStatus(s, t('edit_position.not_active_suffix')) === subjectName)?.id,
+        )
         .filter((id): id is string => id !== undefined)
     : undefined;
 
@@ -133,8 +153,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
         endingDecisionNumber: values.endingDecisionNumber,
         placementLocation: values.placementLocation,
         vacancyFill: values.vacancyFill ? values.vacancyFill / 100 : undefined, // Convert percentage to decimal
-        positionName: values.positionName ? { name: values.positionName.name } : undefined,
-        costcentreId: values.orgTree,
+        positionNameId: values.positionName,
+        costcentreId: values.costcentre,
         pricingId: values.pricingId,
         vacancySize: values.vacancySize ? values.vacancySize / 100 : undefined, // Convert percentage to decimal
         educationLevel: values.educationLevel,
@@ -198,8 +218,8 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
               type: position.type,
               vacancySize: (Number(position.vacancySize) * 100).toFixed(),
               vacancyFill: (Number(position.vacancyFill) * 100).toFixed(),
-              positionName: position.positionName,
-              orgTree: position.costcentreId,
+              positionName: position.positionNameId,
+              costcentre: position.costcentreId,
               placementLocation: position.placementLocation,
               pricingId: position.pricingId,
               educationLevel: position.educationLevel,
@@ -231,18 +251,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
-                            freeSolo
-                            options={positionNames.map((option) => option.name)}
-                            value={input.value?.name || ''}
-                            onInputChange={(_event, value) => {
-                              input.onChange({ name: value });
-                            }}
+                            options={positionNames}
+                            getOptionLabel={(option) => `${option.name}`}
+                            value={positionNames.find((item) => item.id === input.value) || null}
                             onChange={(_event, value) => {
-                              if (typeof value === 'string') {
-                                input.onChange({ name: value });
-                              } else if (value) {
-                                input.onChange({ name: value });
-                              }
+                              input.onChange(value ? value.id : null);
                             }}
                             renderInput={(params) => (
                               <TextField
@@ -251,7 +264,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                 margin="normal"
                                 required
                                 label={t('edit_position.position_name')}
-                                placeholder={t('edit_position.position_name')}
+                                placeholder={
+                                  positionNames.find((tree) => tree.id === position.positionNameId)
+                                    ? `${positionNames.find((tree) => tree.id === position.positionNameId)?.name}`
+                                    : t('edit_position.position_name')
+                                }
                                 slotProps={{
                                   inputLabel: {
                                     shrink: true,
@@ -267,11 +284,13 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
 
                   {/* Costcenter */}
                   <Grid2 size={6}>
-                    <Field name="orgTree">
+                    <Field name="costcentre">
                       {({ input }) => (
                         <Autocomplete
                           options={costcentres}
-                          getOptionLabel={(option) => `${option.number} ${option.name}`}
+                          getOptionLabel={(option) =>
+                            `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`
+                          }
                           value={costcentres.find((tree) => tree.id === input.value) || null}
                           onChange={(_event, value) => {
                             input.onChange(value ? value.id : null);
@@ -285,7 +304,10 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                               label={t('edit_position.costcentre')}
                               placeholder={
                                 costcentres.find((tree) => tree.id === position.costcentreId)
-                                  ? `${costcentres.find((tree) => tree.id === position.costcentreId)?.number} ${costcentres.find((tree) => tree.id === position.costcentreId)?.name}`
+                                  ? `${costcentres.find((tree) => tree.id === position.costcentreId)?.number} ${checkCostCentreActiveStatus(
+                                      costcentres.find((tree) => tree.id === position.costcentreId),
+                                      t('edit_position.not_active_suffix'),
+                                    )}`
                                   : t('edit_position.costcentre')
                               }
                               slotProps={{
@@ -467,7 +489,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                 },
                               }}
                             >
-                              {activeSubjectNames.sort().map((subject) => (
+                              {subjectNames.sort().map((subject) => (
                                 <MenuItem key={subject} value={subject}>
                                   <Checkbox checked={selectedSubjects.includes(subject)} />
                                   <ListItemText primary={subject} />

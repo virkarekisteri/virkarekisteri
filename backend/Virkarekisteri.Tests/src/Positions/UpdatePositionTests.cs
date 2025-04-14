@@ -85,13 +85,22 @@ public class UpdatePositionTests
             CreationDecisionNumber = "123",
             VacancySize = .50M,
             VacancyFill = .40M,
+            SubjectIds = new List<Guid>() { Guid.NewGuid() },
         };
-        var updateDto = new UpdatePositionDto { VacancyFill = 60 };
+        var updateDto = new UpdatePositionDto { VacancySize = .50M, VacancyFill = .60M };
 
         var requestJson = JsonSerializer.Serialize(updateDto);
         var requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
         _positionRepositoryMock.Setup(repo => repo.GetPosition(positionId)).ReturnsAsync(existingPosition);
+        _subjectRepositoryMock
+            .Setup(r => r.GetSubjectsByIds(It.IsAny<List<Guid>>()))
+            .ReturnsAsync(
+                new List<Subject>
+                {
+                    new Subject { Id = existingPosition.SubjectIds.First(), SubjectName = "TestSubject" },
+                }
+            );
 
         request.Body = new MemoryStream(requestBytes);
         request.ContentType = "application/json";
@@ -99,7 +108,7 @@ public class UpdatePositionTests
         var result = await _updatePosition.Run(request, positionId.ToString());
 
         var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
-        badRequestResult.Value.Should().Be("The fill % cannot be greater than the total vacancy %");
+        badRequestResult.Value.Should().Be("VacancyFill cannot be greater than VacancySize.");
     }
 
     [Fact]
@@ -128,9 +137,15 @@ public class UpdatePositionTests
 
         var result = await _updatePosition.Run(request, positionId.ToString());
 
-        result.Should().BeOfType<NoContentResult>();
-        existingPosition.VacancyFill.Should().Be(updateDto.VacancyFill);
+        var badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+        badRequestResult.Value.Should().Be("VacancyFill must be between 0% and 100%.");
     }
+
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
 
     [Fact]
     public async Task UpdatesPositionName_WhenPositionNameIsProvided()
@@ -147,6 +162,7 @@ public class UpdatePositionTests
             PositionNameId = mockPositionNameId,
             VacancySize = .50M,
             VacancyFill = .40M,
+            SubjectIds = new List<Guid>() { Guid.NewGuid() },
         };
         var updateDto = new UpdatePositionDto { PositionName = new PositionNameDto { Name = "New Position Name" } };
 
@@ -154,6 +170,14 @@ public class UpdatePositionTests
         var requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
         _positionRepositoryMock.Setup(repo => repo.GetPosition(positionId)).ReturnsAsync(existingPosition);
+        _subjectRepositoryMock
+            .Setup(r => r.GetSubjectsByIds(It.IsAny<List<Guid>>()))
+            .ReturnsAsync(
+                new List<Subject>
+                {
+                    new Subject { Id = existingPosition.SubjectIds.First(), SubjectName = "TestSubject" },
+                }
+            );
         _positionNameRepositoryMock
             .Setup(repo => repo.GetPositionNameIdByName(updateDto.PositionName.Name))
             .ReturnsAsync(mockPositionNameId);
@@ -169,6 +193,13 @@ public class UpdatePositionTests
         result.Should().BeOfType<NoContentResult>();
         existingPosition.PositionNameId.Should().NotBe(Guid.Empty);
     }
+    */
+
+    /*
+    Note: PositionName-related tests are currently commented out due to a recent major logic change.
+    Previously, PositionName was managed as an object within the Position entity.
+    Now, it's been replaced with a PositionNameId reference, and PositionName management has been moved to its own separate CRUD operations.
+    As a result, PositionNames can no longer be created or updated through the Position object.
 
     [Fact]
     public async Task CreatesPositionName_WhenPositionNameDoesNotExist()
@@ -185,6 +216,7 @@ public class UpdatePositionTests
             PositionNameId = mockPositionNameId,
             VacancySize = .50M,
             VacancyFill = .40M,
+            SubjectIds = new List<Guid>() { Guid.NewGuid() },
         };
         var updateDto = new UpdatePositionDto { PositionName = new PositionNameDto { Name = "New Position Name" } };
 
@@ -198,6 +230,14 @@ public class UpdatePositionTests
         _positionNameRepositoryMock
             .Setup(repo => repo.CreatePositionName(updateDto.PositionName.Name))
             .ReturnsAsync(Guid.NewGuid());
+        _subjectRepositoryMock
+            .Setup(r => r.GetSubjectsByIds(It.IsAny<List<Guid>>()))
+            .ReturnsAsync(
+                new List<Subject>
+                {
+                    new Subject { Id = existingPosition.SubjectIds.First(), SubjectName = "TestSubject" },
+                }
+            );
 
         request.Body = new MemoryStream(requestBytes);
         request.ContentType = "application/json";
@@ -208,4 +248,5 @@ public class UpdatePositionTests
 
         result.Should().BeOfType<NoContentResult>();
     }
+    */
 }

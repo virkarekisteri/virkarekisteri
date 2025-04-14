@@ -7,7 +7,10 @@ const adminchangelogApi = baseApi.injectEndpoints({
       query: () => '/crudchangelogs',
       providesTags: (result) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'AdminChangeLogs', id }) as const), { type: 'AdminChangeLogs' as const, id: 'LIST' }]
+          ? [
+              ...result.map(({ id }) => ({ type: 'AdminChangeLogs', id }) as const),
+              { type: 'AdminChangeLogs' as const, id: 'LIST' },
+            ]
           : [{ type: 'AdminChangeLogs' as const, id: 'LIST' }],
     }),
     getAdminChangeLogsByObjectType: build.query<AdminChangeLogEntry[], string>({
@@ -21,4 +24,8 @@ const adminchangelogApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAdminChangelogsQuery, useGetAdminChangeLogsByObjectTypeQuery, useGetAdminChangelogsByObjectIdQuery } = adminchangelogApi;
+export const {
+  useGetAdminChangelogsQuery,
+  useGetAdminChangeLogsByObjectTypeQuery,
+  useGetAdminChangelogsByObjectIdQuery,
+} = adminchangelogApi;

@@ -61,10 +61,10 @@ public class UpdateCostcentre(
         existingCostcentre.Name = updateDto.Name ?? existingCostcentre.Name;
 
         CRUDLogChange("ValidFrom", existingCostcentre.ValidFrom.ToString(), updateDto.ValidFrom.ToString());
-        existingCostcentre.ValidFrom = updateDto.ValidFrom ?? existingCostcentre.ValidFrom;
+        existingCostcentre.ValidFrom = updateDto.ValidFrom;
 
         CRUDLogChange("ValidUntil", existingCostcentre.ValidUntil.ToString(), updateDto.ValidUntil.ToString());
-        existingCostcentre.ValidUntil = updateDto.ValidUntil ?? existingCostcentre.ValidUntil;
+        existingCostcentre.ValidUntil = updateDto.ValidUntil;
 
         await costcentreRepository.UpdateCostcentre(existingCostcentre);
 

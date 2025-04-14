@@ -6,6 +6,7 @@ import { Form, Field } from 'react-final-form';
 import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 import { useEndPositionMutation } from 'redux/api-slices/functions/positions-api';
 import type { Position } from 'models/Position';
+import { useGetPositionNameByIdQuery } from 'redux/api-slices/functions/position-names-api';
 
 interface EndPositionModalProps {
   open: boolean;
@@ -16,6 +17,9 @@ interface EndPositionModalProps {
 const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, position }) => {
   const { t } = useTranslation();
   const [endPosition] = useEndPositionMutation();
+  const { data: positionName, isLoading } = useGetPositionNameByIdQuery(position.positionNameId, {
+    skip: !position.positionNameId,
+  });
 
   const handleSubmit = async (values: Position) => {
     if (!position.id) return undefined;
@@ -78,7 +82,9 @@ const EndPositionModal: React.FC<EndPositionModalProps> = ({ open, onClose, posi
                     <Typography sx={{ mt: 2 }} fontWeight={'fontWeightBold'}>
                       {t('end_position.position_name')}
                     </Typography>
-                    <RenderReadonlyTextField value={position.positionName.name} />
+                    <RenderReadonlyTextField
+                      value={isLoading ? '...' : positionName?.name || position.positionNameId}
+                    />
                   </Grid2>
                   <Grid2 size={6}>
                     <Field name="endedAt">

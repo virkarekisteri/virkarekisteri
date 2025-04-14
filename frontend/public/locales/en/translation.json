@@ -17,7 +17,8 @@
     "type_position": "Position",
     "type_post": "Post",
     "teacher": "Teacher",
-    "subjects": "Subjects"
+    "subjects": "Subjects",
+    "not_active_suffix": "not active"
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
@@ -74,13 +75,14 @@
     "start_date": "Start date",
     "teacher": "Teacher",
     "subjects": "Subjects",
+    "not_active_suffix": "not active",
     "yes": "Yes",
     "no": "No"
   },
   "tabs": {
     "positions": "Positions list",
     "history": "History information",
-    "admin": "Admin panel"
+    "admin": "Control"
   },
   "user_menu": {
     "logout": "Log Out",
@@ -121,11 +123,13 @@
       "WorkExperience": "Work experience",
       "Details": "Additional details",
       "Type": "Type",
-      "Costcentre": "Costcenter",
-      "PositionName": "Position name",
+      "CostcentreId": "Costcenter",
+      "PositionNameId": "Position name",
       "Substitute": "Substitute",
       "CreatedPosition": "Created new position",
       "CreatedEmployee": "Added new employee",
+      "CreatedCostcentre": "Added new costcentre",
+      "CreatedSubject": "Added new subject",
       "VacancyStatus": "Vacancy status",
       "EndedPosition": "Ended position",
       "PositionSubjects": "Subjects",
@@ -177,7 +181,8 @@
     "creation_decision_number": "Creation decision number",
     "creation_description": "Decision description",
     "teacher": "Teacher",
-    "subjects": "Subjects"
+    "subjects": "Subjects",
+    "not_active_suffix": "not active"
   },
   "error": {
     "pricing_id_error": "Pricing ID can only be upto 20 characters long",
@@ -205,31 +210,68 @@
     "update_value_message": "The value of the field will be updated for every position"
   },
   "admin_panel": {
+    "titles": {
+      "subjects": "Subjects",
+      "job_titles": "Job titles",
+      "cost_centres": "Cost centres"
+    },
+    "search": {
+      "bySubjectName": "Search by subject name",
+      "byName": "Search by name"
+    },
     "teacher_subjects": {
       "name": "Name",
       "status": "Status",
-      "details":"Subject details",
+      "details": "Subject details",
       "active": "Active",
       "inactive": "Inactive",
       "show_only_active": "Show only active",
       "create_subject": "Create new subject",
       "edit_subject": "Edit subject",
       "edit_history": "Editing history",
-      "editwarning": "Changes made here will affect all positions of type teacher!",
-      "no_edits": "No edits"
+      "editwarning": "Changes made here will affect all teacher positions with this subject!",
+      "no_edits": "No edits",
+      "validation": {
+        "subject_name_exists_error": "Subject name exists"
+      }
     },
-    "search": {
-      "bySubjectName": "Search by subject name"
-    },
-    "error": {
-      "subject_name_exists_error": "Subject name exists"
+    "costcentre": {
+      "create_new": "Create new costcentre",
+      "name": "Name",
+      "number": "Number",
+      "time_frame": "Time frame",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until",
+      "show_active": "Show only active",
+      "details": "Costcentre details",
+      "edit": "Edit costcentre",
+      "edit_warning": "Any changes made here will affect all positions using this costcenre.",
+      "edit_history": "Editing history",
+      "validation": {
+        "required": "Field is required",
+        "duplicate_number": "Costcentre number already exists",
+        "duplicate_name": "Costcentre name already exists",
+        "invalid_number": "Invalid costcentre number",
+        "invalid_date": "Invalid time period"
+      }
     },
     "change_logs": {
       "edited_field": "Edited field",
       "old_value": "Old value",
       "new_value": "New value",
       "editor": "Editor",
-      "timestamp": "Timestamp"
+      "timestamp": "Timestamp",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until",
+      "show_active": "Show only active",
+      "details": "Costcentre details",
+      "edit": "Edit costcentre",
+      "validation": {
+        "required": "Field is required",
+        "duplicate_number": "Costcentre number already exists",
+        "duplicate_name": "Costcentre name already exists",
+        "invalid_number": "Invalid costcentre number"
+      }
     }
   }
 }

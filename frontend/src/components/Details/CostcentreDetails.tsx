@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TeacherSubject } from 'models/TeacherSubject';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography, alpha } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Grid2 from '@mui/material/Grid2';
-import EditSubjectModal from 'components/Modal/EditSubjectModal';
-import RenderReadonlyTextField from './RenderReadonlyTextField';
+import type { Costcentre } from 'models/Costcentre';
 import { RequiresEditRole } from 'components/role-guards';
+import { Box, Grid2, Button, Typography, Accordion, AccordionSummary, AccordionDetails, alpha } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { format, parse, isValid } from 'date-fns';
+import RenderReadonlyTextField from './RenderReadonlyTextField';
+import ModifyCostcentreModal from 'components/Modal/ModifyCostcentreModal';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
-import { format } from 'date-fns';
 
-interface SubjectDetailsProps {
-  position: TeacherSubject;
-  allSubjects: TeacherSubject[];
-  doneEditingCallback: () => void;
+interface CostcentreDetailsProps {
+  costcentre: Costcentre;
+  onEditSubmit?: () => void;
 }
 
-const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, doneEditingCallback }) => {
+const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEditSubmit }) => {
   const { t } = useTranslation();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const { data: costcentreChangelogs = [] } = useGetAdminChangelogsByObjectIdQuery(costcentre.id);
 
   const handleOpenEditModal = () => {
     setEditModalOpen(true);
@@ -30,13 +30,38 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
     setEditModalOpen(false);
   };
 
-  const handleSubmitEditModal = () => {
-    setEditModalOpen(false);
-    doneEditingCallback();
+  // Formats the changelog entries if needed
+  const formatIfNeeded = (value: string, field: string) => {
+    if (field === 'CreatedCostcentre' && !value) {
+      return '-';
+    }
+    if ((field === 'ValidFrom' || field === 'ValidUntil') && value) {
+      const parsed = parse(value, 'dd/MM/yyyy H.mm.ss', new Date());
+      if (!isValid(parsed)) {
+        return value;
+      }
+      return format(parsed, 'd.M.yyyy');
+    }
+    return value;
   };
 
-  const { data: subjectChangelogs = [] /* , isLoading: subjectChangeLogsLoading */ } =
-    useGetAdminChangelogsByObjectIdQuery(position.id);
+  // Returns the correct edited field label
+  const getEditedFieldLabel = (field: string) => {
+    switch (field) {
+      case 'CreatedCostcentre':
+        return t('change_logs.fields.CreatedCostcentre');
+      case 'Number':
+        return t('admin_panel.costcentre.number');
+      case 'Name':
+        return t('admin_panel.costcentre.name');
+      case 'ValidFrom':
+        return t('admin_panel.costcentre.valid_from');
+      case 'ValidUntil':
+        return t('admin_panel.costcentre.valid_until');
+      default:
+        return field;
+    }
+  };
 
   return (
     <Box
@@ -49,6 +74,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
       {
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'right' }}>
           <RequiresEditRole>
+            {/* Edit costcentre button */}
             <Button
               variant="contained"
               onClick={handleOpenEditModal}
@@ -74,7 +100,7 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
                 </Box>
               }
             >
-              {t('admin_panel.teacher_subjects.edit_subject')}
+              {t('admin_panel.costcentre.edit')}
             </Button>
           </RequiresEditRole>
         </Box>
@@ -100,30 +126,48 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
             textTransform: 'none',
           }}
         >
-          {t('admin_panel.teacher_subjects.details')}
+          {t('admin_panel.costcentre.details')}
         </Typography>
       </Box>
 
       <Box padding={2}>
-        <Grid2 container spacing={2}>
-          <Grid2 size={6} px={2}>
+        <Grid2 container spacing={2} size={12}>
+          {/* Costcentre number */}
+          <Grid2 size={3} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('admin_panel.teacher_subjects.name')}
+              {t('admin_panel.costcentre.number')}
             </Typography>
-            <RenderReadonlyTextField value={position.subjectName} />
+            <RenderReadonlyTextField value={costcentre.number.toString()} />
           </Grid2>
-          <Grid2 size={6} px={2}>
+
+          {/* Costcentre name */}
+          <Grid2 size={5} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('admin_panel.teacher_subjects.status')}
+              {t('admin_panel.costcentre.name')}
+            </Typography>
+            <RenderReadonlyTextField value={costcentre.name} />
+          </Grid2>
+
+          {/* Costcentre timeframe */}
+          <Grid2 size={4} px={2}>
+            <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+              {t('admin_panel.costcentre.time_frame')}
             </Typography>
             <RenderReadonlyTextField
               value={
-                position.active ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')
+                costcentre.validFrom && costcentre.validUntil
+                  ? `${format(new Date(costcentre.validFrom), 'd.M.yyyy')} - ${format(new Date(costcentre.validUntil), 'd.M.yyyy')}`
+                  : costcentre.validFrom
+                    ? `${format(new Date(costcentre.validFrom), 'd.M.yyyy')} -`
+                    : costcentre.validUntil
+                      ? `- ${format(new Date(costcentre.validUntil), 'd.M.yyyy')}`
+                      : ''
               }
             />
           </Grid2>
         </Grid2>
 
+        {/* Costcentre changelogs */}
         <Accordion sx={{ mt: 2, mb: 0 }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
@@ -142,80 +186,65 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
             }}
           >
             <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
-              {t('admin_panel.teacher_subjects.edit_history')}
+              {t('admin_panel.costcentre.edit_history')}
             </Typography>
           </AccordionSummary>
+
           <AccordionDetails
             sx={{
               padding: '16px',
-              backgroundColor: alpha('#fffff', 1),
+              backgroundColor: alpha('#ffffff', 1),
             }}
           >
             <Grid2 size={12}>
-              {subjectChangelogs.length > 0 ? (
+              {costcentreChangelogs.length > 0 ? (
                 <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
+                  {/* Edited field */}
                   <Grid2 size={2} sx={{ width: '20%' }}>
                     <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                      {t('admin_panel.change_logs.edited_field')}
-                    </Typography>
-                  </Grid2>
-                  <Grid2 size={3} sx={{ width: '20%' }}>
-                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                      {t('admin_panel.change_logs.old_value')}
-                    </Typography>
-                  </Grid2>
-                  <Grid2 size={3} sx={{ width: '20%' }}>
-                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                      {t('admin_panel.change_logs.new_value')}
-                    </Typography>
-                  </Grid2>
-                  <Grid2 size={2} sx={{ width: '20%' }}>
-                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                      {t('admin_panel.change_logs.editor')}
-                    </Typography>
-                  </Grid2>
-                  <Grid2 size={2} sx={{ width: '20%' }}>
-                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-                      {t('admin_panel.change_logs.timestamp')}
+                      {t('change_logs.edited_field')}
                     </Typography>
                   </Grid2>
 
-                  {subjectChangelogs.map((changelog: AdminChangeLogEntry) => (
+                  {/* Old value */}
+                  <Grid2 size={3} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.old_value')}
+                    </Typography>
+                  </Grid2>
+
+                  {/* New value */}
+                  <Grid2 size={3} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.new_value')}
+                    </Typography>
+                  </Grid2>
+
+                  {/* Editor */}
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.editor')}
+                    </Typography>
+                  </Grid2>
+
+                  {/* Timestamp */}
+                  <Grid2 size={2} sx={{ width: '20%' }}>
+                    <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
+                      {t('change_logs.timestamp')}
+                    </Typography>
+                  </Grid2>
+
+                  {/* Changelog entries */}
+                  {costcentreChangelogs.map((changelog: AdminChangeLogEntry) => (
                     <React.Fragment key={changelog.id}>
                       <Grid2 size={2} sx={{ width: '20%' }}>
-                        <RenderReadonlyTextField
-                          value={
-                            changelog.editedField === 'CreatedSubject'
-                              ? t('change_logs.fields.CreatedSubject')
-                              : changelog.editedField === 'Active'
-                                ? t('admin_panel.teacher_subjects.status')
-                                : t('admin_panel.teacher_subjects.name')
-                          }
-                        />
+                        <RenderReadonlyTextField value={getEditedFieldLabel(changelog.editedField)} />
                       </Grid2>
                       <Grid2 size={3} sx={{ width: '20%' }}>
-                        <RenderReadonlyTextField
-                          value={
-                            changelog.editedField === 'CreatedSubject'
-                              ? '-'
-                              : changelog.editedField === 'Active'
-                                ? changelog.oldValue === 'True'
-                                  ? t('admin_panel.teacher_subjects.active')
-                                  : t('admin_panel.teacher_subjects.inactive')
-                                : changelog.oldValue
-                          }
-                        />
+                        <RenderReadonlyTextField value={formatIfNeeded(changelog.oldValue, changelog.editedField)} />
                       </Grid2>
                       <Grid2 size={3} sx={{ width: '20%' }}>
-                        <RenderReadonlyTextField
-                          value={
-                            changelog.editedField == 'Active'
-                              ? changelog.newValue == 'True'
-                                ? t('admin_panel.teacher_subjects.active')
-                                : t('admin_panel.teacher_subjects.inactive')
-                              : changelog.newValue
-                          }
-                        />
+                        <RenderReadonlyTextField value={formatIfNeeded(changelog.newValue, changelog.editedField)} />
                       </Grid2>
                       <Grid2 size={2} sx={{ width: '20%' }}>
                         <RenderReadonlyTextField value={changelog.editor} />
@@ -227,21 +256,22 @@ const SubjectDetails: React.FC<SubjectDetailsProps> = ({ position, allSubjects, 
                   ))}
                 </Grid2>
               ) : (
-                <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.no_edits')} />
+                <RenderReadonlyTextField value={t('change_logs.no_logs_found')} />
               )}
             </Grid2>
           </AccordionDetails>
         </Accordion>
       </Box>
 
-      <EditSubjectModal
+      {/* Edit costcentre modal */}
+      <ModifyCostcentreModal
         open={editModalOpen}
-        handleClose={handleCloseEditModal}
-        submitCallback={handleSubmitEditModal}
-        position={position}
-        allSubjects={allSubjects}
+        onClose={handleCloseEditModal}
+        costcentre={costcentre}
+        onSubmitSuccess={onEditSubmit}
       />
     </Box>
   );
 };
-export default SubjectDetails;
+
+export default CostcentreDetails;

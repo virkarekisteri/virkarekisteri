@@ -17,7 +17,8 @@
     "type_position": "Virka",
     "type_post": "Toimi",
     "teacher": "Opettaja",
-    "subjects": "Opetettavat aineet"
+    "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen"
   },
   "create_csv_position": {
     "success": " virkaa luotu onnistuneesti.",
@@ -74,13 +75,14 @@
     "start_date": "Virkaan asettamispäivä",
     "teacher": "Opettaja",
     "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen",
     "yes": "Kyllä",
     "no": "Ei"
   },
   "tabs": {
     "positions": "Virkalistaus",
     "history": "Historiatiedot",
-    "admin": "Hallintapaneli"
+    "admin": "Hallinta"
   },
   "user_menu": {
     "logout": "Kirjaudu Ulos",
@@ -122,10 +124,12 @@
       "Details": "Lisätiedot",
       "Type": "Tyyppi",
       "CostcentreId": "Kustannuspaikka",
-      "PositionName": "Virkanimike",
+      "PositionNameId": "Virkanimike",
       "Substitute": "Sijainen",
       "CreatedPosition": "Luotu uusi virka",
       "CreatedEmployee": "Lisätty uusi viranhaltija",
+      "CreatedCostcentre": "Luotu uusi kustannuspaikka",
+      "CreatedSubject": "Luotu uusi aine",
       "VacancyStatus": "Vakanssin tila",
       "EndedPosition": "Lakkautettu virka",
       "PositionSubjects": "Aineet",
@@ -177,7 +181,8 @@
     "creation_decision_number": "Päätösnumero",
     "creation_description": "Päätöksen selite",
     "teacher": "Opettaja",
-    "subjects": "Opetettavat aineet"
+    "subjects": "Opetettavat aineet",
+    "not_active_suffix": "ei aktiivinen"
   },
   "error": {
     "pricing_id_error": "Hinnoittelutunnus voi olla vain kaksikymmentä (20) merkkiä pitkä.",
@@ -205,6 +210,15 @@
     "update_value_message": "Kentän arvo päivitetään jokaiselle valitulle viralle"
   },
   "admin_panel": {
+    "titles": {
+      "subjects": "Aineet",
+      "job_titles": "Virkanimikkeet",
+      "cost_centres": "Kustannuspaikat"
+    },
+    "search": {
+      "bySubjectName": "Etsi aineen nimellä",
+      "byName": "Hae nimellä"
+    },
     "teacher_subjects": {
       "name": "Nimi",
       "status": "Tila",
@@ -215,21 +229,49 @@
       "create_subject": "Luo uusi aine",
       "edit_subject": "Muokkaa aineen tietoja",
       "edit_history": "Muutoshistoria",
-      "editwarning": "Tässä tehdyt muokkaukset vaikuttava kaikkien opettajien-tyyppisten virkojen tietoihin!",
-      "no_edits": "Ei muokkauksia"
+      "editwarning": "Tässä tehdyt muokkaukset vaikuttavat kaikkiin opettajan virkoihin joilla tämä aine.",
+      "no_edits": "Ei muokkauksia",
+      "validation": {
+        "subject_name_exists_error": "Aineen nimi on jo olemassa"
+      }
     },
-    "search": {
-      "bySubjectName": "Etsi aineen nimellä"
-    },
-    "error": {
-      "subject_name_exists_error": "Aineen nimi on jo olemassa"
+    "costcentre": {
+      "create_new": "Luo uusi kustannuspaikka",
+      "name": "Nimi",
+      "number": "Numero",
+      "time_frame": "Aikaväli",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen",
+      "show_active": "Näytä vain aktiiviset",
+      "details": "Kustannuspaikan tiedot",
+      "edit": "Muokkaa kustannuspaikan tietoja",
+      "edit_warning": "Tässä tehdyt muutokset vaikuttavat kaikkiin tämän kustannuspaikan virkoihin.",
+      "edit_history": "Muutoshistoria",
+      "validation": {
+        "required": "Kenttä on pakollinen",
+        "duplicate_number": "Kustannuspaikan numero on jo käytössä",
+        "duplicate_name": "Kustannuspaikan nimi on jo käytössä",
+        "invalid_number": "Virheellinen kustannuspaikan numero",
+        "invalid_date": "Virheellinen voimassaoloaika"
+      }
     },
     "change_logs": {
       "edited_field": "Muokattu kenttä",
       "old_value": "Vanha arvo",
       "new_value": "Uusi arvo",
       "editor": "Muokkaaja",
-      "timestamp": "Aika"
+      "timestamp": "Aika",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen",
+      "show_active": "Näytä vain aktiiviset",
+      "details": "Kustannuspaikan tiedot",
+      "edit": "Muokkaa kustannuspaikan tietoja",
+      "validation": {
+        "required": "Kenttä on pakollinen",
+        "duplicate_number": "Kustannuspaikan numero on jo käytössä",
+        "duplicate_name": "Kustannuspaikan nimi on jo käytössä",
+        "invalid_number": "Virheellinen kustannuspaikan numero"
+      }
     }
   }
 }
