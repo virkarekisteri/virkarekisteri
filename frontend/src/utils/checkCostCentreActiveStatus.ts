@@ -2,6 +2,7 @@ import type { Costcentre } from 'models/Costcentre';
 
 export const checkCostCentreActiveStatus = (costCentre: Costcentre | undefined, notActiveSuffix: string): string => {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   if (!costCentre) {
     return '';

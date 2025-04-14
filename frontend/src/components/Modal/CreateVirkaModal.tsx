@@ -105,6 +105,16 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
     return undefined;
   };
 
+  const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
+    const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
+  
+    return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
+  };
+
   useEffect(() => {
     if (!open) {
       setIsTeacherPosition(false);
@@ -297,7 +307,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={costcentres}
+                          options={costcentres.filter(isCostcentreActive)}
                           loading={costcentresLoading}
                           getOptionLabel={(option) =>
                             option
