@@ -255,6 +255,22 @@
         "invalid_date": "Invalid time period"
       }
     },
+    "position_name": {
+      "name": "Name", 
+      "valid_from": "Valid from",
+      "valid_until": "Valid until",
+      "create_position": "Create new position name",
+      "edit_position": "Edit position name",
+      "edit_warning": "Any changes made here will affect all positions using this position name.",
+      "edit_history": "Editing history",
+      "show_active": "Show only active",
+      "details": "Position name details",
+      "validation": {
+        "required": "Field is required",
+        "duplicate_name": "Position name already exists",
+        "invalid_date": "Invalid time period"
+      } 
+    },  
     "change_logs": {
       "edited_field": "Edited field",
       "old_value": "Old value",

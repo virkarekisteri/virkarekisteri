@@ -109,12 +109,25 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             </Typography>
             <RenderReadonlyTextField value={positionName.name} />
           </Grid2>
+          
+          {/* Position name timeframe */}
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('admin_panel.teacher_subjects.status')}
+              {t('admin_panel.costcentre.time_frame')}
             </Typography>
-            <RenderReadonlyTextField value={positionName.validFrom ? t('admin_panel.teacher_subjects.active') : t('admin_panel.teacher_subjects.inactive')} />
+            <RenderReadonlyTextField
+              value={
+                positionName.validFrom && positionName.validUntil
+                  ? `${format(new Date(positionName.validFrom), 'd.M.yyyy')} - ${format(new Date(positionName.validUntil), 'd.M.yyyy')}`
+                  : positionName.validFrom
+                    ? `${format(new Date(positionName.validFrom), 'd.M.yyyy')} -`
+                    : positionName.validUntil
+                      ? `- ${format(new Date(positionName.validUntil), 'd.M.yyyy')}`
+                      : ''
+              }
+            />
           </Grid2>
+
         </Grid2>
 
 

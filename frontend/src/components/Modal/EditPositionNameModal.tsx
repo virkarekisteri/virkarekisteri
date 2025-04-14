@@ -28,13 +28,6 @@ import type { PositionName } from 'models/PositionName'
 import { useUpdatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 import { useCreatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 
-
-//import type { Position } from 'models/Position';
-//import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
-//import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-//import { useGetOrganizationTreesQuery } from 'redux/api-slices/functions/organization-trees-api';
-//import { idID } from '@mui/material/locale';
-
 interface EditPositionNameModalProps {
   open: boolean;
   handleClose: () => void;
@@ -62,17 +55,17 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
 
 
 
-  const initialValues = positionName !== undefined ? 
+  const initialValues: Partial<PositionName> = positionName !== undefined ? 
   {
     name: positionName.name,
     validFrom: positionName.validFrom,
-    validTo: positionName.validTo
+    validUntil: positionName.validUntil
   } 
   :
   {
     name: "", 
     validFrom: "",
-    validTo: ""
+    validUntil: ""
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,7 +85,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
         const subjectData: Partial<PositionName> = {
           name: values.subjectName.toLowerCase(),
           validFrom: new Date(),
-          validTo: new Date()
+          validUntil: new Date()
         };
         console.log("Creating new subject!")
         createSubject(subjectData)

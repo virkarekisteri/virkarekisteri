@@ -28,6 +28,7 @@ import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-na
 import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
 import EditPositionNameModal from '../Modal/EditPositionNameModal'
+import { format } from 'date-fns';
 
 import ActivityLight from 'components/Components/ActivityLight';
 
@@ -35,55 +36,91 @@ const PositionNameAdmin = () => {
   const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<PositionName | null>(null);
-  const [filteredSubjects, setFilteredTeacherSubjects] = useState<PositionName[]>([]);
+  const [filteredPositionNames, setFilteredPositionNames] = useState<PositionName[]>([]);
   const [sortConfig, setSortConfig] = useState<{ key: keyof PositionName; direction: 'asc' | 'desc' } | null>({
     key: 'name',
     direction: 'asc'
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchSubjectName, setSearchSubjectName] = useState('');
-  const [showOnlyActiveSubjects, setShowOnlyActiveSubjects] = useState<boolean>(false); 
+  const [searchPositionName, setSearchPositionName] = useState('');
+  const [showOnlyActive, setShowOnlyActive] = useState<boolean>(false); 
 
-  const { data: teacherSubjects = [], isLoading: teacherSubjectsLoading } = useGetPositionNamesQuery();
+  const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery();
 
 
-  const isLoading = teacherSubjectsLoading;
+  const isLoading = positionNamesLoading;
 
   useEffect(() => {
-    setFilteredTeacherSubjects(teacherSubjects);
-  }, [teacherSubjects]);
+    setFilteredPositionNames(positionNames);
+  }, [positionNames]);
 
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const handleOpenCreateModal = () => {
-
     setCreateModalOpen(true);
   };
   
   const handleCloseCreateModal = () => {
-
     setCreateModalOpen(false);
   };
 
   const handleToggleOnlyActiveSubjects = () => {
-    setShowOnlyActiveSubjects(!showOnlyActiveSubjects);
-
+    setShowOnlyActive(!showOnlyActive);
   }
 
   const handleSort = (key: keyof PositionName) => {
+    setSortConfig((prevConfig) => {
+      setPage(0);
+      if (!prevConfig || prevConfig.key !== key) {
+        const sortedData = [...filteredPositionNames].sort((a, b) => {
+          const valA = a[key] ?? '';
+          const valB = b[key] ?? '';
+
+          if (key === 'validFrom' || key === 'validUntil') {
+            return (new Date(valA).getTime() || 0) - (new Date(valB).getTime() || 0);
+          }
+
+          return valA < valB ? -1 : valA > valB ? 1 : 0;
+        });
+
+        setFilteredPositionNames(sortedData);
+        return { key, direction: 'asc' };
+      } else if (prevConfig.direction === 'asc') {
+        const sortedData = [...filteredPositionNames].sort((a, b) => {
+          const valA = a[key] ?? '';
+          const valB = b[key] ?? '';
+
+          if (key === 'validFrom' || key === 'validUntil') {
+            return (new Date(valB).getTime() || 0) - (new Date(valA).getTime() || 0);
+          }
+
+          return valA > valB ? -1 : valA < valB ? 1 : 0;
+        });
+
+        setFilteredPositionNames(sortedData);
+        return { key, direction: 'desc' };
+      } else {
+        setFilteredPositionNames(positionNames);
+        return null;
+      }
+    });
+  };
+
+/*   const handleSort = (key: keyof PositionName) => {
     setSortConfig((prevConfig) => {
       if (prevConfig && prevConfig.key === key) {
         return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
       }
       return { key, direction: 'asc' };
     });
-  };
+  }; */
 
   /* Sorting logic */
-  const sortedTeacherSubjects = React.useMemo(() => {
-    return filteredSubjects;
+  const sortedPositionNames = React.useMemo(() => {
+    
+    return filteredPositionNames;
     /* 
     if (!sortConfig) return filteredSubjects;
 
@@ -117,18 +154,11 @@ const PositionNameAdmin = () => {
       return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
     */
-  }, [filteredSubjects, sortConfig]);
+  }, [filteredPositionNames, sortConfig]);
 
-
-  /* Show-only-active -filtering logic */
-/*   const activityFilteredTeacherSubjects = React.useMemo(() => {
-    if (!showOnlyActiveSubjects) return sortedTeacherSubjects;
-    else return sortedTeacherSubjects.filter(s => s.active === true);
-  }, [sortedTeacherSubjects, showOnlyActiveSubjects]) 
- */
 
   // Pagination logic
-  const paginatedTeacherSubjects = filteredSubjects.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedPositionNames = filteredPositionNames.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -141,19 +171,31 @@ const PositionNameAdmin = () => {
 
   // Search logic
   const handleSearch = () => {
-    const filtered = teacherSubjects.filter((s) => {
-      const matchesVacancyNumber = searchSubjectName
-        ? s['name'].includes(searchSubjectName)
+    const filtered = positionNames.filter((c) => {
+      const matchesName = searchPositionName
+        ? c['name'].toLowerCase().includes(searchPositionName.toLowerCase())
         : true;
-      return matchesVacancyNumber;
+
+      const matchesActive =
+        !showOnlyActive ||
+        ((c.validFrom
+          ? new Date(new Date(c.validFrom).setHours(0, 0, 0, 0)) <= new Date(new Date().setHours(0, 0, 0, 0))
+          : true) &&
+          (c.validUntil
+            ? new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(new Date(c.validUntil).setHours(0, 0, 0, 0))
+            : true));
+
+      return matchesName && matchesActive;
     });
-    setFilteredTeacherSubjects(filtered);
+
+    setFilteredPositionNames(filtered);
     setPage(0);
   };
 
-  const handleResetSearch = () => {
-    setSearchSubjectName('');
-    setFilteredTeacherSubjects(teacherSubjects);
+  const handleSearchReset = () => {
+    setSearchPositionName('');
+    setFilteredPositionNames(positionNames);
+    setShowOnlyActive(false);
     setPage(0);
   };
 
@@ -174,7 +216,7 @@ const PositionNameAdmin = () => {
     <Box>
       {/* Search Controls */}
 
-      <Box display="flex" gap={2} mb={2}>
+{/*       <Box display="flex" gap={2} mb={2}>
         <TextField
           label={t('admin_panel.search.bySubjectName')}
           value={searchSubjectName}
@@ -214,19 +256,93 @@ const PositionNameAdmin = () => {
                 </Box>
               }
             >
-              {t('admin_panel.teacher_subjects.create_subject')}
+              {t('admin_panel.position_name.create_position')}
             </Button>
           </Box>
         </RequiresEditRole>
 
+      </Box> */}
+
+      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
+        {/* Search Controls */}
+        <Box display="flex" flexWrap="wrap" gap={2}>
+          <Box display="flex" gap={2}>
+            {/* Search by name */}
+            <TextField
+              label={t('admin_panel.search.byName')}
+              value={searchPositionName}
+              onChange={(e) => setSearchPositionName(e.target.value)}
+              sx={{ minWidth: '300px' }}
+            />
+
+
+
+          {/* Search and clear buttons */}
+          <Box display="flex" gap={2} flexWrap="wrap">
+            <Button variant="contained" onClick={handleSearch}>
+              {t('search_filter.search')}
+            </Button>
+
+            <Button variant="outlined" onClick={handleSearchReset}>
+              {t('search_filter.reset')}
+            </Button>
+          </Box>
+        </Box>
+
+            {/* Search only active */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showOnlyActive}
+                  onChange={(event) => setShowOnlyActive(event.target.checked)}
+                  color="primary"
+                />
+              }
+              label={t('admin_panel.costcentre.show_active')}
+              sx={{ minWidth: '250px' }}
+            />
+          </Box>
+
+        <RequiresEditRole>
+          {/* Create new cost centre button */}
+          <Button
+            variant="contained"
+            onClick={handleOpenCreateModal}
+            sx={{
+              backgroundColor: '#223B7C',
+              color: 'white',
+              fontSize: '1.0rem',
+              padding: '20px',
+              height: '40px',
+              display: 'flex',
+              borderRadius: '25px 8px 8px 25px',
+              fontWeight: 'bold',
+              textTransform: 'none',
+            }}
+            startIcon={
+              <Box
+                component="span"
+                sx={{
+                  marginRight: '10px',
+                }}
+              >
+                +
+              </Box>
+            }
+          >
+            {t('admin_panel.costcentre.create_new')}
+          </Button>
+        </RequiresEditRole>
       </Box>
 
       <TableContainer>
         <Table sx={{ minWidth: 650 }}>
+
           {/* Table Header */}
           <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
             <TableRow>
 
+              {/* Name header */}
               <TableCell
                 sx={{
                   color: 'white',
@@ -237,25 +353,35 @@ const PositionNameAdmin = () => {
                 onClick={() => handleSort('name')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
-                  {t('admin_panel.teacher_subjects.name')}
+                  {t('admin_panel.position_name.name')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
                     {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
+
+              {/* Costcentre valid from */}
               <TableCell
-                sx={{
-                  color: 'white',
-                  fontSize: '1.2rem',
-                  cursor: 'pointer',
-                  padding: '8px 16px',
-                }}
-                onClick={() => handleSort('name')}
+                sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px' }}
+                onClick={() => handleSort('validFrom')}
               >
                 <Box display="flex" alignItems="center" gap={2}>
-                  {t('admin_panel.teacher_subjects.status')}
+                  {t('admin_panel.position_name.valid_from')}
                   <Box sx={{ width: '16px', textAlign: 'center' }}>
-                    {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                    {sortConfig?.key === 'validFrom' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
+                  </Box>
+                </Box>
+              </TableCell>
+
+              {/* Costcentre valid until */}
+              <TableCell
+                sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px' }}
+                onClick={() => handleSort('validUntil')}
+              >
+                <Box display="flex" alignItems="center" gap={2}>
+                  {t('admin_panel.position_name.valid_until')}
+                  <Box sx={{ width: '16px', textAlign: 'center' }}>
+                    {sortConfig?.key === 'validUntil' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
                   </Box>
                 </Box>
               </TableCell>
@@ -264,11 +390,11 @@ const PositionNameAdmin = () => {
 
           {/* Table Body */}
           <TableBody>
-            {paginatedTeacherSubjects.map((row) => (
+            {paginatedPositionNames.map((row) => (
               <React.Fragment key={row.id}>
                 <TableRow
                   sx={{
-                    backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedTeacherSubjects.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
+                    backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedPositionNames.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
                     cursor: 'pointer',
                   }}
                   onClick={() => handleRowToggle(row)}
@@ -276,8 +402,10 @@ const PositionNameAdmin = () => {
 
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
-                    asdf
-
+                    {row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}
+                  </TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                    {row.validUntil ? format(new Date(row.validUntil), 'd.M.yyyy') : ''}
                   </TableCell>
                 </TableRow>
 
@@ -291,7 +419,7 @@ const PositionNameAdmin = () => {
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"
-          count={sortedTeacherSubjects.length}
+          count={sortedPositionNames.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
@@ -303,11 +431,11 @@ const PositionNameAdmin = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <PositionNameDetails positionName={expandedRow} allPositionNames={sortedTeacherSubjects}/> : null
+            expandedRow ? <PositionNameDetails positionName={expandedRow} allPositionNames={sortedPositionNames}/> : null
           }
           </Grid2>
         </Grid2>
-        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} positionName={undefined} allPositionNames={sortedTeacherSubjects}/>
+        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} positionName={undefined} allPositionNames={sortedPositionNames}/>
         {/* 
  */}
     </Box>
