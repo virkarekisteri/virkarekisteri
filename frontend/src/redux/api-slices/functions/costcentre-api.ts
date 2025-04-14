@@ -30,7 +30,7 @@ const costcentreTreesApi = baseApi.injectEndpoints({
           'Content-Type': 'application/json',
         },
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'CostCenters', id }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'CostCenters', id }, { type: 'AdminChangeLogs', id }],
     }),
   }),
 });
