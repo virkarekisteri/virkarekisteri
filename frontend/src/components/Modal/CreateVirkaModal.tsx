@@ -108,10 +108,10 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
   const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
+
     const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
     const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
-  
+
     return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
   };
 
