@@ -44,10 +44,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   
     const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
     const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
-  
-    if (validFrom) validFrom.setHours(0, 0, 0, 0);
-    if (validUntil) validUntil.setHours(0, 0, 0, 0);
-  
+
     return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
   };
   
