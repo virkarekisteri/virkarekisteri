@@ -30,7 +30,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
     setEditModalOpen(false);
   };
 
-  //const { data: subjectChangelogs = [], isLoading: subjectChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
+  const { data: positionNameChangelogs = [], isLoading: positionNameChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
 
 
   return (
@@ -147,7 +147,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             }}
             >
             <Grid2 size={12}>
-              {subjectChangelogs.length > 0 ? (
+              {positionNameChangelogs.length > 0 ? (
 
             <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
               <Grid2 size={2} sx={{ width: '20%' }}>
@@ -176,7 +176,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
                 </Typography>
               </Grid2>
 
-              {subjectChangelogs.map((changelog: AdminChangeLogEntry) => (
+              {positionNameChangelogs.map((changelog: AdminChangeLogEntry) => (
                 <React.Fragment key={changelog.id}>
                   <Grid2 size={2} sx={{ width: '20%' }}>
                     <RenderReadonlyTextField value={changelog.editedField == "Active" ? t('admin_panel.teacher_subjects.status') : t('admin_panel.teacher_subjects.name')} />
