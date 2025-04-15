@@ -42,14 +42,17 @@ const SubjectAdmin = () => {
 
   useEffect(() => {
     if (teacherSubjects.length > 0) {
-      const sortedByName = [...teacherSubjects].sort((a, b) => {
-        return a.subjectName.localeCompare(b.subjectName, 'fi');
-      });
-      setFilteredTeacherSubjects(sortedByName);
+      setFilteredTeacherSubjects(applyDefaultSorting(teacherSubjects));
     } else {
       setFilteredTeacherSubjects([]);
     }
   }, [teacherSubjects]);
+
+  const applyDefaultSorting = (data: TeacherSubject[]) => {
+    return [...data].sort((a, b) => {
+      return a.subjectName.localeCompare(b.subjectName, 'fi');
+    });
+  }
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
@@ -134,14 +137,14 @@ const SubjectAdmin = () => {
       const matchesActive = showOnlyActiveSubjects ? s.active === true : true;
       return matchesName && matchesActive;
     });
-    setFilteredTeacherSubjects(filtered);
+    setFilteredTeacherSubjects(applyDefaultSorting(filtered));
     setPage(0);
   };
 
   const handleResetSearch = () => {
     setSearchSubjectName('');
     setShowOnlyActiveSubjects(false);
-    setFilteredTeacherSubjects(teacherSubjects);
+    setFilteredTeacherSubjects(applyDefaultSorting(teacherSubjects));
     setPage(0);
   };
 
