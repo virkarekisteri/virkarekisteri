@@ -120,7 +120,9 @@ const SubjectAdmin = () => {
   // Search logic
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
-      const matchesName = searchSubjectName ? s['subjectName'].includes(searchSubjectName) : true;
+      const matchesName = searchSubjectName 
+        ? s['subjectName'].toLowerCase().includes(searchSubjectName.toLowerCase()) 
+        : true;
       const matchesActive = showOnlyActiveSubjects ? s.active === true : true;
       return matchesName && matchesActive;
     });
