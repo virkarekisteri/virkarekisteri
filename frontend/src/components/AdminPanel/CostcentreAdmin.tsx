@@ -42,8 +42,20 @@ const CostcentreAdmin = () => {
   const isLoading = costcentresLoading;
 
   useEffect(() => {
-    setFilteredCostcentres(costcentres);
+    if (costcentres.length > 0) {
+      setFilteredCostcentres(applyDefaultSorting(costcentres));
+    } else {
+      setFilteredCostcentres([]);
+    }
   }, [costcentres]);
+
+  const applyDefaultSorting = (data: Costcentre[]) => {
+    return [...data].sort((a, b) => {
+      const numA = a.number ?? '';
+      const numB = b.number ?? '';
+      return numA < numB ? -1 : numA > numB ? 1 : 0;
+    });
+  };
 
   const paginatedCostcentres = filteredCostcentres.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -87,14 +99,14 @@ const CostcentreAdmin = () => {
       return matchesName && matchesActive;
     });
 
-    setFilteredCostcentres(filtered);
+    setFilteredCostcentres(applyDefaultSorting(filtered));
     setPage(0);
   };
 
   const handleSearchReset = () => {
     setSearchCostcentreName('');
     setSearchActive(false);
-    setFilteredCostcentres(costcentres);
+    setFilteredCostcentres(applyDefaultSorting(costcentres));
     setPage(0);
   };
 
@@ -130,7 +142,7 @@ const CostcentreAdmin = () => {
         setFilteredCostcentres(sortedData);
         return { key, direction: 'desc' };
       } else {
-        setFilteredCostcentres(costcentres);
+        setFilteredCostcentres(applyDefaultSorting(filteredCostcentres));
         return null;
       }
     });

@@ -41,8 +41,18 @@ const SubjectAdmin = () => {
   const isLoading = teacherSubjectsLoading;
 
   useEffect(() => {
-    setFilteredTeacherSubjects(teacherSubjects);
+    if (teacherSubjects.length > 0) {
+      setFilteredTeacherSubjects(applyDefaultSorting(teacherSubjects));
+    } else {
+      setFilteredTeacherSubjects([]);
+    }
   }, [teacherSubjects]);
+
+  const applyDefaultSorting = (data: TeacherSubject[]) => {
+    return [...data].sort((a, b) => {
+      return a.subjectName.localeCompare(b.subjectName, 'fi');
+    });
+  };
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
@@ -88,7 +98,7 @@ const SubjectAdmin = () => {
           const aName = a['subjectName'] as string;
           const bName = b['subjectName'] as string;
 
-          return aName.localeCompare(bName);
+          return aName.localeCompare(bName, 'fi');
         } else {
           // primary sort by active/inactive
           if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
@@ -101,7 +111,7 @@ const SubjectAdmin = () => {
       const aValue = a[sortConfig.key] as string;
       const bValue = b[sortConfig.key] as string;
 
-      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue, 'fi') : bValue.localeCompare(aValue, 'fi');
     });
   }, [filteredSubjects, sortConfig]);
 
@@ -110,6 +120,7 @@ const SubjectAdmin = () => {
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
+    setExpandedRow(null);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,18 +131,20 @@ const SubjectAdmin = () => {
   // Search logic
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
-      const matchesName = searchSubjectName ? s['subjectName'].includes(searchSubjectName) : true;
+      const matchesName = searchSubjectName
+        ? s['subjectName'].toLowerCase().includes(searchSubjectName.toLowerCase())
+        : true;
       const matchesActive = showOnlyActiveSubjects ? s.active === true : true;
       return matchesName && matchesActive;
     });
-    setFilteredTeacherSubjects(filtered);
+    setFilteredTeacherSubjects(applyDefaultSorting(filtered));
     setPage(0);
   };
 
   const handleResetSearch = () => {
     setSearchSubjectName('');
     setShowOnlyActiveSubjects(false);
-    setFilteredTeacherSubjects(teacherSubjects);
+    setFilteredTeacherSubjects(applyDefaultSorting(teacherSubjects));
     setPage(0);
   };
 

@@ -270,31 +270,31 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       // Sama kuin yllä, mutta katsotaan virkaan asettamispäivää päättyen
       let matchesStartDateEnding = true;
       if (startDateEndsSearch) {
-        if (!position.employeeEndDate && !position.replacementEndDate) {
+        if (!position.employeeStartDate && !position.replacementStartDate) {
           matchesStartDateEnding = false;
         } else if (employeeNameSearch && position.employeeName && replacementNameSearch && position.replacementName) {
           if (
-            position.employeeEndDate &&
-            position.replacementEndDate &&
-            parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch) &&
-            parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)
+            position.employeeStartDate &&
+            position.replacementStartDate &&
+            parseDate(position.employeeStartDate) > parseDate(startDateEndsSearch) &&
+            parseDate(position.replacementStartDate) > parseDate(startDateEndsSearch)
           ) {
             matchesStartDateEnding = false;
           }
-        } else if (employeeNameSearch && position.employeeName && position.employeeEndDate) {
-          if (parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch)) {
+        } else if (employeeNameSearch && position.employeeName && position.employeeStartDate) {
+          if (parseDate(position.employeeStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (replacementNameSearch && position.replacementName && position.replacementEndDate) {
-          if (parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)) {
+        } else if (replacementNameSearch && position.replacementName && position.replacementStartDate) {
+          if (parseDate(position.replacementStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (position.employeeName && position.employeeEndDate) {
-          if (parseDate(position.employeeEndDate) > parseDate(startDateEndsSearch)) {
+        } else if (position.employeeName && position.employeeStartDate) {
+          if (parseDate(position.employeeStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
-        } else if (position.replacementName && position.replacementEndDate) {
-          if (parseDate(position.replacementEndDate) > parseDate(startDateEndsSearch)) {
+        } else if (position.replacementName && position.replacementStartDate) {
+          if (parseDate(position.replacementStartDate) > parseDate(startDateEndsSearch)) {
             matchesStartDateEnding = false;
           }
         }
