@@ -42,7 +42,16 @@ const CostcentreAdmin = () => {
   const isLoading = costcentresLoading;
 
   useEffect(() => {
-    setFilteredCostcentres(costcentres);
+    if (costcentres.length > 0) {
+      const sortedByNumber = [...costcentres].sort((a, b) => {
+        const numA = a.number ?? '';
+        const numB = b.number ?? '';
+        return numA < numB ? -1 : numA > numB ? 1 : 0;
+      });
+      setFilteredCostcentres(sortedByNumber);
+    } else {
+      setFilteredCostcentres([]);
+    }
   }, [costcentres]);
 
   const paginatedCostcentres = filteredCostcentres.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -130,7 +139,13 @@ const CostcentreAdmin = () => {
         setFilteredCostcentres(sortedData);
         return { key, direction: 'desc' };
       } else {
-        setFilteredCostcentres(costcentres);
+        const defaultSorted = [...costcentres].sort((a, b) => {
+          const numA = a.number ?? '';
+          const numB = b.number ?? '';
+          return numA < numB ? -1 : numA > numB ? 1 : 0;
+        });
+        
+        setFilteredCostcentres(defaultSorted);
         return null;
       }
     });
