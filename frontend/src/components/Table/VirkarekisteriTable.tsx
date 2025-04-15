@@ -469,6 +469,22 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       },
     },
     {
+      field: 'endedAt',
+      headerName: t('table.ended_at'),
+      flex: 1,
+      sortable: true,
+      valueFormatter: (params: string) => {
+        if (!params) return '';
+        return format(new Date(params), 'dd.MM.yyyy');
+      },
+    },
+    {
+      field: 'endingDecisionNumber',
+      headerName: t('table.ending_decision_number'),
+      flex: 1,
+      sortable: true,
+    },
+    {
       field: 'employeeName',
       headerName: t('table.employee_name'),
       flex: 1,
@@ -814,7 +830,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             setPage(model.page);
             setRowsPerPage(model.pageSize);
           }}
-          pageSizeOptions={[10, 30, 50, 100, 300, 500, 1000]}
+          pageSizeOptions={[10, 30, 50, 100]}
           checkboxSelection
           onRowSelectionModelChange={(newSelection) => {
             const selection = newSelection as string[];
