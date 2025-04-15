@@ -23,6 +23,7 @@ import { RequiresEditRole } from 'components/role-guards';
 import CostcentreDetails from 'components/Details/CostcentreDetails';
 import { format } from 'date-fns';
 import CreateCostcentreModal from 'components/Modal/CreateCostcentreModal';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 
 const CostcentreAdmin = () => {
   const { t } = useTranslation();
@@ -297,7 +298,9 @@ const CostcentreAdmin = () => {
                   onClick={() => handleRowToggle(row)}
                 >
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.number}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                    {checkCostCentreActiveStatus(row, t('create_position.not_active_suffix'))}
+                  </TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     {row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}
                   </TableCell>

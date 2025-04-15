@@ -38,6 +38,19 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
     open ? undefined : skipToken,
   );
 
+  const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
+    const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
+
+    if (validFrom) validFrom.setHours(0, 0, 0, 0);
+    if (validUntil) validUntil.setHours(0, 0, 0, 0);
+
+    return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
+  };
+
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
@@ -178,7 +191,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                     id: tree.id,
                                     label: `${tree.name}`,
                                   }))
-                                : costcentres.map((tree) => ({
+                                : costcentres.filter(isCostcentreActive).map((tree) => ({
                                     id: tree.id,
                                     label: `${tree.number} ${tree.name}`,
                                   }))
