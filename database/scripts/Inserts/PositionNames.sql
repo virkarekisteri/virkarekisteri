@@ -145,7 +145,7 @@ VALUES
     ('kouluvalmentaja', NULL, NULL),
     ('kuljetuskoordinaattori', NULL, NULL),
     ('kuljetussuunnittelija', NULL, NULL),
-    ('kulttuurikasvatussuunnitelmakoordinaatto', NULL, NULL),
+    ('kulttuurikasvatussuunnitelmakoordinaattori', NULL, NULL),
     ('kulttuuriohjaaja', NULL, NULL),
     ('kulttuuripalvelupäällikkö', NULL, NULL),
     ('kulttuuritoimen johtaja', NULL, NULL),
