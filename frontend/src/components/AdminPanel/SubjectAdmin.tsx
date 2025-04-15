@@ -52,7 +52,7 @@ const SubjectAdmin = () => {
     return [...data].sort((a, b) => {
       return a.subjectName.localeCompare(b.subjectName, 'fi');
     });
-  }
+  };
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
 
@@ -131,8 +131,8 @@ const SubjectAdmin = () => {
   // Search logic
   const handleSearch = () => {
     const filtered = teacherSubjects.filter((s) => {
-      const matchesName = searchSubjectName 
-        ? s['subjectName'].toLowerCase().includes(searchSubjectName.toLowerCase()) 
+      const matchesName = searchSubjectName
+        ? s['subjectName'].toLowerCase().includes(searchSubjectName.toLowerCase())
         : true;
       const matchesActive = showOnlyActiveSubjects ? s.active === true : true;
       return matchesName && matchesActive;

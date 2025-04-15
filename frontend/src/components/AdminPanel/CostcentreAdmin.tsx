@@ -55,7 +55,7 @@ const CostcentreAdmin = () => {
       const numB = b.number ?? '';
       return numA < numB ? -1 : numA > numB ? 1 : 0;
     });
-  }
+  };
 
   const paginatedCostcentres = filteredCostcentres.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
