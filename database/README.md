@@ -10,6 +10,7 @@ Azure SQL Database
 -   Docker (for local database emulation)
 -   Azure Data Studio (for local database emulation/database overall)  
     <sup><sub>(VSCode works also, but not as well)</sub></sup>
+-   **FOR FUTURE DEVELOPERS**: The Spring 2025 project used Azure Data Studio, but it will be retired on February 28, 2026 https://learn.microsoft.com/en-us/azure-data-studio/whats-happening-azure-data-studio
 
 ### Running
 
