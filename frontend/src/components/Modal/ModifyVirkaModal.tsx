@@ -142,7 +142,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
     return undefined;
   };
 
-  const isCostCentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
+  const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -261,7 +261,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
-                            options={positionNames}
+                            options={[...positionNames].sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                             getOptionLabel={(option) => `${option.name}`}
                             value={positionNames.find((item) => item.id === input.value) || null}
                             onChange={(_event, value) => {
@@ -297,7 +297,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                     <Field name="costcentre">
                       {({ input }) => (
                         <Autocomplete
-                          options={costcentres.filter(isCostCentreActive)}
+                          options={[...costcentres]
+                            .filter(isCostcentreActive)
+                            .sort((a, b) => a.number - b.number)}
                           getOptionLabel={(option) =>
                             `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`
                           }

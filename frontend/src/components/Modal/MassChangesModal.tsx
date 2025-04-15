@@ -187,14 +187,19 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                             {...input}
                             options={
                               selectedOption === 'positionNameId'
-                                ? positionNames.map((tree) => ({
-                                    id: tree.id,
-                                    label: `${tree.name}`,
-                                  }))
-                                : costcentres.filter(isCostcentreActive).map((tree) => ({
-                                    id: tree.id,
-                                    label: `${tree.number} ${tree.name}`,
-                                  }))
+                                ? [...positionNames]
+                                    .sort((a, b) => a.name.localeCompare(b.name, 'fi'))
+                                    .map((tree) => ({
+                                      id: tree.id,
+                                      label: `${tree.name}`,
+                                    }))
+                                : [...costcentres]
+                                    .filter(isCostcentreActive)
+                                    .sort((a, b) => a.number - b.number)
+                                    .map((tree) => ({
+                                      id: tree.id,
+                                      label: `${tree.number} ${tree.name}`,
+                                    }))
                             }
                             getOptionLabel={(option) => (typeof option === 'string' ? option : option.label || '')}
                             loading={selectedOption === 'positionNameId' ? positionNamesLoading : costcentresLoading}

@@ -198,7 +198,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Field name="positionNameId">
                       {({ input }) => (
                         <Autocomplete
-                          options={positionNames}
+                          options={[...positionNames].sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option.name}
                           value={input.value || null}
@@ -307,7 +307,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={costcentres.filter(isCostcentreActive)}
+                          options={[...costcentres]
+                            .filter(isCostcentreActive)
+                            .sort((a, b) => a.number - b.number)}
                           loading={costcentresLoading}
                           getOptionLabel={(option) =>
                             option

@@ -26,8 +26,7 @@ import EditSubjectModal from 'components/Modal/EditSubjectModal';
 import ActivityLight from 'components/Components/ActivityLight';
 
 const SubjectAdmin = () => {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language || 'fi';
+  const { t } = useTranslation();
 
   const [expandedRow, setExpandedRow] = useState<TeacherSubject | null>(null);
   const [filteredSubjects, setFilteredTeacherSubjects] = useState<TeacherSubject[]>([]);
@@ -44,7 +43,7 @@ const SubjectAdmin = () => {
   useEffect(() => {
     if (teacherSubjects.length > 0) {
       const sortedByName = [...teacherSubjects].sort((a, b) => {
-        return a.subjectName.localeCompare(b.subjectName, locale);
+        return a.subjectName.localeCompare(b.subjectName, 'fi');
       });
       setFilteredTeacherSubjects(sortedByName);
     } else {
@@ -96,7 +95,7 @@ const SubjectAdmin = () => {
           const aName = a['subjectName'] as string;
           const bName = b['subjectName'] as string;
 
-          return aName.localeCompare(bName, locale);
+          return aName.localeCompare(bName, 'fi');
         } else {
           // primary sort by active/inactive
           if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
@@ -109,7 +108,7 @@ const SubjectAdmin = () => {
       const aValue = a[sortConfig.key] as string;
       const bValue = b[sortConfig.key] as string;
 
-      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue, locale) : bValue.localeCompare(aValue, locale);
+      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue, 'fi') : bValue.localeCompare(aValue, 'fi');
     });
   }, [filteredSubjects, sortConfig]);
 
