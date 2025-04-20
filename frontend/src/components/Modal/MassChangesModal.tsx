@@ -8,7 +8,7 @@ import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-ap
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { Position } from 'models/Position';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-
+import { isDateRangeActive } from 'utils/isDateRangeActive';
 interface MassChangesModalProps {
   open: boolean;
   handleClose: () => void;
@@ -37,19 +37,6 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
   const { data: costcentres = [], isLoading: costcentresLoading } = useGetCostCentersQuery(
     open ? undefined : skipToken,
   );
-
-  const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
-    const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
-
-    if (validFrom) validFrom.setHours(0, 0, 0, 0);
-    if (validUntil) validUntil.setHours(0, 0, 0, 0);
-
-    return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
-  };
 
   const [updatePosition] = useUpdatePositionMutation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -194,7 +181,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                       label: `${tree.name}`,
                                     }))
                                 : [...costcentres]
-                                    .filter(isCostcentreActive)
+                                    .filter(cc => isDateRangeActive(cc.validFrom, cc.validUntil))
                                     .sort((a, b) => a.number - b.number)
                                     .map((tree) => ({
                                       id: tree.id,
