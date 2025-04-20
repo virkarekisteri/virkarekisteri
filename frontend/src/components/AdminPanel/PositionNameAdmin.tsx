@@ -36,10 +36,11 @@ const PositionNameAdmin = () => {
     key: 'name',
     direction: 'asc'
   });
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchPositionName, setSearchPositionName] = useState('');
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [searchPositionName, setSearchPositionName] = useState<string>('');
   const [showOnlyActive, setShowOnlyActive] = useState<boolean>(false); 
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery();
 
@@ -47,11 +48,22 @@ const PositionNameAdmin = () => {
   const isLoading = positionNamesLoading;
 
   useEffect(() => {
-    setFilteredPositionNames(positionNames);
-  }, [positionNames]);
+    if (positionNames.length > 0) {
+      setFilteredPositionNames(applyDefaultSorting(positionNames));
+    } else {
+      setFilteredPositionNames([]);
+    }
+}, [positionNames]);
+
+  const applyDefaultSorting = (data: PositionName[]) => {
+    return [...data].sort((a, b) => {
+      return a.name.localeCompare(b.name, 'fi');
+    });
+  }
 
 
-  const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  // UI callbacks
 
   const handleOpenCreateModal = () => {
     setCreateModalOpen(true);
@@ -61,54 +73,13 @@ const PositionNameAdmin = () => {
     setCreateModalOpen(false);
   };
 
-
-  const handleSort = (key: keyof PositionName) => {
-    setSortConfig((prevConfig) => {
-      setPage(0);
-      if (!prevConfig || prevConfig.key !== key) {
-        const sortedData = [...filteredPositionNames].sort((a, b) => {
-          const valA = a[key] ?? '';
-          const valB = b[key] ?? '';
-
-          if (key === 'validFrom' || key === 'validUntil') {
-            return (new Date(valA).getTime() || 0) - (new Date(valB).getTime() || 0);
-          }
-
-          return valA < valB ? -1 : valA > valB ? 1 : 0;
-        });
-
-        setFilteredPositionNames(sortedData);
-        return { key, direction: 'asc' };
-      } else if (prevConfig.direction === 'asc') {
-        const sortedData = [...filteredPositionNames].sort((a, b) => {
-          const valA = a[key] ?? '';
-          const valB = b[key] ?? '';
-
-          if (key === 'validFrom' || key === 'validUntil') {
-            return (new Date(valB).getTime() || 0) - (new Date(valA).getTime() || 0);
-          }
-
-          return valA > valB ? -1 : valA < valB ? 1 : 0;
-        });
-
-        setFilteredPositionNames(sortedData);
-        return { key, direction: 'desc' };
-      } else {
-        setFilteredPositionNames(positionNames);
-        return null;
-      }
-    });
+  const handleRowToggle = (subject: PositionName) => {
+    setExpandedRow(expandedRow && expandedRow.id === subject.id ? null : subject);
   };
 
-
-  /* Sorting logic */
-  const sortedPositionNames = React.useMemo(() => {    
-    return filteredPositionNames;
-  }, [filteredPositionNames, sortConfig]);
-
-
-  // Pagination logic
-  const paginatedPositionNames = filteredPositionNames.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const handleCloseDetails = () => {
+    setExpandedRow(null);
+  }
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -119,43 +90,102 @@ const PositionNameAdmin = () => {
     setPage(0);
   };
 
+
+  /* Sorting logic */
+  const handleSort = (key: keyof PositionName) => {
+    setSortConfig((prevConfig) => {
+      setPage(0);
+
+      if (!prevConfig || prevConfig.key !== key) {
+      
+        // New key, sort the data based on the selected key and direction
+        const sortedData = [...filteredPositionNames].sort((a, b) => {
+          const valA = a[key] ?? '';
+          const valB = b[key] ?? '';
+
+          // Sort by date
+          if (key === 'validFrom' || key === 'validUntil') {
+            return (new Date(valA).getTime() || 0) - (new Date(valB).getTime() || 0);
+          }
+
+          // Sort by name
+          return valA.localeCompare(valB, 'fi');
+          //return valA < valB ? -1 : valA > valB ? 1 : 0;
+        });
+
+        setFilteredPositionNames(sortedData);
+        return { key, direction: 'asc' };
+      
+      } else if (prevConfig.direction === 'asc') {
+        // Previous config is the same key and ascending, so sort in descending order
+        const sortedData = [...filteredPositionNames].sort((a, b) => {
+          const valA = a[key] ?? '';
+          const valB = b[key] ?? '';
+
+          // Sort by date
+          if (key === 'validFrom' || key === 'validUntil') {
+            return (new Date(valB).getTime() || 0) - (new Date(valA).getTime() || 0);
+          }
+
+          // Sort by name
+          return valB.localeCompare(valA, 'fi');
+          //return valA > valB ? -1 : valA < valB ? 1 : 0;
+        });
+
+        setFilteredPositionNames(sortedData);
+        return { key, direction: 'desc' };
+      } else {
+      
+        // Default sorting
+        setFilteredPositionNames(applyDefaultSorting(filteredPositionNames));
+        return null;
+      
+      }
+    });
+  };
+
+  // TODO: Remove this and use positionNames instead 
+  const sortedPositionNames = React.useMemo(() => {    
+    return filteredPositionNames;
+  }, [filteredPositionNames, sortConfig]);
+
+
   // Search logic
   const handleSearch = () => {
-    const filtered = positionNames.filter((c) => {
+    const filtered = positionNames.filter((p) => {
       const matchesName = searchPositionName
-        ? c['name'].toLowerCase().includes(searchPositionName.toLowerCase())
+        ? p['name'].toLowerCase().includes(searchPositionName.toLowerCase())
         : true;
 
       const matchesActive =
         !showOnlyActive ||
-        ((c.validFrom
-          ? new Date(new Date(c.validFrom).setHours(0, 0, 0, 0)) <= new Date(new Date().setHours(0, 0, 0, 0))
+        ((p.validFrom
+          ? new Date(new Date(p.validFrom).setHours(0, 0, 0, 0)) <= new Date(new Date().setHours(0, 0, 0, 0))
           : true) &&
-          (c.validUntil
-            ? new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(new Date(c.validUntil).setHours(0, 0, 0, 0))
+          (p.validUntil
+            ? new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(new Date(p.validUntil).setHours(0, 0, 0, 0))
             : true));
 
       return matchesName && matchesActive;
     });
 
-    setFilteredPositionNames(filtered);
+    setFilteredPositionNames(applyDefaultSorting(filtered));
     setPage(0);
   };
 
   const handleSearchReset = () => {
     setSearchPositionName('');
-    setFilteredPositionNames(positionNames);
+    setFilteredPositionNames(applyDefaultSorting(positionNames));
     setShowOnlyActive(false);
     setPage(0);
   };
 
-  const handleRowToggle = (subject: PositionName) => {
-    setExpandedRow(expandedRow && expandedRow.id === subject.id ? null : subject);
-  };
 
-  const handleCloseDetails = () => {
-    setExpandedRow(null);
-  }
+
+  // Pagination logic
+  const paginatedPositionNames = filteredPositionNames.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+
 
   if (isLoading) {
     return (
@@ -168,8 +198,6 @@ const PositionNameAdmin = () => {
   
   return (
     <Box>
-      {/* Search Controls */}
-
       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
         {/* Search Controls */}
         <Box display="flex" flexWrap="wrap" gap={2}>
@@ -181,20 +209,6 @@ const PositionNameAdmin = () => {
               onChange={(e) => setSearchPositionName(e.target.value)}
               sx={{ minWidth: '300px' }}
             />
-
-
-
-          {/* Search and clear buttons */}
-          <Box display="flex" gap={2} flexWrap="wrap">
-            <Button variant="contained" onClick={handleSearch}>
-              {t('search_filter.search')}
-            </Button>
-
-            <Button variant="outlined" onClick={handleSearchReset}>
-              {t('search_filter.reset')}
-            </Button>
-          </Box>
-        </Box>
 
             {/* Search only active */}
             <FormControlLabel
@@ -208,6 +222,20 @@ const PositionNameAdmin = () => {
               label={t('admin_panel.position_name.show_only_active')}
               sx={{ minWidth: '250px' }}
             />
+
+          {/* Search and clear buttons */}
+          <Box display="flex" gap={2} flexWrap="wrap">
+            <Button variant="contained" onClick={handleSearch}>
+              {t('search_filter.search')}
+            </Button>
+
+            <Button variant="outlined" onClick={handleSearchReset}>
+              {t('search_filter.reset')}
+            </Button>
+          </Box>
+        </Box>
+
+
           </Box>
 
         <RequiresEditRole>
