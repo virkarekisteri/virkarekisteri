@@ -8,7 +8,7 @@ import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-ap
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { Position } from 'models/Position';
 import { useUpdatePositionMutation } from 'redux/api-slices/functions/positions-api';
-
+import { isDateRangeActive } from 'utils/isDateRangeActive';
 interface MassChangesModalProps {
   open: boolean;
   handleClose: () => void;
@@ -65,6 +65,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           details: position.details,
           type: position.type,
           decisionNumber: values.decisionNumber,
+          isTeacher: position.isTeacher,
         };
 
         // Override the specific field with the new value
@@ -173,14 +174,20 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                             {...input}
                             options={
                               selectedOption === 'positionNameId'
-                                ? positionNames.map((tree) => ({
-                                    id: tree.id,
-                                    label: `${tree.name}`,
-                                  }))
-                                : costcentres.map((tree) => ({
-                                    id: tree.id,
-                                    label: `${tree.number} ${tree.name}`,
-                                  }))
+                                ? [...positionNames]
+                                    .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                                    .sort((a, b) => a.name.localeCompare(b.name, 'fi'))
+                                    .map((tree) => ({
+                                      id: tree.id,
+                                      label: `${tree.name}`,
+                                    }))
+                                : [...costcentres]
+                                    .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
+                                    .sort((a, b) => a.number - b.number)
+                                    .map((tree) => ({
+                                      id: tree.id,
+                                      label: `${tree.number} ${tree.name}`,
+                                    }))
                             }
                             getOptionLabel={(option) => (typeof option === 'string' ? option : option.label || '')}
                             loading={selectedOption === 'positionNameId' ? positionNamesLoading : costcentresLoading}

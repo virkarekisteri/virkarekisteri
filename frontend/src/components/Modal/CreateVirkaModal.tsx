@@ -37,6 +37,7 @@ import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
+import { isDateRangeActive } from 'utils/isDateRangeActive';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -188,7 +189,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Field name="positionNameId">
                       {({ input }) => (
                         <Autocomplete
-                          options={positionNames}
+                          options={[...positionNames]
+                            .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                            .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option.name}
                           value={input.value || null}
@@ -297,7 +300,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={costcentres}
+                          options={[...costcentres]
+                            .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
+                            .sort((a, b) => a.number - b.number)}
                           loading={costcentresLoading}
                           getOptionLabel={(option) =>
                             option

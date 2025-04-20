@@ -23,6 +23,7 @@ import { RequiresEditRole } from 'components/role-guards';
 import CostcentreDetails from 'components/Details/CostcentreDetails';
 import { format } from 'date-fns';
 import CreateCostcentreModal from 'components/Modal/CreateCostcentreModal';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 
 const CostcentreAdmin = () => {
   const { t } = useTranslation();
@@ -41,8 +42,20 @@ const CostcentreAdmin = () => {
   const isLoading = costcentresLoading;
 
   useEffect(() => {
-    setFilteredCostcentres(costcentres);
+    if (costcentres.length > 0) {
+      setFilteredCostcentres(applyDefaultSorting(costcentres));
+    } else {
+      setFilteredCostcentres([]);
+    }
   }, [costcentres]);
+
+  const applyDefaultSorting = (data: Costcentre[]) => {
+    return [...data].sort((a, b) => {
+      const numA = a.number ?? '';
+      const numB = b.number ?? '';
+      return numA < numB ? -1 : numA > numB ? 1 : 0;
+    });
+  };
 
   const paginatedCostcentres = filteredCostcentres.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -86,14 +99,14 @@ const CostcentreAdmin = () => {
       return matchesName && matchesActive;
     });
 
-    setFilteredCostcentres(filtered);
+    setFilteredCostcentres(applyDefaultSorting(filtered));
     setPage(0);
   };
 
   const handleSearchReset = () => {
     setSearchCostcentreName('');
     setSearchActive(false);
-    setFilteredCostcentres(costcentres);
+    setFilteredCostcentres(applyDefaultSorting(costcentres));
     setPage(0);
   };
 
@@ -129,7 +142,7 @@ const CostcentreAdmin = () => {
         setFilteredCostcentres(sortedData);
         return { key, direction: 'desc' };
       } else {
-        setFilteredCostcentres(costcentres);
+        setFilteredCostcentres(applyDefaultSorting(filteredCostcentres));
         return null;
       }
     });
@@ -297,7 +310,9 @@ const CostcentreAdmin = () => {
                   onClick={() => handleRowToggle(row)}
                 >
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.number}</TableCell>
-                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
+                  <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
+                    {checkCostCentreActiveStatus(row, t('create_position.not_active_suffix'))}
+                  </TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     {row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}
                   </TableCell>

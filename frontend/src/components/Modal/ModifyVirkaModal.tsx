@@ -31,6 +31,7 @@ import { useGetCostCentersQuery } from 'redux/api-slices/functions/costcentre-ap
 import { useEffect, useState } from 'react';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { isDateRangeActive } from 'utils/isDateRangeActive';
 
 interface ModifyVirkaModalProps {
   open: boolean;
@@ -251,7 +252,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
-                            options={positionNames}
+                            options={[...positionNames]
+                              .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                              .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                             getOptionLabel={(option) => `${option.name}`}
                             value={positionNames.find((item) => item.id === input.value) || null}
                             onChange={(_event, value) => {
@@ -287,7 +290,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                     <Field name="costcentre">
                       {({ input }) => (
                         <Autocomplete
-                          options={costcentres}
+                          options={[...costcentres]
+                            .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
+                            .sort((a, b) => a.number - b.number)}
                           getOptionLabel={(option) =>
                             `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`
                           }
