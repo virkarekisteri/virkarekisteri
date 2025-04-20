@@ -37,6 +37,7 @@ import { useCreatePositionMutation } from 'redux/api-slices/functions/positions-
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
+import { isDateRangeActive } from 'utils/isDateRangeActive';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -103,16 +104,6 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
       return t('error.vacancy_size_error');
     }
     return undefined;
-  };
-
-  const isCostcentreActive = (costCentre: { validFrom?: string; validUntil?: string }): boolean => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const validFrom = costCentre.validFrom ? new Date(costCentre.validFrom) : null;
-    const validUntil = costCentre.validUntil ? new Date(costCentre.validUntil) : null;
-
-    return (!validFrom || validFrom <= today) && (!validUntil || validUntil >= today);
   };
 
   useEffect(() => {
@@ -198,7 +189,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Field name="positionNameId">
                       {({ input }) => (
                         <Autocomplete
-                          options={[...positionNames].sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
+                          options={[...positionNames]
+                            .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                            .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option.name}
                           value={input.value || null}
@@ -307,7 +300,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                       {({ input }) => (
                         <Autocomplete
                           {...input}
-                          options={[...costcentres].filter(isCostcentreActive).sort((a, b) => a.number - b.number)}
+                          options={[...costcentres]
+                            .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
+                            .sort((a, b) => a.number - b.number)}
                           loading={costcentresLoading}
                           getOptionLabel={(option) =>
                             option
