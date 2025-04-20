@@ -31,6 +31,8 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
     setEditModalOpen(false);
   };
 
+  // Callback for when the edit modal is submitted
+  // Closes the modal and calls the doneEditingCallback function to close the detail view
   const handleSubmitEditModal = () => {
     setEditModalOpen(false);
     doneEditingCallback();
@@ -82,7 +84,6 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
       {
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'right' }}>
           <RequiresEditRole>
-
             <Button
               variant="contained"
               onClick={handleOpenEditModal}
@@ -134,7 +135,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             textTransform: 'none',
           }}
         >
-          {t('admin_panel.teacher_subjects.details')}
+          {t('admin_panel.position_name.details')}
         </Typography>
       </Box>
 
@@ -142,7 +143,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
         <Grid2 container spacing={2} size={16}>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('admin_panel.teacher_subjects.name')}
+              {t('admin_panel.position_name.name')}
             </Typography>
             <RenderReadonlyTextField value={positionName.name} />
           </Grid2>
@@ -150,7 +151,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
           {/* Position name timeframe */}
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
-              {t('admin_panel.costcentre.time_frame')}
+              {t('admin_panel.position_name.time_frame')}
             </Typography>
             <RenderReadonlyTextField
               value={
@@ -164,11 +165,10 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
               }
             />
           </Grid2>
-
         </Grid2>
 
 
-        <Accordion sx={{ mt: 2, mb: 0 }}>
+      <Accordion sx={{ mt: 2, mb: 0 }}>
         <AccordionSummary
         expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
         aria-controls="panel1a-content"
@@ -259,12 +259,12 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
                 <RenderReadonlyTextField value={t('change_logs.no_logs_found')} />
               )}
             </Grid2>
-            </AccordionDetails>
+          </AccordionDetails>
 
-            </Accordion>
-            </Box>
+        </Accordion>
+      </Box>
 
-            
+    {/* Edit Position Name Modal */}
     <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} submitCallback={handleSubmitEditModal} positionName={positionName} allPositionNames={allPositionNames}/>
   </Box>
 );

@@ -1,20 +1,11 @@
 import React from 'react';
 import {
   Box,
-  Checkbox,
-  FormGroup,
   TextField,
   Button,
   Grid2,
   IconButton,
   Typography,
-  InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Autocomplete,
-  FormControlLabel,
 } from '@mui/material';
 
 import RenderReadonlyTextField from '../Details/RenderReadonlyTextField';
@@ -27,7 +18,6 @@ import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName'
 import { useUpdatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 import { useCreatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
-import { format } from 'date-fns';
 
 interface EditPositionNameModalProps {
   open: boolean;
@@ -42,8 +32,6 @@ interface FormValues {
   validFrom?: string;
   validUntil?: string;
 }
-
-
 
 const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ 
   open, 
@@ -103,7 +91,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
       const validFromDate = new Date(allValues.validFrom);
       const validUntilDate = new Date(value);
       if (validUntilDate <= validFromDate) {
-        return t('admin_panel.costcentre.validation.invalid_date');
+        return t('admin_panel.position_name.validation.invalid_date');
       }
     }
     return undefined;
@@ -181,7 +169,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{isCreateDialog ? t('admin_panel.teacher_subjects.create_subject') : t('admin_panel.teacher_subjects.edit_subject')}</Typography>
+          <Typography variant="h6">{isCreateDialog ? t('admin_panel.position_name.create_new') : t('admin_panel.position_name.edit')}</Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -199,10 +187,10 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
                   {/* Subtitle */}
                   <Box sx={{ px: 2, mt: 2 }}>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#223b7c' }}>
-                      {t('admin_panel.teacher_subjects.details')}
+                      {t('admin_panel.position_name.details')}
                     </Typography>
                   </Box>
-                  { isCreateDialog || <RenderReadonlyTextField value={ t('admin_panel.teacher_subjects.editwarning')} /> }
+                  { isCreateDialog || <RenderReadonlyTextField value={ t('admin_panel.position_name.edit_warning')} /> }
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="name" validate={validatePositionName}>
@@ -215,7 +203,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
                           fullWidth
                           margin="normal"
                           placeholder={initialValues.name}
-                          label={t('admin_panel.teacher_subjects.name')}
+                          label={t('admin_panel.position_name.name')}
                           error={meta.error && meta.touched}
                           helperText={meta.touched && meta.error}
                           

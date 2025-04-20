@@ -7,10 +7,8 @@ import {
   TableHead,
   TableRow,
   Box,
-  IconButton,
   CircularProgress,
   alpha,
-  Typography,
   TablePagination,
   TextField,
   Button,
@@ -18,19 +16,16 @@ import {
   Checkbox,
   FormControlLabel
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 import { useTranslation } from 'react-i18next';
-//import type { TeacherSubject } from 'models/TeacherSubject';
+
 import type { PositionName } from 'models/PositionName';
-//import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
+
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole, RequiresAdminRole } from 'components/role-guards';
 import EditPositionNameModal from '../Modal/EditPositionNameModal'
 import { format } from 'date-fns';
-
-import ActivityLight from 'components/Components/ActivityLight';
 
 const PositionNameAdmin = () => {
   const { t } = useTranslation();
@@ -66,9 +61,6 @@ const PositionNameAdmin = () => {
     setCreateModalOpen(false);
   };
 
-  const handleToggleOnlyActiveSubjects = () => {
-    setShowOnlyActive(!showOnlyActive);
-  }
 
   const handleSort = (key: keyof PositionName) => {
     setSortConfig((prevConfig) => {
@@ -108,52 +100,10 @@ const PositionNameAdmin = () => {
     });
   };
 
-/*   const handleSort = (key: keyof PositionName) => {
-    setSortConfig((prevConfig) => {
-      if (prevConfig && prevConfig.key === key) {
-        return { key, direction: prevConfig.direction === 'asc' ? 'desc' : 'asc' };
-      }
-      return { key, direction: 'asc' };
-    });
-  }; */
 
   /* Sorting logic */
-  const sortedPositionNames = React.useMemo(() => {
-    
+  const sortedPositionNames = React.useMemo(() => {    
     return filteredPositionNames;
-    /* 
-    if (!sortConfig) return filteredSubjects;
-
-    
-    // sorting by active/inactive
-    if (sortConfig.key == 'active') {
-      return [...filteredSubjects].sort((a, b) => {
-        const aActive = a[sortConfig.key] as boolean;
-        const bActive = b[sortConfig.key] as boolean;
-
-        if (aActive === bActive) {
-          // secondary sort by name, ascending
-          const aName = a['subjecName'] as string;
-          const bName = b['subjectName'] as string;
-
-          return aName.localeCompare(bName);
-
-        } else {
-          // primary sort by active/inactive
-          if (sortConfig.direction == 'asc') return aActive ? 1 : -1;
-          else return aActive ? -1 : 1;
-        }
-
-      })
-    }
-
-    return [...filteredSubjects].sort((a, b) => {
-      const aValue = a[sortConfig.key] as string;
-      const bValue = b[sortConfig.key] as string;
-
-      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-    });
-    */
   }, [filteredPositionNames, sortConfig]);
 
 
@@ -219,53 +169,6 @@ const PositionNameAdmin = () => {
   return (
     <Box>
       {/* Search Controls */}
-
-{/*       <Box display="flex" gap={2} mb={2}>
-        <TextField
-          label={t('admin_panel.search.bySubjectName')}
-          value={searchSubjectName}
-          onChange={(e) => setSearchSubjectName(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleSearch}>
-          {t('search_filter.search')}
-        </Button>
-        <Button variant="outlined" onClick={handleResetSearch}>
-          {t('search_filter.reset')}
-        </Button>
-        <FormControlLabel sx={{whiteSpace: 'nowrap'}} control={<Checkbox checked={Boolean(showOnlyActiveSubjects)} onChange={() => handleToggleOnlyActiveSubjects()} />} label={t('admin_panel.teacher_subjects.show_only_active')}/>
-        <RequiresEditRole>
-          <Box display="flex" justifyContent="right" width="100%" alignItems="center">
-            <Button
-              variant="contained"
-              onClick={handleOpenCreateModal}
-              sx={{
-                backgroundColor: '#223B7C',
-                color: 'white',
-                fontSize: '1.0rem',
-                padding: '20px',
-                height: '40px',
-                display: 'flex',
-                borderRadius: '25px 8px 8px 25px',
-                fontWeight: 'bold',
-                textTransform: 'none',
-              }}
-              startIcon={
-                <Box
-                  component="span"
-                  sx={{
-                    marginRight: '8px',
-                  }}
-                >
-                  +
-                </Box>
-              }
-            >
-              {t('admin_panel.position_name.create_position')}
-            </Button>
-          </Box>
-        </RequiresEditRole>
-
-      </Box> */}
 
       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
         {/* Search Controls */}

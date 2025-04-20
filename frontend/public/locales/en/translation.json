@@ -257,7 +257,8 @@
       }
     },
     "position_name": {
-      "name": "Name", 
+      "name": "Name",
+      "time_frame": "Time frame",
       "valid_from": "Valid from",
       "valid_until": "Valid until",
       "create_new": "Create new position name",

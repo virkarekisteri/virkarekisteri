@@ -258,6 +258,7 @@
     },
     "position_name": {
       "name": "Nimi", 
+      "time_frame": "Aikaväli",
       "valid_from": "Voimassa alkaen",
       "valid_until": "Voimassa päättyen",
       "create_new": "Luo uusi virkanimike",
