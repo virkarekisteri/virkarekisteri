@@ -203,6 +203,10 @@ const PositionNameAdmin = () => {
     setExpandedRow(expandedRow && expandedRow.id === subject.id ? null : subject);
   };
 
+  const handleCloseDetails = () => {
+    setExpandedRow(null);
+  }
+
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -360,7 +364,7 @@ const PositionNameAdmin = () => {
                 </Box>
               </TableCell>
 
-              {/* Costcentre valid from */}
+              {/* Position name valid from */}
               <TableCell
                 sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px' }}
                 onClick={() => handleSort('validFrom')}
@@ -373,7 +377,7 @@ const PositionNameAdmin = () => {
                 </Box>
               </TableCell>
 
-              {/* Costcentre valid until */}
+              {/* Position name valid until */}
               <TableCell
                 sx={{ width: '20%', color: 'white', fontSize: '1.2rem', cursor: 'pointer', padding: '8px 16px' }}
                 onClick={() => handleSort('validUntil')}
@@ -431,13 +435,22 @@ const PositionNameAdmin = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <PositionNameDetails positionName={expandedRow} allPositionNames={sortedPositionNames}/> : null
+            expandedRow ? <PositionNameDetails positionName={expandedRow} doneEditingCallback={handleCloseDetails} allPositionNames={sortedPositionNames}/> : null
           }
           </Grid2>
         </Grid2>
-        <EditPositionNameModal open={createModalOpen} handleClose={handleCloseCreateModal} positionName={undefined} allPositionNames={sortedPositionNames}/>
-        {/* 
- */}
+
+      {/* Create Position Name Modal */}
+        <EditPositionNameModal 
+          open={createModalOpen} 
+          handleClose={handleCloseCreateModal} 
+          positionName={undefined} 
+          allPositionNames={sortedPositionNames}
+          submitCallback={() => {
+            handleCloseDetails();
+            handleCloseCreateModal();
+          }} 
+          />
     </Box>
   );
 };

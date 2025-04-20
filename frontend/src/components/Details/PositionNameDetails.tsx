@@ -14,9 +14,10 @@ import { format, parse, isValid } from 'date-fns';
 interface PositionNameDetailsProps {
   positionName: PositionName;
   allPositionNames: PositionName[];
+  doneEditingCallback: () => void;
 }
 
-const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName, allPositionNames }) => {
+const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName, allPositionNames, doneEditingCallback }) => {
   const { t } = useTranslation();
 
 
@@ -28,6 +29,11 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
+  };
+
+  const handleSubmitEditModal = () => {
+    setEditModalOpen(false);
+    doneEditingCallback();
   };
 
   // Formats the changelog entries if needed
@@ -259,7 +265,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             </Box>
 
             
-    <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} positionName={positionName} allPositionNames={allPositionNames}/>
+    <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} submitCallback={handleSubmitEditModal} positionName={positionName} allPositionNames={allPositionNames}/>
   </Box>
 );
 };

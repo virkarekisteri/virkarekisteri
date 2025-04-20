@@ -27,10 +27,12 @@ import { useTranslation } from 'react-i18next';
 import type { PositionName } from 'models/PositionName'
 import { useUpdatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 import { useCreatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
+import { format } from 'date-fns';
 
 interface EditPositionNameModalProps {
   open: boolean;
   handleClose: () => void;
+  submitCallback: () => void;
   positionName: PositionName | undefined;
   allPositionNames: PositionName[];
 }
@@ -43,24 +45,40 @@ interface FormValues {
 
 
 
-const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, handleClose, positionName, allPositionNames }) => {
+const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ 
+  open, 
+  handleClose, 
+  submitCallback, 
+  positionName, 
+  allPositionNames 
+}) => {
 
   const isCreateDialog: boolean = positionName === undefined ? true : false;
 
   const { t } = useTranslation();
-
   
   const [ updateSubject ] = useUpdatePositionNameMutation();
   const [ createSubject ] = useCreatePositionNameMutation();
 
+  // Formats the date for the input field
+  const formatDateForInput = (dateString?: string): string => {
+    if (!dateString) return '';
 
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
 
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
 
   const initialValues: Partial<PositionName> = positionName !== undefined ? 
   {
     name: positionName.name,
-    validFrom: positionName.validFrom,
-    validUntil: positionName.validUntil
+    validFrom: formatDateForInput(positionName.validFrom),
+    validUntil: formatDateForInput(positionName.validUntil)
   } 
   :
   {
@@ -104,7 +122,8 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
         };
         console.log("Creating new position name!")
         createSubject(subjectData)
-        handleClose();
+        submitCallback();
+        //handleClose();
         return;
       } catch (error) {
         console.error('Failed to create position name:', error);
@@ -120,7 +139,8 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
       };
       console.log(updateData)
       updateSubject({ id: positionName.id, data: updateData });
-      handleClose();
+      submitCallback();
+      //handleClose();
     } catch (error) {
       console.error('Failed to update position name:', error);
     }
@@ -182,7 +202,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ open, han
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  <RenderReadonlyTextField value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')} />
+                  { isCreateDialog || <RenderReadonlyTextField value={ t('admin_panel.teacher_subjects.editwarning')} /> }
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="name" validate={validatePositionName}>
