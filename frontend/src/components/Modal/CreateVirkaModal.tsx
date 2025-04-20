@@ -301,7 +301,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                         <Autocomplete
                           {...input}
                           options={[...costcentres]
-                            .filter(cc => isDateRangeActive(cc.validFrom, cc.validUntil))
+                            .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
                             .sort((a, b) => a.number - b.number)}
                           loading={costcentresLoading}
                           getOptionLabel={(option) =>

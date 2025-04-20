@@ -182,7 +182,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                                       label: `${tree.name}`,
                                     }))
                                 : [...costcentres]
-                                    .filter(cc => isDateRangeActive(cc.validFrom, cc.validUntil))
+                                    .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
                                     .sort((a, b) => a.number - b.number)
                                     .map((tree) => ({
                                       id: tree.id,

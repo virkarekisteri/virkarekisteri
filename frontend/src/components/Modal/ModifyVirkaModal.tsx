@@ -291,7 +291,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       {({ input }) => (
                         <Autocomplete
                           options={[...costcentres]
-                            .filter(cc => isDateRangeActive(cc.validFrom, cc.validUntil))
+                            .filter((cc) => isDateRangeActive(cc.validFrom, cc.validUntil))
                             .sort((a, b) => a.number - b.number)}
                           getOptionLabel={(option) =>
                             `${option.number} ${checkCostCentreActiveStatus(option, t('edit_position.not_active_suffix'))}`
