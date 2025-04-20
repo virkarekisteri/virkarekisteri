@@ -175,6 +175,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
                             options={
                               selectedOption === 'positionNameId'
                                 ? [...positionNames]
+                                    .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
                                     .sort((a, b) => a.name.localeCompare(b.name, 'fi'))
                                     .map((tree) => ({
                                       id: tree.id,

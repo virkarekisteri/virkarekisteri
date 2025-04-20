@@ -252,7 +252,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                       <Field name="positionName">
                         {({ input }) => (
                           <Autocomplete
-                            options={[...positionNames].sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
+                            options={[...positionNames]
+                              .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                              .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                             getOptionLabel={(option) => `${option.name}`}
                             value={positionNames.find((item) => item.id === input.value) || null}
                             onChange={(_event, value) => {

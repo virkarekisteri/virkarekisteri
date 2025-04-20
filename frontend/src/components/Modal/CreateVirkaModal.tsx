@@ -189,7 +189,9 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                     <Field name="positionNameId">
                       {({ input }) => (
                         <Autocomplete
-                          options={[...positionNames].sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
+                          options={[...positionNames]
+                            .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
+                            .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
                           loading={positionNamesLoading}
                           getOptionLabel={(option) => option.name}
                           value={input.value || null}
