@@ -67,8 +67,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
           validUntil: '',
         };
 
-   
-  const validatePositionName = (value: string, /* allValues: Record<string, any> */) => {
+  const validatePositionName = (value: string /* allValues: Record<string, any> */) => {
     if (
       value &&
       allPositionNames.some((posName) => {
