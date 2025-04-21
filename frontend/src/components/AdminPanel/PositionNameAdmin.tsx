@@ -24,7 +24,7 @@ import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole } from 'components/role-guards';
-import EditPositionNameModal from '../Modal/EditPositionNameModal';
+import EditPositionNameModal from 'components/Modal/EditPositionNameModal';
 import { format } from 'date-fns';
 
 const PositionNameAdmin = () => {

@@ -67,7 +67,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
           validUntil: '',
         };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const validatePositionName = (value: string, /* allValues: Record<string, any> */) => {
     if (
       value &&
