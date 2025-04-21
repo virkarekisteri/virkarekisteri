@@ -65,8 +65,8 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
   };
 
   const onSubmit = async (values: FormValues) => {
-    if ( isCreateDialog ) {
-    //if (!position || !position.id) {
+    if (isCreateDialog) {
+      //if (!position || !position.id) {
       // Create new subject
       try {
         const subjectData: Partial<TeacherSubject> = {
@@ -150,7 +150,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  { isCreateDialog || <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.editwarning')} /> }
+                  {isCreateDialog || <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.editwarning')} />}
 
                   {/* Name */}
                   <Grid2 size={12}>

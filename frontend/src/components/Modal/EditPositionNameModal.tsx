@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  TextField,
-  Button,
-  Grid2,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import { Box, TextField, Button, Grid2, IconButton, Typography } from '@mui/material';
 
 import RenderReadonlyTextField from 'components/Details/RenderReadonlyTextField';
 
@@ -15,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Form, Field } from 'react-final-form';
 import { useTranslation } from 'react-i18next';
 
-import type { PositionName } from 'models/PositionName'
+import type { PositionName } from 'models/PositionName';
 import { useUpdatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 import { useCreatePositionNameMutation } from 'redux/api-slices/functions/position-names-api';
 
@@ -33,20 +26,19 @@ interface FormValues {
   validUntil?: string;
 }
 
-const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({ 
-  open, 
-  handleClose, 
-  submitCallback, 
-  positionName, 
-  allPositionNames 
+const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
+  open,
+  handleClose,
+  submitCallback,
+  positionName,
+  allPositionNames,
 }) => {
-
   const isCreateDialog: boolean = positionName === undefined ? true : false;
 
   const { t } = useTranslation();
-  
-  const [ updateSubject ] = useUpdatePositionNameMutation();
-  const [ createSubject ] = useCreatePositionNameMutation();
+
+  const [updateSubject] = useUpdatePositionNameMutation();
+  const [createSubject] = useCreatePositionNameMutation();
 
   // Formats the date for the input field
   const formatDateForInput = (dateString?: string): string => {
@@ -62,24 +54,27 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
     return `${year}-${month}-${day}`;
   };
 
-  const initialValues: Partial<PositionName> = positionName !== undefined ? 
-  {
-    name: positionName.name,
-    validFrom: formatDateForInput(positionName.validFrom),
-    validUntil: formatDateForInput(positionName.validUntil)
-  } 
-  :
-  {
-    name: "", 
-    validFrom: "",
-    validUntil: ""
-  };
+  const initialValues: Partial<PositionName> =
+    positionName !== undefined
+      ? {
+          name: positionName.name,
+          validFrom: formatDateForInput(positionName.validFrom),
+          validUntil: formatDateForInput(positionName.validUntil),
+        }
+      : {
+          name: '',
+          validFrom: '',
+          validUntil: '',
+        };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validatePositionName = (value: string, allValues: Record<string, any>) => {
-    if (value && allPositionNames.some(
-        (posName) => {return (posName.name === value.toLowerCase() && (isCreateDialog || (positionName && value != positionName.name)))}
-      ))
+    if (
+      value &&
+      allPositionNames.some((posName) => {
+        return posName.name === value.toLowerCase() && (isCreateDialog || (positionName && value != positionName.name));
+      })
+    )
       return t('admin_panel.position_name.validation.duplicate_name');
 
     return undefined;
@@ -102,40 +97,36 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
     if (!positionName || !positionName.id) {
       // create new position name
       try {
-
         const subjectData: Partial<PositionName> = {
           name: values.name.toLowerCase(),
           validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
           validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
         };
-        console.log("Creating new position name!")
-        createSubject(subjectData)
+        console.log('Creating new position name!');
+        createSubject(subjectData);
         submitCallback();
         //handleClose();
         return;
       } catch (error) {
         console.error('Failed to create position name:', error);
-    }
-  }
-  else {
-    // edit existing position name
-    try {
-      const updateData = {
-        name: values.name.toLowerCase(),
-        validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
-        validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
-      };
-      console.log(updateData)
-      updateSubject({ id: positionName.id, data: updateData });
-      submitCallback();
-      //handleClose();
-    } catch (error) {
-      console.error('Failed to update position name:', error);
+      }
+    } else {
+      // edit existing position name
+      try {
+        const updateData = {
+          name: values.name.toLowerCase(),
+          validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
+          validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
+        };
+        console.log(updateData);
+        updateSubject({ id: positionName.id, data: updateData });
+        submitCallback();
+        //handleClose();
+      } catch (error) {
+        console.error('Failed to update position name:', error);
+      }
     }
   };
-}
-
-
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -169,7 +160,9 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
             borderTopRightRadius: 1,
           }}
         >
-          <Typography variant="h6">{isCreateDialog ? t('admin_panel.position_name.create_new') : t('admin_panel.position_name.edit')}</Typography>
+          <Typography variant="h6">
+            {isCreateDialog ? t('admin_panel.position_name.create_new') : t('admin_panel.position_name.edit')}
+          </Typography>
           <IconButton onClick={handleClose} sx={{ color: 'white' }}>
             <CloseIcon />
           </IconButton>
@@ -179,7 +172,6 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
         <Box sx={{ p: 4, pt: 0 }}>
           <Form
             onSubmit={onSubmit}
-            
             initialValues={initialValues}
             render={({ handleSubmit, submitting, pristine, hasValidationErrors }) => (
               <form onSubmit={handleSubmit}>
@@ -190,73 +182,70 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
                       {t('admin_panel.position_name.details')}
                     </Typography>
                   </Box>
-                  { isCreateDialog || <RenderReadonlyTextField value={ t('admin_panel.position_name.edit_warning')} /> }
+                  {isCreateDialog || <RenderReadonlyTextField value={t('admin_panel.position_name.edit_warning')} />}
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="name" validate={validatePositionName}>
                       {({ input, meta }) => {
-                        
                         //console.log(input)
                         return (
                           <TextField
-                          {...input}
-                          fullWidth
-                          margin="normal"
-                          placeholder={initialValues.name}
-                          label={t('admin_panel.position_name.name')}
-                          error={meta.error && meta.touched}
-                          helperText={meta.touched && meta.error}
-                          
-                          slotProps={{
-                            inputLabel: {
-                              shrink: true,
-                            },
-                          }}
+                            {...input}
+                            fullWidth
+                            margin="normal"
+                            placeholder={initialValues.name}
+                            label={t('admin_panel.position_name.name')}
+                            error={meta.error && meta.touched}
+                            helperText={meta.touched && meta.error}
+                            slotProps={{
+                              inputLabel: {
+                                shrink: true,
+                              },
+                            }}
                           />
-                        )}
-                      }
+                        );
+                      }}
                     </Field>
                   </Grid2>
                 </Grid2>
 
-                    {/* Valid from */}
-                    <Grid2 size={2} sx={{ display: 'flex', gap: 2 }}>
-                      <Field name="validFrom">
-                        {({ input, meta }) => (
-                          <TextField
-                            {...input}
-                            margin="normal"
-                            label={t('admin_panel.position_name.valid_from')}
-                            type="date"
-                            slotProps={{ inputLabel: { shrink: true } }}
-                            sx={{ width: '360px' }}
-                            error={meta.error && meta.touched}
-                            helperText={meta.touched && meta.error}
-                          />
-                        )}
-                      </Field>
+                {/* Valid from */}
+                <Grid2 size={2} sx={{ display: 'flex', gap: 2 }}>
+                  <Field name="validFrom">
+                    {({ input, meta }) => (
+                      <TextField
+                        {...input}
+                        margin="normal"
+                        label={t('admin_panel.position_name.valid_from')}
+                        type="date"
+                        slotProps={{ inputLabel: { shrink: true } }}
+                        sx={{ width: '360px' }}
+                        error={meta.error && meta.touched}
+                        helperText={meta.touched && meta.error}
+                      />
+                    )}
+                  </Field>
 
+                  {/* Valid until */}
 
-                    {/* Valid until */}
-
-                      <Field
-                        name="validUntil"
-                        validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}
-                      >
-                        {({ input, meta }) => (
-                          <TextField
-                            {...input}
-                            margin="normal"
-                            label={t('admin_panel.position_name.valid_until')}
-                            type="date"
-                            slotProps={{ inputLabel: { shrink: true } }}
-                            sx={{ width: '360px' }}
-                            error={meta.error && meta.touched}
-                            helperText={meta.touched && meta.error}
-                          />
-                        )}
-                      </Field>
-                    </Grid2>
+                  <Field
+                    name="validUntil"
+                    validate={(value, allValues) => validateValidUntil(value, allValues as FormValues)}
+                  >
+                    {({ input, meta }) => (
+                      <TextField
+                        {...input}
+                        margin="normal"
+                        label={t('admin_panel.position_name.valid_until')}
+                        type="date"
+                        slotProps={{ inputLabel: { shrink: true } }}
+                        sx={{ width: '360px' }}
+                        error={meta.error && meta.touched}
+                        helperText={meta.touched && meta.error}
+                      />
+                    )}
+                  </Field>
+                </Grid2>
 
                 {/* Buttons */}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>

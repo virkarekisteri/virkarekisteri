@@ -19,7 +19,10 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
         method: 'PUT',
         body: subject,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'TeacherSubjects', id }, { type: 'AdminChangeLogs', id }],
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'TeacherSubjects', id },
+        { type: 'AdminChangeLogs', id },
+      ],
     }),
     createTeacherSubject: build.mutation<TeacherSubject, Partial<TeacherSubject>>({
       query: (subject) => ({
@@ -27,7 +30,7 @@ const TeacherSubjectsApi = baseApi.injectEndpoints({
         method: 'POST',
         body: subject,
       }),
-      invalidatesTags: [{ type: 'TeacherSubjects', id: 'LIST' } ],
+      invalidatesTags: [{ type: 'TeacherSubjects', id: 'LIST' }],
     }),
   }),
 });
