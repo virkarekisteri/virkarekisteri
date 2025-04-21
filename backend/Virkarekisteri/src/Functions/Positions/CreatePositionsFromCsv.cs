@@ -118,14 +118,27 @@ public class CreatePositionsFromCsv(
                     }
                     position.CostcentreId = costcentre.Id;
 
-                    var positionName = values[1];
-                    position.PositionNameId = (
-                        await positionNameRepository.GetPositionNameIdByName(positionName)
-                    ).GetValueOrDefault();
-                    if (position.PositionNameId == Guid.Empty)
+                    // Handle position name from CSV
+                    var positionNameName = values[1];
+                    var positionNameId = await positionNameRepository.GetPositionNameIdByName(positionNameName);
+                    if (positionNameId == Guid.Empty || !positionNameId.HasValue)
                     {
-                        throw new Exception($"Virheellinen viran nimi '{positionName}'.");
+                        throw new Exception(
+                            $"Virheellinen virkanimike '{positionNameName}'. Lisää virkanimike järjestelmään tai käytä löytyvää virkanimikettä."
+                        );
                     }
+
+                    var positionName = await positionNameRepository.GetPositionNameById(positionNameId.Value);
+                    if (
+                        (positionName.ValidFrom.HasValue && positionName.ValidFrom.Value > now)
+                        || (positionName.ValidUntil.HasValue && positionName.ValidUntil.Value < now)
+                    )
+                    {
+                        throw new Exception(
+                            $"Virkanimike '{positionNameName}' ei ole voimassa tällä hetkellä. Tarkista voimassaolotiedot."
+                        );
+                    }
+                    position.PositionNameId = positionName.Id;
 
                     position.EndedAt = string.IsNullOrWhiteSpace(values[5])
                         ? (DateTime?)null
