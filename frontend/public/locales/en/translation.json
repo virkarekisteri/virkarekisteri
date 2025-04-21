@@ -273,8 +273,8 @@
         "required": "Field is required",
         "duplicate_name": "Position name already exists",
         "invalid_date": "Invalid time period"
-      } 
-    },  
+      }
+    },
     "change_logs": {
       "edited_field": "Edited field",
       "old_value": "Old value",

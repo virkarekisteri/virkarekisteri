@@ -15,13 +15,16 @@ const PositionNamesApi = baseApi.injectEndpoints({
       query: (id) => `/positionnames/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'PositionNames', id }],
     }),
-    updatePositionName: build.mutation<PositionName, { id: string, data: Partial<PositionName> }>({
-      query: ({id, data}) => ({
+    updatePositionName: build.mutation<PositionName, { id: string; data: Partial<PositionName> }>({
+      query: ({ id, data }) => ({
         url: `/positionnames/${id}`,
         method: 'PUT',
-        body: data
+        body: data,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'PositionNames', id }, { type: 'AdminChangeLogs', id }],
+      invalidatesTags: (_result, _error, { id }) => [
+        { type: 'PositionNames', id },
+        { type: 'AdminChangeLogs', id },
+      ],
     }),
     createPositionName: build.mutation<PositionName, Partial<PositionName>>({
       query: (data) => ({
@@ -30,9 +33,13 @@ const PositionNamesApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: [{ type: 'PositionNames', id: 'LIST' }],
-    })
+    }),
   }), // end endpoints
-
 });
 
-export const { useGetPositionNamesQuery, useGetPositionNameByIdQuery, useUpdatePositionNameMutation, useCreatePositionNameMutation } = PositionNamesApi;
+export const {
+  useGetPositionNamesQuery,
+  useGetPositionNameByIdQuery,
+  useUpdatePositionNameMutation,
+  useCreatePositionNameMutation,
+} = PositionNamesApi;

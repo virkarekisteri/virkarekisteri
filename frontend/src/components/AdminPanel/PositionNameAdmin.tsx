@@ -14,7 +14,7 @@ import {
   Button,
   Grid2,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
 } from '@mui/material';
 
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 import PositionNameDetails from 'components/Details/PositionNameDetails';
 import { RequiresEditRole } from 'components/role-guards';
-import EditPositionNameModal from '../Modal/EditPositionNameModal'
+import EditPositionNameModal from '../Modal/EditPositionNameModal';
 import { format } from 'date-fns';
 
 const PositionNameAdmin = () => {
@@ -36,11 +36,10 @@ const PositionNameAdmin = () => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchPositionName, setSearchPositionName] = useState<string>('');
-  const [showOnlyActive, setShowOnlyActive] = useState<boolean>(false); 
+  const [showOnlyActive, setShowOnlyActive] = useState<boolean>(false);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
   const { data: positionNames = [], isLoading: positionNamesLoading } = useGetPositionNamesQuery();
-
 
   const isLoading = positionNamesLoading;
 
@@ -50,22 +49,20 @@ const PositionNameAdmin = () => {
     } else {
       setFilteredPositionNames([]);
     }
-}, [positionNames]);
+  }, [positionNames]);
 
   const applyDefaultSorting = (data: PositionName[]) => {
     return [...data].sort((a, b) => {
       return a.name.localeCompare(b.name, 'fi');
     });
-  }
-
-
+  };
 
   // UI callbacks
 
   const handleOpenCreateModal = () => {
     setCreateModalOpen(true);
   };
-  
+
   const handleCloseCreateModal = () => {
     setCreateModalOpen(false);
   };
@@ -76,7 +73,7 @@ const PositionNameAdmin = () => {
 
   const handleCloseDetails = () => {
     setExpandedRow(null);
-  }
+  };
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -87,14 +84,12 @@ const PositionNameAdmin = () => {
     setPage(0);
   };
 
-
   /* Sorting logic */
   const handleSort = (key: keyof PositionName) => {
     setSortConfig((prevConfig) => {
       setPage(0);
 
       if (!prevConfig || prevConfig.key !== key) {
-      
         // New key, sort the data based on the selected key and direction
         const sortedData = [...filteredPositionNames].sort((a, b) => {
           const valA = a[key] ?? '';
@@ -112,7 +107,6 @@ const PositionNameAdmin = () => {
 
         setFilteredPositionNames(sortedData);
         return { key, direction: 'asc' };
-      
       } else if (prevConfig.direction === 'asc') {
         // Previous config is the same key and ascending, so sort in descending order
         const sortedData = [...filteredPositionNames].sort((a, b) => {
@@ -132,11 +126,9 @@ const PositionNameAdmin = () => {
         setFilteredPositionNames(sortedData);
         return { key, direction: 'desc' };
       } else {
-      
         // Default sorting
         setFilteredPositionNames(applyDefaultSorting(filteredPositionNames));
         return null;
-      
       }
     });
   };
@@ -171,12 +163,8 @@ const PositionNameAdmin = () => {
     setPage(0);
   };
 
-
-
   // Pagination logic
   const paginatedPositionNames = filteredPositionNames.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-
 
   if (isLoading) {
     return (
@@ -185,8 +173,7 @@ const PositionNameAdmin = () => {
       </Box>
     );
   }
-  
-  
+
   return (
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
@@ -214,20 +201,18 @@ const PositionNameAdmin = () => {
               sx={{ minWidth: '250px' }}
             />
 
-          {/* Search and clear buttons */}
-          <Box display="flex" gap={2} flexWrap="wrap">
-            <Button variant="contained" onClick={handleSearch}>
-              {t('search_filter.search')}
-            </Button>
+            {/* Search and clear buttons */}
+            <Box display="flex" gap={2} flexWrap="wrap">
+              <Button variant="contained" onClick={handleSearch}>
+                {t('search_filter.search')}
+              </Button>
 
-            <Button variant="outlined" onClick={handleSearchReset}>
-              {t('search_filter.reset')}
-            </Button>
+              <Button variant="outlined" onClick={handleSearchReset}>
+                {t('search_filter.reset')}
+              </Button>
+            </Box>
           </Box>
         </Box>
-
-
-          </Box>
 
         <RequiresEditRole>
           {/* Create new cost centre button */}
@@ -263,11 +248,9 @@ const PositionNameAdmin = () => {
 
       <TableContainer>
         <Table sx={{ minWidth: 650 }}>
-
           {/* Table Header */}
           <TableHead sx={{ backgroundColor: '#223B7C', height: '30px' }}>
             <TableRow>
-
               {/* Name header */}
               <TableCell
                 sx={{
@@ -320,12 +303,16 @@ const PositionNameAdmin = () => {
               <React.Fragment key={row.id}>
                 <TableRow
                   sx={{
-                    backgroundColor: row === expandedRow ? alpha('#223B7C', 0.5) : (paginatedPositionNames.indexOf(row) % 2 === 0 ? '#F9F9F9' : alpha('#223B7C', 0.2)),
+                    backgroundColor:
+                      row === expandedRow
+                        ? alpha('#223B7C', 0.5)
+                        : paginatedPositionNames.indexOf(row) % 2 === 0
+                          ? '#F9F9F9'
+                          : alpha('#223B7C', 0.2),
                     cursor: 'pointer',
                   }}
                   onClick={() => handleRowToggle(row)}
                 >
-
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>{row.name}</TableCell>
                   <TableCell sx={{ color: 'black', fontSize: '1rem' }}>
                     {row.validFrom ? format(new Date(row.validFrom), 'd.M.yyyy') : ''}
@@ -334,7 +321,6 @@ const PositionNameAdmin = () => {
                     {row.validUntil ? format(new Date(row.validUntil), 'd.M.yyyy') : ''}
                   </TableCell>
                 </TableRow>
-
               </React.Fragment>
             ))}
           </TableBody>
@@ -355,24 +341,28 @@ const PositionNameAdmin = () => {
       </Box>
 
       <Grid2>
-          <Grid2 size={12}>
-          {
-            expandedRow ? <PositionNameDetails positionName={expandedRow} doneEditingCallback={handleCloseDetails} allPositionNames={positionNames}/> : null
-          }
-          </Grid2>
+        <Grid2 size={12}>
+          {expandedRow ? (
+            <PositionNameDetails
+              positionName={expandedRow}
+              doneEditingCallback={handleCloseDetails}
+              allPositionNames={positionNames}
+            />
+          ) : null}
         </Grid2>
+      </Grid2>
 
       {/* Create Position Name Modal */}
-        <EditPositionNameModal 
-          open={createModalOpen} 
-          handleClose={handleCloseCreateModal} 
-          positionName={undefined} 
-          allPositionNames={positionNames}
-          submitCallback={() => {
-            handleCloseDetails();
-            handleCloseCreateModal();
-          }} 
-          />
+      <EditPositionNameModal
+        open={createModalOpen}
+        handleClose={handleCloseCreateModal}
+        positionName={undefined}
+        allPositionNames={positionNames}
+        submitCallback={() => {
+          handleCloseDetails();
+          handleCloseCreateModal();
+        }}
+      />
     </Box>
   );
 };

@@ -4,7 +4,7 @@ import type { PositionName } from 'models/PositionName';
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography, alpha } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Grid2 from '@mui/material/Grid2';
-import EditPositionNameModal from '../Modal/EditPositionNameModal'
+import EditPositionNameModal from 'components/Modal/EditPositionNameModal';
 import RenderReadonlyTextField from './RenderReadonlyTextField';
 import { RequiresEditRole } from 'components/role-guards';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
@@ -17,9 +17,12 @@ interface PositionNameDetailsProps {
   doneEditingCallback: () => void;
 }
 
-const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName, allPositionNames, doneEditingCallback }) => {
+const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({
+  positionName,
+  allPositionNames,
+  doneEditingCallback,
+}) => {
   const { t } = useTranslation();
-
 
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -69,8 +72,8 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
     }
   };
 
-  const { data: positionNameChangelogs = [], /* isLoading: positionNameChangeLogsLoading */ } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
-
+  const { data: positionNameChangelogs = [], /* isLoading: positionNameChangeLogsLoading */ } =
+    useGetAdminChangelogsByObjectIdQuery(positionName.id);
 
   return (
     <Box
@@ -79,8 +82,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
         borderRadius: '0px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
       }}
-      >
-  
+    >
       {
         <Box sx={{ padding: 2, display: 'flex', justifyContent: 'right' }}>
           <RequiresEditRole>
@@ -97,13 +99,13 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
                 borderRadius: '25px 8px 8px 25px',
                 fontWeight: 'bold',
                 textTransform: 'none',
-                }}
+              }}
               startIcon={
                 <Box
                   component="span"
                   sx={{
                     marginRight: '8px',
-                    }}
+                  }}
                 >
                   ✎
                 </Box>
@@ -126,8 +128,8 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
           color: 'white',
           borderTopLeftRadius: 1,
           borderTopRightRadius: 1,
-          }}
-          >
+        }}
+      >
         <Typography
           sx={{
             color: 'white',
@@ -147,7 +149,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
             </Typography>
             <RenderReadonlyTextField value={positionName.name} />
           </Grid2>
-          
+
           {/* Position name timeframe */}
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -167,35 +169,33 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
           </Grid2>
         </Grid2>
 
-
-      <Accordion sx={{ mt: 2, mb: 0 }}>
-        <AccordionSummary
-        expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        sx={{
+        <Accordion sx={{ mt: 2, mb: 0 }}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            sx={{
               backgroundColor: alpha('#223B7C', 1),
               color: 'white',
               minHeight: '45px',
               '&.Mui-expanded': {
                 minHeight: '45px',
-                },
+              },
               '& .MuiAccordionSummary-content': {
                 margin: 0,
-                },
-                }}
+              },
+            }}
           >
             <Typography sx={{ color: 'white', fontSize: '1.0rem', fontWeight: 'bold', textTransform: 'none' }}>
               {t('admin_panel.position_name.edit_history')}
             </Typography>
-
           </AccordionSummary>
           <AccordionDetails
-          sx={{
-            padding: '16px',
-            backgroundColor: alpha('#fffff', 1),
+            sx={{
+              padding: '16px',
+              backgroundColor: alpha('#fffff', 1),
             }}
-            >
+          >
             <Grid2 size={12}>
               {positionNameChangelogs.length > 0 ? (
                 <Grid2 container spacing={0} sx={{ justifyContent: 'flex-start' }}>
@@ -260,13 +260,18 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
               )}
             </Grid2>
           </AccordionDetails>
-
         </Accordion>
       </Box>
 
-    {/* Edit Position Name Modal */}
-    <EditPositionNameModal open={editModalOpen} handleClose={handleCloseEditModal} submitCallback={handleSubmitEditModal} positionName={positionName} allPositionNames={allPositionNames}/>
-  </Box>
-);
+      {/* Edit Position Name Modal */}
+      <EditPositionNameModal
+        open={editModalOpen}
+        handleClose={handleCloseEditModal}
+        submitCallback={handleSubmitEditModal}
+        positionName={positionName}
+        allPositionNames={allPositionNames}
+      />
+    </Box>
+  );
 };
 export default PositionNameDetails;
