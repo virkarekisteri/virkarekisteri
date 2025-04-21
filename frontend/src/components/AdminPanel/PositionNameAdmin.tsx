@@ -32,10 +32,7 @@ const PositionNameAdmin = () => {
 
   const [expandedRow, setExpandedRow] = useState<PositionName | null>(null);
   const [filteredPositionNames, setFilteredPositionNames] = useState<PositionName[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof PositionName; direction: 'asc' | 'desc' } | null>({
-    key: 'name',
-    direction: 'asc'
-  });
+  const [sortConfig, setSortConfig] = useState<{ key: keyof PositionName; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchPositionName, setSearchPositionName] = useState<string>('');
@@ -143,12 +140,6 @@ const PositionNameAdmin = () => {
       }
     });
   };
-
-  // TODO: Remove this and use positionNames instead 
-  const sortedPositionNames = React.useMemo(() => {    
-    return filteredPositionNames;
-  }, [filteredPositionNames, sortConfig]);
-
 
   // Search logic
   const handleSearch = () => {
@@ -354,7 +345,7 @@ const PositionNameAdmin = () => {
       <Box display="flex" justifyContent="center" mt={2}>
         <TablePagination
           component="div"
-          count={sortedPositionNames.length}
+          count={positionNames.length}
           page={page}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
@@ -366,7 +357,7 @@ const PositionNameAdmin = () => {
       <Grid2>
           <Grid2 size={12}>
           {
-            expandedRow ? <PositionNameDetails positionName={expandedRow} doneEditingCallback={handleCloseDetails} allPositionNames={sortedPositionNames}/> : null
+            expandedRow ? <PositionNameDetails positionName={expandedRow} doneEditingCallback={handleCloseDetails} allPositionNames={positionNames}/> : null
           }
           </Grid2>
         </Grid2>
@@ -376,7 +367,7 @@ const PositionNameAdmin = () => {
           open={createModalOpen} 
           handleClose={handleCloseCreateModal} 
           positionName={undefined} 
-          allPositionNames={sortedPositionNames}
+          allPositionNames={positionNames}
           submitCallback={() => {
             handleCloseDetails();
             handleCloseCreateModal();
