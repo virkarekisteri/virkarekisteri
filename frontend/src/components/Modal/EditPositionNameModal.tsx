@@ -76,7 +76,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const validatePositionName = (value: string, allValues: Record<string, any>) => {
+  const validatePositionName = (value: string, /* allValues: Record<string, any> */) => {
     if (value && allPositionNames.some(
         (posName) => {return (posName.name === value.toLowerCase() && (isCreateDialog || (positionName && value != positionName.name)))}
       ))

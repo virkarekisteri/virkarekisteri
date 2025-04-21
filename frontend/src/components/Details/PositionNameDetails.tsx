@@ -69,7 +69,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({ positionName,
     }
   };
 
-  const { data: positionNameChangelogs = [], isLoading: positionNameChangeLogsLoading } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
+  const { data: positionNameChangelogs = [], /* isLoading: positionNameChangeLogsLoading */ } = useGetAdminChangelogsByObjectIdQuery(positionName.id);
 
 
   return (
