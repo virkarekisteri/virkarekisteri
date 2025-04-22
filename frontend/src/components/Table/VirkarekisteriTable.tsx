@@ -70,11 +70,6 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [lazyEmployeeTrigger] = useLazyGetPositionEmployeeQuery();
   const { data: subjects = [] } = useGetTeacherSubjectsQuery();
 
-  // Filteröi aktiiviset aineet
-  const activeSubjectNames = subjects
-    .filter((subject) => subject.active === true)
-    .map((subject) => subject.subjectName);
-
   // Suodatuskentät (Hakusuodattimet)
   const [vacancyNumberSearch, setVacancyNumberSearch] = useState('');
   const [placementLocationStateSearch, setPlacementLocationStateSearch] = useState('');
@@ -713,12 +708,19 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                         },
                       }}
                     >
-                      {activeSubjectNames.sort().map((subject) => (
-                        <MenuItem key={subject} value={subject}>
-                          <Checkbox checked={teacherSubjectSearch.includes(subject)} />
-                          <ListItemText primary={subject} />
-                        </MenuItem>
-                      ))}
+                      {subjects
+                        .slice()
+                        .sort((a, b) => a.subjectName.localeCompare(b.subjectName, 'fi'))
+                        .map((subject) => {
+                          const value = subject.subjectName;
+                          const label = checkSubjectActiveStatus(subject, t('table.not_active_suffix'));
+                          return (
+                            <MenuItem key={value} value={value}>
+                              <Checkbox checked={teacherSubjectSearch.includes(value)} />
+                              <ListItemText primary={label} />
+                            </MenuItem>
+                          );
+                        })}
                     </Select>
                   </FormControl>
                 </Grid2>
