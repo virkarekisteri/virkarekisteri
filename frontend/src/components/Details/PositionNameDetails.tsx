@@ -142,7 +142,7 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({
       </Box>
 
       <Box padding={2}>
-        <Grid2 container spacing={2} >
+        <Grid2 container spacing={2}>
           <Grid2 size={6} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.position_name.name')}
