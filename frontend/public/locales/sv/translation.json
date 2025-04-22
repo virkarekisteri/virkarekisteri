@@ -1,6 +1,6 @@
 {
   "additional_details": "",
-  "app_name": "jag talar inte svenska",
+  "app_name": "Tjänsteregister",
   "create_position": {
     "add_new_position": "",
     "created_at": "",
@@ -61,15 +61,15 @@
     "ended_at": "",
     "creation_decision_number": "",
     "ending_decision_number": "",
-    "placement_location": "",
     "type": "",
     "vacancy_number": "",
     "vacancy_size": "",
     "vacancy_status": "",
     "rows_per_page": "",
+    "position_name": "",
     "costcentre": "",
     "other": "",
-    "position_name": "",
+    "placement_location": "",
     "employee_name": "",
     "replacement_name": "",
     "replacement_start_date": "",
@@ -132,6 +132,7 @@
       "CreatedEmployee": "",
       "CreatedCostcentre": "",
       "CreatedSubject": "",
+      "CreatedPositionName": "",
       "VacancyStatus": "",
       "EndedPosition": "",
       "PositionSubjects": "",
@@ -254,6 +255,23 @@
         "duplicate_number": "",
         "duplicate_name": "",
         "invalid_number": "",
+        "invalid_date": ""
+      }
+    },
+    "position_name": {
+      "name": "",
+      "time_frame": "",
+      "valid_from": "",
+      "valid_until": "",
+      "create_new": "",
+      "edit": "",
+      "show_only_active": "",
+      "details": "",
+      "edit_warning": "",
+      "edit_history": "",
+      "validation": {
+        "required": "",
+        "duplicate_name": "",
         "invalid_date": ""
       }
     },

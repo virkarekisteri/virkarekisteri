@@ -254,6 +254,7 @@ const PositionNameAdmin = () => {
               {/* Name header */}
               <TableCell
                 sx={{
+                  width: '55%',
                   color: 'white',
                   fontSize: '1.2rem',
                   cursor: 'pointer',

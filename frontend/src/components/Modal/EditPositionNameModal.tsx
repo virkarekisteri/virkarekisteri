@@ -92,7 +92,6 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
   };
 
   const onSubmit = async (values: FormValues) => {
-    console.log(values);
     if (!positionName || !positionName.id) {
       // create new position name
       try {
@@ -101,7 +100,6 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
           validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
           validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
         };
-        console.log('Creating new position name!');
         createSubject(subjectData);
         submitCallback();
         //handleClose();
@@ -117,7 +115,6 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
           validFrom: values.validFrom ? new Date(values.validFrom).toISOString().split('T')[0] : undefined,
           validUntil: values.validUntil ? new Date(values.validUntil).toISOString().split('T')[0] : undefined,
         };
-        console.log(updateData);
         updateSubject({ id: positionName.id, data: updateData });
         submitCallback();
         //handleClose();
@@ -186,11 +183,11 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
                   <Grid2 size={12}>
                     <Field name="name" validate={validatePositionName}>
                       {({ input, meta }) => {
-                        //console.log(input)
                         return (
                           <TextField
                             {...input}
                             fullWidth
+                            required
                             margin="normal"
                             placeholder={initialValues.name}
                             label={t('admin_panel.position_name.name')}
@@ -209,7 +206,7 @@ const EditPositionNameModal: React.FC<EditPositionNameModalProps> = ({
                 </Grid2>
 
                 {/* Valid from */}
-                <Grid2 size={2} sx={{ display: 'flex', gap: 2 }}>
+                <Grid2 size={12} sx={{ display: 'flex', gap: 2 }}>
                   <Field name="validFrom">
                     {({ input, meta }) => (
                       <TextField

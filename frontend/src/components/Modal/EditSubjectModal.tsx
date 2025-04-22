@@ -159,6 +159,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
                         return (
                           <TextField
                             {...input}
+                            required
                             fullWidth
                             margin="normal"
                             placeholder={initialValues.subjectName}
