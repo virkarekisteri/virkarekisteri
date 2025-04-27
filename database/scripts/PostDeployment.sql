@@ -10,7 +10,7 @@
 
 -- Insert test data to Costcentres table
 --PRINT 'INSERTING DATA TO Costcentres TABLE';
---:r .\Inserts\Constcentres.sql
+--:r .\Inserts\Costcentres.sql
 
 -- Insert test data to Position table
 --PRINT 'INSERTING DATA TO Positions TABLE';

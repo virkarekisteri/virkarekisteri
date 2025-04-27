@@ -16,6 +16,7 @@ public class CreatePositionTests
     private readonly Mock<IPositionRepository> _positionRepositoryMock;
     private readonly Mock<IPositionNameRepository> _positionNameRepositoryMock;
     private readonly Mock<IPositionChangeLogRepository> _positionChangeLogRepositoryMock;
+    private readonly Mock<ICostcentreRepository> _costcentreRepositoryMock;
     private readonly CreatePosition _function;
 
     public CreatePositionTests()
@@ -24,6 +25,7 @@ public class CreatePositionTests
         _positionRepositoryMock = new Mock<IPositionRepository>();
         _positionNameRepositoryMock = new Mock<IPositionNameRepository>();
         _positionChangeLogRepositoryMock = new Mock<IPositionChangeLogRepository>();
+        _costcentreRepositoryMock = new Mock<ICostcentreRepository>();
 
         _function = new CreatePosition(
             loggerMock.Object,
@@ -80,7 +82,9 @@ public class CreatePositionTests
             PositionNameId = Guid.NewGuid(),
             CostcentreId = Guid.NewGuid(),
         };
+
         _positionRepositoryMock.Setup(repo => repo.CreatePosition(It.IsAny<Position>())).ReturnsAsync(mockPosition);
+        _positionRepositoryMock.Setup(repo => repo.GetCostcentreNumberById(It.IsAny<Guid>())).ReturnsAsync("1234");
 
         var json = JsonSerializer.Serialize(mockPosition);
         var jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -107,7 +111,7 @@ public class CreatePositionTests
             CreationDecisionNumber = "123",
             Type = 0,
             PositionNameId = mockPositionNameId,
-            PositionName = new PositionName { Id = mockPositionNameId, Name = "Test" },
+            //PositionName = new PositionName { Id = mockPositionNameId, Name = "Test" },
             CostcentreId = Guid.NewGuid(),
         };
 
@@ -115,6 +119,7 @@ public class CreatePositionTests
         _positionNameRepositoryMock
             .Setup(repo => repo.GetPositionNameIdByName(It.IsAny<string>()))
             .ReturnsAsync(mockPositionNameId);
+        _positionRepositoryMock.Setup(repo => repo.GetCostcentreNumberById(It.IsAny<Guid>())).ReturnsAsync("1234");
 
         var json = JsonSerializer.Serialize(mockPosition);
         var jsonBytes = Encoding.UTF8.GetBytes(json);
