@@ -65,7 +65,9 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
   };
 
   const onSubmit = async (values: FormValues) => {
-    if (!position || !position.id) {
+    if (isCreateDialog) {
+      //if (!position || !position.id) {
+      // Create new subject
       try {
         const subjectData: Partial<TeacherSubject> = {
           subjectName: values.subjectName.toLowerCase(),
@@ -78,12 +80,13 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
         console.error('Failed to create subject:', error);
       }
     } else {
+      // Update existing subject
       try {
         const updateData = {
           subjectName: values.subjectName.toLowerCase(),
           active: values.active,
         };
-        updateSubject({ id: position.id, subject: updateData });
+        updateSubject({ id: position!.id, subject: updateData });
         submitCallback();
       } catch (error) {
         console.error('Failed to update subject:', error);
@@ -147,9 +150,8 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
                       {t('admin_panel.teacher_subjects.details')}
                     </Typography>
                   </Box>
-                  <RenderReadonlyTextField
-                    value={isCreateDialog ? '' : t('admin_panel.teacher_subjects.editwarning')}
-                  />
+                  {isCreateDialog || <RenderReadonlyTextField value={t('admin_panel.teacher_subjects.editwarning')} />}
+
                   {/* Name */}
                   <Grid2 size={12}>
                     <Field name="subjectName" validate={validateSubjectName}>
@@ -157,6 +159,7 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
                         return (
                           <TextField
                             {...input}
+                            required
                             fullWidth
                             margin="normal"
                             placeholder={initialValues.subjectName}
@@ -172,14 +175,12 @@ const EditSubjectModal: React.FC<EditSubjectModalProps> = ({
                         );
                       }}
                     </Field>
-                    {/* //</Grid2> */}
 
                     {/* Active checkbox */}
-                    {/* <Grid2 size={12}> */}
                     <Field name="active" type="checkbox">
                       {({ input }) => (
                         <FormControlLabel
-                          control={<Checkbox {...input} /* checked={Boolean(input.value)} */ />}
+                          control={<Checkbox {...input} />}
                           label={t('admin_panel.teacher_subjects.active')}
                         />
                       )}

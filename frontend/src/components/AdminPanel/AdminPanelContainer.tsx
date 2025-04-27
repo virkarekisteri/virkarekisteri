@@ -4,6 +4,7 @@ import SubjectAdmin from './SubjectAdmin';
 // import JobtitleAdmin from './JobtitleAdmin';
 import CostcentreAdmin from './CostcentreAdmin';
 import { useTranslation } from 'react-i18next';
+import PositionNameAdmin from './PositionNameAdmin';
 
 const AdminPanelContainer = () => {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ const AdminPanelContainer = () => {
       <Box sx={{ p: 2 }}>
         {selectedTab === 0 && <SubjectAdmin />}
         {selectedTab === 1 && <CostcentreAdmin />}
-        {/* {selectedTab === 2 && <JobtitleAdmin />} */}
+        {selectedTab === 2 && <PositionNameAdmin />}
       </Box>
     </Box>
   );

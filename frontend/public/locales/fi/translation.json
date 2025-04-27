@@ -132,6 +132,7 @@
       "CreatedEmployee": "Lisätty uusi viranhaltija",
       "CreatedCostcentre": "Luotu uusi kustannuspaikka",
       "CreatedSubject": "Luotu uusi aine",
+      "CreatedPositionName": "Luotu uusi virkanimike",
       "VacancyStatus": "Vakanssin tila",
       "EndedPosition": "Lakkautettu virka",
       "PositionSubjects": "Aineet",
@@ -254,6 +255,23 @@
         "duplicate_number": "Kustannuspaikan numero on jo käytössä",
         "duplicate_name": "Kustannuspaikan nimi on jo käytössä",
         "invalid_number": "Virheellinen kustannuspaikan numero",
+        "invalid_date": "Virheellinen voimassaoloaika"
+      }
+    },
+    "position_name": {
+      "name": "Nimi",
+      "time_frame": "Aikaväli",
+      "valid_from": "Voimassa alkaen",
+      "valid_until": "Voimassa päättyen",
+      "create_new": "Luo uusi virkanimike",
+      "edit": "Muokkaa virkanimikkeen tietoja",
+      "show_only_active": "Näytä vain aktiiviset",
+      "details": "Virkanimikkeen tiedot",
+      "edit_warning": "Tässä tehdyt muutokset vaikuttavat kaikkiin tämän virkanimikkeen virkoihin.",
+      "edit_history": "Muutoshistoria",
+      "validation": {
+        "required": "Kenttä on pakollinen",
+        "duplicate_name": "Virkanimike on jo käytössä",
         "invalid_date": "Virheellinen voimassaoloaika"
       }
     },

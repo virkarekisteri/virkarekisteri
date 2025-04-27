@@ -327,6 +327,8 @@ const SubjectAdmin = () => {
           ) : null}
         </Grid2>
       </Grid2>
+
+      {/* Create Subject Modal */}
       <EditSubjectModal
         open={createModalOpen}
         handleClose={handleCloseCreateModal}
