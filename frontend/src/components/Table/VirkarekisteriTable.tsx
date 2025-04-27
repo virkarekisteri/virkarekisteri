@@ -95,7 +95,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
   const [enrichedPositions, setEnrichedPositions] = useState<Position[]>([]);
 
   // Valitut rivit
-  const [selectedRows, setSelectedRows] = useState<Position[]>([]);
+  const [, setSelectedRows] = useState<Position[]>([]);
   const [clickedRowId, setClickedRowId] = useState<string | null>(null);
 
   // Density vaihtoehdot ja localStorageen
