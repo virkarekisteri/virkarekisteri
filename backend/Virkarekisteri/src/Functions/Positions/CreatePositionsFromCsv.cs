@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
-using System.Text;
 
 namespace Virkarekisteri.Functions.Positions;
 
@@ -48,7 +48,7 @@ public class CreatePositionsFromCsv(
 
         int totalLines = 0;
 
-        // Register code page provider for non-UTF8 encodings (Windows-1252 for Excel CSV) so it supports letters like "ä", "ö" 
+        // Register code page provider for non-UTF8 encodings (Windows-1252 for Excel CSV) so it supports letters like "ä", "ö"
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         using (var reader = new StreamReader(file.OpenReadStream(), Encoding.GetEncoding(1252)))
         {
@@ -56,7 +56,7 @@ public class CreatePositionsFromCsv(
             var headerLine = await reader.ReadLineAsync();
             int lineNumber = 2;
 
-            // Expected date formats d.M.yyyy or dd.MM.yyyy 
+            // Expected date formats d.M.yyyy or dd.MM.yyyy
             var dateFormats = new[] { "d.M.yyyy", "dd.MM.yyyy" };
 
             while (!reader.EndOfStream)
@@ -80,8 +80,16 @@ public class CreatePositionsFromCsv(
                     }
 
                     // Parse CreatedAt in dd.MM.yyyy
-                    if (string.IsNullOrWhiteSpace(values[3])
-                        || !DateTime.TryParseExact(values[3], dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt))
+                    if (
+                        string.IsNullOrWhiteSpace(values[3])
+                        || !DateTime.TryParseExact(
+                            values[3],
+                            dateFormats,
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                            out var createdAt
+                        )
+                    )
                     {
                         throw new Exception("Perustamisajankohta on pakollinen ja sen on oltava muodossa dd.MM.yyyy.");
                     }
@@ -90,7 +98,9 @@ public class CreatePositionsFromCsv(
                     // Parse Type (Laji) as numeric or textual
                     var typeText = values[8]?.Trim();
                     if (string.IsNullOrWhiteSpace(typeText))
-                        throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai tekstiarvo.");
+                        throw new Exception(
+                            "Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai tekstiarvo."
+                        );
                     int type;
                     if (!int.TryParse(typeText, out type))
                     {
@@ -106,7 +116,9 @@ public class CreatePositionsFromCsv(
                                 type = 2;
                                 break;
                             default:
-                                throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai yksi seuraavista teksteistä: Virka, Toimi, Position, Post.");
+                                throw new Exception(
+                                    "Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai yksi seuraavista teksteistä: Virka, Toimi, Position, Post."
+                                );
                         }
                     }
                     position.Type = type;
@@ -163,16 +175,22 @@ public class CreatePositionsFromCsv(
                     bool hasEndingDec = !string.IsNullOrWhiteSpace(endingDecText);
                     if (hasEnded ^ hasEndingDec)
                     {
-                        throw new Exception("Viran lakkautus päivämäärä ja lakkautus päätösnumero on annettava molemmat.");
+                        throw new Exception(
+                            "Viran lakkautus päivämäärä ja lakkautus päätösnumero on annettava molemmat."
+                        );
                     }
                     position.EndedAt = hasEnded
-                        ? DateTime.ParseExact(endedAtText, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None)
+                        ? DateTime.ParseExact(
+                            endedAtText,
+                            dateFormats,
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None
+                        )
                         : (DateTime?)null;
 
                     // Set VacancyStatus = 1 if no end date or end date is in the future
-                    position.VacancyStatus = !position.EndedAt.HasValue || position.EndedAt.Value.Date > now.Date
-                        ? 1
-                        : 0;
+                    position.VacancyStatus =
+                        !position.EndedAt.HasValue || position.EndedAt.Value.Date > now.Date ? 1 : 0;
 
                     position.EndingDecisionNumber = hasEndingDec ? endingDecText : null;
                     position.VacancySize = NormalizePercent(values[5]);
@@ -262,15 +280,19 @@ public class CreatePositionsFromCsv(
 
         return new OkObjectResult(response);
     }
+
     private static decimal? NormalizePercent(string s)
     {
-        if (string.IsNullOrWhiteSpace(s)) return null;
+        if (string.IsNullOrWhiteSpace(s))
+            return null;
         var trimmed = s.Trim();
         bool hasPercent = trimmed.EndsWith("%");
-        var numText = hasPercent
-            ? trimmed.Substring(0, trimmed.Length - 1).Trim()
-            : trimmed;
-        var raw = decimal.Parse(numText, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite, CultureInfo.InvariantCulture);
+        var numText = hasPercent ? trimmed.Substring(0, trimmed.Length - 1).Trim() : trimmed;
+        var raw = decimal.Parse(
+            numText,
+            NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite,
+            CultureInfo.InvariantCulture
+        );
         if (hasPercent)
             return raw / 100m;
         return raw > 1m ? raw / 100m : raw;
