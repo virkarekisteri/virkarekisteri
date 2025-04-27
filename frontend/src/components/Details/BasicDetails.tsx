@@ -12,6 +12,7 @@ import EndPositionModal from 'components/Modal/EndPositionModal';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
+import { checkPositionNameActiveStatus } from 'utils/checkPositionNameActiveStatus';
 import { useGetPositionNameByIdQuery } from 'redux/api-slices/functions/position-names-api';
 
 interface BasicDetailsProps {
@@ -177,7 +178,13 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.position_name')}
             </Typography>
-            <RenderReadonlyTextField value={isPositionNameLoading ? '...' : positionName?.name || ''} />
+            <RenderReadonlyTextField
+              value={
+                isPositionNameLoading
+                  ? '...'
+                  : checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))
+              }
+            />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>

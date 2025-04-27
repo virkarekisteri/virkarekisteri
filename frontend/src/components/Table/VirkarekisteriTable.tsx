@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
+import { checkPositionNameActiveStatus } from 'utils/checkPositionNameActiveStatus';
 import {
   Box,
   Accordion,
@@ -37,6 +38,7 @@ import { clearSelectedPosition, selectPosition } from 'redux/slices/position-sli
 import { format } from 'date-fns';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import type { Costcentre } from 'models/Costcentre';
+import type { PositionName } from 'models/PositionName';
 import { useGetPositionNamesQuery } from 'redux/api-slices/functions/position-names-api';
 
 interface DataTableProps {
@@ -379,11 +381,16 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       sortable: true,
     },
     {
-      field: 'positionName',
+      field: 'positionNameId',
       headerName: t('table.position_name'),
       flex: 1,
       sortable: true,
-      valueGetter: (params: { name: string }) => params.name || 'Error',
+      valueGetter: (params: string) => {
+        const id = params;
+        if (!id || !positionNames) return id;
+        const positionName = positionNames.find((p: PositionName) => p.id === id);
+        return positionName ? ` ${checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))}` : '';
+      },
     },
     {
       field: 'costcentreId',
