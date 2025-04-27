@@ -1,6 +1,9 @@
 import type { PositionName } from 'models/PositionName';
 
-export const checkPositionNameActiveStatus = (positionName: PositionName | undefined, notActiveSuffix: string): string => {
+export const checkPositionNameActiveStatus = (
+  positionName: PositionName | undefined,
+  notActiveSuffix: string,
+): string => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -14,7 +17,8 @@ export const checkPositionNameActiveStatus = (positionName: PositionName | undef
   // A position name is active if:
   // - There is no validFrom date or validFrom is on/before today AND
   // - There is no validUntil date or validUntil is on/after today.
-  const isActive = (!positionNameFrom || positionNameFrom <= today) && (!positionNameUntil || positionNameUntil >= today);
+  const isActive =
+    (!positionNameFrom || positionNameFrom <= today) && (!positionNameUntil || positionNameUntil >= today);
 
   return isActive ? positionName.name : `${positionName.name} (${notActiveSuffix})`;
 };

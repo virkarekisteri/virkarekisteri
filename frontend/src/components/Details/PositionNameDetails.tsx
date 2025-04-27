@@ -149,7 +149,9 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.position_name.name')}
             </Typography>
-            <RenderReadonlyTextField value={checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))} />
+            <RenderReadonlyTextField
+              value={checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))}
+            />
           </Grid2>
 
           {/* Position name timeframe */}

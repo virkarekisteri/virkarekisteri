@@ -178,8 +178,12 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.position_name')}
             </Typography>
-            <RenderReadonlyTextField 
-              value={isPositionNameLoading ? '...' : checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))} 
+            <RenderReadonlyTextField
+              value={
+                isPositionNameLoading
+                  ? '...'
+                  : checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))
+              }
             />
           </Grid2>
           <Grid2 size={4} px={2}>

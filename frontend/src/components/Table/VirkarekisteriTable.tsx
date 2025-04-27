@@ -390,7 +390,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
         if (!id || !positionNames) return id;
         const positionName = positionNames.find((p: PositionName) => p.id === id);
         return positionName ? ` ${checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))}` : '';
-      }
+      },
     },
     {
       field: 'costcentreId',

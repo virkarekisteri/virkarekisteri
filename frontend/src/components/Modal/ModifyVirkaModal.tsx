@@ -256,7 +256,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                             options={[...positionNames]
                               .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
                               .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
-                            getOptionLabel={(option) => 
+                            getOptionLabel={(option) =>
                               `${checkPositionNameActiveStatus(option, t('edit_position.not_active_suffix'))}`
                             }
                             value={positionNames.find((item) => item.id === input.value) || null}
@@ -275,7 +275,7 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                     ? `${checkPositionNameActiveStatus(
                                         positionNames.find((p) => p.id === position.positionNameId),
                                         t('edit_position.not_active_suffix'),
-                                        )}`
+                                      )}`
                                     : t('edit_position.position_name')
                                 }
                                 slotProps={{
