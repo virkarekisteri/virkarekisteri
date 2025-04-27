@@ -32,6 +32,7 @@ import { useEffect, useState } from 'react';
 import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersubject-api';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { isDateRangeActive } from 'utils/isDateRangeActive';
+import { checkPositionNameActiveStatus } from 'utils/checkPositionNameActiveStatus';
 
 interface ModifyVirkaModalProps {
   open: boolean;
@@ -255,7 +256,9 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                             options={[...positionNames]
                               .filter((pn) => isDateRangeActive(pn.validFrom, pn.validUntil))
                               .sort((a, b) => a.name.localeCompare(b.name, 'fi'))}
-                            getOptionLabel={(option) => `${option.name}`}
+                            getOptionLabel={(option) => 
+                              `${checkPositionNameActiveStatus(option, t('edit_position.not_active_suffix'))}`
+                            }
                             value={positionNames.find((item) => item.id === input.value) || null}
                             onChange={(_event, value) => {
                               input.onChange(value ? value.id : null);
@@ -268,8 +271,11 @@ const ModifyVirkaModal: React.FC<ModifyVirkaModalProps> = ({ open, handleClose, 
                                 required
                                 label={t('edit_position.position_name')}
                                 placeholder={
-                                  positionNames.find((tree) => tree.id === position.positionNameId)
-                                    ? `${positionNames.find((tree) => tree.id === position.positionNameId)?.name}`
+                                  positionNames.find((p) => p.id === position.positionNameId)
+                                    ? `${checkPositionNameActiveStatus(
+                                        positionNames.find((p) => p.id === position.positionNameId),
+                                        t('edit_position.not_active_suffix'),
+                                        )}`
                                     : t('edit_position.position_name')
                                 }
                                 slotProps={{
