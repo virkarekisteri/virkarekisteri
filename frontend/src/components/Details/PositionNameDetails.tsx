@@ -10,6 +10,7 @@ import { RequiresEditRole } from 'components/role-guards';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
 import { format, parse, isValid } from 'date-fns';
+import { checkPositionNameActiveStatus } from 'utils/checkPositionNameActiveStatus';
 
 interface PositionNameDetailsProps {
   positionName: PositionName;
@@ -143,11 +144,12 @@ const PositionNameDetails: React.FC<PositionNameDetailsProps> = ({
 
       <Box padding={2}>
         <Grid2 container spacing={2}>
+          {/* Position name */}
           <Grid2 size={6} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.position_name.name')}
             </Typography>
-            <RenderReadonlyTextField value={positionName.name} />
+            <RenderReadonlyTextField value={checkPositionNameActiveStatus(positionName, t('table.not_active_suffix'))} />
           </Grid2>
 
           {/* Position name timeframe */}

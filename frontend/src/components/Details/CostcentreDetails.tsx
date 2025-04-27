@@ -9,6 +9,7 @@ import RenderReadonlyTextField from './RenderReadonlyTextField';
 import ModifyCostcentreModal from 'components/Modal/ModifyCostcentreModal';
 import { useGetAdminChangelogsByObjectIdQuery } from 'redux/api-slices/functions/admin-changelog-api';
 import type { AdminChangeLogEntry } from 'models/AdminChangeLogEntry';
+import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 
 interface CostcentreDetailsProps {
   costcentre: Costcentre;
@@ -145,7 +146,7 @@ const CostcentreDetails: React.FC<CostcentreDetailsProps> = ({ costcentre, onEdi
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('admin_panel.costcentre.name')}
             </Typography>
-            <RenderReadonlyTextField value={costcentre.name} />
+            <RenderReadonlyTextField value={checkCostCentreActiveStatus(costcentre, t('table.not_active_suffix'))} />
           </Grid2>
 
           {/* Costcentre timeframe */}
