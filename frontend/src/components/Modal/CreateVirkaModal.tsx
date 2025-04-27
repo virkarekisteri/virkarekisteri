@@ -38,6 +38,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 import { isDateRangeActive } from 'utils/isDateRangeActive';
+import { format } from 'date-fns';
 
 interface CreateVirkaModalProps {
   open: boolean;
@@ -212,7 +213,7 @@ const CreateVirkaModal: React.FC<CreateVirkaModalProps> = ({ open, handleClose }
                   </Grid2>
 
                   <Grid2 size={4}>
-                    <Field name="createdAt">
+                    <Field name="createdAt" initialValue={format(new Date(), 'yyyy-MM-dd')}>
                       {({ input }) => (
                         <TextField
                           {...input}

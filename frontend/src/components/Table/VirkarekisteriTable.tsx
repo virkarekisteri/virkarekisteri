@@ -98,6 +98,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
 
   // Valitut rivit
   const [, setSelectedRows] = useState<Position[]>([]);
+  const [clickedRowId, setClickedRowId] = useState<string | null>(null);
 
   // Density vaihtoehdot ja localStorageen
   const [density, setDensity] = React.useState<GridDensity>(() => {
@@ -825,7 +826,7 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
       </Box>
 
       {/* DataGrid-komponentti */}
-      <Box sx={{ mt: 2, width: '100%', height: 'auto' }}>
+      <Box sx={{ mt: 2, width: '100%', maxHeight: 1000, display: 'flex', flexDirection: 'column' }}>
         <DataGrid
           loading={loading}
           rows={filteredData}
@@ -841,22 +842,29 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
           }}
           pageSizeOptions={[10, 30, 50, 100]}
           checkboxSelection
+          isRowSelectable={(params) => params.row.vacancyStatus !== 0}
+          disableRowSelectionOnClick
           onRowSelectionModelChange={(newSelection) => {
-            const selection = newSelection as string[];
-            const newSelectedRows = filteredData.filter((row) => selection.includes(row.id ?? row.costcentreId!));
-            setSelectedRows(newSelectedRows);
-            onRowSelectionChange(newSelectedRows);
-
-            if (newSelectedRows.length > 0) {
-              const lastSelectedRow = newSelectedRows[newSelectedRows.length - 1];
-              const rowId = lastSelectedRow.id ?? lastSelectedRow.costcentreId;
-              if (rowId) {
-                getPosition(rowId, true);
-                dispatch(selectPosition(rowId));
-              }
-            } else {
+            const sel = (newSelection as string[]).map((id) => filteredData.find((r) => r.id === id)!).filter(Boolean);
+            setSelectedRows(sel);
+            onRowSelectionChange(sel);
+          }}
+          onRowClick={(params) => {
+            const id = params.id as string;
+            if (clickedRowId === id) {
+              setClickedRowId(null);
               dispatch(clearSelectedPosition());
+            } else {
+              setClickedRowId(id);
+              getPosition(id, true);
+              dispatch(selectPosition(id));
             }
+          }}
+          getRowClassName={(params) => (params.id === clickedRowId ? 'clicked-row' : '')}
+          sx={{
+            '& .clicked-row .MuiDataGrid-cell': {
+              backgroundColor: (theme) => theme.palette.primary.light + '40',
+            },
           }}
           rowCount={filteredData.length}
           paginationMode="client"
@@ -867,6 +875,9 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
             localStorage.setItem('columnVisibilityModel', JSON.stringify(newModel));
           }}
           slotProps={{
+            pagination: {
+              labelRowsPerPage: t('table.rows_per_page'),
+            },
             toolbar: {
               csvOptions: {
                 fileName: 'Virkarekisteri_data_table',
@@ -878,21 +889,32 @@ const DataTable: React.FC<DataTableProps> = ({ onRowSelectionChange }) => {
                 hideToolbar: true,
                 includeCheckboxes: false,
                 pageStyle: `
-          @page {
-            size: landscape;
-            margin: 10mm;
-          }
-          @media print {
-            .MuiDataGrid-root {
-              transform: scale(0.7);
-              transform-origin: top left;
+            @page {
+              size: landscape;
+              margin: 10mm;
             }
-          }
-        `,
+            @media print {
+              .MuiDataGrid-root {
+                transform: scale(0.7);
+                transform-origin: top left;
+              }
+            }
+          `,
               },
             },
           }}
           slots={{ toolbar: GridToolbar }}
+          localeText={{
+            // toolbar texts
+            toolbarColumns: t('table.columns'),
+            toolbarColumnsLabel: t('table.columns_label'),
+            toolbarDensity: t('table.density'),
+            toolbarDensityLabel: t('table.density_label'),
+            toolbarDensityCompact: t('table.density_compact'),
+            toolbarDensityStandard: t('table.density_standard'),
+            toolbarDensityComfortable: t('table.density_comfortable'),
+            checkboxSelectionHeaderName: t('table.select'),
+          }}
         />
       </Box>
     </>

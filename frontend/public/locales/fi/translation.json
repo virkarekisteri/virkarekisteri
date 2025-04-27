@@ -22,7 +22,7 @@
   },
   "create_csv_position": {
     "success": " virkaa luotu onnistuneesti.",
-    "error1": "CSV-tiedostossa oli ",
+    "error1": "Virkoja ei luotu. CSV-tiedostossa oli ",
     "error2": " virheellistä riviä.",
     "upload": "Lataa",
     "title": "Luo virkoja CSV-tiedostosta",
@@ -59,7 +59,7 @@
   "table": {
     "created_at": "Perustamisajankohta",
     "ended_at": "Viran lakkautus päivämäärä",
-    "creation_decision_number": "Päätösnumero",
+    "creation_decision_number": "Luonti päätösnumero",
     "ending_decision_number": "Lakkautus päätösnumero",
     "type": "Laji",
     "vacancy_number": "Vakanssinumero",
@@ -79,7 +79,15 @@
     "subjects": "Opetettavat aineet",
     "not_active_suffix": "ei aktiivinen",
     "yes": "Kyllä",
-    "no": "Ei"
+    "no": "Ei",
+    "columns": "Sarakkeet",
+    "columns_label": "Näytä/piilota sarakkeet",
+    "density": "Rivien tiheys",
+    "density_label": "Rivien tiheyden asetus",
+    "density_compact": "Tiivis",
+    "density_standard": "Vakio",
+    "density_comfortable": "Mukava",
+    "select": "Massamuutos valintaruutu"
   },
   "tabs": {
     "positions": "Virkalistaus",

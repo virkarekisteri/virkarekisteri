@@ -79,7 +79,15 @@
     "subjects": "",
     "not_active_suffix": "",
     "yes": "",
-    "no": ""
+    "no": "",
+    "columns": "",
+    "columns_label": "",
+    "density": "",
+    "density_label": "",
+    "density_compact": "",
+    "density_standard": "",
+    "density_comfortable": "",
+    "select": ""
   },
   "tabs": {
     "positions": "",
