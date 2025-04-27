@@ -22,7 +22,7 @@
   },
   "create_csv_position": {
     "success": " positions imported successfully.",
-    "error1": "There were ",
+    "error1": "No positions were created. There were ",
     "error2": " errors in the CSV file.",
     "upload": "Upload",
     "title": "Create positions from CSV",
@@ -79,7 +79,15 @@
     "subjects": "Subjects",
     "not_active_suffix": "not active",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "columns": "Columns",
+    "columns_label": "Show/hide columns",
+    "density": "Row density",
+    "density_label": "Row density",
+    "density_compact": "Compact",
+    "density_standard": "Standard",
+    "density_comfortable": "Comfortable",
+    "select": "Mass change checkbox"
   },
   "tabs": {
     "positions": "Positions list",

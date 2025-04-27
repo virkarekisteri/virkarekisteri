@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Virkarekisteri.Middleware.Attributes;
 using Virkarekisteri.Models;
 using Virkarekisteri.Repositories;
+using System.Text;
 
 namespace Virkarekisteri.Functions.Positions;
 
@@ -47,11 +48,16 @@ public class CreatePositionsFromCsv(
 
         int totalLines = 0;
 
-        using (var reader = new StreamReader(file.OpenReadStream()))
+        // Register code page provider for non-UTF8 encodings (Windows-1252 for Excel CSV) so it supports letters like "ä", "ö" 
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        using (var reader = new StreamReader(file.OpenReadStream(), Encoding.GetEncoding(1252)))
         {
             // Skip the header line
             var headerLine = await reader.ReadLineAsync();
             int lineNumber = 2;
+
+            // Expected date formats d.M.yyyy or dd.MM.yyyy 
+            var dateFormats = new[] { "d.M.yyyy", "dd.MM.yyyy" };
 
             while (!reader.EndOfStream)
             {
@@ -66,37 +72,47 @@ public class CreatePositionsFromCsv(
 
                 try
                 {
-                    var position = new Position { CreationDecisionNumber = values[3] };
+                    var position = new Position { CreationDecisionNumber = values[4] };
 
                     if (string.IsNullOrWhiteSpace(position.CreationDecisionNumber))
                     {
                         throw new Exception("Päätösnumero on pakollinen eikä se voi olla tyhjä.");
                     }
 
-                    if (
-                        string.IsNullOrWhiteSpace(values[2])
-                        || !DateTime.TryParse(
-                            values[2],
-                            CultureInfo.InvariantCulture,
-                            DateTimeStyles.None,
-                            out var createdAt
-                        )
-                    )
+                    // Parse CreatedAt in dd.MM.yyyy
+                    if (string.IsNullOrWhiteSpace(values[3])
+                        || !DateTime.TryParseExact(values[3], dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var createdAt))
                     {
-                        throw new Exception(
-                            "Perustamisajankohta on pakollinen ja sen on oltava kelvollinen päivämäärä."
-                        );
+                        throw new Exception("Perustamisajankohta on pakollinen ja sen on oltava muodossa dd.MM.yyyy.");
                     }
                     position.CreatedAt = createdAt;
 
-                    if (string.IsNullOrWhiteSpace(values[4]) || !int.TryParse(values[4], out var type))
+                    // Parse Type (Laji) as numeric or textual
+                    var typeText = values[8]?.Trim();
+                    if (string.IsNullOrWhiteSpace(typeText))
+                        throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai tekstiarvo.");
+                    int type;
+                    if (!int.TryParse(typeText, out type))
                     {
-                        throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku.");
+                        // support textual values mapping to numeric codes
+                        switch (typeText.ToLowerInvariant())
+                        {
+                            case "virka":
+                            case "position":
+                                type = 1;
+                                break;
+                            case "toimi":
+                            case "post":
+                                type = 2;
+                                break;
+                            default:
+                                throw new Exception("Laji on pakollinen ja sen on oltava kelvollinen kokonaisluku tai yksi seuraavista teksteistä: Virka, Toimi, Position, Post.");
+                        }
                     }
                     position.Type = type;
 
                     // Handle costcentre from CSV
-                    var costcentreNumber = values[0];
+                    var costcentreNumber = values[1];
                     var costcentreId = await positionRepository.GetCostcentreIdByNumber(costcentreNumber);
                     if (costcentreId == Guid.Empty)
                     {
@@ -119,7 +135,7 @@ public class CreatePositionsFromCsv(
                     position.CostcentreId = costcentre.Id;
 
                     // Handle position name from CSV
-                    var positionNameName = values[1];
+                    var positionNameName = values[0];
                     var positionNameId = await positionNameRepository.GetPositionNameIdByName(positionNameName);
                     if (positionNameId == Guid.Empty || !positionNameId.HasValue)
                     {
@@ -140,33 +156,34 @@ public class CreatePositionsFromCsv(
                     }
                     position.PositionNameId = positionName.Id;
 
-                    position.EndedAt = string.IsNullOrWhiteSpace(values[5])
-                        ? (DateTime?)null
-                        : DateTime.Parse(values[5], CultureInfo.InvariantCulture);
-                    // Set VacancyStatus = 1 if no end date or end date is in the future
-                    if (!position.EndedAt.HasValue || position.EndedAt.Value.Date > DateTime.Now.Date)
+                    // Parse EndedAt and EndingDecisionNumber together
+                    var endedAtText = values[13]?.Trim();
+                    var endingDecText = values[14]?.Trim();
+                    bool hasEnded = !string.IsNullOrWhiteSpace(endedAtText);
+                    bool hasEndingDec = !string.IsNullOrWhiteSpace(endingDecText);
+                    if (hasEnded ^ hasEndingDec)
                     {
-                        position.VacancyStatus = 1; // 1 = Established
+                        throw new Exception("Viran lakkautus päivämäärä ja lakkautus päätösnumero on annettava molemmat.");
                     }
-                    else
-                    {
-                        position.VacancyStatus = 0; // 0 = Abolished
-                    }
+                    position.EndedAt = hasEnded
+                        ? DateTime.ParseExact(endedAtText, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None)
+                        : (DateTime?)null;
 
-                    position.EndingDecisionNumber = string.IsNullOrWhiteSpace(values[6]) ? null : values[6];
-                    position.VacancySize = string.IsNullOrWhiteSpace(values[7])
-                        ? (decimal?)null
-                        : decimal.Parse(values[7], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                    position.VacancyFill = string.IsNullOrWhiteSpace(values[8])
-                        ? (decimal?)null
-                        : decimal.Parse(values[8], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                    position.PricingId = string.IsNullOrWhiteSpace(values[9]) ? null : values[9];
+                    // Set VacancyStatus = 1 if no end date or end date is in the future
+                    position.VacancyStatus = !position.EndedAt.HasValue || position.EndedAt.Value.Date > now.Date
+                        ? 1
+                        : 0;
+
+                    position.EndingDecisionNumber = hasEndingDec ? endingDecText : null;
+                    position.VacancySize = NormalizePercent(values[5]);
+                    position.VacancyFill = NormalizePercent(values[6]);
+                    position.PricingId = string.IsNullOrWhiteSpace(values[7]) ? null : values[7];
                     position.EducationLevel = string.IsNullOrWhiteSpace(values[10]) ? null : values[10];
                     position.WorkExperience = string.IsNullOrWhiteSpace(values[11]) ? null : values[11];
                     position.Details = string.IsNullOrWhiteSpace(values[12]) ? null : values[12];
-                    position.PlacementLocation = string.IsNullOrWhiteSpace(values[13]) ? null : values[13];
+                    position.PlacementLocation = string.IsNullOrWhiteSpace(values[2]) ? null : values[2];
 
-                    var teacherSubjectsRaw = values[14];
+                    var teacherSubjectsRaw = values[9];
                     if (!string.IsNullOrWhiteSpace(teacherSubjectsRaw))
                     {
                         var splittedSubjects = teacherSubjectsRaw.Split(',', StringSplitOptions.RemoveEmptyEntries);
@@ -244,5 +261,18 @@ public class CreatePositionsFromCsv(
         };
 
         return new OkObjectResult(response);
+    }
+    private static decimal? NormalizePercent(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return null;
+        var trimmed = s.Trim();
+        bool hasPercent = trimmed.EndsWith("%");
+        var numText = hasPercent
+            ? trimmed.Substring(0, trimmed.Length - 1).Trim()
+            : trimmed;
+        var raw = decimal.Parse(numText, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite, CultureInfo.InvariantCulture);
+        if (hasPercent)
+            return raw / 100m;
+        return raw > 1m ? raw / 100m : raw;
     }
 }

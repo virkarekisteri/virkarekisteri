@@ -13,6 +13,7 @@ import { useGetTeacherSubjectsQuery } from 'redux/api-slices/functions/teachersu
 import { checkSubjectActiveStatus } from 'utils/checkSubjectActiveStatus';
 import { checkCostCentreActiveStatus } from 'utils/checkCostCentreActiveStatus';
 import { useGetPositionNameByIdQuery } from 'redux/api-slices/functions/position-names-api';
+import { format } from 'date-fns';
 
 interface BasicDetailsProps {
   position: Position;
@@ -231,6 +232,15 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               <RenderReadonlyTextField value={teacherSubjects.join(', ')} />
             </Grid2>
           )}
+          <Grid2 size={4} px={2}>
+            <Typography component="div" sx={{ color: '#7f7f7f' }}>
+              {t('table.created_at')}
+            </Typography>
+
+            <RenderReadonlyTextField
+              value={position.createdAt ? format(new Date(position.createdAt), 'dd.MM.yyyy') : ''}
+            />
+          </Grid2>
         </Grid2>
 
         <Accordion sx={{ mt: 2, mb: 4 }}>

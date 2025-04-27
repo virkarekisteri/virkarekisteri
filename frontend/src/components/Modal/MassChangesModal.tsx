@@ -66,6 +66,7 @@ const MassChangesModal: React.FC<MassChangesModalProps> = ({ open, handleClose, 
           type: position.type,
           decisionNumber: values.decisionNumber,
           isTeacher: position.isTeacher,
+          subjectIds: position.subjectIds,
         };
 
         // Override the specific field with the new value
