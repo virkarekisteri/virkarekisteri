@@ -323,7 +323,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('additional_details')}
               </Typography>
-              <RenderReadonlyTextField value={position.details} />
+              <RenderReadonlyTextField value={position.details || ''} />
             </Grid2>
           </AccordionDetails>
         </Accordion>
