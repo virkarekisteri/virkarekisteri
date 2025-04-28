@@ -173,7 +173,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('table.vacancy_number')}
             </Typography>
-            <RenderReadonlyTextField value={position.vacancyNumber} />
+            <RenderReadonlyTextField value={position.vacancyNumber || ''} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -215,7 +215,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('table.placement_location')}
             </Typography>
-            <RenderReadonlyTextField value={position.placementLocation} />
+            <RenderReadonlyTextField value={position.placementLocation || ''} />
           </Grid2>
           <Grid2 size={4} px={2}>
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
@@ -229,7 +229,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
             <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
               {t('create_position.pricing_id')}
             </Typography>
-            <RenderReadonlyTextField value={position.pricingId?.toString()} />
+            <RenderReadonlyTextField value={position.pricingId?.toString() || ''} />
           </Grid2>
           {position.isTeacher && (
             <Grid2 size={12} px={2}>
@@ -281,13 +281,13 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('create_position.education_level')}
               </Typography>
-              <RenderReadonlyTextField value={position.educationLevel} />
+              <RenderReadonlyTextField value={position.educationLevel || ''} />
             </Grid2>
             <Grid2 size={12}>
               <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('create_position.work_experience')}
               </Typography>
-              <RenderReadonlyTextField value={position.workExperience} />
+              <RenderReadonlyTextField value={position.workExperience || ''} />
             </Grid2>
           </AccordionDetails>
         </Accordion>
@@ -323,7 +323,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ position }) => {
               <Typography component={'div'} sx={{ color: '#7f7f7f' }}>
                 {t('additional_details')}
               </Typography>
-              <RenderReadonlyTextField value={position.details} />
+              <RenderReadonlyTextField value={position.details || ''} />
             </Grid2>
           </AccordionDetails>
         </Accordion>
